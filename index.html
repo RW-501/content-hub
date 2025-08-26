@@ -303,6 +303,8 @@ async function loadSites(){
 
     sitesData=snap.docs.map(doc=>{
       const d=doc.data();
+            console.log(`https://contenthub.guru/site/${d.slug}`);
+
       return {
         id: doc.id,
         title: d.name||d.title||"Untitled Site",
@@ -315,7 +317,6 @@ async function loadSites(){
         tags: d.tags||[],
         createdAt: d.createdAt?.toDate().getTime()||Date.now()
       }
-      console.log(`https://contenthub.guru/site/${d.slug}`);
     });
 
     renderTagFilters();

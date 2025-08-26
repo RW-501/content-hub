@@ -2770,7 +2770,7 @@ const slugVal = slugInput.value.trim();
 
 
 // Listen for focus out (blur) event
-slugInput.addEventListener('blur', () => {
+slugInput.addEventListener('click', () => {
     if (slugInput.value) {
         // Replace spaces with hyphens and remove extra spaces
         slugInput.value = slugInput.value.trim().replace(/\s+/g, '-').toLowerCase();

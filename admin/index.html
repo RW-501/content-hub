@@ -808,6 +808,7 @@ async function loadDashboard(autoPing = false) {
     const pageRef = doc(db, "pages", p.id);
     const pageSnap = await getDoc(pageRef);
     const pageData = pageSnap.exists() ? pageSnap.data() : {};
+    
 console.log("pages  ",pages);
 console.log("pageData  ",pageData);
 console.log("p  ",p);
@@ -821,7 +822,7 @@ console.log("p  ",p);
         </p>
       </td>
       <td>
-        <a href="https://contenthub.guru/site/${pageData.slug}" target="_blank" style="width: 50%; display: block;">${pageData.title}</a>
+        @ <a href="https://contenthub.guru/site/${pageData.slug}" target="_blank" style="width: 50%; display: block;">${pageData.title}</a>
       </td>
       <td id="status-${pageData.id}" class="status-offline">❌ Offline</td>
       <td>${pageData.views || 0}</td>

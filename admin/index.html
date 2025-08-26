@@ -835,7 +835,7 @@ console.log("p  ",p);
 
   html += "</tbody></table>";
   contentDiv.innerHTML = html;
-  
+
   if (autoPing) pages.forEach(p => updateLiveStatus(pageData.siteId, pageData.slug));
 }
 
@@ -911,10 +911,12 @@ window.removePage = removePage;
 // Update Live Status for a Page
 async function updateLiveStatus(pageId, slug) {
   const statusEl = document.getElementById(`status-${pageId}`);
-  if (!statusEl) return;
+  if (!statusEl) console.log("return   ",slug);
+return;
   const online = await pingSite(slug);
   statusEl.textContent = online ? "✅ Online" : "❌ Offline";
   statusEl.className = online ? "status-online" : "status-offline";
+console.log("pageId  ",pageId, "   slug   ",slug);
 
   // Repeat every 10 seconds
   setTimeout(() => updateLiveStatus(pageId, slug), 10000);

@@ -2511,6 +2511,7 @@ async function savePage(pageId, currentUser) {
     affiliates: safeParse($("#affiliates").value || "[]", []),
     monetization: { adPlaceholders: safeParse($("#ads").value || "[]", ["top"]) },
     updatedBy: currentUser.uid,
+    publishedCount: increment(1),
     updatedAt: serverTimestamp()
   };
 

@@ -232,6 +232,48 @@ let pendingUrls = []; // Queue of URLs to fetch
         const sitemapOutput = document.getElementById('sitemapOutput');
 
         
+        import { collection, query, getDocs, orderBy } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+
+// Fetch pages from Firestore and populate table
+const loadPagesFromDB = async () => {
+  try {
+    const q = query(collection(db, "pages"), orderBy("createdAt", "desc"));
+    const snap = await getDocs(q);
+
+    if (snap.empty) {
+      document.getElementById('linkTable').querySelector('tbody').innerHTML =
+        "<tr><td colspan='6' class='text-center'>No pages found in the database.</td></tr>";
+      return;
+    }
+
+    const sitesData = snap.docs.map(doc => {
+      const d = doc.data();
+      return {
+        id: doc.id,
+        title: d.name || d.title || "Untitled Site",
+        slug: d.slug || "N/A",
+        createdAt: d.createdAt?.toDate() || new Date()
+      };
+    });
+
+    // Add each page to the table
+    sitesData.forEach(site => {
+      const url = `https://contenthub.guru/site/${site.slug}`;
+      const lastmod = site.createdAt.toISOString().split('T')[0];
+      
+      addLinkToTable(url, url); // Add to table, source URL is same as page
+      const row = document.querySelector(`#linkTable tbody tr:last-child`);
+      row.querySelector('td:nth-child(4)').textContent = lastmod; // set lastmod
+      row.querySelector('input[type="checkbox"]').checked = true; // mark ready for sitemap
+    });
+
+  } catch (error) {
+    console.error("Error loading pages from Firestore:", error);
+    updateErrorLog([error.message]);
+  }
+};
+
+
 
 // Fetch links via iframe
 const fetchLinksUsingIframe = async (url) => {
@@ -758,6 +800,10 @@ document.getElementById('exportJSON').addEventListener('click', () => {
 
 
 
+// Call this after your page loads
+document.addEventListener('DOMContentLoaded', () => {
+  loadPagesFromDB();
+});
 
 
         </script>

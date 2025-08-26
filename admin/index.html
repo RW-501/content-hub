@@ -808,11 +808,11 @@ async function loadDashboard(autoPing = false) {
     const pageRef = doc(db, "pages", p.id);
     const pageSnap = await getDoc(pageRef);
     const pageData = pageSnap.exists() ? pageSnap.data() : {};
-    
+  /*  
 console.log("pages  ",pages);
 console.log("pageData  ",pageData);
 console.log("p  ",p);
-
+*/
     html += `<tr>
       <td>
         <p>
@@ -824,11 +824,11 @@ console.log("p  ",p);
       <td>
         @ <a href="https://contenthub.guru/site/${pageData.slug}" target="_blank" style="width: 50%; display: block;">${pageData.title}</a>
       </td>
-      <td id="status-${pageData.id}" class="status-offline">❌ Offline</td>
+      <td id="status-${pageData.siteId}" class="status-offline">❌ Offline</td>
       <td>${pageData.views || 0}</td>
       <td>
-        <button onclick="window.location.href='https://contenthub.guru/admin/editor?id=${pageData.id}'">Edit</button>
-        <button onclick="removePage('${pageData.id}','${pageData.slug}')">Remove</button>
+        <button onclick="window.location.href='https://contenthub.guru/admin/editor?id=${pageData.siteId}'">Edit</button>
+        <button onclick="removePage('${pageData.siteId}','${pageData.slug}')">Remove</button>
       </td>
     </tr>`;
   }
@@ -836,7 +836,7 @@ console.log("p  ",p);
   html += "</tbody></table>";
   contentDiv.innerHTML = html;
 
-  if (autoPing) pages.forEach(p => updateLiveStatus(p.id, p.slug));
+  if (autoPing) pages.forEach(p => updateLiveStatus(pageData.siteId, pageData.slug));
 }
 
 

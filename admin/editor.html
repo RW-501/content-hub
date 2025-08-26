@@ -2512,6 +2512,7 @@ async function savePage(pageId, currentUser) {
     monetization: { adPlaceholders: safeParse($("#ads").value || "[]", ["top"]) },
     updatedBy: currentUser.uid,
     publishedCount: increment(1),
+    status: "published",
     updatedAt: serverTimestamp()
   };
 

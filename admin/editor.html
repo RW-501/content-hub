@@ -2792,7 +2792,9 @@ const slugVal = slugInput.value.trim();
 
 
 // Listen for focus out (blur) event
-slugInput.addEventListener('click', () => {
+seoContainer.addEventListener('click', () => {
+    console.log("slugInput.value:", slugInput.value);
+
     if (slugInput.value) {
         // Replace spaces with hyphens and remove extra spaces
         slugInput.value = slugInput.value.trim().replace(/\s+/g, '-').toLowerCase();

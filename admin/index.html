@@ -789,6 +789,9 @@ const pageSize = 6;
 // Load Dashboard with Live Status
 // Add "Remove" button to the dashboard table
 async function loadDashboard(autoPing = false) {
+
+  console.log("autoPing  ",autoPing);
+
   const contentDiv = document.getElementById("dashboardContent");
   const userSnap = await getDoc(doc(db, "users", currentUser.uid));
   const pages = userSnap.exists() ? userSnap.data().createdPages || [] : [];

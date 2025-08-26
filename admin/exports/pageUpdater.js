@@ -610,7 +610,7 @@ setTimeout(() => {
 if (location) {
   window.location.href = location;
 }
-}, 200000);
+}, 2000);
     
   } catch (err) {
     console.error(err.message);

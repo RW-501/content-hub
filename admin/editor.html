@@ -657,12 +657,13 @@ if (toggleBtn) toggleBtn.addEventListener('click', toggleSticky);
 <script type="module">
 /* ---------------- Firebase Boot ---------------- */
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
-import { getFirestore, doc, getDoc, setDoc, addDoc, collection, serverTimestamp, updateDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+import {  increment, getFirestore, doc, getDoc, setDoc, addDoc, collection, serverTimestamp, updateDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-storage.js";
 
 
 import { showToast } from "https://contenthub.guru/exports/showToast.js";
+import { updatePage } from "https://contenthub.guru/exports/pageUpdater.js";
 
 // fallback toast if import fails
 window.showToast = window.showToast || function(type,msg,dur){alert(`${type}: ${msg}`)};
@@ -1856,6 +1857,8 @@ $("#dailyViews").textContent = data.dailyViews?.[today] || 0;
   }
 
 
+
+/*
 function getVideo(videoUrl) {
   if (!videoUrl) return "";
 
@@ -1922,10 +1925,10 @@ function getVideo(videoUrl) {
   return "";
 }
 
-
+*/
 
   // Load existing image when editing
-function renderBlockHTML(b) {
+function renderBlockHTMLXXX(b) {
   switch (b.type) {
     case "heading":
       return `<h${b.level || 2} class="content-heading heading-${b.level || 2}">
@@ -2009,7 +2012,7 @@ case "video":
 }
 
 
-async function updatePage(pageId, currentUser) {
+async function updatePageXXX(pageId, currentUser) {
   // First save & fetch updated data from Firestore
   const savedPageId = await savePage(pageId, currentUser);
   const docSnap = await getDoc(doc(db, "pages", savedPageId));
@@ -2478,6 +2481,11 @@ setTimeout(() => {
   }
 }
 
+
+
+
+
+
 /* ---------------- Save / Publish ---------------- */
 async function savePage(pageId, currentUser) { 
   // Serialize blocks from builder
@@ -2508,8 +2516,19 @@ async function savePage(pageId, currentUser) {
 
   if (pageId) {
     await setDoc(doc(db, "pages", pageId), data, { merge: true });
+
+      // First save & fetch updated data from Firestore
+  const docSnap = await getDoc(doc(db, "pages", pageId));
+  if (!docSnap.exists()) {
+    console.error("No page data found for:", pageId);
+    return;
+  }
+  const articleData = docSnap.data();
+
+  updatePage(articleData,  'https://contenthub.guru/admin');
+
     showToast("success", "Page updated!", 2500);
-    return pageId;
+  //  return pageId;
   } else {
     data.createdBy = currentUser.uid;
     data.createdAt = serverTimestamp();
@@ -2529,7 +2548,8 @@ $("#saveBtn").onclick = async () => {
 $("#publishBtn").onclick = async () => {
   const id = getPageIdFromUrl();
   if (!id) return showToast("error", "Save before publishing!", 3000);
-  await updateDoc(doc(db, "pages", id), { status: "published", publishedAt: serverTimestamp() });
+  await updateDoc(doc(db, "pages", id), { status: "published", publishedAt: serverTimestamp(),
+   publishedCount: increment(1) });
   //showToast("success", "Page published!", 2500);
 };
 

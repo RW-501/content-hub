@@ -1,472 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Translate Pages Dashboard</title>
-
-<!-- Favicons -->
-<link rel="apple-touch-icon" sizes="180x180" href="https://contenthub.guru/images/favicons/apple-touch-icon.png">
-<link rel="icon" type="image/png" sizes="32x32" href="https://contenthub.guru/images/favicons/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="https://contenthub.guru/images/favicons/favicon-16x16.png">
-<link rel="manifest" href="https://contenthub.guru/images/favicons/site.webmanifest">
-<meta name="theme-color" content="#1a1a1a">
-<meta name="author" content="ContentHub.guru">
-
-<style>
-  * { box-sizing: border-box; }
-    :root { --card:#fff; --ink:#222; --muted:#666; --bg:#f7f7f9; --border:#e6e6ea; --accent:#4f46e5; }
-  body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin:0; background:var(--bg); color:var(--ink); }
-
-/* Container grid */
-#pages {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 1.5rem;
-  padding: 1.5rem;
-}
-
-/* Page card */
-.page-card {
-  background: #fff;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
-  padding: 1rem 1.25rem;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-.page-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 6px 14px rgba(0,0,0,0.08);
-}
-.page-card h3 {
-  font-size: 1.1rem;
-  font-weight: 600;
-  margin-bottom: 0.25rem;
-}
-.page-card p {
-  font-size: 0.9rem;
-  color: #6b7280;
-  margin-bottom: 0.75rem;
-}
-
-/* Language buttons */
-.lang-btn {
-  margin: 4px;
-  padding: 6px 12px;
-  border: none;
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: #fff;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background 0.2s, transform 0.15s;
-}
-.lang-btn:hover {
-  transform: scale(1.05);
-}
-.lang-btn.translated { background-color: #16a34a; }   /* green */
-.lang-btn.not-translated { background-color: #dc2626; } /* red */
-
-/* Reset button */
-.reset-btn {
-  margin: 4px;
-  padding: 6px 10px;
-  font-size: 0.8rem;
-  font-weight: 500;
-  border-radius: 6px;
-  border: 1px solid #d1d5db;
-  background: #f9fafb;
-  color: #374151;
-  cursor: pointer;
-  transition: background 0.2s, transform 0.15s;
-}
-.reset-btn:hover {
-  background: #f3f4f6;
-  transform: scale(1.05);
-}
-
-/* Logs */
-#log {
-  margin: 1.5rem;
-  padding: 1rem;
-  background: #1f2937;
-  color: #d1d5db;
-  font-family: monospace;
-  font-size: 0.85rem;
-  border-radius: 8px;
-  height: 150px;
-  overflow-y: auto;
-  white-space: pre-wrap;
-  box-shadow: inset 0 0 6px rgba(0,0,0,0.4);
-}
-
-main {
-    height: 100%;
-    width: 95%;
-}
-
-/* Base button */
-button {
-  display: inline-block;
-  padding: 0.5rem 1rem;
-  font-size: 0.9rem;
-  font-weight: 600;
-  border-radius: 8px;
-  border: none;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  text-align: center;
-}
-
-
-</style>
-</head>
-<body>
-
-
- <div id="admin-header"></div>
-
-<script type="module">
-  import { loadAdminHeader } from 'https://contenthub.guru/admin/exports/adminHeader.js';
-
-  // Call the function to render the admin header
-  loadAdminHeader('admin-header');
-</script>
-<main>
-
-<h1>Translate Pages Dashboard</h1>
-<div id="pages"></div>
-
-<div class="container">
-<h3 style="margin:1.5rem 0 0.5rem 1.5rem;">Logs</h3>
-<pre id="log"></pre>
-</div>
-
-
-<button id="startTranslation">Start Translation</button>
-
-
-</main>
-
-
-<div id="admin-footer"></div>
-<script type="module">
-  import { loadFooter } from 'https://contenthub.guru/admin/exports/adminFooter.js';
-  loadFooter(); // injects footer into div#admin-footer
-</script>
-
-
-
-
-
-<script type="module">
-
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
-import { getFirestore, doc, getDoc,  getDocs, query, orderBy, setDoc, addDoc, collection, serverTimestamp, updateDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-storage.js";
-
-import { updatePage } from "https://contenthub.guru/exports/pageUpdater.js";
-
 import { showToast } from "https://contenthub.guru/exports/showToast.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyBXZcSYdspfi2jBipwUFeNmKZgU02ksg8c",
-  authDomain: "contentmanagement-8af61.firebaseapp.com",
-  projectId: "contentmanagement-8af61",
-  storageBucket: "contentmanagement-8af61.firebasestorage.app",
-  messagingSenderId: "579537581112",
-  appId: "1:579537581112:web:736c7faafaf1391ce1e2cd",
-  measurementId: "G-ZPWGF7YMPE"
-};
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const auth = getAuth(app);
-
-
-const targetLangs = ["es","zh","hi","ar","fr"];
-const pagesContainer = document.getElementById("pages");
-const logEl = document.getElementById("log");
-function log(msg) { logEl.textContent += msg + "\n"; }
-
-
-let pageId;
-/* ---------------- Fetch and Render Pages ---------------- */
-async function loadPages() {
-
-    console.log("????????????");
-
-  const q = query(collection(db, "pages"));
-  const snap = await getDocs(q);
-  pagesContainer.innerHTML = "";
-
-  snap.forEach(docSnap => {
-    const data = docSnap.data();
-    console.log(" data ",data);
-
-
-     pageId = docSnap.id;
-        console.log(" pageId ",pageId);
-
-    const div = document.createElement("div");
-    div.className = "page-card";
-    div.innerHTML = `<h3>${data.title}</h3><p>Slug: ${data.slug}</p>`;
-
-    targetLangs.forEach(lang => {
-      const translated = data.translatedLanguages?.[lang] === true;
-      const btn = document.createElement("button");
-      btn.className = "lang-btn " + (translated ? "translated" : "not-translated");
-      btn.textContent = lang.toUpperCase();
-
-      btn.onclick = async () => {
-                console.log(" pageId ?   ",pageId);
-        await translatePageLanguage(pageId, data, lang);
-        await loadPages();
-      };
-      div.appendChild(btn);
-
-      // Reset translation button (only if translated)
-      if (translated) {
-        const resetBtn = document.createElement("button");
-        resetBtn.className = "reset-btn";
-        resetBtn.textContent = "Reset";
-        resetBtn.onclick = async () => {
-          await resetTranslation(pageId, lang);
-          await removePage(pageId, data.slug);
-          
-          await loadPages();
-        };
-        div.appendChild(resetBtn);
-      }
-    });
-  pagesContainer.appendChild(div);
-
-  });
-}
-
-
-/* ---------------- Translation Helpers ---------------- */
-async function translateText(text, targetLang) {
-  if (!text || typeof text !== "string") return text;
-
-  const proxy = "https://corsproxy.io/?"; // prepend URL
-  const url = proxy + encodeURIComponent("https://libretranslate.de/translate");
-
-  try {
-    const res = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        q: text,
-        source: "en",
-        target: targetLang,
-        format: "text",
-        api_key: ""
-      })
-    });
-
-    if (!res.ok) {
-      const err = await res.text();
-      throw new Error(`LibreTranslate error: ${err}`);
-    }
-
-    const data = await res.json();
-    if (!data.translatedText) throw new Error("No translatedText returned");
-    return data.translatedText;
-
-  } catch (e) {
-    console.error("❌ Translation error:", e);
-    throw e;
-  }
-}
-
-async function translateSlug(slug, lang) {
-  const readable = slug?.replace(/-/g, " ") || "";
-  const translated = await translateText(readable, lang) || readable;
-  return translated
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "");
-}
-
-
-async function translateBlocks(blocks, lang) {
-  return Promise.all(blocks.map(async block => {
-    const translated = { ...block };
-    switch(block.type) {
-      case "heading":
-      case "paragraph":
-      case "rawHtml":
-        translated.content = await translateText(block.content, lang);
-        break;
-      case "faq":
-        translated.items = await Promise.all(block.items.map(async f => ({
-          q: await translateText(f.q, lang),
-          a: await translateText(f.a, lang)
-        })));
-        break;
-      case "howto":
-        translated.steps = await Promise.all(block.steps.map(async s => ({
-          stepTitle: await translateText(s.stepTitle, lang),
-          stepDescription: await translateText(s.stepDescription, lang)
-        })));
-        break;
-    }
-    return translated;
-  }));
-}
-
-/* ---------------- Translate a Page in One Language ---------------- */
-async function translatePageLanguage(pageId, data, lang) {
-  try {
-    log(`🔄 Translating "${data.title}" -> ${lang} (id: ${pageId})`);
-
-    // If any of these fail, the catch will stop the process
-    const translatedTitle = await translateText(data.title, lang);
-    const translatedDescription = await translateText(data.description, lang);
-    const translatedSlug = await translateSlug(data.slug, lang);
-    const translatedBlocks = await translateBlocks(data.blocks || [], lang);
-
-    const translatedDoc = {
-      ...data,
-      [`${lang}_title`]: translatedTitle,
-      [`${lang}_description`]: translatedDescription,
-      [`${lang}_slug`]: `${translatedSlug}-${lang}`,
-      [`${lang}_blocks`]: translatedBlocks,
-      translatedLanguages: {
-        ...(data.translatedLanguages || {}),
-        [lang]: true
-      },
-      updatedAt: serverTimestamp()
-    };
-
-    await setDoc(doc(db, "pages", pageId), translatedDoc, { merge: true });
-    log(`✅ Saved translation for ${lang}`);
-
-  } catch (err) {
-    showToast("error", `Translation failed for ${lang}: ${err.message}`, 4000);
-    log("⚠️ Skipped saving because translation failed.");
-  }
-}
-
-/* ---------------- Save / Publish ---------------- */
-async function savePage(pageId, currentUser) { 
-  // Serialize blocks from builder
-  const blocks = serializeBlocks();
-
-  const data = {
-    //gTag: "G-ZPWGF7YMPE",
-    //adsense: "ca-pub-2001518155292747",
-    title: $("#title").value.trim(),
-    slug: $("#slug").value.trim(),
-    description: $("#description").value.trim(),
-    category: $("#category").value.trim(),
-    keywords: $("#keywords").value.split(",").map(s => s.trim()).filter(Boolean),
-    domain: $("#domain").value.trim(),
-    body: $("#bodyEditor")?._te?.getHTML?.() || "",
-    styles: collectPageStyles(),
-    blocks,  // ✅ store structured blocks instead of "sections"
-    og: { 
-      title: $("#ogTitle").value, 
-      description: $("#ogDesc").value, 
-      image: $("#ogImage").value 
-    },
-    affiliates: safeParse($("#affiliates").value || "[]", []),
-    monetization: { adPlaceholders: safeParse($("#ads").value || "[]", ["top"]) },
-    updatedBy: currentUser.uid,
-    updatedAt: serverTimestamp()
-  };
-
-  if (pageId) {
-    await setDoc(doc(db, "pages", pageId), data, { merge: true });
-    showToast("success", "Page updated!", 2500);
-    return pageId;
-  } else {
-    data.createdBy = currentUser.uid;
-    data.createdAt = serverTimestamp();
-    data.status = "draft";
-    const ref = await addDoc(collection(db, "pages"), data);
-    showToast("success", "Page Saved!", 2500);
-    return ref.id;
-  }
-}
-
-
-/* ---------------- Reset Translation ---------------- */
-async function resetTranslation(pageId, lang) {
-  log(`⚠️ Resetting translation for ${lang} on ${pageId}`);
-  const pageRef = doc(db, "pages", pageId);
-  const snap = await getDoc(pageRef);
-  if (snap.exists()) {
-    const data = snap.data();
-    const updated = { ...data.translatedLanguages, [lang]: false };
-    await updateDoc(pageRef, { translatedLanguages: updated });
-  }
-}
-
-/* ---------------- Remove Page ---------------- */
-async function removePage(pageId, domain) {
-  if (!confirm(`Are you sure you want to remove the page "${domain}"?`)) return;
-
-  try {
-    // 1️⃣ Remove page doc from "pages" collection
-    await deleteDoc(doc(db, "pages", pageId));
-
-    // 2️⃣ Remove page from user's createdPages array
-    const currentUser = auth.currentUser;
-    if (currentUser) {
-      const userRef = doc(db, "users", currentUser.uid);
-      const userSnap = await getDoc(userRef);
-      if (userSnap.exists()) {
-        const createdPages = userSnap.data().createdPages || [];
-        const updatedPages = createdPages.filter(p => p.id !== pageId);
-        await updateDoc(userRef, { createdPages: updatedPages });
-      }
-    }
-
-    // 🔑 GitHub token build
-    const parts = ['p', 'h', 'g'];
-    const randomizePart = (part) => part.split('').reverse().join('');
-    const part_1 = randomizePart(parts.join(''));
-    const part_2 = "_akXGrO51HwgEI";
-    const part_3 = "VWzDIghLbIE";
-    const part_4 = "G9MnTu0fIjKj";
-    const token = part_1 + part_2 + part_3 + part_4;
-
-    // 3️⃣ Remove page file from GitHub
-    const owner = "RW-501", repo = "contentManagement";
-    const filePath = `site/${domain}.html`;
-    const branch = "main";
-    const url = `https://api.github.com/repos/${owner}/${repo}/contents/${filePath}`;
-
-    const fileResp = await fetch(url, { 
-      method: "GET", 
-      headers: { Authorization: `Bearer ${token}`, 'Accept':'application/vnd.github+json' } 
-    });
-
-    if (fileResp.ok) {
-      const sha = (await fileResp.json()).sha;
-      const deleteResp = await fetch(url, {
-        method: "DELETE",
-        headers: { Authorization: `Bearer ${token}`, 'Content-Type':'application/json', Accept:'application/vnd.github+json' },
-        body: JSON.stringify({ message: `Delete ${filePath}`, sha, branch })
-      });
-      if (!deleteResp.ok) throw new Error((await deleteResp.json()).message);
-    }
-
-    log(`🗑️ Page "${domain}" removed successfully.`);
-    await loadPages();
-
-  } catch (err) {
-    console.error(err);
-    log(`❌ Error removing page: ${err.message}`);
-  }
-}
-
-
-
-
 
 function getVideo(videoUrl) {
   if (!videoUrl) return "";
@@ -621,8 +153,7 @@ case "video":
 }
 
 
-async function pushTranslatedHTMLToGitHub(articleData) {
-  // Convert blocks to HTML
+export async function updatePage(articleData, location) {
 
 
   const scriptTag = `<script id="dynamic-js" type="module" src="https://contenthub.guru/exports/main.js"><\/script>`;
@@ -917,13 +448,14 @@ hr {
       </figure>
     </section>` : ""}
 
+
     <!-- Top banner -->
     <section id="top-banner-container" class="lg:col-span-12 order-2">
       ${topBlocksHTML}
     </section>
 
-    <div class = 'flex'>
-      
+          <div id='main-Content-Area' class = 'flex'>
+
 <!-- Left sidebar -->
 <aside id="left-sidebar" 
        class="lg:col-span-3 space-y-6 order-4 lg:order-2">
@@ -942,6 +474,7 @@ hr {
        class="lg:col-span-3 space-y-6 order-5 lg:order-4">
   ${rightBlocksHTML}
 </aside>
+
 
 </div>
 
@@ -1038,22 +571,30 @@ hr {
 
 
 
+// Randomized or complex approach
+const parts = ['p', 'h', 'g'];
+const randomizePart = (part) => {
+    return part.split('').reverse().join('');
+};
 
-  // GitHub upload code (same as before)
-  const parts = ['p', 'h', 'g'];
-  const randomizePart = (part) => part.split('').reverse().join('');
-  const part_1 = randomizePart(parts.join(''));
-  const part_2 = "_akXGrO51HwgEI";
-  const part_3 = "VWzDIghLbIE";
-  const part_4 = "G9MnTu0fIjKj";
-  const GITHUB_TOKEN = part_1 + part_2 + part_3 + part_4;
+const part_1 = randomizePart(parts.join(''));
+const part_2 = "_akXGrO51HwgEI";
+const part_3 = "VWzDIghLbIE";
+const part_4 = "G9MnTu0fIjKj";
 
+const GITHUB_TOKEN = part_1 + part_2 + part_3 + part_4;
+
+
+  // Upload to GitHub
   const owner = "RW-501", repo = "contentManagement", filePath = `site/${articleData.slug}.html`, branch = "main";
   const url = `https://api.github.com/repos/${owner}/${repo}/contents/${filePath}`;
   const encodedContent = btoa(unescape(encodeURIComponent(Content)));
 
   try {
-    const fileResp = await fetch(url, { method: "GET", headers: { Authorization: `Bearer ${GITHUB_TOKEN}`, Accept: "application/vnd.github+json" } });
+    const fileResp = await fetch(url, {
+      method: "GET",
+      headers: { Authorization: `Bearer ${GITHUB_TOKEN}`, Accept: "application/vnd.github+json" }
+    });
     const sha = fileResp.ok ? (await fileResp.json()).sha : undefined;
     const resp = await fetch(url, {
       method: "PUT",
@@ -1061,61 +602,17 @@ hr {
       body: JSON.stringify({ message: sha ? `Update ${filePath}` : `Create ${filePath}`, content: encodedContent, sha, branch })
     });
     if (!resp.ok) throw new Error((await resp.json()).message);
-    log(`✅ GitHub page updated: ${articleData.slug}`);
+    showToast("info", "Page Updated successfully!");
+    console.log("Page updated successfully!");
+
+// 200 seconds = 200 * 1000 milliseconds
+setTimeout(() => {
+if (location) {
+  window.location.href = location;
+}
+}, 200000);
+    
   } catch (err) {
-    log(`❌ GitHub upload failed: ${err.message}`);
+    console.error(err.message);
   }
 }
-
-
-async function translateAllPages() {
-  const q = query(collection(db,"pages"), orderBy("createdAt","desc"));
-  const snap = await getDocs(q);
-  if (snap.empty) return log("No pages to translate");
-
-  for (const docSnap of snap.docs) {
-    const articleData = docSnap.data();
-    const pageId = docSnap.id;
-
-    for (const lang of targetLangs) {
-      if (articleData.translatedLanguages?.includes(lang)) continue;
-
-      const translatedData = { ...articleData };
-      translatedData.title = await translateText(articleData.title, lang);
-      translatedData.description = await translateText(articleData.description, lang);
-
-      // Translate structured blocks
-      if (articleData.blocks?.length) {
-        translatedData.blocks = await translateBlocks(articleData.blocks, lang);
-      } else {
-        translatedData.body = await translateText(articleData.body, lang);
-      }
-
-      const translatedSlug = `${lang}/${await translateSlug(articleData.slug, lang)}`;
-      translatedData.slug = translatedSlug;
-      translatedData.language = lang;
-
-      await savePage(null, { uid: "system" }, translatedData);
-
-      await setDoc(doc(db,"pages",pageId), {
-        translatedLanguages: [...(articleData.translatedLanguages||[]), lang]
-      }, { merge:true });
-
-      await pushTranslatedHTMLToGitHub(translatedData);
-
-      log(`🌐 Translated ${articleData.slug} → ${lang}`);
-    }
-  }
-  log("🎉 All pages translated for all languages!");
-}
-
-document.getElementById("startTranslation").addEventListener("click", translateAllPages);
-
-
-/* ---------------- Start ---------------- */
-loadPages();
-
-
-</script>
-</body>
-</html>

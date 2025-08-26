@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Auto Link Admin</title>
+
+  </head>
+<body style="font-family:Arial,sans-serif;padding:20px;">
+
+    
+<div id="admin-header"></div>
+
+<script type="module">
+  import { loadAdminHeader } from 'https://contenthub.guru/admin/exports/adminHeader.js';
+
+  // Call the function to render the admin header
+  loadAdminHeader('admin-header');
+</script>
+
+
+<main>
+  <h2>🔗 Auto Link Admin</h2>
+
+  
+  <div style="margin:10px 0;padding:10px;border:1px solid #ccc;">
+    <button onclick="startAutoLink()">▶ Start All Pages</button>
+    <button onclick="stopAutoLink()">⏹ Stop</button>
+    <button onclick="skipKeyword()">⏭ Skip Keyword</button>
+    <button onclick="toggleTestMode()">🔀 Toggle Test Mode</button>
+    <br><br>
+    <input id="pageIdInput" placeholder="Enter page ID..." style="padding:5px;width:250px;">
+    <button onclick="updateCurrentPage()">📄 Update Current Page</button>
+    <div id="linkStats" style="margin-top:8px;">Words: 0 | Max Links: 0 | Inserted: 0</div>
+  </div>
+  <div id="linkLog" style="margin-top:10px;max-height:300px;overflow:auto;font-size:12px;border:1px solid #ddd;padding:5px;">
+    <em>Log will appear here...</em>
+  </div>
+
+</main>
+
+
+
+<div id="admin-footer"></div>
+<script type="module">
+  import { loadFooter } from 'https://contenthub.guru/admin/exports/adminFooter.js';
+  loadFooter(); // injects footer into div#admin-footer
+</script>
+
+
+
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+    import { getFirestore, collection, query, getDocs, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+
+    import { updatePage } from "https://contenthub.guru/exports/pageUpdater.js";
+
+// Firebase config
+const firebaseConfig = {
+  apiKey: "AIzaSyBXZcSYdspfi2jBipwUFeNmKZgU02ksg8c",
+  authDomain: "contentmanagement-8af61.firebaseapp.com",
+  projectId: "contentmanagement-8af61",
+  storageBucket: "contentmanagement-8af61.firebasestorage.app",
+  messagingSenderId: "579537581112",
+  appId: "1:579537581112:web:736c7faafaf1391ce1e2cd",
+  measurementId: "G-ZPWGF7YMPE"
+};
+
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // 🔹 Global state
+    let autoLinkRunning = false;
+    let linkIndex = 0;
+    let keywordsArray = [];
+    let maxLinks = 0;
+    let insertedLinks = 0;
+    let processedPages = 0;
+    let testMode = true; // default ON
+
+    // 🔹 Helpers
+    function escapeRegExp(string) {
+      return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    }
+    function stripHtml(html) {
+      return html.replace(/<[^>]+>/g, "");
+    }
+    function log(msg) {
+      const el = document.getElementById("linkLog");
+      el.innerHTML += `<div>${msg}</div>`;
+      el.scrollTop = el.scrollHeight;
+    }
+
+    // 🔹 Process blocks of one page
+    async function autoLinkBlocks(blocks, slug) {
+      if (!blocks || !Array.isArray(blocks)) return blocks;
+
+      // Count words
+      const totalWords = blocks
+        .filter(b => b.type === "paragraph" && b.html)
+        .map(b => stripHtml(b.html).split(/\s+/).length)
+        .reduce((a, b) => a + b, 0);
+
+      // Allow 1–2 links per 200 words
+      maxLinks = Math.max(1, Math.floor(totalWords / 200) * 2);
+      insertedLinks = 0;
+
+      linkIndex = 0;
+      autoLinkRunning = true;
+
+      // Process blocks one by one
+      for (let i = 0; i < blocks.length; i++) {
+        if (!autoLinkRunning || insertedLinks >= maxLinks) break;
+        if (blocks[i].type === "paragraph" && blocks[i].html) {
+          blocks[i].html = await processBlock(blocks[i].html, slug);
+        }
+      }
+
+      document.getElementById("linkStats").innerText =
+        `Page: ${slug} | Words: ${totalWords} | Max Links: ${maxLinks} | Inserted: ${insertedLinks}`;
+      return blocks;
+    }
+
+    // 🔹 Process one paragraph block
+    async function processBlock(html, slug, perBlockLimit = 1) {
+      let replaced = 0;
+      while (linkIndex < keywordsArray.length && insertedLinks < maxLinks) {
+        const { keyword, slug: targetSlug } = keywordsArray[linkIndex];
+        if (slug === targetSlug) { linkIndex++; continue; } // don’t self-link
+        if (html.includes(`https://contenthub.guru/site/${targetSlug}`)) { linkIndex++; continue; } // don’t double-link
+
+        const regex = new RegExp(`\\b(${escapeRegExp(keyword)})\\b`, "i");
+        const link = testMode
+          ? `<mark class="test-link">$1</mark>` // highlight instead of saving
+          : `<a href="https://contenthub.guru/site/${targetSlug}" class="auto-link">$1</a>`;
+
+        if (regex.test(html)) {
+          html = html.replace(regex, link);
+          insertedLinks++;
+          replaced++;
+          log(`${testMode ? "🟡 Preview" : "🔗 Linked"} "${keyword}" → /site/${targetSlug}`);
+          if (replaced >= perBlockLimit) break;
+        }
+        linkIndex++;
+      }
+      return html;
+    }
+
+    // 🔹 Run across ALL pages
+    async function runAutoLinkAll() {
+      log("⏳ Loading pages...");
+      const q = query(collection(db, "pages"));
+      const snap = await getDocs(q);
+
+      if (snap.empty) { log("❌ No pages found."); return; }
+
+      // Load all keywords first
+      keywordsArray = snap.docs.map(doc => {
+        const d = doc.data();
+        return { keyword: d.title || d.name || "", slug: d.slug || "" };
+      }).filter(p => p.keyword && p.slug);
+
+      keywordsArray.sort((a, b) => b.keyword.length - a.keyword.length);
+
+      processedPages = 0;
+      for (const docSnap of snap.docs) {
+        if (!autoLinkRunning) break;
+        const d = docSnap.data();
+        if (!d.blocks) continue;
+
+        const newBlocks = await autoLinkBlocks(d.blocks, d.slug);
+
+        if (!testMode) {
+          await updateDoc(doc(db, "pages", docSnap.id), { blocks: newBlocks });
+          log(`✅ Updated page: ${d.slug}`);
+        } else {
+          log(`🟡 Previewed page: ${d.slug}`);
+        }
+        processedPages++;
+      }
+
+      log(`🎉 Done! Processed ${processedPages} pages.`);
+    }
+
+    // 🔹 Run on ONE page by ID
+    async function updateSinglePage(pageId) {
+      const pageRef = doc(db, "pages", pageId);
+      const snap = await getDoc(pageRef);
+      if (!snap.exists()) { log(`❌ Page not found: ${pageId}`); return; }
+
+      const d = snap.data();
+      const newBlocks = await autoLinkBlocks(d.blocks, d.slug);
+
+      if (!testMode) {
+        await updateDoc(pageRef, { blocks: newBlocks });
+        log(`✅ Updated single page: ${d.slug}`);
+
+
+
+
+  updatePage(d);
+
+
+      } else {
+        log(`🟡 Previewed single page: ${d.slug}`);
+      }
+    }
+
+    // 🔹 Controls
+    function startAutoLink() {
+      autoLinkRunning = true;
+      runAutoLinkAll();
+    }
+    function stopAutoLink() {
+      autoLinkRunning = false;
+      log("⏹ Auto-link stopped.");
+    }
+    function skipKeyword() {
+      linkIndex++;
+      log("⏭ Skipped keyword.");
+    }
+    function toggleTestMode() {
+      testMode = !testMode;
+      log(`🔀 Test Mode ${testMode ? "ON (Preview)" : "OFF (Live Update)"}`);
+    }
+    function updateCurrentPage() {
+      const pageId = document.getElementById("pageIdInput").value.trim();
+      if (!pageId) { log("⚠️ Enter a page ID"); return; }
+      autoLinkRunning = true;
+      updateSinglePage(pageId);
+    }
+
+    // 🔹 Expose to buttons
+    window.startAutoLink = startAutoLink;
+    window.stopAutoLink = stopAutoLink;
+    window.skipKeyword = skipKeyword;
+    window.toggleTestMode = toggleTestMode;
+    window.updateCurrentPage = updateCurrentPage;
+  </script>
+
+</body>
+</html>

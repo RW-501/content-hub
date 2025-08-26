@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <title>Auto Link Admin</title>
-  <!-- Favicons -->
   <link rel="apple-touch-icon" sizes="180x180" href="https://contenthub.guru/images/favicons/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="https://contenthub.guru/images/favicons/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="https://contenthub.guru/images/favicons/favicon-16x16.png">
@@ -88,6 +87,7 @@
   loadFooter();
 </script>
 
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
 import { getFirestore, collection, doc, getDoc, getDocs, updateDoc, setDoc } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
@@ -127,11 +127,24 @@ function updateKeywordDisplay() {
   ul.innerHTML = "";
   keywordsArray.forEach(k => {
     const li = document.createElement("li");
-    li.textContent = `${k.keyword} → /site/${k.slug}`;
+    li.textContent = `${k.keyword} → https://contenthub.guru/site/${k.slug}`;
     ul.appendChild(li);
   });
   document.getElementById("testModeStatus").innerText = testMode ? "ON" : "OFF";
 }
+
+// 🔹 Load keywords automatically on page load
+async function loadKeywords() {
+  const snap = await getDocs(collection(db,"keywords"));
+  keywordsArray = [];
+  snap.forEach(docSnap => {
+    const data = docSnap.data();
+    if (!data.removed) keywordsArray.push({ keyword: data.keyword, slug: data.slug });
+  });
+  updateKeywordDisplay();
+  renderModalList();
+}
+window.addEventListener("load", loadKeywords);
 
 // 🔹 Modal for keywords with Firestore updates
 function openKeywordModal() {
@@ -147,11 +160,12 @@ function renderModalList() {
   keywordsArray.forEach((k, i) => {
     const li = document.createElement("li");
     li.className = "keyword-item";
-    li.innerHTML = `${k.keyword} → /site/${k.slug} <button onclick="removeKeyword(${i})">❌</button>`;
+    li.innerHTML = `${k.keyword} → https://contenthub.guru/site/${k.slug} <button onclick="removeKeyword(${i})">❌</button>`;
     ul.appendChild(li);
   });
 }
 
+// 🔹 Add/Remove keywords
 async function addKeyword() {
   const kw = document.getElementById("newKeyword").value.trim();
   const slug = document.getElementById("newSlug").value.trim();
@@ -165,7 +179,7 @@ async function addKeyword() {
 
   // Save to Firestore keywords collection
   await setDoc(doc(db,"keywords",slug), newKeyword);
-  log(`✅ Added keyword "${kw}" → /site/${slug}`);
+  log(`✅ Added keyword "${kw}" → https://contenthub.guru/site/${slug}`);
 }
 
 async function removeKeyword(i) {
@@ -180,15 +194,10 @@ async function removeKeyword(i) {
 // 🔹 Auto-link logic
 function escapeRegExp(string) { return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); }
 function stripHtml(html) { return html.replace(/<[^>]+>/g, ""); }
-
 async function autoLinkBlocks(blocks, slug) {
   if (!blocks || !Array.isArray(blocks)) return blocks;
-
-  const totalWords = blocks
-    .filter(b => b.type === "paragraph" && b.html)
-    .map(b => stripHtml(b.html).split(/\s+/).length)
-    .reduce((a,b)=>a+b,0);
-
+  const totalWords = blocks.filter(b => b.type==="paragraph" && b.html)
+    .map(b => stripHtml(b.html).split(/\s+/).length).reduce((a,b)=>a+b,0);
   maxLinks = Math.max(1, Math.floor(totalWords/200)*2);
   insertedLinks = 0;
   linkIndex = 0;
@@ -202,25 +211,19 @@ async function autoLinkBlocks(blocks, slug) {
       blocks[i].html = await processBlock(blocks[i].html, slug);
     }
   }
-
   document.getElementById("linkStats").innerText =
-    `Test Mode: ${testMode ? "ON" : "OFF"} | Page: ${slug} | Words: ${totalWords} | Max Links: ${maxLinks} | Inserted: ${insertedLinks}`;
-
+    `Test Mode: ${testMode?"ON":"OFF"} | Page: ${slug} | Words: ${totalWords} | Max Links: ${maxLinks} | Inserted: ${insertedLinks}`;
   return blocks;
 }
 
 async function processBlock(html, slug, perBlockLimit=1) {
-  let replaced = 0;
-  while (linkIndex < keywordsArray.length && insertedLinks < maxLinks) {
-    const { keyword, slug: targetSlug } = keywordsArray[linkIndex];
+  let replaced=0;
+  while (linkIndex<keywordsArray.length && insertedLinks<maxLinks) {
+    const {keyword, slug: targetSlug} = keywordsArray[linkIndex];
     if (slug===targetSlug) { linkIndex++; continue; }
     if (html.includes(`/site/${targetSlug}`)) { linkIndex++; continue; }
-
     const regex = new RegExp(`\\b(${escapeRegExp(keyword)})\\b`, "i");
-    const link = testMode
-      ? `<mark class="test-link">$1</mark>`
-      : `<a href="/site/${targetSlug}">$1</a>`;
-
+    const link = testMode ? `<mark class="test-link">$1</mark>` : `<a href="/site/${targetSlug}">$1</a>`;
     if (regex.test(html)) {
       html = html.replace(regex, link);
       insertedLinks++; replaced++;
@@ -235,48 +238,35 @@ async function processBlock(html, slug, perBlockLimit=1) {
 }
 
 // 🔹 Controls
-function startAutoLink() { autoLinkRunning = true; runAutoLinkAll(); }
-function stopAutoLink() { autoLinkRunning = false; log("⏹ Auto-link stopped."); }
+function startAutoLink() { autoLinkRunning=true; runAutoLinkAll(); }
+function stopAutoLink() { autoLinkRunning=false; log("⏹ Auto-link stopped."); }
 function skipKeyword() { linkIndex++; log("⏭ Skipped keyword."); }
-function toggleTestMode() { testMode = !testMode; log(`🔀 Test Mode ${testMode ? "ON" : "OFF"}`); }
-
+function toggleTestMode() { testMode=!testMode; log(`🔀 Test Mode ${testMode?"ON":"OFF"}`); }
 async function updateSinglePage(pageId) {
   const pageRef = doc(db,"pages",pageId);
   const snap = await getDoc(pageRef);
   if (!snap.exists()) { log(`❌ Page not found: ${pageId}`); return; }
-
   const d = snap.data();
   const newBlocks = await autoLinkBlocks(d.blocks,d.slug);
-
-  if (!testMode) {
-    await updateDoc(pageRef, { blocks: newBlocks });
-    log(`✅ Updated page: ${d.slug} PageId: ${pageId}`);
-  } else {
-    log(`🟡 Previewed page: ${d.slug} PageId: ${pageId}`);
-  }
+  if (!testMode) await updateDoc(pageRef,{blocks:newBlocks}), log(`✅ Updated page: ${d.slug} PageId: ${pageId}`);
+  else log(`🟡 Previewed page: ${d.slug} PageId: ${pageId}`);
 }
-
 function updateCurrentPage() {
-  const pageId = document.getElementById("pageIdInput").value.trim();
+  const pageId=document.getElementById("pageIdInput").value.trim();
   if (!pageId) { log("⚠️ Enter a page ID"); return; }
-  autoLinkRunning = true;
-  updateSinglePage(pageId);
+  autoLinkRunning=true; updateSinglePage(pageId);
 }
-
 async function runAutoLinkAll() {
   log("⏳ Loading pages...");
-  const q = collection(db,"pages");
-  const snap = await getDocs(q);
-
+  const snap = await getDocs(collection(db,"pages"));
   if (snap.empty) { log("❌ No pages found."); return; }
-
   processedPages=0;
-  for (const docSnap of snap.docs) {
-    if (!autoLinkRunning) break;
-    const d = docSnap.data();
-    if (!d.blocks) continue;
+  for(const docSnap of snap.docs){
+    if(!autoLinkRunning) break;
+    const d=docSnap.data();
+    if(!d.blocks) continue;
     await autoLinkBlocks(d.blocks,d.slug);
-    if (!testMode) { await updateDoc(doc(db,"pages",docSnap.id), { blocks: d.blocks }); log(`✅ Updated: ${d.slug}`); }
+    if(!testMode) await updateDoc(doc(db,"pages",docSnap.id),{blocks:d.blocks}), log(`✅ Updated: ${d.slug}`);
     else log(`🟡 Previewed: ${d.slug}`);
     processedPages++;
   }

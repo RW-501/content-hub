@@ -809,25 +809,25 @@ async function loadDashboard(autoPing = false) {
     const pageSnap = await getDoc(pageRef);
     const pageData = pageSnap.exists() ? pageSnap.data() : {};
 console.log("pages  ",pages);
-console.log("pageData  ",pageData.slug);
-console.log("p.slug  ",p.slug);
+console.log("pageData  ",pageData);
+console.log("p  ",p);
 
     html += `<tr>
       <td>
         <p>
-          <a href="https://contenthub.guru/site/${p.slug}" target="_blank">
-            <img src="${p.image || ''}" alt="preview" width="300" height="200">
+          <a href="https://contenthub.guru/site/${pageData.slug}" target="_blank">
+            <img src="${pageData.image || ''}" alt="preview" width="300" height="200">
           </a>
         </p>
       </td>
       <td>
-        <a href="https://contenthub.guru/site/${p.slug}" target="_blank" style="width: 50%; display: block;">${p.title}</a>
+        <a href="https://contenthub.guru/site/${pageData.slug}" target="_blank" style="width: 50%; display: block;">${pageData.title}</a>
       </td>
-      <td id="status-${p.id}" class="status-offline">❌ Offline</td>
+      <td id="status-${pageData.id}" class="status-offline">❌ Offline</td>
       <td>${pageData.views || 0}</td>
       <td>
-        <button onclick="window.location.href='https://contenthub.guru/admin/editor?id=${p.id}'">Edit</button>
-        <button onclick="removePage('${p.id}','${p.slug}')">Remove</button>
+        <button onclick="window.location.href='https://contenthub.guru/admin/editor?id=${pageData.id}'">Edit</button>
+        <button onclick="removePage('${pageData.id}','${pageData.slug}')">Remove</button>
       </td>
     </tr>`;
   }

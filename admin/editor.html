@@ -2516,6 +2516,8 @@ async function savePage(pageId, currentUser) {
 
   if (pageId) {
     await setDoc(doc(db, "pages", pageId), data, { merge: true });
+   
+    showToast("success", "Page updated!", 2500);
 
       // First save & fetch updated data from Firestore
   const docSnap = await getDoc(doc(db, "pages", pageId));
@@ -2527,7 +2529,6 @@ async function savePage(pageId, currentUser) {
 
   updatePage(articleData,  'https://contenthub.guru/admin');
 
-    showToast("success", "Page updated!", 2500);
   //  return pageId;
   } else {
     data.createdBy = currentUser.uid;
@@ -2541,8 +2542,9 @@ async function savePage(pageId, currentUser) {
 
 
 $("#saveBtn").onclick = async () => {
-  const id = getPageIdFromUrl();
-  pageId = await updatePage(id, currentUser);
+  const pageId = getPageIdFromUrl();
+
+   savePage(pageId, currentUser)
 };
 
 $("#publishBtn").onclick = async () => {

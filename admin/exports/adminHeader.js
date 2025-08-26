@@ -167,7 +167,7 @@ export function loadAdminHeader(targetId = "admin-header") {
   btnContainer.appendChild(createDashboardButton("Show Analytics", null, "#10b981", () => {
     const analyticsPanel = document.getElementById("analyticsPanel");
     if (analyticsPanel) analyticsPanel.style.display = analyticsPanel.style.display === "none" ? "block" : "none";
-  }));
+  },"showAnalytics"));
   btnContainer.appendChild(createDashboardButton("Logout", null, "#ef4444", async () => {
     if (window.firebase && firebase.auth) {
       await firebase.auth().signOut();

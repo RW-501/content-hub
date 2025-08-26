@@ -3,8 +3,25 @@
 <head>
   <meta charset="UTF-8">
   <title>Auto Link Admin</title>
+  <!-- Favicons -->
+  <link rel="apple-touch-icon" sizes="180x180" href="https://contenthub.guru/images/favicons/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://contenthub.guru/images/favicons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://contenthub.guru/images/favicons/favicon-16x16.png">
+  <link rel="manifest" href="https://contenthub.guru/images/favicons/site.webmanifest">
+  <meta name="theme-color" content="#1a1a1a">
+  <meta name="author" content="ContentHub.guru">
+
   <style>
-    body { font-family: Arial, sans-serif; padding: 20px; }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin:0; padding:0; background:#f4f6f8; color:#333; }
+    h2,h3 { color:#357ABD; }
+    .hidden { display:none; }
+    header, footer { background:#357ABD; color:white; padding:1rem 2rem; display:flex; justify-content:space-between; align-items:center; }
+    footer a { color:white; text-decoration:underline; }
+    main { max-width:1200px; margin:2rem auto; padding:0 1rem; }
+    button { cursor:pointer; border:none; border-radius:6px; padding:0.5rem 1rem; background:#4a90e2; color:white; font-weight:600; transition:0.3s; }
+    button:hover { background:#357ABD; }
+    input, textarea, select { width:100%; padding:0.5rem; margin:0.3rem 0; border-radius:6px; border:1px solid #ccc; }
+
     #keywordModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
       background: rgba(0,0,0,0.5); justify-content: center; align-items: center; }
     #keywordModalContent { background: #fff; padding: 20px; width: 400px; max-height: 80%; overflow: auto; border-radius: 8px; }
@@ -12,6 +29,7 @@
     .keyword-item button { background: red; color: #fff; border: none; padding: 2px 5px; cursor: pointer; }
     #linkLog { margin-top: 10px; max-height: 300px; overflow: auto; font-size: 12px; border: 1px solid #ddd; padding: 5px; }
     #linkStats { margin-top: 8px; }
+    #currentText { margin-top:10px; padding:10px; border:1px solid #ccc; background:#fff; max-height:150px; overflow:auto; font-size:14px; }
     mark.test-link { background: yellow; }
   </style>
 </head>
@@ -44,6 +62,10 @@
       <strong>Keywords to link:</strong>
       <ul id="keywordsList"></ul>
     </div>
+    <div>
+      <strong>Current Text Preview:</strong>
+      <div id="currentText"><em>Text that will be updated appears here...</em></div>
+    </div>
   </div>
 
   <div id="linkLog"><em>Log will appear here...</em></div>
@@ -68,7 +90,7 @@
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
-import { getFirestore, collection, doc, getDoc, getDocs, updateDoc } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+import { getFirestore, collection, doc, getDoc, getDocs, updateDoc, setDoc } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBXZcSYdspfi2jBipwUFeNmKZgU02ksg8c",
@@ -91,6 +113,7 @@ let maxLinks = 0;
 let insertedLinks = 0;
 let processedPages = 0;
 let testMode = true; // default ON
+let currentPreviewText = "";
 
 // 🔹 Helpers
 function log(msg) {
@@ -110,7 +133,7 @@ function updateKeywordDisplay() {
   document.getElementById("testModeStatus").innerText = testMode ? "ON" : "OFF";
 }
 
-// 🔹 Modal for keywords
+// 🔹 Modal for keywords with Firestore updates
 function openKeywordModal() {
   const modal = document.getElementById("keywordModal");
   modal.style.display = "flex";
@@ -129,21 +152,29 @@ function renderModalList() {
   });
 }
 
-function addKeyword() {
+async function addKeyword() {
   const kw = document.getElementById("newKeyword").value.trim();
   const slug = document.getElementById("newSlug").value.trim();
   if (!kw || !slug) return alert("Enter both keyword and slug");
-  keywordsArray.push({ keyword: kw, slug: slug });
+  const newKeyword = { keyword: kw, slug: slug };
+  keywordsArray.push(newKeyword);
   updateKeywordDisplay();
   renderModalList();
   document.getElementById("newKeyword").value = "";
   document.getElementById("newSlug").value = "";
+
+  // Save to Firestore keywords collection
+  await setDoc(doc(db,"keywords",slug), newKeyword);
+  log(`✅ Added keyword "${kw}" → /site/${slug}`);
 }
 
-function removeKeyword(i) {
-  keywordsArray.splice(i, 1);
+async function removeKeyword(i) {
+  const removed = keywordsArray.splice(i, 1)[0];
   updateKeywordDisplay();
   renderModalList();
+  // Remove from Firestore
+  await updateDoc(doc(db,"keywords",removed.slug), { removed: true });
+  log(`❌ Removed keyword "${removed.keyword}"`);
 }
 
 // 🔹 Auto-link logic
@@ -165,8 +196,11 @@ async function autoLinkBlocks(blocks, slug) {
 
   for (let i=0;i<blocks.length;i++) {
     if (!autoLinkRunning || insertedLinks>=maxLinks) break;
-    if (blocks[i].type==="paragraph" && blocks[i].html)
+    if (blocks[i].type==="paragraph" && blocks[i].html) {
+      currentPreviewText = blocks[i].html;
+      document.getElementById("currentText").innerHTML = currentPreviewText;
       blocks[i].html = await processBlock(blocks[i].html, slug);
+    }
   }
 
   document.getElementById("linkStats").innerText =
@@ -190,6 +224,8 @@ async function processBlock(html, slug, perBlockLimit=1) {
     if (regex.test(html)) {
       html = html.replace(regex, link);
       insertedLinks++; replaced++;
+      currentPreviewText = html;
+      document.getElementById("currentText").innerHTML = currentPreviewText;
       log(`${testMode?"🟡 Preview":"🔗 Linked"} "${keyword}" → /site/${targetSlug}`);
       if (replaced>=perBlockLimit) break;
     }
@@ -214,9 +250,9 @@ async function updateSinglePage(pageId) {
 
   if (!testMode) {
     await updateDoc(pageRef, { blocks: newBlocks });
-    log(`✅ Updated page: ${d.slug}`);
+    log(`✅ Updated page: ${d.slug} PageId: ${pageId}`);
   } else {
-    log(`🟡 Previewed page: ${d.slug}`);
+    log(`🟡 Previewed page: ${d.slug} PageId: ${pageId}`);
   }
 }
 

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact Us – Content Hub</title>
+<meta name="description" content="Get in touch with the Content Hub team. Send questions, feedback, or feature requests directly via our contact form.">
+<meta name="keywords" content="Contact, Content Hub, CMS, Feedback, Questions, Support">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://contenthub.guru/contact-us">
+<link rel="stylesheet" href="https://contenthub.guru/css/style.css">
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Content Hub">
+<meta property="og:title" content="Content Hub – Smart CMS Dashboard for Websites">
+<meta property="og:description" content="Manage, edit, and optimize your websites from one dashboard. ContentHub.guru makes content management simple and powerful.">
+<meta property="og:url" content="https://contenthub.guru/contact-us">
+<meta property="og:image" content="https://contenthub.guru/images/og-preview.png">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Content Hub – Smart CMS Dashboard for Websites">
+<meta name="twitter:description" content="Manage, edit, and optimize your websites with ContentHub.guru. A powerful CMS dashboard built for creators.">
+<meta name="twitter:image" content="https://contenthub.guru/images/og-preview.png">
+
+<!-- Favicons -->
+<link rel="apple-touch-icon" sizes="180x180" href="https://contenthub.guru/images/favicons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://contenthub.guru/images/favicons/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="https://contenthub.guru/images/favicons/favicon-16x16.png">
+<link rel="manifest" href="https://contenthub.guru/images/favicons/site.webmanifest">
+<meta name="theme-color" content="#1a1a1a">
+
+<!-- Monetization -->
+<meta name="google-adsense-account" content="ca-pub-2001518155292747">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2001518155292747" crossorigin="anonymous"></script>
+
+<!-- Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZPWGF7YMPE"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-ZPWGF7YMPE');
+</script>
+
+</head>
+<body>
+
+<div id="main-header"></div>
+<script type="module">
+  import {  } from 'https://contenthub.guru/exports/header.js';
+</script>
+
+
+<main>
+      <h1>Contact Us</h1>
+
+  <section>
+    <p>Have questions, feedback, or feature requests? Fill out the form below and our team will get back to you promptly.</p>
+    
+    <form id="contactForm">
+      <div class="form-group">
+        <label for="name">Name*</label>
+        <input type="text" id="name" name="name" placeholder="Your Name" required>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email*</label>
+        <input type="email" id="email" name="email" placeholder="Your Email" required>
+      </div>
+
+      <div class="form-group">
+        <label for="message">Message*</label>
+        <textarea id="message" name="message" rows="5" placeholder="Your message" required></textarea>
+      </div>
+
+      <button type="submit" id="submitBtn">Send Message</button>
+      <p id="formFeedback" style="margin-top:10px;"></p>
+    </form>
+  </section>
+</main>
+
+<div id="main-footer"></div>
+<script type="module">
+  import { loadFooter } from 'https://contenthub.guru/exports/footer.js';
+  loadFooter(); // injects footer into div#main-footer
+</script>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+  
+import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+import { showToast } from "https://contenthub.guru/exports/showToast.js";
+
+// Firebase config
+const firebaseConfig = {
+  apiKey: "AIzaSyBXZcSYdspfi2jBipwUFeNmKZgU02ksg8c",
+  authDomain: "contentmanagement-8af61.firebaseapp.com",
+  projectId: "contentmanagement-8af61",
+  storageBucket: "contentmanagement-8af61.firebasestorage.app",
+  messagingSenderId: "579537581112",
+  appId: "1:579537581112:web:736c7faafaf1391ce1e2cd",
+  measurementId: "G-ZPWGF7YMPE"
+};
+
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+const loginBtn = document.getElementById("loginBtn");
+const adminBtn = document.getElementById("adminBtn");
+
+onAuthStateChanged(auth, user => {
+  if(user){
+    loginBtn.textContent = "Logged in as " + user.displayName;
+    if(allowedEmails.includes(user.email) || allowedPhones.includes(user.phoneNumber)) adminBtn.style.display="inline-block";
+  } else {
+    loginBtn.textContent="Login";
+    adminBtn.style.display="none";
+  }
+
+  loginBtn.addEventListener("click", async () => {
+  const provider = new GoogleAuthProvider();
+  try { await signInWithPopup(auth, provider); } 
+  catch (err) { alert("Login failed: " + err.message); }
+});
+
+adminBtn.addEventListener("click", () => { window.location.href = "https://contenthub.guru/admin/index.html"; });
+
+});
+
+
+
+document.addEventListener("DOMContentLoaded", () => {
+  const form = document.getElementById("contactForm");
+  const submitBtn = document.getElementById("submitBtn");
+  const feedback = document.getElementById("formFeedback");
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    submitBtn.disabled = true;
+    feedback.textContent = "Sending...";
+    const name = form.name.value.trim();
+    const email = form.email.value.trim();
+    const message = form.message.value.trim();
+
+    if (!name || !email || !message) {
+      feedback.textContent = "All fields are required.";
+      submitBtn.disabled = false;
+      return;
+    }
+
+    try {
+      await addDoc(collection(db, "contactMessages"), {
+        name,
+        email,
+        message,
+        createdAt: serverTimestamp()
+      });
+      feedback.textContent = "✅ Message sent successfully!";
+      form.reset();
+    } catch (err) {
+      console.error(err);
+      feedback.textContent = "❌ Error sending message. Try again.";
+    }
+    submitBtn.disabled = false;
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,2803 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Page Editor</title>
+
+<!-- Favicons -->
+<link rel="apple-touch-icon" sizes="180x180" href="https://contenthub.guru/images/favicons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://contenthub.guru/images/favicons/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="https://contenthub.guru/images/favicons/favicon-16x16.png">
+<link rel="manifest" href="https://contenthub.guru/images/favicons/site.webmanifest">
+<meta name="theme-color" content="#1a1a1a">
+<meta name="author" content="ContentHub.guru">
+
+<style>
+  :root { --card:#fff; --ink:#222; --muted:#666; --bg:#f7f7f9; --border:#e6e6ea; --accent:#4f46e5; }
+  * { box-sizing: border-box; }
+  body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin:0; background:var(--bg); color:var(--ink); }
+  #toolbar { display:flex; gap:.75rem; background:#333; color:#fff; padding:1rem; align-items:center; flex-wrap:wrap; }
+  #toolbar div { margin-right:1rem; white-space:nowrap; }
+  .container { max-width:1100px; margin:0 auto; padding:1rem; }
+  section { background:var(--card); padding:1rem; margin:1rem 0; border-radius:12px; box-shadow:0 2px 6px rgba(0,0,0,.06); border:1px solid var(--border); }
+  section header { display:flex; align-items:center; justify-content:space-between; gap:.5rem; margin-bottom:.75rem; }
+  section header h2 { margin:0; font-size:1.05rem; }
+  .section-actions { display:flex; gap:.5rem; }
+  .toggle-btn { font-size:.85rem; background:#eef2ff; color:var(--accent); border:1px solid #c7d2fe; padding:.25rem .5rem; border-radius:6px; cursor:pointer; }
+.hidden { display:none; }
+  .color-btn { width: 36px; height: 36px; border: none; border-radius: 6px; cursor:pointer; vertical-align: middle; }
+  #previewPrimary, #previewSecondary { padding:0.5rem 1rem; margin-top:0.5rem; border:none; border-radius:8px; cursor:pointer; }
+
+  input, textarea, select { width:100%; margin:.1rem 0 .8rem; padding:.6rem .65rem; border:1px solid var(--border); border-radius:8px; background:#fff; }
+  textarea { min-height:120px; }
+  button { padding:.55rem .9rem; border:none; border-radius:8px; cursor:pointer; background:#eaeaea; }
+  #publishBtn { background:#22c55e; color:#fff; }
+  #saveBtn { background:#111827; color:#fff; }
+  #editorTitle { margin:1rem 0 .5rem; }
+
+  /* TextEditor */
+  .te { border:1px solid var(--border); border-radius:10px; overflow:hidden; background:#fff; margin:.5rem 0 1rem; }
+  .te-toolbar { display:flex; gap:.35rem; flex-wrap:wrap; background:#fafafa; border-bottom:1px solid var(--border); padding:.35rem; }
+  .te-toolbar button { background:#fff; border:1px solid var(--border); border-radius:6px; padding:.35rem .5rem; font-size:.85rem; }
+  .te-area[contenteditable="true"] { min-height:120px; padding:.7rem .8rem; outline:none; }
+  .te-footer { display:flex; justify-content:flex-end; gap:.5rem; padding:.35rem .5rem; background:#fafafa; border-top:1px solid var(--border); }
+  .te-compact .te-area { min-height:80px; }
+
+  /* Blocks */
+  .blocks-list { display:flex; flex-direction:column; gap:.6rem; }
+  .block-card { border:1px dashed #d1d5db; border-radius:10px; background:#fff; padding:.6rem; position:relative; }
+  .block-head { display:flex; align-items:center; gap:.5rem; justify-content:space-between; }
+  .block-head-left { display:flex; gap:.5rem; align-items:center; }
+  .drag-handle { cursor:grab; user-select:none; padding:.25rem .45rem; border:1px solid var(--border); border-radius:6px; background:#f9fafb; }
+  .block-actions { display:flex; gap:.4rem; }
+  .block-actions button { font-size:.8rem; }
+  .block-body { margin-top:.6rem; }
+  .row { display:flex; gap:.6rem; }
+  .row > * { flex:1; }
+  .muted { color:var(--muted); font-size:.9rem; }
+  .col { display: grid; gap: .2rem;}
+
+.pill {
+    background: #eef2ff;
+    color: #3730a3;
+    font-size: .75rem;
+    padding: .1rem .5rem;
+    border-radius: 999px;
+    border: 1px solid #c7d2fe;
+    width: -webkit-fill-available;
+}
+
+.group { display: grid; margin: 1rem ; }
+
+  main { margin-bottom: 2rem;}
+  .hidden { display: none;}
+
+  .page-preview { border: 2px dashed #ddd; padding: 12px; margin-top: 12px; background:#fafafa; }
+.preview-row { display: grid; grid-template-columns: 1fr 2fr 1fr; gap: 12px; }
+.preview-top, .preview-bottom, .preview-left, .preview-in-article, .preview-right {
+  border: 1px dashed #ccc; padding: 8px; min-height: 40px; background:#fff;
+}
+.preview-top::before { content: "🔝 Top"; display:block; color:#888; font-size:12px; }
+.preview-left::before { content: "⬅️ Left"; display:block; color:#888; font-size:12px; }
+.preview-in-article::before { content: "📄 In-article"; display:block; color:#888; font-size:12px; }
+.preview-right::before { content: "➡️ Right"; display:block; color:#888; font-size:12px; }
+.preview-bottom::before { content: "🔚 Bottom"; display:block; color:#888; font-size:12px; }
+
+.preview-block { border:1px solid #aaa; padding:6px; margin:6px 0; background:#fff; }
+
+</style>
+
+
+<style>
+  .image-drop-zone {
+    border: 2px dashed #ccc;
+    padding: 1rem;
+    border-radius: 8px;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .image-drop-zone.dragover {
+    border-color: #357ABD;
+    background: #f0f4fa;
+  }
+  .hidden { display: none; }
+</style>
+
+</head>
+<body>
+
+ <div id="admin-header"></div>
+
+<script type="module">
+  import { loadAdminHeader } from 'https://contenthub.guru/admin/exports/adminHeader.js';
+
+  // Call the function to render the admin header
+  loadAdminHeader('admin-header');
+</script>
+<main>
+
+<div id="auth-section" class="container">Login first…</div>
+
+<div id="editor" class="hidden">
+  <div id="toolbar">
+    <div>Status: <span id="pageStatus">-</span></div>
+    <div>Views: <span id="viewsCount">0</span></div>
+    <div>Unique: <span id="uniqueViews">0</span></div>
+    <div>Today Views: <span id="dailyViews">0</span></div>
+    <div>Last Updated: <span id="lastUpdated">-</span></div>
+    <div>Site Live: <span id="sitePing">-</span></div>
+  </div>
+
+<div class="container">
+  <h1 id="editorTitle">Create Page</h1>
+
+  <!-- Metadata -->
+  <section id="metadataSection">
+    <header>
+      <h2>Page Metadata</h2>
+      <div class="section-actions">
+        <button class="toggle-btn" data-toggle="#metadataContent">Show/Hide</button>
+      </div>
+    </header>
+
+    <div id="metadataContent">
+      <div class="group">
+        <label for="title">Title</label>
+        <input id="title" placeholder="Title" />
+        <div id="titleFeedback" class="seo-feedback"></div>
+        <small>Tip: Keep under 60 characters and include main keyword.</small>
+</div>
+      <div class="group">
+      <label for="description">Description</label>
+      <textarea id="description" placeholder="Description"></textarea>
+      <div id="descriptionFeedback" class="seo-feedback"></div>
+      <small>Tip: 150–160 characters summarizing the page content.</small>
+</div>
+      <div class="group">
+      <label for="keywords">Keywords</label>
+      <input id="keywords" placeholder="Comma separated keywords" />
+      <div id="keywordsFeedback" class="seo-feedback"></div>
+      <small>Tip: Use 5–10 relevant keywords, separated by commas.</small>
+
+</div>
+      <div class="group">
+        <label for="schemaType">Schema Type</label>
+        <select id="schemaType" title="Schema Type">
+          <option value="Article">Article</option>
+          <option value="FAQ">FAQ</option>
+          <option value="HowTo">HowTo</option>
+        </select>
+        <div id="schemaFeedback" class="seo-feedback"></div>
+        <small>Tip: Choose the most appropriate schema for SEO rich snippets.</small>
+</div>
+      <div class="group">
+        <label for="domain">Domain (optional)</label>
+        <input id="domain" value="contenthub.guru" placeholder="Domain" disabled/>
+        <div id="domainFeedback" class="seo-feedback"></div>
+        <small>Tip: Leave blank to auto-generate from title.</small>
+      </div>
+      <div class="group">
+        <label for="slug">Slug</label>
+        <input id="slug" placeholder="contenthub.guru/... Slug (unique)" disabled/>
+        <div id="slugFeedback" class="seo-feedback"></div>
+        <small>Tip: Use hyphens, lowercase, no spaces or special chars.</small>
+</div>
+      <!-- Category -->
+      <div class="group">
+        <label for="category">Category</label>
+        <select id="category">
+          <option value="">-- Select Category --</option>
+          <option value="health">Health</option>
+          <option value="nutrition">Nutrition</option>
+          <option value="fitness">Fitness</option>
+          <option value="business">Business</option>
+          <option value="tech">Technology</option>
+          <option value="lifestyle">Lifestyle</option>
+          <option value="education">Education</option>
+          <option value="finance">Finance</option>
+          <option value="news">News</option>
+          <option value="other">Other</option>
+        </select>
+        <div id="categoryFeedback" class="seo-feedback"></div>
+        <small>Tip: Pick the category closest to your content.</small>
+      </div>
+
+
+
+<div id="seoContainer" style="margin-top:10px; background: white; padding: 5px 0; transition: all 0.3s ease;">
+  <div style="font-weight:bold;">SEO Score:</div>
+  <div style="width:100%; background:#eee; height:20px; border-radius:4px;">
+    <div id="seoScoreBar" style="width:0%; height:100%; background:green; border-radius:4px;"></div>
+  </div>
+  <div id="seoScoreText" style="font-size:12px; font-weight:bold; margin-top:2px;"></div>
+</div>
+
+
+
+
+</div>
+
+<style>
+  .seo-feedback {
+    height: 14px;
+    margin-top: 2px;
+    font-size: 12px;
+    font-weight: bold;
+  }
+</style>
+
+  </section>
+
+
+    <!-- Main Image Section -->
+<section id="mainImageSection">
+  <header>
+    <h2>Main Image</h2>
+    <div class="section-actions">
+      <button class="toggle-btn" data-toggle="#imageWrap">Show/Hide</button>
+    </div>
+  </header>
+  <div id="imageWrap">
+    <div id="imageDropZone" class="image-drop-zone">
+      <p>Click or drag an image here</p>
+      <img id="previewImg" src=""  width="300" height="200" alt="Preview" style="display:none; max-width:100%; margin-top:10px; border-radius:8px;"/>
+    </div>
+    <input type="file" id="imageInput" accept="image/*" class="hidden">
+    <input type="hidden" id="imageUrl">
+  </div>
+</section>
+
+
+
+<div id="pagePreview" class="page-preview">
+  <h3>Live Page Preview</h3>
+
+  <div class="preview-top"></div>
+
+  <!-- 3-column row for left / main / right -->
+  <div class="preview-row">
+    <div class="preview-left"></div>
+    <div class="preview-in-article"></div>
+    <div class="preview-right"></div>
+  </div>
+
+  <div class="preview-bottom"></div>
+
+  <div>
+  <button id="toggle-preview-btn">Show/Hide</button>
+  </div>
+</div>
+
+
+
+<script>
+const seoContainer = document.getElementById('seoContainer');
+const pagePreview = document.getElementById('pagePreview');
+const placeholder = document.createElement('div');
+let isSticky = false;
+
+function stick() {
+  if (isSticky) return;
+
+  const rect = seoContainer.getBoundingClientRect();
+  const parent = seoContainer.parentNode;
+
+  placeholder.style.height = rect.height + 'px';
+  parent.insertBefore(placeholder, seoContainer);
+
+  seoContainer.style.position = 'fixed';
+  seoContainer.style.top = '0';
+  seoContainer.style.left = rect.left + 'px';
+  seoContainer.style.width = rect.width + 'px';
+  seoContainer.style.boxShadow = '0 2px 8px rgba(0,0,0,0.15)';
+  seoContainer.style.transform = 'translateY(-20px)';
+  seoContainer.style.opacity = '0';
+  seoContainer.style.marginTop = '0';
+  seoContainer.style.zIndex = '1000';
+  seoContainer.style.padding = '10px';
+
+  requestAnimationFrame(() => {
+    seoContainer.style.transform = 'translateY(0)';
+    seoContainer.style.opacity = '1';
+  });
+
+  isSticky = true;
+}
+
+function unstick() {
+  if (!isSticky) return;
+
+  const rect = seoContainer.getBoundingClientRect();
+  const parent = seoContainer.parentNode;
+
+  placeholder.style.height = rect.height + 'px';
+  parent.insertBefore(placeholder, seoContainer);
+
+  seoContainer.style.position = '';
+  seoContainer.style.top = '';
+  seoContainer.style.left = '';
+  seoContainer.style.width = '';
+  seoContainer.style.boxShadow = '';
+  seoContainer.style.transform = '';
+  seoContainer.style.opacity = '';
+  seoContainer.style.zIndex = '';
+  seoContainer.style.padding = '';
+
+
+  if (placeholder.parentElement) placeholder.remove();
+  isSticky = false;
+}
+
+let isStickyPreview = false;
+
+function unstickPreview(){
+
+  pagePreview.style.position = '';
+  pagePreview.style.top = '';
+  pagePreview.style.left = '';
+  pagePreview.style.width = '';
+  pagePreview.style.boxShadow = '';
+  pagePreview.style.transform = '';
+  pagePreview.style.opacity = '';
+  pagePreview.style.marginTop = '';
+  pagePreview.style.zIndex = '';
+  pagePreview.style.padding = '';
+
+isStickyPreview = false;
+}
+
+function stickPreview(){
+  const rect = seoContainer.getBoundingClientRect();
+  const parent = seoContainer.parentNode;
+
+
+  pagePreview.style.position = 'fixed';
+  pagePreview.style.top = '0';
+  pagePreview.style.left = rect.left + 'px';
+  pagePreview.style.width = rect.width + 'px';
+  pagePreview.style.boxShadow = '0 2px 8px rgba(0,0,0,0.15)';
+  pagePreview.style.transform = 'translateY(-20px)';
+  pagePreview.style.opacity = '0';
+  pagePreview.style.marginTop = '0';
+  pagePreview.style.zIndex = '1000';
+  pagePreview.style.padding = '10px';
+
+  requestAnimationFrame(() => {
+    pagePreview.style.transform = 'translateY(0)';
+    pagePreview.style.opacity = '1';
+  });
+
+  isStickyPreview = true;
+}
+
+window.addEventListener('scroll', () => {
+  const seoRect = seoContainer.getBoundingClientRect();
+  const previewRect = pagePreview.getBoundingClientRect();
+
+  // Stick if top of SEO is above viewport
+  if (seoRect.top <= 0 && !isSticky && previewRect.top > 0) {
+    stick();
+  }
+
+  // Unstick if scrolled back above SEO
+  if (isSticky && window.scrollY < placeholder.offsetTop) {
+    unstick();
+  }
+
+  // Unstick if pagePreview reaches top
+  if (isSticky && previewRect.top <= 0) {
+    unstick();
+  }
+});
+
+window.addEventListener('resize', () => {
+  if (isSticky) {
+    const rect = placeholder.getBoundingClientRect();
+    seoContainer.style.left = rect.left + 'px';
+    seoContainer.style.width = rect.width + 'px';
+  }
+});
+
+
+
+
+
+const toggleBtn = document.getElementById('toggle-preview-btn');
+
+function toggleSticky() { 
+  if (isStickyPreview) {
+    unstickPreview();
+  } else {
+    stickPreview();
+  }
+}
+
+function updateToggleBtnText() {
+  if (!toggleBtn) return;
+  toggleBtn.textContent = isStickyPreview ? 'Show' : 'Hide';
+}
+
+if (toggleBtn) toggleBtn.addEventListener('click', toggleSticky);
+
+</script>
+
+
+
+
+    <!-- Blocks Builder -->
+    <section id="blocksSection">
+      <header>
+        <h2>Blocks Builder (drag to reorder)</h2>
+        <div class="section-actions">
+          <button id="addBlockBtn">+ Add Block</button>
+          <button class="toggle-btn" data-toggle="#blocksWrap">Show/Hide</button>
+        </div>
+      </header>
+      <div id="blocksWrap">
+        <div class="muted">Types: heading, paragraph, image, video, faq, comparisonTable, ad, cta, button, rawHtml</div>
+        <div class="blocks-list" id="blocksList"></div>
+        <textarea id="blocksJSON" class="hidden"></textarea>
+      </div>
+      
+      <div id="bodyFeedback" class="body-feedback"></div>
+    </section>
+
+    <!-- Body Content -->
+    <section id="bodySection" hidden>
+      <header>
+        <h2>Body Content</h2>
+
+        <div class="section-actions">
+          <span class="pill">Reusable Text Editor</span>
+          <button class="toggle-btn" data-toggle="#bodyContentWrap">Show/Hide</button>
+        </div>
+      </header>
+      <div id="bodyContentWrap">
+        <div id="bodyEditor" class="te"></div>
+      </div>
+    </section>
+
+<!-- Page Styles -->
+<section id="stylesSection">
+  <header>
+    <h2>Page Styles / Theme</h2>
+    <div class="section-actions">
+      <button class="toggle-btn" data-toggle="#stylesWrap">Show/Hide</button>
+    </div>
+  </header>
+<div id="stylesWrap">
+
+  <div class="row">
+    <label>Header Background Color
+      <input type="color" id="headerBg" value="#ffffff" class="hidden">
+      <button class="color-btn" data-target="headerBg" style="background:#ffffff"></button>
+    </label>
+    <label>Header Text Color
+      <input type="color" id="headerText" value="#222222" class="hidden">
+      <button class="color-btn" data-target="headerText" style="background:#222222"></button>
+    </label>
+    <label>Header Border Color
+      <input type="color" id="headerBorder" value="#e6e6ea" class="hidden">
+      <button class="color-btn" data-target="headerBorder" style="background:#e6e6ea"></button>
+    </label>
+  </div>
+
+  <div class="row">
+    <label>&lt;hr&gt; Color
+      <input type="color" id="hrColor" value="#d1d5db" class="hidden">
+      <button class="color-btn" data-target="hrColor" style="background:#d1d5db"></button>
+    </label>
+  </div>
+
+  <div class="row">
+    <label>CTA Button Color
+      <input type="color" id="ctaBg" value="#4f46e5" class="hidden">
+      <button class="color-btn" data-target="ctaBg" style="background:#4f46e5"></button>
+    </label>
+    <label>CTA Text Color
+      <input type="color" id="ctaText" value="#ffffff" class="hidden">
+      <button class="color-btn" data-target="ctaText" style="background:#ffffff"></button>
+    </label>
+    <label>CTA Hover Color
+      <input type="color" id="ctaHover" value="#3730a3" class="hidden">
+      <button class="color-btn" data-target="ctaHover" style="background:#3730a3"></button>
+    </label>
+    <label>CTA Border Radius
+      <input type="range" id="ctaRadius" min="0" max="30" value="8">
+    </label>
+    <label>CTA Outline Color
+      <input type="color" id="ctaOutline" value="#e6e6ea" class="hidden">
+      <button class="color-btn" data-target="ctaOutline" style="background:#e6e6ea"></button>
+    </label>
+  </div>
+
+  <div class="row">
+    <label>Button Color
+      <input type="color" id="btnBg" value="#22c55e" class="hidden">
+      <button class="color-btn" data-target="btnBg" style="background:#22c55e"></button>
+    </label>
+    <label>Button Text Color
+      <input type="color" id="btnText" value="#ffffff" class="hidden">
+      <button class="color-btn" data-target="btnText" style="background:#ffffff"></button>
+    </label>
+    <label>Button Hover Color
+      <input type="color" id="btnHover" value="#16a34a" class="hidden">
+      <button class="color-btn" data-target="btnHover" style="background:#16a34a"></button>
+    </label>
+  </div>
+
+  <div class="col">
+  <label>
+    <input type="checkbox" id="ctaNoBorderRadius"> Remove CTA Border Radius
+  </label>
+  <label>
+    <input type="checkbox" id="ctaNoBorder"> Remove CTA Outline
+  </label>
+</div>
+
+<div class="col">
+  <label>
+    <input type="checkbox" id="btnNoBorderRadius"> Remove Button Border Radius
+  </label>
+  <label>
+    <input type="checkbox" id="btnNoBorder"> Remove Button Border
+  </label>
+</div>
+
+  <div class="row">
+    <label>Extra Custom CSS
+      <textarea id="customCSS" placeholder="Enter any additional CSS"></textarea>
+    </label>
+  </div>
+</div>
+
+
+    <!-- Button Preview -->
+    <div style="margin-top:1rem;">
+
+<!-- 🔹 Preview Area -->
+<div id="previewWrap" style="border:1px solid #ccc; padding:1rem; margin-top:1rem; border-radius:8px; background:#f9f9f9;">
+  
+  <!-- Header Preview -->
+  <header  id="previewHeader" style="padding:1rem; margin-bottom:1rem; text-align:center;">
+    <h1>Header Preview</h1>
+  </header>
+
+  <!-- Horizontal Rule Preview -->
+  <hr style="margin:1rem 0; border:1px solid #d1d5db;">
+
+  <!-- Button Preview -->
+  <div style="margin-top:1rem; display:flex; gap:1rem;">
+    <button id="previewPrimary" style="padding:0.5rem 1rem; cursor:pointer;">Primary CTA</button>
+    <button id="previewSecondary" style="padding:0.5rem 1rem; cursor:pointer;">Secondary Button</button>
+  </div>
+
+</div>
+
+    </div>
+</section>
+
+    <!-- FAQ -->
+    <section id="faqSection" class="hidden">
+      <header>
+        <h2>FAQ Items</h2>
+        <div class="section-actions">
+          <button id="addFaqBtn">+ Add FAQ</button>
+          <button class="toggle-btn" data-toggle="#faqWrap">Show/Hide</button>
+        </div>
+      </header>
+      <div id="faqWrap">
+        <div id="faqItems"></div>
+      </div>
+    </section>
+
+    <!-- HowTo -->
+    <section id="howtoSection" class="hidden">
+      <header>
+        <h2>HowTo Steps</h2>
+        <div class="section-actions">
+          <button id="addHowtoBtn">+ Add Step</button>
+          <button class="toggle-btn" data-toggle="#howtoWrap">Show/Hide</button>
+        </div>
+      </header>
+      <div id="howtoWrap">
+        <div id="howtoItems"></div>
+      </div>
+    </section>
+
+    <!-- SEO -->
+    <section id="seoSection">
+      <header>
+        <h2>SEO / OpenGraph</h2>
+        <div class="section-actions">
+          <button class="toggle-btn" data-toggle="#seoWrap">Show/Hide</button>
+        </div>
+      </header>
+      <div id="seoWrap">
+        <div class="row">
+          <input id="ogTitle" placeholder="OG Title" />
+          <input id="ogDesc" placeholder="OG Description" />
+        </div>
+        <input id="ogImage" placeholder="OG Image URL" />
+      </div>
+    </section>
+
+    <!-- Monetization -->
+    <section id="monetizationSection">
+      <header>
+        <h2>Monetization & Affiliates</h2>
+        <div class="section-actions">
+          <button class="toggle-btn" data-toggle="#monWrap">Show/Hide</button>
+        </div>
+      </header>
+      <div id="monWrap">
+        <textarea id="affiliates" placeholder='Affiliate IDs (JSON array) e.g. ["amzn-123","sk-456"]'></textarea>
+        <textarea id="ads" placeholder='Ad placeholders (JSON array) e.g. ["top","in-article-1","sidebar-1"]'></textarea>
+      </div>
+    </section>
+
+    <div class="row" style="margin-top:1rem;">
+      <button id="saveBtn">Save Changes</button>
+      <button id="publishBtn">Publish</button>
+    </div>
+  </div>
+</div>
+</main>
+
+
+<div id="admin-footer"></div>
+<script type="module">
+  import { loadFooter } from 'https://contenthub.guru/admin/exports/adminFooter.js';
+  loadFooter(); // injects footer into div#admin-footer
+</script>
+
+
+<script type="module">
+/* ---------------- Firebase Boot ---------------- */
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+import { getFirestore, doc, getDoc, setDoc, addDoc, collection, serverTimestamp, updateDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-storage.js";
+
+
+import { showToast } from "https://contenthub.guru/exports/showToast.js";
+
+// fallback toast if import fails
+window.showToast = window.showToast || function(type,msg,dur){alert(`${type}: ${msg}`)};
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBXZcSYdspfi2jBipwUFeNmKZgU02ksg8c",
+  authDomain: "contentmanagement-8af61.firebaseapp.com",
+  projectId: "contentmanagement-8af61",
+  storageBucket: "contentmanagement-8af61.firebasestorage.app",
+  messagingSenderId: "579537581112",
+  appId: "1:579537581112:web:736c7faafaf1391ce1e2cd",
+  measurementId: "G-ZPWGF7YMPE"
+};
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
+
+// Initialize Storage
+const storage = getStorage(app); // app is your Firebase app instance
+
+/* ---------------- Utilities ---------------- */
+const $ = sel => document.querySelector(sel);
+
+/* ---------------- Helpers ---------------- */
+function safeParse(str, fallback) {
+  try { return JSON.parse(str); } catch { return fallback; }
+}
+const toJSON = (obj) => JSON.stringify(obj ?? null, null, 2);
+
+/* ping */
+
+// Cache for domain checks
+const checkedDomains = {};
+
+async function pingSite(domain) {
+  if (!domain) return "❌ Offline";
+
+  // ✅ Return cached result if already checked
+  if (checkedDomains.hasOwnProperty(domain)) {
+    return checkedDomains[domain];
+  }
+
+  try {
+    const url = domain.startsWith("http") 
+      ? domain 
+      : `https://contenthub.guru/site/${domain}.html`;
+
+    const resp = await fetch(url, { method: "GET", cache: "no-store" });
+    const status = resp.ok ? "✅ Online" : "❌ Offline";
+
+    // ✅ Save result to cache
+    checkedDomains[domain] = status;
+    return status;
+  } catch {
+    checkedDomains[domain] = "❌ Offline";
+    return "❌ Offline";
+  }
+}
+
+function getPageIdFromUrl() {
+  const params = new URLSearchParams(window.location.search);
+  return params.get("id");
+}
+
+
+let currentUser, pageData = null;
+  let pageId = getPageIdFromUrl();
+
+
+/* show/hide toggles */
+document.addEventListener("click", (e) => {
+  const btn = e.target.closest("[data-toggle]");
+  if (!btn) return;
+  const target = btn.getAttribute("data-toggle");
+  const el = document.querySelector(target);
+  if (!el) return;
+  el.classList.toggle("hidden");
+});
+
+
+
+async function loadPageData(currentUser) {
+  if (!pageId) {
+    console.warn("No pageId found in URL");
+    return null;
+  }
+
+  const ref = doc(db, "pages", pageId);
+  const snap = await getDoc(ref);
+
+  if (!snap.exists()) {
+    showToast("error", "Page not found!", 4000);
+    return null;
+  }
+
+  const pageData = snap.data();
+
+  // ✅ Permission check
+  if (pageData.createdBy !== currentUser.uid) {
+    showToast("error", "You are not the owner of this page", 4000);
+    throw new Error("Permission denied");
+  }
+
+  return { id: pageId, ...pageData };
+}
+
+async function initEditor(currentUser) {
+  try {
+    const pageData = await loadPageData(currentUser);
+    if (!pageData) return;
+
+    // Fill form fields
+    $("#title").value = pageData.title || "";
+    $("#slug").value = pageData.slug || "";
+    $("#description").value = pageData.description || "";
+    $("#keywords").value = pageData.keywords?.join(", ") || "";
+    $("#domain").value = pageData.domain || "";
+
+    // ✅ Show FAQ / HowTo sections depending on schema type
+const schema = $("#schemaType").value;
+if (schema === "FAQ") $("#faqSection").classList.remove("hidden");
+if (schema === "HowTo") $("#howtoSection").classList.remove("hidden");
+
+
+    // ✅ Analytics stats
+$("#viewsCount").textContent = pageData.views ?? 0;
+$("#uniqueViews").textContent = pageData.uniqueViews ?? 0;
+$("#lastUpdated").textContent = pageData.updatedAt?.toDate?.().toLocaleString?.() || "-";
+
+// ✅ Site ping
+if (pageData.slug) {
+  $("#sitePing").textContent = await pingSite(pageData.slug);
+}
+
+
+
+    // ✅ Apply stored styles
+if (pageData.styles) {
+  applyPageStyles(pageData.styles);
+
+  // 🔹 Header
+  document.getElementById("headerBg").value = pageData.styles.headerBg || "#ffffff";
+  document.getElementById("headerText").value = pageData.styles.headerText || "#222222";
+  document.getElementById("headerBorder").value = pageData.styles.headerBorder || "#e6e6ea";
+
+  // 🔹 Horizontal Rule
+  document.getElementById("hrColor").value = pageData.styles.hrColor || "#d1d5db";
+
+  // 🔹 CTA Button
+  document.getElementById("ctaBg").value = pageData.styles.ctaBg || "#4f46e5";
+  document.getElementById("ctaText").value = pageData.styles.ctaText || "#ffffff";
+  document.getElementById("ctaHover").value = pageData.styles.ctaHover || "#3730a3";
+  document.getElementById("ctaRadius").value = pageData.styles.ctaRadius || 8;
+  document.getElementById("ctaOutline").value = pageData.styles.ctaOutline || "#e6e6ea";
+
+  // 🔹 Regular Button
+  document.getElementById("btnBg").value = pageData.styles.btnBg || "#22c55e";
+  document.getElementById("btnText").value = pageData.styles.btnText || "#ffffff";
+  document.getElementById("btnHover").value = pageData.styles.btnHover || "#16a34a";
+
+  // 🔹 Extra CSS
+  document.getElementById("customCSS").value = pageData.styles.extra || "";
+}
+
+
+    if ($("#bodyEditor") && !$("#bodyEditor")._te) {
+  $("#bodyEditor")._te = TextEditor($("#bodyEditor"), { value: pageData.body || "" });
+}
+
+    showToast("success", "Page loaded!", 2000);
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+// Replace with your 404 page URL
+const redirectTo404 = () => {
+
+  console.log("404");
+//  window.location.href = "/404.html"; // or full URL: "https://example.com/404.html"
+};
+
+
+
+onAuthStateChanged(auth, async (user) => {
+  if (user) {
+    currentUser = user;
+    await initEditor(user);
+  } else {
+// Call the function to trigger 404
+redirectTo404();
+  }
+});
+
+$("#schemaType").addEventListener("change", e => {
+  $("#faqSection").classList.toggle("hidden", e.target.value !== "FAQ");
+  $("#howtoSection").classList.toggle("hidden", e.target.value !== "HowTo");
+});
+
+
+/* ---------------- Page Styles ---------------- */
+  // Toggle section visibility
+  document.querySelectorAll(".toggle-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const wrap = document.querySelector(btn.dataset.toggle);
+      wrap.style.display = wrap.style.display === "none" ? "block" : "none";
+        
+      console.log("toggle  ",wrap.style.display,"btn.dataset.toggle ? ",btn.dataset.toggle )
+
+    });
+  });
+
+  // Initialize color buttons
+  document.querySelectorAll(".color-btn").forEach(btn => {
+    const input = document.getElementById(btn.dataset.target);
+
+    // Open native color picker on click
+    btn.addEventListener("click", () => input.click());
+
+    // Update button color when input changes
+    input.addEventListener("input", () => {
+      btn.style.background = input.value;
+      applyPageStyles(collectPageStyles());
+    });
+  });
+
+  // Apply styles on slider/input change
+  document.getElementById("ctaRadius").addEventListener("input", () => {
+    applyPageStyles(collectPageStyles());
+  });
+  document.getElementById("customCSS").addEventListener("input", () => {
+    applyPageStyles(collectPageStyles());
+  });
+
+  // Live preview buttons
+function applyPageStyles(styles) {
+  if (!styles) return;
+
+  // Header
+  const headerPreview = document.getElementById("previewHeader");
+  if (headerPreview) {
+    headerPreview.style.backgroundColor = styles.headerBg || "#ffffff";
+    headerPreview.style.color = styles.headerText || "#222222";
+    headerPreview.style.borderBottom = `1px solid ${styles.headerBorder || "#e6e6ea"}`;
+  }
+
+  // HR
+  document.querySelectorAll("hr").forEach(hr => {
+    hr.style.borderColor = styles.hrColor || "#d1d5db";
+  });
+
+  // CTA Button
+  const previewPrimary = document.getElementById("previewPrimary");
+  if (previewPrimary) {
+    previewPrimary.style.backgroundColor = styles.ctaBg || "#4f46e5";
+    previewPrimary.style.color = styles.ctaText || "#ffffff";
+    previewPrimary.style.borderRadius = styles.ctaNoBorderRadius ? "0" : (styles.ctaRadius || 8) + "px";
+    previewPrimary.style.border = styles.ctaNoBorder ? "none" : `1px solid ${styles.ctaOutline || "#e6e6ea"}`;
+  }
+
+  // Regular Button
+  const previewSecondary = document.getElementById("previewSecondary");
+  if (previewSecondary) {
+    previewSecondary.style.backgroundColor = styles.btnBg || "#22c55e";
+    previewSecondary.style.color = styles.btnText || "#ffffff";
+    previewSecondary.style.borderRadius = styles.btnNoBorderRadius ? "0" : (styles.radius || 8) + "px";
+    previewSecondary.style.border = styles.btnNoBorder ? "none" : `1px solid ${styles.btnHover || "#16a34a"}`;
+  }
+
+  // Hover styles
+  let hoverStyle = document.getElementById("dynamic-hover-styles");
+  if (!hoverStyle) {
+    hoverStyle = document.createElement("style");
+    hoverStyle.id = "dynamic-hover-styles";
+    document.head.appendChild(hoverStyle);
+  }
+  hoverStyle.innerHTML = `
+    #previewPrimary:hover { background-color: ${styles.ctaHover || "#3730a3"}; }
+    #previewSecondary:hover { background-color: ${styles.btnHover || "#16a34a"}; }
+  `;
+
+  // Extra custom CSS
+  let styleEl = document.getElementById("dynamic-style");
+  if (!styleEl) {
+    styleEl = document.createElement("style");
+    styleEl.id = "dynamic-style";
+    document.head.appendChild(styleEl);
+  }
+  styleEl.innerHTML = styles.extra || "";
+}
+
+
+function collectPageStyles() {
+  return {
+    headerBg: document.getElementById("headerBg").value,
+    headerText: document.getElementById("headerText").value,
+    headerBorder: document.getElementById("headerBorder").value,
+    hrColor: document.getElementById("hrColor").value,
+    ctaBg: document.getElementById("ctaBg").value,
+    ctaText: document.getElementById("ctaText").value,
+    ctaHover: document.getElementById("ctaHover").value,
+    ctaRadius: document.getElementById("ctaRadius").value,
+    ctaOutline: document.getElementById("ctaOutline").value,
+    ctaNoBorderRadius: document.getElementById("ctaNoBorderRadius").checked,
+    ctaNoBorder: document.getElementById("ctaNoBorder").checked,
+    btnBg: document.getElementById("btnBg").value,
+    btnText: document.getElementById("btnText").value,
+    btnHover: document.getElementById("btnHover").value,
+    btnNoBorderRadius: document.getElementById("btnNoBorderRadius").checked,
+    btnNoBorder: document.getElementById("btnNoBorder").checked,
+    extra: document.getElementById("customCSS").value
+  };
+}
+
+
+
+  // Initial application
+  applyPageStyles(collectPageStyles());
+
+
+/* ---------------- Reusable Text Editor ----------------
+   Minimal toolbar: bold/italic/underline, H2/H3, link, UL/OL, clear, view-html
+------------------------------------------------------- */
+function TextEditor(root, { value = "", compact = false } = {}) {
+  root.classList.add("te");
+  if (compact) root.classList.add("te-compact");
+  root.innerHTML = `
+    <div class="te-toolbar">
+      <button type="button" data-cmd="bold"><b>B</b></button>
+      <button type="button" data-cmd="italic"><i>I</i></button>
+      <button type="button" data-cmd="underline"><u>U</u></button>
+      <button type="button" data-block="h2">H2</button>
+      <button type="button" data-block="h3">H3</button>
+      <button type="button" data-cmd="insertUnorderedList">• List</button>
+      <button type="button" data-cmd="insertOrderedList">1. List</button>
+      <button type="button" data-link>Add Link</button>
+      <button type="button" data-clear>Clear</button>
+      <button type="button" data-toggle-html>View HTML</button>
+    </div>
+    <div class="te-area" contenteditable="true"></div>
+    <div class="te-footer">
+      <small class="muted">Tip: Paste Markdown/HTML — it will keep basic formatting.</small>
+    </div>
+  `;
+  const area = root.querySelector(".te-area");
+  let htmlMode = false;
+  area.innerHTML = value || "";
+
+  root.querySelector(".te-toolbar").addEventListener("click", e => {
+    const btn = e.target.closest("button");
+    if (!btn) return;
+    if (btn.dataset.cmd) {
+      document.execCommand(btn.dataset.cmd, false);
+      return;
+    }
+    if (btn.dataset.block) {
+      document.execCommand("formatBlock", false, btn.dataset.block);
+      return;
+    }
+    if (btn.hasAttribute("data-link")) {
+      const url = prompt("Enter URL");
+      if (url) document.execCommand("createLink", false, url);
+      return;
+    }
+    if (btn.hasAttribute("data-clear")) {
+      area.innerHTML = "";
+      return;
+    }
+    if (btn.hasAttribute("data-toggle-html")) {
+      if (!htmlMode) {
+        area.textContent = area.innerHTML;
+      } else {
+        area.innerHTML = area.textContent;
+      }
+      htmlMode = !htmlMode;
+      return;
+    }
+  });
+
+  return {
+    getHTML: () => (htmlMode ? area.textContent : area.innerHTML),
+    setHTML: (html) => { if (htmlMode) { area.textContent = html || ""; } else { area.innerHTML = html || ""; } },
+    el: root
+  };
+}
+
+
+
+
+function makePreviewClickable(previewBlock, card) {
+  previewBlock.style.cursor = "pointer";
+  previewBlock.title = "Click to edit block";
+  previewBlock.onclick = () => {
+    card.scrollIntoView({ behavior: "smooth", block: "center" });
+    card.classList.add("highlight"); // optional highlight
+    setTimeout(() => card.classList.remove("highlight"), 1500);   
+    setTimeout(() => unstickPreview(), 200);   
+                                        
+    // optionally focus first input in block body 
+    const firstInput = card.querySelector("input, textarea, select");
+    if (firstInput) firstInput.focus();
+  };
+}
+
+
+function rebuildPreview() {
+  const preview = document.getElementById("pagePreview");
+  if (!preview) return;
+  // remove old previews
+  preview.querySelectorAll(".preview-block").forEach(n => n.remove());
+  
+  // append in order
+  document.querySelectorAll(".block-card").forEach(card => {
+    card._renderPreview?.();
+  });
+
+  // sort by editor order
+  const inArticle = preview.querySelector(".preview-in-article");
+  if (inArticle) {
+    const sorted = [...inArticle.children].sort((a, b) => 
+      +a.dataset.previewId - +b.dataset.previewId
+    );
+    sorted.forEach(n => inArticle.appendChild(n));
+  }
+}
+
+
+
+
+
+
+
+
+/* ---------------- Blocks Builder ---------------- */
+const DEFAULT_BLOCKS = [];
+const BLOCK_TYPES = [
+  "heading", "paragraph", "image", "video", "faq",
+  "comparisonTable", "ad", "cta", "button", "rawHtml"
+];
+
+
+
+
+function makeBlockCard(block, idx) {
+  const el = document.createElement("div");
+  el.className = "block-card";
+  el.draggable = true;
+  el.dataset.index = idx;
+  el.innerHTML = `
+    <div class="block-head">
+      <div class="block-head-left">
+        <span class="drag-handle" title="Drag to reorder">⠿</span>
+        <strong>Block</strong>
+        <select class="block-type"></select>
+        <span class="pill" title="Render order">#${idx + 1}</span>
+      </div>
+      <div class="block-actions">
+        <button class="dup">Duplicate</button>
+        <button class="del">Delete</button>
+      </div>
+    </div>
+    <div class="block-body"></div>
+  `;
+
+  const positionSel = document.createElement("select");
+positionSel.className = "block-position";
+["top", "bottom", "left", "right", "in-article"].forEach(pos => {
+  const opt = document.createElement("option");
+  opt.value = pos;
+  opt.textContent = pos.charAt(0).toUpperCase() + pos.slice(1);
+  positionSel.appendChild(opt);
+});
+positionSel.value = block.position || "in-article"; // default
+el.querySelector(".block-head-left").appendChild(positionSel);
+
+
+const pill = document.createElement("span");
+pill.className = "pill position-pill";
+pill.textContent = positionSel.value;
+el.querySelector(".block-head-left").appendChild(pill);
+
+// update pill when position changes
+positionSel.onchange = () => {
+  pill.textContent = positionSel.value;
+  serializeBlocks();
+};
+
+  // populate type select
+  const typeSel = el.querySelector(".block-type");
+  BLOCK_TYPES.forEach(t => {
+    const opt = document.createElement("option");
+    opt.value = t;
+    opt.textContent = t;
+    typeSel.appendChild(opt);
+  });
+  typeSel.value = block.type || "paragraph";
+
+  const body = el.querySelector(".block-body");
+
+  const renderFields = () => {
+    body.innerHTML = "";
+    const t = typeSel.value;
+
+    if (t === "heading") {
+      const row = document.createElement("div");
+      row.className = "row";
+      const uid = `heading-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+      row.innerHTML = `
+        <label for="level-${uid}">Heading Level</label>
+        <select id="level-${uid}" class="b-level">
+          <option value="1">H1</option><option value="2">H2</option>
+          <option value="3">H3</option><option value="4">H4</option>
+        </select>
+        <label for="text-${uid}">Heading Text</label>
+        <input id="text-${uid}" class="b-text" placeholder="Heading text" />
+      `;
+      body.appendChild(row);
+      body.querySelector(".b-level").value = block.level ?? 2;
+      body.querySelector(".b-text").value = block.text ?? "";
+    }
+
+    if (t === "paragraph") {
+      const wrap = document.createElement("div");
+      wrap.innerHTML = `
+        <div class="muted" style="margin:.2rem 0;">Paragraph content</div>
+        <div class="p-editor"></div>
+      `;
+      body.appendChild(wrap);
+      const te = TextEditor(wrap.querySelector(".p-editor"), {
+        compact: true,
+        value: block.html || block.markdown || ""
+      });
+      el._te = te;
+    }
+
+    if (t === "image") {
+      const uid = `img-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+      const index = parseInt(el.dataset.index, 10) + 1;
+
+      const row = document.createElement("div");
+      row.className = "row";
+      row.innerHTML = `
+        <h4 class="block-label">Image ${index}</h4>
+        <label for="media-${uid}">Image Source</label>
+        <input id="media-${uid}" class="b-mediaId" placeholder="mediaId or URL" />
+        <div id="imageSourceFeedback-${uid}" class="seo-feedback"></div>
+        <small>Tip: Use optimized WebP/JPEGs for best SEO.</small>
+
+        <label for="alt-${uid}">Alt Text</label>
+        <input id="alt-${uid}" class="b-alt" placeholder="Alt text for accessibility" />
+        <div id="imageAltFeedback-${uid}" class="seo-feedback"></div>
+        <small>Tip: Meaningful description helps SEO + screen readers.</small>
+
+        <input type="file" class="b-upload" accept="image/*"/>
+        <span class="upload-status"></span>
+      `;
+
+      const row2 = document.createElement("div");
+      row2.className = "row";
+      row2.innerHTML = `
+        <label for="caption-${uid}">Caption</label>
+        <input id="caption-${uid}" class="b-caption" placeholder="Caption (optional)" />
+        <div id="imageCaptionFeedback-${uid}" class="seo-feedback"></div>
+        <small>Tip: Useful for credits or extra context.</small>
+
+        <label for="width-${uid}">Width</label>
+        <input id="width-${uid}" class="b-width" placeholder="width (px, optional)" type="number" min="0"/>
+        <div id="imageWidthFeedback-${uid}" class="seo-feedback"></div>
+        <small>Leave blank for responsive sizing.</small>
+      `;
+
+      body.appendChild(row);
+      body.appendChild(row2);
+
+      body.querySelector(".b-mediaId").value = block.mediaId ?? "";
+      body.querySelector(".b-alt").value = block.alt ?? "";
+      body.querySelector(".b-caption").value = block.caption ?? "";
+      body.querySelector(".b-width").value = block.width ?? "";
+
+      const fileInput = row.querySelector(".b-upload");
+      const mediaInput = row.querySelector(".b-mediaId");
+      const statusSpan = row.querySelector(".upload-status");
+
+      fileInput.addEventListener("change", async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        try {
+          statusSpan.textContent = "Uploading...";
+          const uniqueName = `${Date.now()}-${file.name}`;
+          const storageRef = ref(storage, `pages/${pageId}/${uniqueName}`);
+          const snapshot = await uploadBytes(storageRef, file);
+          const downloadURL = await getDownloadURL(snapshot.ref);
+          mediaInput.value = downloadURL;
+          statusSpan.textContent = "Uploaded ✅";
+        } catch (err) {
+          console.error("Image upload failed", err);
+          statusSpan.textContent = "Upload failed ❌";
+        }
+      });
+    }
+
+    if (t === "video") {
+      const uid = `vid-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+      const index = parseInt(el.dataset.index, 10) + 1;
+
+      const row = document.createElement("div");
+      row.className = "col";
+      row.innerHTML = `
+        <h4 class="block-label">Video ${index}</h4>
+        <label for="url-${uid}">Video Source</label>
+        <input id="url-${uid}" class="b-url" placeholder="Video URL (YouTube, Vimeo, MP4/WebM)" />
+        <div id="videoUrlFeedback-${uid}" class="seo-feedback"></div>
+        <small>YouTube/Vimeo auto-embed; custom uploads must be MP4/WebM.</small>
+
+        <label for="alt-${uid}">Video Description</label>
+        <input id="alt-${uid}" class="b-alt" placeholder="Short description for accessibility" />
+        <div id="videoAltFeedback-${uid}" class="seo-feedback"></div>
+        <small>Provide text alternative for SEO and accessibility.</small>
+
+        <input type="file" class="b-upload" accept="video/*"/>
+        <span class="upload-status"></span>
+      `;
+
+      const row2 = document.createElement("div");
+      row2.className = "row";
+      row2.innerHTML = `
+        <label for="caption-${uid}">Caption</label>
+        <input id="caption-${uid}" class="b-caption" placeholder="Caption (optional)" />
+        <div id="videoCaptionFeedback-${uid}" class="seo-feedback"></div>
+        <small>Displayed under the video for context.</small>
+
+        <label for="width-${uid}">Width</label>
+        <input id="width-${uid}" class="b-width" placeholder="width (px, optional)" type="number" min="0"/>
+        <div id="videoWidthFeedback-${uid}" class="seo-feedback"></div>
+        <small>Leave blank for responsive full width.</small>
+      `;
+
+      body.appendChild(row);
+      body.appendChild(row2);
+
+      body.querySelector(".b-url").value = block.url ?? "";
+      body.querySelector(".b-alt").value = block.alt ?? "";
+      body.querySelector(".b-caption").value = block.caption ?? "";
+      body.querySelector(".b-width").value = block.width ?? "";
+
+      const fileInput = row.querySelector(".b-upload");
+      const urlInput = row.querySelector(".b-url");
+      const statusSpan = row.querySelector(".upload-status");
+
+      fileInput.addEventListener("change", async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        try {
+          statusSpan.textContent = "Uploading...";
+          const uniqueName = `${Date.now()}-${file.name}`;
+          const storageRef = ref(storage, `pages/${pageId}/${uniqueName}`);
+          const snapshot = await uploadBytes(storageRef, file);
+          const downloadURL = await getDownloadURL(snapshot.ref);
+          urlInput.value = downloadURL;
+          statusSpan.textContent = "Uploaded ✅";
+        } catch (err) {
+          console.error("Video upload failed", err);
+          statusSpan.textContent = "Upload failed ❌";
+        }
+      });
+    }
+
+    if (t === "faq") {
+      const wrap = document.createElement("div");
+      wrap.innerHTML = `
+        <div class="muted">Add Q/A pairs below</div>
+        <div class="faq-items"></div>
+        <button class="add-faq">+ Add Q/A</button>
+      `;
+      body.appendChild(wrap);
+      const holder = wrap.querySelector(".faq-items");
+      const addItem = (qa = { q: "", a: "" }) => {
+        const row = document.createElement("div");
+        row.className = "row";
+        row.innerHTML = `
+          <input placeholder="Question" class="q"/>
+          <input placeholder="Answer" class="a"/>
+          <button class="rem">×</button>
+        `;
+        row.querySelector(".q").value = qa.q;
+        row.querySelector(".a").value = qa.a;
+        row.querySelector(".rem").onclick = () => row.remove();
+        holder.appendChild(row);
+      };
+      (block.items || []).forEach(addItem);
+      wrap.querySelector(".add-faq").onclick = () => addItem();
+    }
+
+    if (t === "comparisonTable") {
+      const top = document.createElement("div");
+      top.innerHTML = `
+        <div class="muted">Columns (comma separated)</div>
+        <input class="b-cols" placeholder="e.g. Plan, Price, Features" />
+        <div class="muted">Rows (pipe-separated cells per row)</div>
+        <textarea class="b-rows" placeholder="e.g. Basic|$9|3 projects\nPro|$29|Unlimited"></textarea>
+      `;
+      body.appendChild(top);
+      body.querySelector(".b-cols").value = (block.columns || []).join(", ");
+      body.querySelector(".b-rows").value = (block.rows || []).map(r => r.join("|")).join("\n");
+    }
+
+    if (t === "ad") {
+      const row = document.createElement("div");
+      row.className = "row";
+      row.innerHTML = `
+        <label>Ad Slot</label>
+        <select class="b-slot">
+          <option>top</option><option>in-article-1</option><option>sidebar-1</option>
+        </select>
+      `;
+      body.appendChild(row);
+      body.querySelector(".b-slot").value = block.slot || "top";
+    }
+
+    if (t === "cta" || t === "button") {
+      const row = document.createElement("div");
+      row.className = "row";
+      row.innerHTML = `
+        <label>${t.toUpperCase()} Text</label>
+        <input class="b-text" placeholder="${t.toUpperCase()} text" />
+        <label>Link</label>
+        <input class="b-href" placeholder="https://contenthub.guru" />
+      `;
+      body.appendChild(row);
+      body.querySelector(".b-text").value = block.text ?? "";
+      body.querySelector(".b-href").value = block.href ?? "";
+    }
+
+    if (t === "rawHtml") {
+      const ta = document.createElement("textarea");
+      ta.className = "b-html";
+      ta.placeholder = "Paste raw HTML";
+      ta.value = block.html ?? "";
+      body.appendChild(ta);
+    }
+  };
+
+  
+// 👇 Add this INSIDE makeBlockCard, after renderFields is declared:
+  function renderPreview() {
+    const preview = document.getElementById("pagePreview");
+    if (!preview) return;
+
+    // remove old preview for this card
+    preview.querySelectorAll(`[data-preview-id="${el.dataset.index}"]`).forEach(n => n.remove());
+
+    // build preview block
+    const previewBlock = document.createElement("div");
+    previewBlock.className = `preview-block preview-${typeSel.value}`;
+    previewBlock.dataset.previewId = el.dataset.index;
+
+    // simple representations for each type
+    if (typeSel.value === "heading") {
+      previewBlock.textContent = body.querySelector(".b-text")?.value || "Heading Preview";
+    } else if (typeSel.value === "paragraph") {
+      const text = el._te?.getValue?.() || el._te?.getHTML?.() || body.textContent || "";
+      previewBlock.textContent = (text.replace(/<[^>]+>/g, "").slice(0, 80) || "Paragraph") + "…";
+    } else if (typeSel.value === "image") {
+      const src = body.querySelector(".b-mediaId")?.value;
+      previewBlock.innerHTML = src ? `<img src="${src}" alt="preview" style="max-width:150px;">` : "[Image block]";
+    } else if (typeSel.value === "video") {
+      previewBlock.textContent = "[Video block]";
+    } else if (typeSel.value === "faq") {
+      previewBlock.textContent = "[FAQ block]";
+    } else if (typeSel.value === "comparisonTable") {
+      previewBlock.textContent = "[Comparison Table]";
+    } else if (typeSel.value === "cta" || typeSel.value === "button") {
+      previewBlock.innerHTML = `<button>${body.querySelector(".b-text")?.value || "CTA"}</button>`;
+    } else if (typeSel.value === "ad") {
+      previewBlock.textContent = "[Ad Slot]";
+    } else if (typeSel.value === "rawHtml") {
+      previewBlock.textContent = "[Raw HTML]";
+    }
+
+    // choose target area (includes left/right!)
+    const position = el.querySelector(".block-position").value;
+    const map = {
+      top: ".preview-top",
+      "in-article": ".preview-in-article",
+      left: ".preview-left",
+      right: ".preview-right",
+      bottom: ".preview-bottom"
+    };
+
+    
+
+
+    const target = preview.querySelector(map[position] || ".preview-in-article");
+if (target) {
+  target.appendChild(previewBlock);
+  makePreviewClickable(previewBlock, el); // link preview to editor
+}
+
+  }
+
+
+
+  renderFields();
+
+  // actions
+  el.querySelector(".del").onclick = () => {
+    el.remove();
+    serializeBlocks();
+    refreshBlockNumbers();
+  };
+  el.querySelector(".dup").onclick = () => {
+    const blocksList = el.parentElement;
+    const idx = parseInt(el.dataset.index, 10);
+    const copy = JSON.parse(JSON.stringify(block));
+    delete copy.id; // force new UID regeneration
+    const newCard = makeBlockCard(copy, idx + 1);
+    blocksList.insertBefore(newCard, el.nextSibling);
+    serializeBlocks();
+    refreshBlockNumbers();
+  };
+
+  el.querySelector(".block-type").onchange = () => {
+    renderFields();
+    serializeBlocks();
+    refreshBlockNumbers();
+  };
+
+
+  // when block type changes
+typeSel.onchange = () => {
+  renderFields();
+  renderPreview();   // 🔥 add preview refresh
+  serializeBlocks();
+  refreshBlockNumbers();
+};
+
+// when block position changes
+positionSel.onchange = () => {
+  
+  pill.textContent = positionSel.value;
+  renderPreview();   // 🔥 add preview refresh
+  serializeBlocks();
+
+  setTimeout(() => stickPreview(), 200);   
+
+};
+
+// also trigger preview on text/content changes
+body.addEventListener("input", () => {
+  renderPreview();
+  serializeBlocks();
+});
+
+
+  // DnD
+  el.addEventListener("dragstart", (e) => {
+    e.dataTransfer.setData("text/plain", el.dataset.index);
+    el.classList.add("dragging");
+  });
+el.addEventListener("dragend", () => {
+  el.classList.remove("dragging");
+  Array.from(el.parentElement.children).forEach((c, i) => (c.dataset.index = i));
+  serializeBlocks();
+  refreshBlockNumbers();
+  rebuildPreview(); // 🔥 needed
+});
+
+el._renderPreview = renderPreview; // make rebuildPreview work
+renderPreview(); // initial preview render
+
+
+  return el;
+}
+
+function refreshBlockNumbers() {
+  document.querySelectorAll(".block-card").forEach((card, idx) => {
+    card.dataset.index = idx;
+    const label = card.querySelector(".block-label");
+    if (label) {
+      const isImage = card.querySelector(".b-mediaId") !== null;
+      const isVideo = card.querySelector(".b-url") !== null;
+      if (isImage) label.textContent = `Image ${idx + 1}`;
+      if (isVideo) label.textContent = `Video ${idx + 1}`;
+    }
+  });
+}
+
+function extractBlock(card) {
+  const t = card.querySelector(".block-type").value;
+  const b = { type: t };
+
+  // grab position
+  const posSel = card.querySelector(".block-position");
+  if (posSel) b.position = posSel.value || "in-article";
+
+  const body = card.querySelector(".block-body");
+  
+  if (t === "heading") {
+    b.level = parseInt(body.querySelector(".b-level").value || "2", 10);
+    b.text = body.querySelector(".b-text").value || "";
+  }
+  if (t === "paragraph") {
+    const te = card._te;
+    b.html = te?.getHTML() || "";
+  }
+  if (t === "image") {
+    b.mediaId = body.querySelector(".b-mediaId").value || "";
+    b.alt = body.querySelector(".b-alt").value || "";
+    b.caption = body.querySelector(".b-caption").value || "";
+    const w = body.querySelector(".b-width").value;
+    if (w) b.width = +w;
+  }
+  if (t === "video") {
+    b.url = body.querySelector(".b-url").value || "";
+    b.alt = body.querySelector(".b-alt").value || "";
+    b.caption = body.querySelector(".b-caption").value || "";
+    const w = body.querySelector(".b-width").value;
+    if (w) b.width = +w;
+  }
+  if (t === "faq") {
+    b.items = Array.from(body.querySelectorAll(".faq-items .row")).map(r => ({
+      q: r.querySelector(".q").value,
+      a: r.querySelector(".a").value
+    }));
+  }
+  if (t === "comparisonTable") {
+    b.columns = (body.querySelector(".b-cols").value || "")
+      .split(",").map(s => s.trim()).filter(Boolean);
+    b.rows = (body.querySelector(".b-rows").value || "")
+      .split("\n").map(line => line.split("|").map(s => s.trim()))
+      .filter(r => r.some(Boolean));
+  }
+  if (t === "ad") b.slot = body.querySelector(".b-slot").value || "top";
+  if (t === "cta" || t === "button") {
+    b.text = body.querySelector(".b-text").value || "";
+    b.href = body.querySelector(".b-href").value || "";
+  }
+  if (t === "rawHtml") b.html = body.querySelector(".b-html").value || "";
+
+  return b;
+}
+
+function initBlockDnD() {
+  const list = $("#blocksList");
+  list.addEventListener("dragover", (e) => {
+    e.preventDefault();
+    const dragging = list.querySelector(".dragging");
+    const after = getDragAfterElement(list, e.clientY);
+    if (!dragging) return;
+    if (after == null) list.appendChild(dragging);
+    else list.insertBefore(dragging, after);
+  });
+
+  list.addEventListener("drop", () => {
+    serializeBlocks();
+    rebuildPreview(); // 🔥 ensure previews reflect new order
+  });
+}
+
+
+function getDragAfterElement(container, y) {
+  const els = [...container.querySelectorAll(".block-card:not(.dragging)")];
+  return els.reduce(
+    (closest, child) => {
+      const box = child.getBoundingClientRect();
+      const offset = y - box.top - box.height / 2;
+      if (offset < 0 && offset > closest.offset) return { offset, element: child };
+      else return closest;
+    },
+    { offset: Number.NEGATIVE_INFINITY }
+  ).element;
+}
+
+function serializeBlocks() {
+  const list = $("#blocksList");
+  const blocks = Array.from(list.children).map(extractBlock);
+  $("#blocksJSON").value = toJSON(blocks);
+  refreshBlockNumbers();
+  return blocks;
+}
+
+function addBlock(block = { type: "paragraph", html: "" }) {
+  const list = $("#blocksList");
+  const card = makeBlockCard(block, list.children.length);
+  list.appendChild(card);
+  serializeBlocks();
+  refreshBlockNumbers();
+}
+
+
+/* ---------------- FAQ & HowTo UI ---------------- */
+function addFaqItem(item = {q:'', a:''}) {
+  const div = document.createElement('div');
+  div.className = 'block-card';
+  div.innerHTML = `
+    <div class="block-head">
+      <div class="block-head-left"><strong>FAQ</strong></div>
+      <div class="block-actions"><button class="del">Delete</button></div>
+    </div>
+    <div class="row"><input placeholder="Question" class="faq-q" value="${item.q||""}"/></div>
+    <div><div class="faq-a te"></div></div>
+  `;
+  div.querySelector(".del").onclick = () => div.remove();
+  $("#faqItems").appendChild(div);
+  const te = TextEditor(div.querySelector(".faq-a"), { compact:true, value: item.a||"" });
+  div._te = te;
+}
+function collectFaqItems() {
+  return Array.from($("#faqItems").children).map(div => ({
+    q: div.querySelector(".faq-q").value,
+    a: div._te?.getHTML() || ""
+  }));
+}
+
+function addHowtoStep(step = {stepTitle:'', stepDescription:''}) {
+  const div = document.createElement('div');
+  div.className = 'block-card';
+  div.innerHTML = `
+    <div class="block-head">
+      <div class="block-head-left"><strong>HowTo Step</strong></div>
+      <div class="block-actions"><button class="del">Delete</button></div>
+    </div>
+    <div class="row"><input placeholder="Step Title" class="step-title" value="${step.stepTitle||""}"/></div>
+    <div><div class="step-desc te"></div></div>
+  `;
+  div.querySelector(".del").onclick = () => div.remove();
+  $("#howtoItems").appendChild(div);
+  const te = TextEditor(div.querySelector(".step-desc"), { compact:true, value: step.stepDescription||"" });
+  div._te = te;
+}
+function collectHowtoItems() {
+  return Array.from($("#howtoItems").children).map(div => ({
+    stepTitle: div.querySelector(".step-title").value,
+    stepDescription: div._te?.getHTML() || ""
+  }));
+}
+
+/* ---------------- Schema Section Visibility ---------------- */
+function toggleSchemaSections(schemaType) {
+  $("#faqSection").classList.toggle("hidden", schemaType !== "FAQ");
+  $("#howtoSection").classList.toggle("hidden", schemaType !== "HowTo");
+}
+
+/* ---------------- Auth & Load ---------------- */
+onAuthStateChanged(auth, async (user) => {
+    const pageId  = getPageIdFromUrl();
+
+  if (!user) return alert("Login required");
+  currentUser = user;
+
+  $("#auth-section").classList.add("hidden");
+  $("#editor").classList.remove("hidden");
+
+  $("#schemaType").addEventListener("change", e => toggleSchemaSections(e.target.value));
+  $("#addBlockBtn").onclick = () => addBlock();
+
+  $("#addFaqBtn").onclick = () => addFaqItem();
+  $("#addHowtoBtn").onclick = () => addHowtoStep();
+
+  // Initialize reusable body editor
+  const bodyTE = TextEditor($("#bodyEditor"), { value: "" });
+  $("#bodyEditor")._te = bodyTE;
+
+  if (pageId) {
+    const ref = doc(db, "pages", pageId);
+    const snap = await getDoc(ref);
+    if (!snap.exists()) return  
+    // Call the function to trigger 404
+    redirectTo404();
+
+    const data = snap.data();
+    pageData = data;
+
+    console.log("Data   ",data);
+    if (data.createdBy !== user.uid) return alert("Not your page");
+
+    $("#editorTitle").innerText = "Edit Page";
+
+    // Metadata
+    $("#title").value = data.title || "";
+    $("#slug").value = data.slug || "";
+    $("#description").value = data.description || "";
+    $("#keywords").value = (data.keywords || []).join(",");
+    $("#domain").value = data.domain || "";
+    $("#category").value = data.category || "";
+    $("#schemaType").value = data.schemaTypes?.[0] || "Article";
+    toggleSchemaSections($("#schemaType").value);
+
+     loadPageImage(data);
+
+    // Body
+    bodyTE.setHTML(data.body || "");
+
+    // Blocks
+    const blocks = data.blocks || DEFAULT_BLOCKS;
+    blocks.forEach(addBlock);
+    $("#blocksJSON").value = toJSON(blocks);
+
+    // SEO
+    $("#ogTitle").value = data.og?.title || "";
+    $("#ogDesc").value = data.og?.description || "";
+    $("#ogImage").value = data.og?.image || "";
+
+    // Monetization
+    $("#affiliates").value = toJSON(data.affiliates || []);
+    $("#ads").value = toJSON(data.monetization?.adPlaceholders || ["top","in-article-1"]);
+
+    // FAQ/HowTo
+    (data.faq || []).forEach(addFaqItem);
+    (data.howto || []).forEach(addHowtoStep);
+
+
+    // Toolbar
+    $("#pageStatus").textContent = data.status || "draft";
+    $("#viewsCount").textContent = data.views || 0;
+    $("#uniqueViews").textContent = data.uniqueViews || 0;
+
+const today = new Date().toISOString().split("T")[0]; // "2025-08-23"
+
+$("#dailyViews").textContent = data.dailyViews?.[today] || 0;
+
+    $("#lastUpdated").textContent = data.updatedAt?.toDate ? data.updatedAt.toDate().toLocaleString() : "-";
+    if (data.slug) $("#sitePing").textContent = await pingSite(`https://contenthub.guru/site/${data.slug}.html`);
+  }
+
+    updateSEOIndicators();
+
+});
+
+
+  // Toggle section
+  document.querySelectorAll(".toggle-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const wrap = document.querySelector(btn.dataset.toggle);
+      wrap.style.display = wrap.style.display === "none" ? "block" : "none";
+    });
+  });
+
+  const imageInput = document.getElementById("imageInput");
+  const imageDropZone = document.getElementById("imageDropZone");
+  const previewImg = document.getElementById("previewImg");
+  const imageUrl = document.getElementById("imageUrl");
+
+  // Open file selector on drop zone click
+  imageDropZone.addEventListener("click", () => imageInput.click());
+
+  // Handle file selection
+  imageInput.addEventListener("change", (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (evt) => {
+      previewImg.src = evt.target.result;
+      previewImg.style.display = "block";
+      imageUrl.value = evt.target.result; // store for Firestore
+    };
+    reader.readAsDataURL(file);
+  });
+
+  // Drag & drop
+  imageDropZone.addEventListener("dragover", (e) => {
+    e.preventDefault();
+    imageDropZone.classList.add("dragover");
+  });
+  imageDropZone.addEventListener("dragleave", (e) => {
+    e.preventDefault();
+    imageDropZone.classList.remove("dragover");
+  });
+  imageDropZone.addEventListener("drop", (e) => {
+    e.preventDefault();
+    imageDropZone.classList.remove("dragover");
+    const file = e.dataTransfer.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (evt) => {
+      previewImg.src = evt.target.result;
+      previewImg.style.display = "block";
+      imageUrl.value = evt.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+
+
+    // Load existing image when editing
+  async function loadPageImage(pageData) {
+    if (pageData.image) {
+      previewImg.src = pageData.image;
+      previewImg.style.display = "block";
+      imageUrl.value = pageData.image;
+    }
+  }
+
+
+function getVideo(videoUrl) {
+  if (!videoUrl) return "";
+
+  // Firebase / direct file
+  if (videoUrl.includes("firebasestorage.googleapis.com") || videoUrl.match(/\.(mp4|webm|ogg)$/i)) {
+    return `<video class="w-full h-full" controls role="region" aria-label="Video player">
+              <source src="${videoUrl}" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>`;
+  }
+
+  // YouTube
+  if (videoUrl.includes("youtube.com") || videoUrl.includes("youtu.be")) {
+    const youtubeEmbed = videoUrl.includes("watch?v=")
+      ? videoUrl.replace("watch?v=", "embed/")
+      : videoUrl.replace("youtu.be/", "youtube.com/embed/");
+    return `<iframe class="w-full h-full" src="${youtubeEmbed}" frameborder="0" allowfullscreen 
+              role="region" aria-label="YouTube video player" title="YouTube video"></iframe>`;
+  }
+
+  // Vimeo
+  if (videoUrl.includes("vimeo.com")) {
+    const vimeoId = new URL(videoUrl).pathname.split("/").pop();
+    return `<iframe class="w-full h-full" src="https://player.vimeo.com/video/${vimeoId}" 
+              frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen
+              role="region" aria-label="Vimeo video player" title="Vimeo video"></iframe>`;
+  }
+
+  // Dailymotion
+  if (videoUrl.includes("dailymotion.com")) {
+    const id = new URL(videoUrl).pathname.split("/").pop();
+    return `<iframe class="w-full h-full" src="https://www.dailymotion.com/embed/video/${id}" 
+              frameborder="0" allowfullscreen role="region" aria-label="Dailymotion video player" title="Dailymotion video"></iframe>`;
+  }
+
+  // Twitch
+  if (videoUrl.includes("twitch.tv")) {
+    const id = new URL(videoUrl).pathname.split("/").pop();
+    return `<iframe class="w-full h-full" src="https://player.twitch.tv/?video=${id}" 
+              frameborder="0" allowfullscreen role="region" aria-label="Twitch video player" title="Twitch video"></iframe>`;
+  }
+
+  // Instagram
+  if (videoUrl.includes("instagram.com")) {
+    const id = new URL(videoUrl).pathname.split("/p/")[1].split("/")[0];
+    return `<iframe class="w-full h-full" src="https://www.instagram.com/p/${id}/embed" 
+              frameborder="0" allowfullscreen role="region" aria-label="Instagram video player" title="Instagram video"></iframe>`;
+  }
+
+  // Twitter
+  if (videoUrl.includes("twitter.com")) {
+    return `<iframe class="w-full h-full" src="https://twitframe.com/show?url=${encodeURIComponent(videoUrl)}" 
+              frameborder="0" allowfullscreen role="region" aria-label="Twitter video player" title="Twitter video"></iframe>`;
+  }
+
+  // TikTok
+  if (videoUrl.includes("tiktok.com")) {
+    const id = new URL(videoUrl).pathname.split("/video/")[1];
+    return `<iframe class="w-full h-full" src="https://www.tiktok.com/embed/${id}" 
+              frameborder="0" allowfullscreen role="region" aria-label="TikTok video player" title="TikTok video"></iframe>`;
+  }
+
+  // Unsupported
+  return "";
+}
+
+
+
+  // Load existing image when editing
+function renderBlockHTML(b) {
+  switch (b.type) {
+    case "heading":
+      return `<h${b.level || 2} class="content-heading heading-${b.level || 2}">
+                ${b.text || ""}
+              </h${b.level || 2}>`;
+
+    case "paragraph":
+      return `<div class="content-paragraph prose max-w-none">
+                ${b.html || ""}
+              </div>`;
+
+    case "image":
+      return `<figure class="content-image">
+                <img src="${b.mediaId}" 
+                     alt="${b.alt || ""}" 
+                     class="rounded-lg shadow-md" 
+                     ${b.width ? `style="width:${b.width}px;"` : "style='max-width:100%;height:auto;'"}  loading="lazy" />
+                ${b.caption ? `<figcaption class="caption text-sm text-gray-500 mt-2">${b.caption}</figcaption>` : ""}
+              </figure>`;
+
+case "video":
+  return `<div class="content-video aspect-w-16 aspect-h-9 rounded-lg overflow-hidden shadow-md">
+            ${getVideo(b.url)}
+          </div>
+          ${b.caption ? `<p class="caption text-center text-sm text-gray-500 mt-2">${b.caption}</p>` : ""}`;
+
+    case "faq":
+      return `<dl class="content-faq divide-y divide-gray-200">
+        ${b.items?.map(qa => `
+          <div class="faq-item py-3">
+            <dt class="faq-question font-semibold text-lg">${qa.q}</dt>
+            <dd class="faq-answer text-gray-700 mt-1">${qa.a}</dd>
+          </div>`).join("")}
+      </dl>`;
+
+    case "comparisonTable":
+      return `<div class="overflow-x-auto">
+        <table class="comparison-table w-full border border-gray-300 text-sm text-left">
+          <thead class="bg-gray-100">
+            <tr>${b.columns.map(c => `<th class="px-4 py-2 border">${c}</th>`).join("")}</tr>
+          </thead>
+          <tbody>
+            ${b.rows.map(r => `<tr>${r.map(c => `<td class="px-4 py-2 border">${c}</td>`).join("")}</tr>`).join("")}
+          </tbody>
+        </table>
+      </div>`;
+
+    case "cta":
+    case "button":
+      return `<div class="content-cta my-6 text-center">
+                <a href="${b.href}" 
+                   class="inline-block px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md transition">
+                   ${b.text}
+                </a>
+              </div>`;
+
+    case "rawHtml":
+      return `<div class="content-raw">${b.html || ""}</div>`;
+
+    case "ad":
+      return `<div class="ad-slot my-6 border border-dashed border-gray-400 text-center text-gray-500 py-4" data-slot="${b.slot}">
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2001518155292747"
+     crossorigin="anonymous"><\/script>
+<!-- ${b.slot} Ad -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-2001518155292747"
+     data-ad-slot="1489076914"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+<\/script>  
+        Sponsered: Google 
+              </div>`;
+
+    default:
+      return "";
+  }
+}
+
+
+async function updatePage(pageId, currentUser) {
+  // First save & fetch updated data from Firestore
+  const savedPageId = await savePage(pageId, currentUser);
+  const docSnap = await getDoc(doc(db, "pages", savedPageId));
+  if (!docSnap.exists()) {
+    console.error("No page data found for:", savedPageId);
+    return;
+  }
+  const articleData = docSnap.data();
+
+  const scriptTag = `<script id="dynamic-js" type="module" src="https://contenthub.guru/exports/main.js"><\/script>`;
+
+  // Schema generation
+  let schemaJSON;
+  switch (articleData.schemaType) {
+    case "FAQ":
+      schemaJSON = {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": articleData.faq?.map(f => ({
+          "@type": "Question",
+          "name": f.q,
+          "acceptedAnswer": { "@type": "Answer", "text": f.a }
+        })) || []
+      };
+      break;
+    case "HowTo":
+      schemaJSON = {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        "name": articleData.title,
+        "description": articleData.description,
+        "step": articleData.howto?.map((s, i) => ({
+          "@type": "HowToStep",
+          "position": i + 1,
+          "name": s.stepTitle,
+          "text": s.stepDescription
+        })) || []
+      };
+      break;
+    default: // Article
+      schemaJSON = {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": articleData.title,
+        "image": articleData.image,
+        "datePublished": articleData.datePublished || new Date().toISOString(),
+        "dateModified": articleData.updatedAt || new Date().toISOString(),
+        "author": articleData.author || { "@type": "Organization", "name": articleData.updatedBy },
+        "publisher": { "@type": "Organization", "name": articleData.updatedBy },
+        "description": articleData.description,
+        "articleBody": articleData.body || ""
+      };
+      break;
+  }
+
+  // Metadata
+  const metadataJSON = {
+    siteId: articleData.siteId || "Fitness",
+    type: articleData.type || "page",
+    slug: articleData.slug,
+    title: articleData.title,
+    description: articleData.description,
+    keywords: articleData.keywords || [],
+    status: articleData.status || "draft",
+    blocks: articleData.blocks || [],
+    og: articleData.og,
+    schemaTypes: [articleData.schemaType],
+    faq: articleData.faq || [],
+    howto: articleData.howto || [],
+    article: articleData.article || {},
+    affiliates: articleData.affiliates || [],
+    tags: articleData.tags || [],
+    hashTags: articleData.hashTags || [],
+    createdBy: articleData.createdBy,
+    updatedBy: articleData.updatedBy,
+    createdAt: articleData.createdAt,
+    updatedAt: articleData.updatedAt,
+    publishedAt: articleData.publishedAt || null,
+    analytics: articleData.analytics || { views: 0, uniqueViews: 0 },
+    monetization: articleData.monetization || { adPlaceholders: ["top", "in-article-1"] }
+  };
+
+
+  // Prepare containers with block HTML
+const topBlocksHTML = articleData.blocks
+  .filter(b => b.position === "top")
+  .map((b, i) => `<div id="block-top-${i}" class="block block-${b.type}">${renderBlockHTML(b)}</div>`)
+  .join("");
+
+const leftBlocksHTML = articleData.blocks
+  .filter(b => b.position === "left")
+  .map((b, i) => `<div id="block-left-${i}" class="block block-${b.type}">${renderBlockHTML(b)}</div>`)
+  .join("");
+
+const rightBlocksHTML = articleData.blocks
+  .filter(b => b.position === "right")
+  .map((b, i) => `<div id="block-right-${i}" class="block block-${b.type}">${renderBlockHTML(b)}</div>`)
+  .join("");
+
+const inArticleBlocksHTML = articleData.blocks
+  .filter(b => b.position === "in-article" || !b.position)
+  .map((b, i) => `<div id="block-article-${i}" class="block block-${b.type}">${renderBlockHTML(b)}</div>`)
+  .join("");
+
+const bottomBlocksHTML = articleData.blocks
+  .filter(b => b.position === "bottom")
+  .map((b, i) => `<div id="block-bottom-${i}" class="block block-${b.type}">${renderBlockHTML(b)}</div>`)
+  .join("");
+
+
+    const pageURL = `https://contenthub.guru/site/${encodeURIComponent(articleData.slug)}`;
+    const pageTitle = `${articleData.title}`;
+    const encodedPageTitle = encodeURIComponent(articleData.slug); // Use for URL query strings
+
+  // Modern Layout HTML
+const Content = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>${articleData.title} ${articleData.domain} | ${articleData.slug || "Untitled"}</title>
+<meta name="description" content="${articleData.description}">
+<meta name="keywords" content="${articleData.keywords?.join(', ') || ''}">
+
+<!-- Canonical URL -->
+<link rel="canonical" href="https://contenthub.guru/site/${articleData.slug}">
+
+  <meta name="author" content="ReelCareer">
+  <meta name="robots" content="index, follow">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="${articleData.title}">
+  <meta property="og:description" content="${articleData.description}">
+  <meta property="og:image" content="${articleData.image}">
+  <meta property="og:url" content="https://contenthub.guru/site/${articleData.slug}">
+  <meta property="og:site_name" content="ContentHub.guru">
+  <meta property="og:locale" content="en_US">
+  <meta property="article:author" content="https://contenthub.guru">
+
+  <!-- Twitter Cards -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="${articleData.title}">
+  <meta name="twitter:description" content="${articleData.description}">
+  <meta name="twitter:image" content="${articleData.image}">
+  <meta name="twitter:site" content="@ContentHub">
+  <meta name="twitter:creator" content="@ContentHub">
+
+    <!-- Structured Data: Article + FAQ -->
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"Article",
+    "headline":"${articleData.title}",
+    "description":"${articleData.description}",
+    "image":["https://contenthub.guru/site/${articleData.slug}"],
+    "author":{"@type":"Organization","name":"ContentHub"},
+    "publisher":{"@type":"Organization","name":"ContentHub","logo":{"@type":"ImageObject","url":"${articleData.image}"}},
+    "datePublished":"${articleData.publishedAt}",
+    "dateModified":"${articleData.updatedAt}",
+    "mainEntityOfPage":{"@type":"WebPage","@id":"https://contenthub.guru/site/${articleData.slug}"}
+  }
+  <\/script>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="https://contenthub.guru/images/favicons/favicon.ico">
+
+<meta name="google-adsense-account" content="${articleData.adsense}">
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=${articleData.gTag}" id="google-tag"><\/script>
+<script id="google-gtag">
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', '${articleData.gTag}');
+<\/script>
+
+
+<!-- Schema & Metadata -->
+<script type="application/ld+json">${JSON.stringify(schemaJSON)}<\/script>
+<script type="application/ld+json">${JSON.stringify(metadataJSON)}<\/script>
+${scriptTag}
+
+<div id= 'default-style'></div>
+
+<!-- 🔹 Changeable Theme CSS -->
+<style id="dynamic-style">
+  <!-- styles -->
+${JSON.stringify(articleData.styles)}
+
+<!-- customCSS -->
+${articleData.customCSS}
+
+/* 🔹 Header */
+.site-header {
+  background: linear-gradient(135deg, ${articleData.styles.headerBg || "#ffffff"}, ${articleData.styles.headerBorder || "#e6e6ea"});
+  color: ${articleData.styles.headerText || "#222222"};
+  padding: 3rem 0;
+  text-align: center;
+  border-bottom: 4px solid ${articleData.styles.headerBorder || "#e6e6ea"};
+}
+
+main {
+/* 🔹 CTA Button */
+.content-cta a {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  background-color: ${articleData.styles.ctaBg || "#4f46e5"};
+  color: ${articleData.styles.ctaText || "#ffffff"};
+  font-weight: 600;
+  border-radius: ${articleData.styles.ctaNoBorderRadius ? 0 : (articleData.styles.ctaRadius || 8)}px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  text-decoration: none;
+  transition: background-color 0.2s, transform 0.1s;
+  border: ${articleData.styles.ctaNoBorder ? "none" : `1px solid ${articleData.styles.ctaOutline || "#e6e6ea"}`};
+}
+
+.content-cta a:hover {
+  background-color: ${articleData.styles.ctaHover || "#3730a3"};
+  transform: translateY(-1px);
+}
+
+ button {
+  background-color: ${articleData.styles.btnBg || "#22c55e"};
+  color: ${articleData.styles.btnText || "#ffffff"};
+  border-radius: ${articleData.styles.btnNoBorderRadius ? 0 : (articleData.styles.btnRadius || 8)}px;
+  border: ${articleData.styles.btnNoBorder ? "none" : `1px solid ${articleData.styles.btnOutline || "#16a34a"}`};
+  padding: 0.5rem 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
+}
+
+button:hover {
+  background-color: ${articleData.styles.btnHover || "#16a34a"};
+  transform: translateY(-1px);
+}
+
+/* 🔹 Horizontal Rule */
+hr {
+  border: none;
+  border-top: 1px solid ${articleData.styles.hrColor || "#d1d5db"};
+}
+}
+
+</style>
+</head>
+<body>
+  <!-- 🔹 Skip to main content (screen readers & keyboard users) -->
+  <a href="#block-article-0" class="skip-link">Skip to content</a>
+
+  <header class="site-header" role="banner">
+    <div class="container">
+      <h1 id="page-title">${articleData.title}</h1>
+      <p class="subtitle">${articleData.subtitle || ""}</p>
+    </div>
+  </header>
+
+  
+  <main class="mx-auto px-4" id="main-content" role="main">
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+    <!-- Share Section -->
+            <div class="share-section">
+            <div class="share-buttons">
+                <a class="facebook" href="https://www.facebook.com/sharer/sharer.php?u=${pageURL}" target="_blank" title="Share on Facebook">
+                    <i class="fab fa-facebook"></i>
+                </a>
+                <a class="twitter" href="https://twitter.com/intent/tweet?text=${encodedPageTitle}&url=${pageURL}" target="_blank" title="Share on Twitter">
+                    <i class="fab fa-twitter"></i>
+                </a>
+                <a class="linkedin" href="https://www.linkedin.com/shareArticle?mini=true&url=${pageURL}" target="_blank" title="Share on LinkedIn">
+                    <i class="fab fa-linkedin"></i>
+                </a>
+                <a class="whatsapp" href="https://wa.me/?text=${encodedPageTitle}%20${pageURL}" target="_blank" title="Share on WhatsApp">
+                    <i class="fab fa-whatsapp"></i>
+                </a>
+                <button id="deviceShareButton" class="device-share" title="Share using your device">
+                    <i class="fas fa-share-alt"></i> 
+                </button>
+            </div>
+        </div>
+
+    <!-- Hero / Featured image -->
+    ${articleData.image ? `
+    <section class="hero lg:col-span-12 order-1">
+      <figure>
+        <img src="${articleData.image}" 
+             alt="${articleData.alt || articleData.title}" 
+             id="mainImage"
+             class="hero-img" 
+             role="img"
+             aria-describedby="page-title"  
+             loading="lazy"/>
+        ${articleData.caption ? `<figcaption>${articleData.caption}</figcaption>` : ""}
+      </figure>
+    </section>` : ""}
+
+    <!-- Top banner -->
+    <section id="top-banner-container" class="lg:col-span-12 order-2">
+      ${topBlocksHTML}
+    </section>
+
+    <div class = 'flex'>
+      
+<!-- Left sidebar -->
+<aside id="left-sidebar" 
+       class="lg:col-span-3 space-y-6 order-4 lg:order-2">
+  ${leftBlocksHTML}
+</aside>
+
+<!-- Main content -->
+<section id="in-article-blocks" 
+         class="lg:col-span-6 space-y-6 order-2 lg:order-3">
+  ${articleData.body}
+  ${inArticleBlocksHTML}
+</section>
+
+<!-- Right sidebar -->
+<aside id="right-sidebar" 
+       class="lg:col-span-3 space-y-6 order-5 lg:order-4">
+  ${rightBlocksHTML}
+</aside>
+
+</div>
+
+    <!-- Bottom banner -->
+    <section id="bottom-banner-container" class="lg:col-span-12 order-6">
+      ${bottomBlocksHTML}
+    </section>
+
+  </div>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2001518155292747"
+     crossorigin="anonymous"><\/script>
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-format="autorelaxed"
+     data-ad-client="ca-pub-2001518155292747"
+     data-ad-slot="4160274610"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+<\/script>
+
+  <div class="comments form">
+  <h2 class="changeable-text">Comments</h2>
+  <div id="commentForm">
+    <div>
+      <input type="text" id="commentName" placeholder="Your Name" required>
+    </div>
+    
+    <div id="checkBoxArea">
+      <div class="anonymousCheckboxArea">
+        <input type="checkbox" id="anonymousCheckbox">
+        <label for="anonymousCheckbox">Post as Anonymous</label>
+      </div>
+      <div class="privateCheckboxArea">
+        <input type="checkbox" id="privateCheckbox">
+        <label for="privateCheckbox">Private Comment</label>
+      </div>
+    </div>
+
+    <div>
+      <textarea id="commentMessage" rows="4" placeholder="Write a comment..." required></textarea>
+    </div>
+    <div>
+      <button id="comment-submit-btn" class="changeable-text">Post Comment</button>
+    </div>
+  </div>
+
+  <!-- 🔹 Comments Display -->
+  <div class="comments-list" id="commentsList">
+    <!-- Comments will be rendered here dynamically -->
+  </div>
+</div>
+
+</main>
+
+
+
+  <footer class="site-footer" role="contentinfo"><p>V1001</p>
+    <p>Copyright © ${new Date().getFullYear()}  | <a href="https://contenthub.guru/" target="_blank">ContentHub.guru</a> <br>
+      ${articleData.slug || "Untitled Site"} <br>
+      
+<!-- 🔹 Report Page Button -->
+<div id="reportPageBtn" style="
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    color: red;                  /* Red text */
+    border: 2px solid red;       /* Red outline */
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    text-align: center;
+    transition: background-color 0.2s, color 0.2s;
+    margin: 1.5rem 0;
+">
+    Report Page
+</div>
+      <br>
+      <a href="https://rw-501.github.io/Portfolio" target="_blank" hidden>Created by Ron W.</a></div>
+</p>
+  </footer>
+
+  <!-- 🔹 Hidden meta info for debugging / internal use -->
+  <div hidden>
+    <div id="pageID">${articleData.siteId}</div>
+    <div id="pageOwnerUserID">${articleData.userID}</div>
+    <div id="pageSlug">${articleData.slug}</div>
+    <div id="pageTitle">${articleData.title}</div>
+    <div id="pageDescription">${articleData.description}</div>
+    <div id="pageURL">https://contenthub.guru/site/${articleData.slug}</div>
+  </div>
+</body>
+</html>
+`;
+
+
+
+// Randomized or complex approach
+const parts = ['p', 'h', 'g'];
+const randomizePart = (part) => {
+    return part.split('').reverse().join('');
+};
+
+const part_1 = randomizePart(parts.join(''));
+const part_2 = "_akXGrO51HwgEI";
+const part_3 = "VWzDIghLbIE";
+const part_4 = "G9MnTu0fIjKj";
+
+const GITHUB_TOKEN = part_1 + part_2 + part_3 + part_4;
+
+
+  // Upload to GitHub
+  const owner = "RW-501", repo = "contentManagement", filePath = `site/${articleData.slug}.html`, branch = "main";
+  const url = `https://api.github.com/repos/${owner}/${repo}/contents/${filePath}`;
+  const encodedContent = btoa(unescape(encodeURIComponent(Content)));
+
+  try {
+    const fileResp = await fetch(url, {
+      method: "GET",
+      headers: { Authorization: `Bearer ${GITHUB_TOKEN}`, Accept: "application/vnd.github+json" }
+    });
+    const sha = fileResp.ok ? (await fileResp.json()).sha : undefined;
+    const resp = await fetch(url, {
+      method: "PUT",
+      headers: { Authorization: `Bearer ${GITHUB_TOKEN}`, "Content-Type": "application/json", Accept: "application/vnd.github+json" },
+      body: JSON.stringify({ message: sha ? `Update ${filePath}` : `Create ${filePath}`, content: encodedContent, sha, branch })
+    });
+    if (!resp.ok) throw new Error((await resp.json()).message);
+    showToast("info", "Page Updated successfully!");
+    console.log("Page updated successfully!");
+
+// 200 seconds = 200 * 1000 milliseconds
+setTimeout(() => {
+    window.location.href = 'https://contenthub.guru/admin';
+}, 200000);
+    
+  } catch (err) {
+    console.error(err.message);
+  }
+}
+
+/* ---------------- Save / Publish ---------------- */
+async function savePage(pageId, currentUser) { 
+  // Serialize blocks from builder
+  const blocks = serializeBlocks();
+
+  const data = {
+    //gTag: "G-ZPWGF7YMPE",
+    //adsense: "ca-pub-2001518155292747",
+    title: $("#title").value.trim(),
+    slug: $("#slug").value.trim(),
+    description: $("#description").value.trim(),
+    category: $("#category").value.trim(),
+    keywords: $("#keywords").value.split(",").map(s => s.trim()).filter(Boolean),
+    domain: $("#domain").value.trim(),
+    body: $("#bodyEditor")?._te?.getHTML?.() || "",
+    styles: collectPageStyles(),
+    blocks,  // ✅ store structured blocks instead of "sections"
+    og: { 
+      title: $("#ogTitle").value, 
+      description: $("#ogDesc").value, 
+      image: $("#ogImage").value 
+    },
+    affiliates: safeParse($("#affiliates").value || "[]", []),
+    monetization: { adPlaceholders: safeParse($("#ads").value || "[]", ["top"]) },
+    updatedBy: currentUser.uid,
+    updatedAt: serverTimestamp()
+  };
+
+  if (pageId) {
+    await setDoc(doc(db, "pages", pageId), data, { merge: true });
+    showToast("success", "Page updated!", 2500);
+    return pageId;
+  } else {
+    data.createdBy = currentUser.uid;
+    data.createdAt = serverTimestamp();
+    data.status = "draft";
+    const ref = await addDoc(collection(db, "pages"), data);
+    showToast("success", "Page Saved!", 2500);
+    return ref.id;
+  }
+}
+
+
+$("#saveBtn").onclick = async () => {
+  const id = getPageIdFromUrl();
+  pageId = await updatePage(id, currentUser);
+};
+
+$("#publishBtn").onclick = async () => {
+  const id = getPageIdFromUrl();
+  if (!id) return showToast("error", "Save before publishing!", 3000);
+  await updateDoc(doc(db, "pages", id), { status: "published", publishedAt: serverTimestamp() });
+  //showToast("success", "Page published!", 2500);
+};
+
+
+
+// schemaType toggle -> show FAQ/HowTo
+$("#schemaType").addEventListener("change", e => {
+  $("#faqSection").classList.add("hidden");
+  $("#howtoSection").classList.add("hidden");
+  if(e.target.value==="FAQ") $("#faqSection").classList.remove("hidden");
+  if(e.target.value==="HowTo") $("#howtoSection").classList.remove("hidden");
+});
+
+
+  const titleInput = document.getElementById("title");
+  const descriptionInput = document.getElementById("description");
+  const keywordsInput = document.getElementById("keywords");
+  const domainInput = document.getElementById("domain");
+  const slugInput = document.getElementById("slug");
+  const slugFeedback = document.getElementById("slugFeedback");
+  const bodyEditor = document.getElementById("bodyEditor");
+  const bodyFeedback = document.getElementById("bodyFeedback");
+
+  const titleFeedback = document.getElementById("titleFeedback");
+  const descriptionFeedback = document.getElementById("descriptionFeedback");
+  const keywordsFeedback = document.getElementById("keywordsFeedback");
+  const seoScoreBar = document.getElementById("seoScoreBar");
+  const seoScoreText = document.getElementById("seoScoreText");
+
+  const stopWords = ["a","an","and","the","is","of","to","in","for","on","at","by","with","from","or","as","be","this","that","it"];
+
+  const seoRubric = {
+    title: { min: 50, max: 70 },          // characters
+    description: { min: 150, max: 160 },  // characters
+    keywords: { min: 5, max: 15 },        // number of keywords
+    body: { min: 300, max: 5000 }         // characters for main content
+  };
+
+  function generateSuggestions(count, min, max, fieldName) {
+  if (count < min) return `Add ${min - count} more ${fieldName} to reach minimum.`;
+  if (count > max) return `Reduce ${count - max} ${fieldName} to stay within recommended max.`;
+  return `Good length!`;
+}
+
+function keywordMatchSuggestion(matches, minRequired, fieldName) {
+  if (matches < minRequired) return `Add ${minRequired - matches} more keywords in ${fieldName}.`;
+  return "";
+}
+
+  function evaluateSEOLength(count, min, max) {
+    if (count < min) return 0;      // bad
+    if (count > max) return 50;     // okay
+    return 100;                     // good
+  }
+
+// 🔹 Count keyword matches in a string
+function countKeywordMatches(text, keywords) {
+  if (!text || !keywords) return 0;
+
+  const lowerText = text.toLowerCase();
+  const keyList = keywords.toLowerCase().split(/\s*,\s*/);
+
+  let count = 0;
+  for (const key of keyList) {
+    // Use a global regex to count occurrences
+    const regex = new RegExp(key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g'); // escape special chars
+    const matches = lowerText.match(regex);
+    if (matches) count += matches.length;
+  }
+
+  return count;
+}
+
+// 🔹 Get all text content from blocks
+function getAllBlockText() {
+  let allText = "";
+
+  document.querySelectorAll(".block-card").forEach(card => {
+    const type = card.querySelector(".block-type")?.value;
+    if (!type) return;
+
+    if (type === "paragraph" && card._te?.getHTML) {
+      const html = card._te.getHTML();
+      allText += " " + html.replace(/<[^>]+>/g, "");
+    } else if (type === "heading") {
+      allText += " " + (card.querySelector(".b-text")?.value || "");
+    } else if (type === "faq") {
+      card.querySelectorAll(".faq-items .row").forEach(row => {
+        allText += " " + (row.querySelector(".q")?.value || "");
+        allText += " " + (row.querySelector(".a")?._te?.getHTML()?.replace(/<[^>]+>/g, "") || "");
+      });
+    } else if (type === "howto") {
+      allText += " " + (card.querySelector(".step-title")?.value || "");
+      allText += " " + (card.querySelector(".step-desc")?._te?.getHTML()?.replace(/<[^>]+>/g, "") || "");
+    }
+    // optionally include CTA, button, rawHtml, etc.
+  });
+
+  return allText.trim();
+}
+
+// 🔹 Count keyword matches across all blocks
+function getTotalKeywordMatches(keywords) {
+  const allText = getAllBlockText(); // your function to get all text
+  /*
+  console.log("keywords:", keywords);
+  console.log("allText:", allText);
+*/
+  return countKeywordMatches(allText, keywords);
+}
+
+
+  function generateKeywords(text) {
+    return text
+      .toLowerCase()
+      .split(/\s+/)
+      .map(word => word.replace(/[^a-z0-9]/g, ""))
+      .filter(word => word && !stopWords.includes(word) && !/^\d+$/.test(word))
+      .join(", ");
+  }
+
+
+
+  function generateSlug(text) {
+    return text
+      .toLowerCase()
+      .replace(/\s+/g, "-")
+      .replace(/[^a-z0-9\-]/g, "")
+      .slice(0, 100); // limit slug length
+  }
+
+  function getTotalBlockContent() {
+  let total = 0;
+
+  document.querySelectorAll(".block-card").forEach(card => {
+    const type = card.querySelector(".block-type")?.value;
+
+    if (!type) return;
+
+    if (type === "paragraph" && card._te?.getHTML) {
+      const html = card._te.getHTML();
+      const text = html.replace(/<[^>]+>/g, ""); // strip HTML
+      total += text.length;
+    } else if (type === "heading") {
+      total += card.querySelector(".b-text")?.value.length || 0;
+    } else if (type === "faq") {
+      card.querySelectorAll(".faq-items .row").forEach(row => {
+        total += (row.querySelector(".q")?.value.length || 0);
+        total += (row.querySelector(".a")?._te?.getHTML()?.replace(/<[^>]+>/g, "").length || 0);
+      });
+    } else if (type === "howto") {
+      total += card.querySelector(".step-title")?.value.length || 0;
+      total += card.querySelector(".step-desc")?._te?.getHTML()?.replace(/<[^>]+>/g, "").length || 0;
+    }
+    // optionally include CTA, button, rawHtml, etc., if you want their text counted
+  });
+
+  return total;
+}
+
+function updateSEOIndicators() {
+  const title = titleInput.value.trim();
+  const description = descriptionInput.value.trim();
+  const keywords = keywordsInput.value.trim();
+
+const bodyCount = getTotalBlockContent();
+
+
+
+const slugVal = slugInput.value.trim();
+
+  const titleCount = title.length;
+  const descCount = description.length;
+  const keywordCount = keywords.split(/\s*,\s*/).filter(Boolean).length;
+
+  const titleScore = evaluateSEOLength(titleCount, seoRubric.title.min, seoRubric.title.max);
+  const descScore = evaluateSEOLength(descCount, seoRubric.description.min, seoRubric.description.max);
+  const keywordsScore = evaluateSEOLength(keywordCount, seoRubric.keywords.min, seoRubric.keywords.max);
+  const bodyScore = evaluateSEOLength(bodyCount, seoRubric.body.min, seoRubric.body.max);
+
+  const seoScore = Math.round((titleScore + descScore + keywordsScore + bodyScore) / 4);
+  seoScoreBar.style.width = `${seoScore}%`;
+  seoScoreBar.style.background = seoScore >= 80 ? "green" : seoScore >= 50 ? "orange" : "red";
+  seoScoreText.textContent = `SEO Score: ${seoScore}/100`;
+
+  // Feedback colors
+  titleFeedback.style.color = titleScore === 100 ? "green" : titleScore === 50 ? "orange" : "red";
+  descriptionFeedback.style.color = descScore === 100 ? "green" : descScore === 50 ? "orange" : "red";
+  keywordsFeedback.style.color = keywordsScore === 100 ? "green" : keywordsScore === 50 ? "orange" : "red";
+  bodyFeedback.style.color = bodyScore === 100 ? "green" : bodyScore === 50 ? "orange" : "red";
+
+  // Feedback text with suggestions
+  titleFeedback.textContent = `Title: ${titleCount} chars. ${generateSuggestions(titleCount, seoRubric.title.min, seoRubric.title.max, "characters")}`;
+  descriptionFeedback.textContent = `Description: ${descCount} chars. ${generateSuggestions(descCount, seoRubric.description.min, seoRubric.description.max, "characters")}`;
+  keywordsFeedback.textContent = `Keywords: ${keywordCount}. ${generateSuggestions(keywordCount, seoRubric.keywords.min, seoRubric.keywords.max, "keywords")}`;
+  bodyFeedback.textContent = `Body: ${bodyCount} chars. ${generateSuggestions(bodyCount, seoRubric.body.min, seoRubric.body.max, "characters")}`;
+
+  // Keyword match suggestions
+  const titleMatches = countKeywordMatches(title, keywords);
+  const descMatches = countKeywordMatches(description, keywords);
+
+  const bodyMatches = getTotalKeywordMatches(keywords);
+
+  console.log("Total keyword matches:", bodyMatches);
+
+  const titleKeywordTip = keywordMatchSuggestion(titleMatches, 1, "title");
+  const descKeywordTip = keywordMatchSuggestion(descMatches, 2, "description");
+  const bodyKeywordTip = keywordMatchSuggestion(bodyMatches, 3, "body");
+
+  if(titleKeywordTip) titleFeedback.textContent += " ⚠ " + titleKeywordTip;
+  if(descKeywordTip) descriptionFeedback.textContent += " ⚠ " + descKeywordTip;
+  if(bodyKeywordTip) bodyFeedback.textContent += " ⚠ " + bodyKeywordTip;
+
+  // Slug validation
+  if(!slugVal || slugVal !== generateSlug(title)) {
+    slugFeedback.textContent = "⚠ Slug should match URL-friendly version of the title.";
+    slugFeedback.style.color = "red";
+  } else {
+    slugFeedback.textContent = "Slug looks good!";
+    slugFeedback.style.color = "green";
+  }
+}
+
+
+  titleInput.addEventListener("input", () => {
+    if (!keywordsInput.value.trim()) keywordsInput.value = generateKeywords(titleInput.value);
+    if (!slugInput.value.trim()) slugInput.value = generateSlug(titleInput.value);
+    updateSEOIndicators();
+  });
+
+  descriptionInput.addEventListener("input", updateSEOIndicators);
+  keywordsInput.addEventListener("input", updateSEOIndicators);
+  bodyEditor.addEventListener("input", updateSEOIndicators);
+  slugInput.addEventListener("input", updateSEOIndicators);
+
+  window.addEventListener("DOMContentLoaded", () => {
+  initBlockDnD();
+});
+
+
+
+// Listen for focus out (blur) event
+slugInput.addEventListener('blur', () => {
+    if (slugInput.value) {
+        // Replace spaces with hyphens and remove extra spaces
+        slugInput.value = slugInput.value.trim().replace(/\s+/g, '-').toLowerCase();
+    }
+});
+
+/*
+https://adsense.payouts.hyperwallet.com/hw2web/
+https://search.google.com/search-console?resource_id=sc-domain%3Acontenthub.guru
+
+G-ZPWGF7YMPE
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZPWGF7YMPE"><\/script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-ZPWGF7YMPE');
+<\/script>
+
+https://www.openx.com/publishers/
+https://pubmatic.com/
+<meta name="google-adsense-account" content="ca-pub-2001518155292747">
+
+*/
+</script>
+</body>
+</html>

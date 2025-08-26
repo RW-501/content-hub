@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SEO Helper Tool | ContentHub</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+  <style>
+    body { background:#f8fafc; font-family:'Segoe UI',sans-serif; }
+    h1,h2,h4 { font-weight:600; }
+    .card { border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.06); }
+    .progress { height:1.2rem; border-radius:10px; }
+    .status-badge { font-size:0.85rem; padding:0.35rem 0.65rem; border-radius:20px; }
+    .status-ok { background:#22c55e; color:#fff; }
+    .status-error { background:#ef4444; color:#fff; }
+    #scrollUpBtn {
+      display:none; position:fixed; bottom:30px; right:30px;
+      background:#4a90e2; color:white; border:none; border-radius:50%;
+      width:45px; height:45px; font-size:20px; cursor:pointer;
+      box-shadow:0 4px 12px rgba(0,0,0,0.2); transition:0.3s;
+    }
+    #scrollUpBtn:hover { background:#357ABD; }
+
+    .collapse:not(.show) {
+    display: inherit;
+}
+    .collapse {
+  display: none;
+
+   border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  margin-bottom: 16px;
+  transition: max-height 0.3s ease, padding 0.3s ease;
+  overflow: hidden;
+
+
+
+/* Card body */
+.card-body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Input and Textarea fields */
+.input-field,
+.textarea-field {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  font-family: sans-serif;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.input-field:focus,
+.textarea-field:focus {
+  border-color: #007BFF;
+  box-shadow: 0 0 0 2px rgba(0,123,255,0.2);
+}
+
+/* Labels */
+label {
+  font-weight: 600;
+  color: #333;
+  font-size: 14px;
+  margin-bottom: 4px;
+  display: block;
+}
+
+/* Info text blocks */
+.info-text {
+  font-size: 13px;
+  color: #555;
+  padding-left: 8px;
+}
+
+/* Grouped info blocks (Open Graph, Twitter) */
+.info-block {
+  background-color: #f9f9f9;
+  border-left: 3px solid #007BFF;
+  padding: 10px 12px;
+  font-size: 13px;
+  color: #444;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+}
+
+.collapse.show {
+  display: block;
+}
+.show {
+  display: block;
+}
+
+  </style>
+</head>
+<body>
+
+     <div id="admin-header"></div>
+
+<script type="module">
+  import { loadAdminHeader } from 'https://contenthub.guru/admin/exports/adminHeader.js';
+
+  // Call the function to render the admin header
+  loadAdminHeader('admin-header');
+</script>
+
+<main class="container my-5">
+
+  <!-- Header -->
+  <div class="text-center mb-5">
+    <h1 class="display-5 text-primary"><i class="bi bi-graph-up-arrow"></i> SEO Helper Tool</h1>
+    <p class="text-muted">Check internal links, analyze SEO data, and spot issues quickly.</p>
+  </div>
+
+  <!-- Input -->
+  <div class="card p-4 mb-4">
+    <h2 class="h5 mb-3"><i class="bi bi-link-45deg"></i> Check Internal Links</h2>
+    <div class="input-group">
+      <input type="url" id="urlInput" value="https://contenthub.guru" class="form-control" placeholder="Enter a URL (e.g., https://example.com)" required>
+      <button id="startButton" class="btn btn-primary"><i class="bi bi-search"></i> Start</button>
+    </div>
+  </div>
+
+  <!-- Progress -->
+  <div class="card p-4 mb-4">
+    <h4 id="pageCount" class="text-center mb-3">Waiting to start...</h4>
+    <div class="progress">
+      <div id="progressBar" class="progress-bar progress-bar-striped progress-bar-animated"
+           role="progressbar" style="width:0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+    </div>
+  </div>
+
+  <!-- Error Panel -->
+  <div class="card p-4 mb-4">
+    <h4><i class="bi bi-exclamation-triangle-fill text-danger"></i> Error Report</h4>
+    <p id="errorCount" class="fw-bold text-danger">404 Count: 0</p>
+    <button id="errorDropdown" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#errorModal">
+      <i class="bi bi-bug"></i> View Errors
+    </button>
+  </div>
+
+  <!-- SEO Results -->
+  <div id="seo-container" class="mt-4"></div>
+</main>
+
+<!-- Error Modal -->
+<div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title" id="errorModalLabel"><i class="bi bi-bug-fill"></i> 404 Error Details</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <ul id="errorListModal" class="list-group"></ul>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Scroll-up button -->
+<button id="scrollUpBtn" onclick="scrollToTop()"><i class="bi bi-arrow-up"></i></button>
+
+<!-- Footer -->
+
+<div id="admin-footer"></div>
+<script type="module">
+  import { loadFooter } from 'https://contenthub.guru/admin/exports/adminFooter.js';
+  loadFooter(); // injects footer into div#admin-footer
+</script>
+
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+ 
+  // Scroll-to-top
+  window.onscroll = function () {
+    const btn = document.getElementById("scrollUpBtn");
+    btn.style.display = (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) ? "block" : "none";
+  };
+  function scrollToTop() {
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
+  }
+</script>
+
+
+
+
+    <script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+import { getFirestore, doc, getDoc, setDoc, addDoc, collection, serverTimestamp, updateDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-storage.js";
+
+import { showToast } from "https://contenthub.guru/exports/showToast.js";
+
+
+// Firebase config
+const firebaseConfig = {
+  apiKey: "AIzaSyBXZcSYdspfi2jBipwUFeNmKZgU02ksg8c",
+  authDomain: "contentmanagement-8af61.firebaseapp.com",
+  projectId: "contentmanagement-8af61",
+  storageBucket: "contentmanagement-8af61.firebasestorage.app",
+  messagingSenderId: "579537581112",
+  appId: "1:579537581112:web:736c7faafaf1391ce1e2cd",
+  measurementId: "G-ZPWGF7YMPE"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
+const storage = getStorage(app);
+
+
+
+
+        let pageCount = 0; // Variable to keep track of the number of pages checked
+        let totalPages = 0; // Total pages to check
+        let errorPages = []; // Array to keep track of pages with errors
+
+        let errorCount = 0; // Initialize a count for 404 errors
+let errorUrls = []; // Array to keep track of URLs with 404 errors
+
+
+// Toggle the nearest collapse
+document.querySelectorAll('.card-header').forEach(header => {
+  header.addEventListener('click', () => {
+    const collapse = header.nextElementSibling; // nearest .collapse after header
+    if (!collapse) return;
+
+    collapse.classList.toggle('show');
+
+    // Toggle the arrow
+    const arrow = header.querySelector('span');
+    if (collapse.classList.contains('show')) {
+      arrow.textContent = '▲';
+    } else {
+      arrow.textContent = '▼';
+    }
+  });
+});
+
+
+
+// Function to open the error modal and populate it with URLs
+function openErrorModal() {
+    const errorListModal = document.getElementById('errorListModal');
+    errorListModal.innerHTML = ''; // Clear previous error list
+
+    errorUrls.forEach(url => {
+        const listItem = document.createElement('li');
+        listItem.classList.add('list-group-item');
+        listItem.textContent = url; // Display URL
+        errorListModal.appendChild(listItem);
+    });
+}
+
+// Function to show "Bad" on the collapsible button
+function showBadOnCollapseButton() {
+    const dropdownToggle = document.getElementById('errorDropdown');
+    dropdownToggle.innerText = 'Bad';
+    dropdownToggle.classList.add('btn-danger'); // Optional: Change button color
+}
+
+// Function to update the 404 count in the UI
+function updateErrorCount() {
+    document.getElementById('errorCount').innerText = `404 Count: ${errorCount}`;
+}
+
+        // Function to get internal links
+        function getInternalLinks(currentDomain) {
+    const allLinks = document.querySelectorAll('a');  // Select all anchor tags
+    const internalLinks = [];
+
+    allLinks.forEach(link => {
+        let linkURL;
+        
+        // Check if the link is relative or absolute
+        if (link.href.startsWith('http')) {
+            linkURL = new URL(link.href); // Absolute URL, create a URL object
+        } else {
+            // Relative URL, resolve it based on the current page's origin (including paths)
+            linkURL = new URL(link.getAttribute('href'), window.location.origin + window.location.pathname);
+        }
+
+        // Check if the link belongs to the same domain and ignore empty/anchor links
+        if (linkURL.hostname === currentDomain && linkURL.href !== '' && linkURL.href !== '#') {
+            internalLinks.push(linkURL.href);  // Add the full internal link to the array
+        }
+    });
+
+    return internalLinks;  // Return the array of internal links
+}
+
+        // Check if a link resolves and return the status
+// Check if a link resolves and return the status
+async function checkLinkStatus(url) {
+    // Adjust URL as needed, removing "/backend" from the URL if it exists
+    const cleanedUrl = url.replace('/backend', '');
+    
+    try {
+        const response = await fetch(cleanedUrl, { method: 'HEAD' });
+        if (response.status === 404) {
+            errorCount++;
+            errorUrls.push(cleanedUrl); // Add cleaned URL to errorUrls array
+            updateErrorCount();
+            showBadOnCollapseButton(); // Update button state
+            return response.status; // Return the HTTP status code
+        }
+        return response.status; // Return the HTTP status code for valid links
+    } catch (error) {
+        console.error(`Error fetching ${cleanedUrl}:`, error);
+        return null; // Return null if there's an error
+    }
+}
+         
+            
+            
+            
+
+        // Fetch title, meta tags, check for Schema Markup, and extract styles for each internal link
+        async function fetchPageSEOData(url) {
+            try {
+                const response = await fetch(url);
+                const text = await response.text();
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(text, 'text/html');
+
+                // Get title
+                const title = doc.querySelector('title') ? doc.querySelector('title').innerText : 'No title found';
+
+                // Get meta tags
+                const metaTags = Array.from(doc.querySelectorAll('meta')).map(meta => {
+                    return `${meta.getAttribute('name') || meta.getAttribute('property')}: ${meta.getAttribute('content')}`;
+                }).join('\n');
+
+                // Check for Schema Markup
+                const hasSchema = doc.querySelector('script[type="application/ld+json"]') !== null;
+
+                // Get style tag contents
+                const styleTags = Array.from(doc.querySelectorAll('style')).map(style => style.innerText).join('\n\n') || 'No style tags found';
+
+                // Get word count
+                const wordCount = text.split(/\s+/).filter(word => word.length > 0).length;
+
+                // Get heading tags (H1, H2, etc.)
+                const headings = {
+                    H1: doc.querySelectorAll('h1').length,
+                    H2: doc.querySelectorAll('h2').length,
+                    H3: doc.querySelectorAll('h3').length,
+                    H4: doc.querySelectorAll('h4').length,
+                    H5: doc.querySelectorAll('h5').length,
+                    H6: doc.querySelectorAll('h6').length
+                };
+
+                // Get image alt attributes
+                const imgTags = Array.from(doc.querySelectorAll('img'));
+                const imgAltAttributes = imgTags.map(img => ({
+                    src: img.src,
+                    alt: img.alt || 'No alt attribute'
+                }));
+
+                // Get canonical tags
+                const canonicalTags = Array.from(doc.querySelectorAll('link[rel="canonical"]')).map(link => link.href);
+
+                // Get Open Graph tags
+                const ogTags = Array.from(doc.querySelectorAll('meta[property^="og:"]')).map(meta => ({
+                    property: meta.getAttribute('property'),
+                    content: meta.getAttribute('content')
+                }));
+
+                // Get Twitter Card tags
+                const twitterTags = Array.from(doc.querySelectorAll('meta[name^="twitter:"]')).map(meta => ({
+                    name: meta.getAttribute('name'),
+                    content: meta.getAttribute('content')
+                }));
+
+                return {
+                    title,
+                    metaTags,
+                    hasSchema,
+                    styleTags,
+                    wordCount,
+                    headings,
+                    imgAltAttributes,
+                    canonicalTags,
+                    ogTags,
+                    twitterTags
+                };
+            } catch (error) {
+                console.error(`Failed to fetch SEO data for ${url}:`, error);
+                return {
+                    title: 'Error fetching title',
+                    metaTags: 'Error fetching meta tags',
+                    hasSchema: false,
+                    styleTags: 'Error fetching style tags',
+                    wordCount: 0,
+                    headings: {},
+                    imgAltAttributes: [],
+                    canonicalTags: [],
+                    ogTags: [],
+                    twitterTags: []
+                };
+            }
+        }
+
+        // Create a form for SEO details
+        async function createSEOForm(url) {
+            const seoData = await fetchPageSEOData(url);
+            const statusCode = await checkLinkStatus(url); // Get the link status code
+
+            const container = document.getElementById('seo-container');
+            const cardDiv = document.createElement('div');
+            cardDiv.classList.add('card', 'mb-3');
+
+            const collapsible = document.createElement('div');
+            collapsible.classList.add('card-header', 'd-flex', 'justify-content-between', 'align-items-center', 'cursor-pointer');
+            collapsible.textContent = `SEO Details for ${url}`;
+            const toggleIcon = document.createElement('span');
+            toggleIcon.textContent = '▼';
+            collapsible.appendChild(toggleIcon);
+            cardDiv.appendChild(collapsible);
+
+            const contentDiv = document.createElement('div');
+            contentDiv.classList.add('collapse');
+            const cardBody = document.createElement('div');
+            cardBody.classList.add('card-body');
+
+            // Title
+            const titleLabel = document.createElement('label');
+            titleLabel.textContent = `Title for ${url}:`;
+            const titleInput = document.createElement('input');
+            titleInput.type = 'text';
+            titleInput.classList.add('form-control');
+            titleInput.value = seoData.title;
+
+            // Meta Tags
+            const metaLabel = document.createElement('label');
+            metaLabel.textContent = `Meta Tags for ${url}:`;
+            const metaTextarea = document.createElement('textarea');
+            metaTextarea.rows = 5;
+            metaTextarea.classList.add('form-control');
+            metaTextarea.value = seoData.metaTags;
+
+            // Style Tags
+            const styleLabel = document.createElement('label');
+            styleLabel.textContent = `Style Tags for ${url}:`;
+            const styleTextarea = document.createElement('textarea');
+            styleTextarea.rows = 10;
+            styleTextarea.classList.add('form-control');
+            styleTextarea.value = seoData.styleTags;
+
+            // Word Count
+            const wordCountLabel = document.createElement('label');
+            wordCountLabel.textContent = `Word Count for ${url}: ${seoData.wordCount}`;
+
+            // Heading Tags
+            const headingLabel = document.createElement('label');
+            headingLabel.textContent = `Heading Tags for ${url}:`;
+            const headingsText = `H1: ${seoData.headings.H1}, H2: ${seoData.headings.H2}, H3: ${seoData.headings.H3}, H4: ${seoData.headings.H4}, H5: ${seoData.headings.H5}, H6: ${seoData.headings.H6}`;
+            const headingsDiv = document.createElement('div');
+            headingsDiv.textContent = headingsText;
+
+            // Image Alt Attributes
+            const imgAltLabel = document.createElement('label');
+            imgAltLabel.textContent = `Image Alt Attributes for ${url}:`;
+            const imgAltDiv = document.createElement('div');
+            seoData.imgAltAttributes.forEach(img => {
+                const imgAltText = document.createElement('div');
+                imgAltText.textContent = `Image: ${img.src}, Alt: ${img.alt}`;
+                imgAltDiv.appendChild(imgAltText);
+            });
+
+            // Canonical Tags
+            const canonicalLabel = document.createElement('label');
+            canonicalLabel.textContent = `Canonical Tags for ${url}:`;
+            const canonicalDiv = document.createElement('div');
+            seoData.canonicalTags.forEach(canonical => {
+                const canonicalText = document.createElement('div');
+                canonicalText.textContent = `Canonical: ${canonical}`;
+                canonicalDiv.appendChild(canonicalText);
+            });
+
+            // Open Graph Tags
+            const ogLabel = document.createElement('label');
+            ogLabel.textContent = `Open Graph Tags for ${url}:`;
+            const ogDiv = document.createElement('div');
+            seoData.ogTags.forEach(og => {
+                const ogText = document.createElement('div');
+                ogText.textContent = `${og.property}: ${og.content}`;
+                ogDiv.appendChild(ogText);
+            });
+
+            // Twitter Card Tags
+            const twitterLabel = document.createElement('label');
+            twitterLabel.textContent = `Twitter Card Tags for ${url}:`;
+            const twitterDiv = document.createElement('div');
+            seoData.twitterTags.forEach(twitter => {
+                const twitterText = document.createElement('div');
+                twitterText.textContent = `${twitter.name}: ${twitter.content}`;
+                twitterDiv.appendChild(twitterText);
+            });
+
+            // Add elements to the card body
+            cardBody.appendChild(titleLabel);
+            cardBody.appendChild(titleInput);
+            cardBody.appendChild(metaLabel);
+            cardBody.appendChild(metaTextarea);
+            cardBody.appendChild(styleLabel);
+            cardBody.appendChild(styleTextarea);
+            cardBody.appendChild(wordCountLabel);
+            cardBody.appendChild(headingLabel);
+            cardBody.appendChild(headingsDiv);
+            cardBody.appendChild(imgAltLabel);
+            cardBody.appendChild(imgAltDiv);
+            cardBody.appendChild(canonicalLabel);
+            cardBody.appendChild(canonicalDiv);
+            cardBody.appendChild(ogLabel);
+            cardBody.appendChild(ogDiv);
+            cardBody.appendChild(twitterLabel);
+            cardBody.appendChild(twitterDiv);
+
+            contentDiv.appendChild(cardBody);
+            cardDiv.appendChild(contentDiv);
+            container.appendChild(cardDiv);
+
+            // Update error pages
+            if (statusCode !== 200) {
+                errorPages.push(url); // Add the URL to errorPages array
+                const errorItem = document.createElement('a');
+                errorItem.classList.add('dropdown-item');
+                errorItem.href = url;
+                errorItem.textContent = `Error ${statusCode}: ${url}`;
+                errorItem.target = "_blank"; // Open in a new tab
+                document.getElementById('errorList').appendChild(errorItem);
+            }
+
+            pageCount++;
+            updateProgressBar();
+        }
+
+        // Update the progress bar
+        function updateProgressBar() {
+            const progressBar = document.getElementById('progressBar');
+            const progressPercentage = (pageCount / totalPages) * 100; // Calculate percentage
+            progressBar.style.width = `${progressPercentage}%`; // Update progress bar width
+            progressBar.setAttribute('aria-valuenow', progressPercentage); // Set aria-valuenow for accessibility
+            document.getElementById('pageCount').innerText = `Checked ${pageCount} out of ${totalPages} pages.`;
+        }
+
+        // Main function to start checking pages
+        async function startChecking(url) {
+            const internalLinks = getInternalLinks(url);  // Get internal links from the page
+            totalPages = internalLinks.length;  // Set total pages to check
+            pageCount = 0;  // Reset page count
+            errorPages = [];  // Reset error pages
+
+            errorCount = 0; // Reset error count
+        errorUrls = []; // Reset error URLs
+        updateErrorCount(); // Update count display
+  
+        // Clear previous results
+            document.getElementById('seo-container').innerHTML = '';
+            document.getElementById('errorListModal').innerHTML = '';
+            document.getElementById('progressBar').style.width = '0%'; // Reset progress bar
+    console.log("internalLinks ",internalLinks);
+
+            // Check each link one by one
+            for (const url of internalLinks) {
+                await createSEOForm(url);
+                await new Promise(resolve => setTimeout(resolve, 2000)); // Wait 2 seconds before checking the next page
+            }
+        }
+
+        // Scroll to top function
+        window.onscroll = function() {
+            const scrollUpBtn = document.getElementById("scrollUpBtn");
+            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                scrollUpBtn.style.display = "block";
+            } else {
+                scrollUpBtn.style.display = "none";
+            }
+        };
+
+        function scrollToTop() {
+            document.body.scrollTop = 0; // For Safari
+            document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+        }
+
+// Start checking the URL when the button is clicked
+document.getElementById('startButton').addEventListener('click', () => {
+    const url = document.getElementById('urlInput').value;
+    console.log("url ",url);
+    if (url) {
+        startChecking(url);
+     } else {
+        alert('Please enter a valid URL.');
+    }
+});
+
+function toggleCollapse(collapseId) {
+    const collapseElement = document.getElementById(collapseId);
+
+    if (collapseElement) {
+        collapseElement.classList.toggle('show'); // Toggle the 'show' class for collapse
+
+        // Change the arrow icon direction
+        const headerElement = collapseElement.previousElementSibling;
+        const arrow = headerElement.querySelector('span');
+        
+        if (collapseElement.classList.contains('show')) {
+            arrow.textContent = '▲'; // Change to up arrow when expanded
+        } else {
+            arrow.textContent = '▼'; // Change to down arrow when collapsed
+        }
+    }
+}
+
+// Attaching event listener to the collapsible element
+document.querySelectorAll('.card-header').forEach(header => {
+  header.addEventListener('click', function() {
+    const collapseElement = this.nextElementSibling; // get the collapse div right after header
+    if (!collapseElement) return;
+
+    collapseElement.classList.toggle('show'); // toggle visibility
+
+    // toggle arrow
+    const arrow = this.querySelector('span');
+    if (collapseElement.classList.contains('show')) {
+      arrow.textContent = '▲';
+    } else {
+      arrow.textContent = '▼';
+    }
+  });
+});
+
+
+
+document.getElementById('urlInput').addEventListener('keydown', function(event) {
+    if (event.key === 'Enter' || event.keyCode === 13) {  // Check if the pressed key is Enter
+        let urlInput = document.getElementById('urlInput').value.trim();
+        
+        // Remove 'https://', 'http://', and 'www.' if present
+        if (urlInput.startsWith('https://')) {
+            urlInput = urlInput.replace('https://', '');
+        } else if (urlInput.startsWith('http://')) {
+            urlInput = urlInput.replace('http://', '');
+        }
+
+        if (urlInput.startsWith('www.')) {
+            urlInput = urlInput.replace('www.', '');
+        }
+        
+        // Update the input field with the cleaned-up URL
+        document.getElementById('urlInput').value = urlInput;
+        
+        // Focus on the start button
+        document.getElementById('startButton').focus();
+    }
+});
+
+
+// Add event listener for modal opening
+document.getElementById('errorDropdown').addEventListener('click', openErrorModal);
+    </script>                                                                                                                                                                                               
+</body>
+</html>

@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Content Hub – Smart CMS Dashboard for Websites</title>
+
+<!-- Essential Meta -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Content Hub is a modern CMS dashboard to manage, edit, filter, and optimize your websites. Streamline publishing with SEO tools, analytics, and collaboration.">
+<meta name="keywords" content="CMS, Content Management, Dashboard, Website Editor, Admin Panel, SEO Tools, ContentHub Guru">
+<meta name="author" content="ContentHub.guru">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://contenthub.guru/">
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Content Hub">
+<meta property="og:title" content="Content Hub – Smart CMS Dashboard for Websites">
+<meta property="og:description" content="Manage, edit, and optimize your websites from one dashboard. ContentHub.guru makes content management simple and powerful.">
+<meta property="og:url" content="https://contenthub.guru/">
+<meta property="og:image" content="https://contenthub.guru/images/og-preview.png">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Content Hub – Smart CMS Dashboard for Websites">
+<meta name="twitter:description" content="Manage, edit, and optimize your websites with ContentHub.guru. A powerful CMS dashboard built for creators.">
+<meta name="twitter:image" content="https://contenthub.guru/images/og-preview.png">
+
+<!-- Favicons -->
+<link rel="apple-touch-icon" sizes="180x180" href="https://contenthub.guru/images/favicons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://contenthub.guru/images/favicons/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="https://contenthub.guru/images/favicons/favicon-16x16.png">
+<link rel="manifest" href="https://contenthub.guru/images/favicons/site.webmanifest">
+<meta name="theme-color" content="#1a1a1a">
+
+<!-- Schema.org JSON-LD -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "Content Hub",
+  "url": "https://contenthub.guru",
+  "description": "CMS dashboard to manage your websites with SEO, analytics, and collaboration tools.",
+  "publisher": {
+    "@type": "Organization",
+    "name": "ContentHub.guru",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://contenthub.guru/images/logo.png"
+    }
+  },
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://contenthub.guru/search?query={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
+
+<!-- Monetization -->
+<meta name="google-adsense-account" content="ca-pub-2001518155292747">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2001518155292747" crossorigin="anonymous"></script>
+
+<!-- Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZPWGF7YMPE"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-ZPWGF7YMPE');
+</script>
+
+<link rel="stylesheet" href="https://contenthub.guru/css/style.css">
+
+<style>
+  body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin:0; padding:0; background:#f4f6f8; color:#333; }
+  a { text-decoration:none; color:inherit; }
+
+  header { background:linear-gradient(90deg,#4a90e2,#357ABD); color:white; padding:1rem 2rem; display:flex; justify-content:space-between; align-items:center; box-shadow:0 4px 10px rgba(0,0,0,0.12);}
+  header h1 { margin:0; font-size:2rem; }
+  .login-btn, .admin-btn { background:#fff; color:#357ABD; font-weight:600; border:none; padding:0.6rem 1.2rem; border-radius:8px; cursor:pointer; transition:0.3s; margin-left:0.5rem; box-shadow:0 2px 6px rgba(0,0,0,0.15);}
+  .login-btn:hover, .admin-btn:hover { background:#e1eaff; transform:translateY(-2px); }
+
+  main { max-width:1200px; margin:2rem auto; padding:0 1rem; }
+  main h2 { font-size:2rem; margin-bottom:1rem; text-align:center; color:#4a4a4a; }
+
+  .toolbar { display:flex; justify-content:center; flex-wrap:wrap; gap:1rem; margin-bottom:1rem; }
+  .toolbar input, .toolbar select { padding:0.5rem 1rem; border-radius:6px; border:1px solid #ccc; font-size:0.95rem; }
+
+  .tag-filters { display:flex; justify-content:center; flex-wrap:wrap; gap:0.5rem; margin-bottom:1.5rem; }
+  .tag-filter { cursor:pointer; background:#357ABD; color:white; padding:0.3rem 0.7rem; border-radius:5px; font-size:0.85rem; transition:0.3s; }
+  .tag-filter:hover { background:#4a90e2; }
+
+  .sites-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:1.8rem; }
+  .site-card { background:linear-gradient(135deg, #ffffff, #f0f4f8); border-radius:16px; padding:1.8rem; box-shadow:0 8px 20px rgba(0,0,0,0.06); transition:0.4s; cursor:pointer; border:1px solid #e0e0e0; position:relative; overflow:hidden; }
+  .site-card:hover { transform:translateY(-8px) scale(1.02); box-shadow:0 15px 30px rgba(0,0,0,0.12); }
+  .site-card h3 { margin-top:0; color:#357ABD; }
+  .site-card p { margin:0.4rem 0; color:#555; font-size:0.95rem; }
+  .tags { display:flex; flex-wrap:wrap; gap:0.5rem; margin-top:0.8rem; }
+  .tag { background:linear-gradient(135deg,#4a90e2,#357ABD); color:white; font-size:0.75rem; padding:0.2rem 0.5rem; border-radius:4px; }
+
+  .views { position:absolute; top:1rem; right:1rem; font-size:0.8rem; background:#fff; padding:0.2rem 0.5rem; border-radius:6px; color:#357ABD; font-weight:600; box-shadow:0 2px 4px rgba(0,0,0,0.1); }
+
+  .pagination { display:flex; justify-content:center; margin:2rem 0; gap:0.5rem; flex-wrap:wrap; }
+  .page-btn { cursor:pointer; padding:0.4rem 0.8rem; border-radius:5px; background:#357ABD; color:white; transition:0.3s; }
+  .page-btn.active { background:#4a90e2; font-weight:600; }
+  .page-btn:hover:not(.active) { background:#4a90e2; }
+
+  .loading { text-align:center; padding:2rem; font-size:1.2rem; color:#888; }
+
+  footer { background:#222; color:white; padding:1.2rem 2rem; display:flex; justify-content:space-between; flex-wrap:wrap; font-size:0.9rem; align-items:center;}
+  footer a { color:#4a90e2; font-weight:500; transition:0.3s; }
+  footer a:hover { text-decoration:underline; }
+
+  @media(max-width:600px){ header, footer { flex-direction:column; align-items:flex-start; } .login-btn, .admin-btn { margin:0.5rem 0 0 0; } footer { justify-content:center; gap:0.5rem; } }
+</style>
+</head>
+<body>
+
+<div id="main-header"></div>
+<script type="module">
+  import {  } from 'https://contenthub.guru/exports/header.js';
+</script>
+
+<main>
+  <h2>Our Sites</h2>
+
+  <nav class="toolbar" aria-label="Search and sort websites">
+    <input type="text" id="searchInput" aria-label="Search sites" placeholder="Search by title, domain, or tag">
+    <select id="sortSelect" aria-label="Sort sites">
+      <option value="createdDesc">Newest</option>
+      <option value="createdAsc">Oldest</option>
+      <option value="publishedDesc">Most Published</option>
+      <option value="viewsDesc">Most Viewed</option>
+    </select>
+  </nav>
+
+  <div class="tag-filters" id="tagFilters" aria-label="Filter by tags"></div>
+
+  <section id="sitesList" class="sites-grid" aria-live="polite">
+    <div class="loading">Loading sites...</div>
+  </section>
+
+  <div class="pagination" id="pagination" aria-label="Pagination"></div>
+</main>
+
+
+<div id="main-footer"></div>
+<script type="module">
+  import { loadFooter } from 'https://contenthub.guru/exports/footer.js';
+  loadFooter(); // injects footer into div#main-footer
+</script>
+
+<footer>
+<div>
+<a href="https://rw-501.github.io/Portfolio" target="_blank">Created by Ron W.</a> |
+Last updated: <span id="lastUpdated">-</span></div>
+
+</footer>
+
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+import { showToast } from "https://contenthub.guru/exports/showToast.js";
+
+
+const firebaseConfig = { apiKey:"AIzaSyBXZcSYdspfi2jBipwUFeNmKZgU02ksg8c", authDomain:"contentmanagement-8af61.firebaseapp.com", projectId:"contentmanagement-8af61", storageBucket:"contentmanagement-8af61.appspot.com", messagingSenderId:"579537581112", appId:"1:579537581112:web:736c7faafaf1391ce1e2cd", measurementId:"G-ZPWGF7YMPE" };
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+document.getElementById("currentYear").textContent = new Date().getFullYear();
+
+const loginBtn = document.getElementById("loginBtn");
+const adminBtn = document.getElementById("adminBtn");
+const searchInput = document.getElementById("searchInput");
+const sortSelect = document.getElementById("sortSelect");
+const tagFiltersDiv = document.getElementById("tagFilters");
+const sitesList = document.getElementById("sitesList");
+const paginationDiv = document.getElementById("pagination");
+
+const allowedEmails = ["1988lrp@gmail.com"];
+const allowedPhones = ["+19725977878"];
+
+let sitesData = [];
+let filteredSites = [];
+let currentPage = 1;
+const pageSize = 6;
+let activeTag = null;
+
+
+onAuthStateChanged(auth, user => {
+  if(user){
+    loginBtn.textContent = "Logged in as " + user.displayName;
+    if(allowedEmails.includes(user.email) || allowedPhones.includes(user.phoneNumber)) adminBtn.style.display="inline-block";
+  } else {
+    loginBtn.textContent="Login";
+    adminBtn.style.display="none";
+  }
+
+  loginBtn.addEventListener("click", async () => {
+  const provider = new GoogleAuthProvider();
+  try { await signInWithPopup(auth, provider); } 
+  catch (err) { alert("Login failed: " + err.message); }
+});
+
+adminBtn.addEventListener("click", () => { window.location.href = "https://contenthub.guru/admin/index.html"; });
+
+});
+
+// Render sites for current page
+function renderSites(){
+  const queryText = searchInput.value.toLowerCase();
+  filteredSites = sitesData.filter(site =>
+    site.title.toLowerCase().includes(queryText) ||
+    site.slug.toLowerCase().includes(queryText) ||
+    (site.tags || []).some(t=>t.toLowerCase().includes(queryText))
+  );
+
+  if(activeTag) filteredSites = filteredSites.filter(site => site.tags.includes(activeTag));
+
+  const sortValue = sortSelect.value;
+  if(sortValue==="createdDesc") filteredSites.sort((a,b)=>b.createdAt-a.createdAt);
+  if(sortValue==="createdAsc") filteredSites.sort((a,b)=>a.createdAt-a.createdAt);
+  if(sortValue==="publishedDesc") filteredSites.sort((a,b)=>b.publishedCount-a.publishedCount);
+  if(sortValue==="viewsDesc") filteredSites.sort((a,b)=>b.views-a.views);
+
+  const totalPages = Math.ceil(filteredSites.length/pageSize);
+  if(currentPage>totalPages) currentPage=1;
+
+  sitesList.innerHTML='';
+  if(filteredSites.length===0){
+    sitesList.innerHTML="<p class='loading'>No matching websites.</p>";
+    paginationDiv.innerHTML='';
+    return;
+  }
+
+  const start = (currentPage-1)*pageSize;
+  const pageSites = filteredSites.slice(start,start+pageSize);
+
+  pageSites.forEach(data=>{
+    const card=document.createElement("article");
+    card.className="site-card";
+    card.setAttribute("role","button");
+    card.setAttribute("tabindex","0");
+    card.innerHTML=`
+      <div class="views">${data.views || 0} views</div>
+      <h3>${data.title}</h3>
+      <p><img src="${data.image||''}" alt="preview" width="300" height="200"></p>
+      <p>Category: ${data.category}</p>
+      <p>Domain: ${data.domain}</p>
+      <p>Slug: ${data.slug}</p>
+      <p>Pages: ${data.pageCount || 0} | Published: ${data.publishedCount || 0}</p>
+      <div class="tags">${(data.tags||[]).map(tag=>`<span class="tag">${tag}</span>`).join('')}</div>
+    `;
+    card.addEventListener("click",()=>{window.location.href=`https://contenthub.guru/site/${data.slug}`});
+    sitesList.appendChild(card);
+  });
+
+  renderPagination(totalPages);
+  const latestDate=Math.max(...filteredSites.map(s=>s.createdAt));
+  if(latestDate) document.getElementById("lastUpdated").textContent=new Date(latestDate).toLocaleString();
+}
+
+// Pagination buttons
+function renderPagination(totalPages){
+  paginationDiv.innerHTML='';
+  for(let i=1;i<=totalPages;i++){
+    const btn=document.createElement("span");
+    btn.className="page-btn"+(i===currentPage?' active':'');
+    btn.textContent=i;
+    btn.addEventListener("click",()=>{ currentPage=i; renderSites(); });
+    paginationDiv.appendChild(btn);
+  }
+}
+
+// Render tag filters
+function renderTagFilters(){
+  const allTags=[...new Set(sitesData.flatMap(s=>s.tags||[]))];
+  tagFiltersDiv.innerHTML='';
+  allTags.forEach(tag=>{
+    const btn=document.createElement("span");
+    btn.className="tag-filter";
+    btn.textContent=tag;
+    btn.addEventListener("click",()=>{
+      activeTag=(activeTag===tag?null:tag);
+      currentPage=1;
+      renderSites();
+    });
+    tagFiltersDiv.appendChild(btn);
+  });
+}
+
+// Load sites from Firebase
+async function loadSites(){
+  sitesList.innerHTML='<div class="loading">Loading sites...</div>';
+  try{
+    const q=query(collection(db,"pages"), orderBy("createdAt","desc"));
+    const snap=await getDocs(q);
+    if(snap.empty){ sitesList.innerHTML="<p class='loading'>No websites yet. Create one after login.</p>"; return; }
+
+    sitesData=snap.docs.map(doc=>{
+      const d=doc.data();
+      return {
+        id: doc.id,
+        title: d.name||d.title||"Untitled Site",
+        domain: d.domain||"N/A",
+        slug: d.slug || "N/A",
+        category: d.category || 'N/A',
+        pageCount: d.pageCount||0,
+        publishedCount: d.publishedCount||0,
+        views: d.views||0,
+        tags: d.tags||[],
+        createdAt: d.createdAt?.toDate().getTime()||Date.now()
+      }
+      console.log(`https://contenthub.guru/site/${d.slug}`);
+    });
+
+    renderTagFilters();
+    renderSites();
+  } catch(err){ sitesList.innerHTML=`<p class="loading">Error loading sites: ${err.message}</p>`; }
+}
+
+loadSites();
+searchInput.addEventListener('input',()=>{ currentPage=1; renderSites(); });
+sortSelect.addEventListener('change',()=>{ currentPage=1; renderSites(); });
+
+</script>
+</body>
+</html>

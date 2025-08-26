@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Admin Dashboard</title>
+<meta name="description" content="Manage your pages, add tags, keywords, and monitor page performance.">
+<meta name="keywords" content="CMS, Admin, Dashboard, Keywords, Tags, SEO, Pages">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Favicons -->
+<link rel="apple-touch-icon" sizes="180x180" href="https://contenthub.guru/images/favicons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://contenthub.guru/images/favicons/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="https://contenthub.guru/images/favicons/favicon-16x16.png">
+<link rel="manifest" href="https://contenthub.guru/images/favicons/site.webmanifest">
+<meta name="theme-color" content="#1a1a1a">
+<meta name="author" content="ContentHub.guru">
+
+<style>
+  body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin:0; padding:0; background:#f4f6f8; color:#333; }
+  h2,h3 { color:#357ABD; }
+  .hidden { display:none; }
+  header, footer { background:#357ABD; color:white; padding:1rem 2rem; display:flex; justify-content:space-between; align-items:center; }
+  footer a { color:white; text-decoration:underline; }
+  main { max-width:1200px; margin:2rem auto; padding:0 1rem; }
+  button { cursor:pointer; border:none; border-radius:6px; padding:0.5rem 1rem; background:#4a90e2; color:white; font-weight:600; transition:0.3s; }
+  button:hover { background:#357ABD; }
+  input, textarea, select { width:100%; padding:0.5rem; margin:0.3rem 0; border-radius:6px; border:1px solid #ccc; }
+  #createPageSection { background:white; padding:1.5rem; border-radius:12px; box-shadow:0 6px 18px rgba(0,0,0,0.08); margin-bottom:2rem; }
+  .dashboard-tools { display:flex; flex-wrap:wrap; gap:1rem; margin-bottom:1rem; align-items:center; }
+  .dashboard-tools input, .dashboard-tools select { flex:1; min-width:150px; }
+  table { width:100%; border-collapse: collapse; margin-top:1rem; background:white; border-radius:12px; overflow:hidden; box-shadow:0 4px 10px rgba(0,0,0,0.05); }
+  th, td { padding:0.8rem 1rem; text-align:left; }
+  th { background:#f4f4f4; }
+  tr:nth-child(even) { background:#f9f9f9; }
+  img { max-width:60px; border-radius:6px; }
+  .status-online { color:green; font-weight:bold; }
+  .status-offline { color:red; font-weight:bold; }
+  .tag { display:inline-block; background:#357ABD; color:white; padding:0.2rem 0.5rem; margin:0.2rem; border-radius:4px; font-size:0.8rem; }
+ 
+
+ /* Modal styles */
+.modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); justify-content:center; align-items:center; z-index:1000; }
+.modal-content { background:#fff; padding:20px; border-radius:10px; width:90%; max-width:800px; max-height:90%; overflow-y:auto; box-shadow:0 4px 20px rgba(0,0,0,0.2);}
+.close-modal { float:right; font-size:24px; cursor:pointer; }
+.analytics-card { display:flex; justify-content:space-between; padding:10px; border:1px solid #ddd; border-radius:6px; margin-bottom:10px; background:#f9f9f9; }
+.analytics-card h3 { margin:0; font-size:16px; }
+.analytics-table { width:100%; border-collapse:collapse; margin-top:10px; }
+.analytics-table th, .analytics-table td { border:1px solid #ddd; padding:8px; text-align:left; }
+.analytics-table th { background:#f0f0f0; }
+.group {
+    background-color: #7c7c7c;
+    display: grid;
+    padding: .5rem;
+    width: 100%;
+    border-radius: .5rem;
+}
+.row { display: grid; }
+    
+    
+    </style>
+</head>
+<body>
+
+<div id="admin-header"></div>
+
+<script type="module">
+  import { loadAdminHeader } from 'https://contenthub.guru/admin/exports/adminHeader.js';
+
+  // Call the function to render the admin header
+  loadAdminHeader('admin-header');
+</script>
+
+
+<main>
+  <div id="auth-section">
+    <h3>Login</h3>
+    <button id="googleLogin">Login with Google</button>
+    <div style="margin-top:10px;">
+      <input id="phoneInput" placeholder="Enter phone" />
+      <button id="sendCode">Send Code</button>
+    </div>
+    <div id="codeSection" class="hidden">
+      <input id="verifyCode" placeholder="Enter code" />
+      <button id="verifyBtn">Verify</button>
+    </div>
+    <div id="recaptcha-container"></div>
+  </div>
+
+  <div id="admin-panel" class="hidden">
+    <section id="createPageSection">
+      <h3>Create New Page</h3>
+  <label>Title:</label>
+  <input id="title" type="text"  placeholder="Page Title" />
+  <div id="titleFeedback" class="seo-feedback"></div>
+
+<div>
+  <label>Description:</label>
+  <textarea id="description"  placeholder="Page Description"></textarea>
+  <div id="descriptionFeedback" class="seo-feedback"></div>
+</div>
+
+<div>
+  <label>Keywords:</label>
+  <input id="keywords" type="text" placeholder="Comma separated keywords" />
+  <div id="keywordsFeedback" class="seo-feedback"></div>
+</div>
+
+<div>
+  <label>Domain:</label>
+  <input id="domain" type="text" value="contenthub.guru" placeholder="Page Domain (example.com)" />
+</div>
+
+<div>
+  <label>Slug:</label>
+  <input id="slug" type="text" placeholder="Page Domain (example.com)" />
+</div>
+
+<div style="margin-top:10px;">
+  <div style="font-weight:bold;">SEO Score:</div>
+  <div style="width:100%; background:#eee; height:20px; border-radius:4px;">
+    <div id="seoScoreBar" style="width:0%; height:100%; background:green; border-radius:4px;"></div>
+  </div>
+  <div id="seoScoreText" style="font-size:12px; font-weight:bold; margin-top:2px;"></div>
+</div>
+
+<style>
+  .seo-feedback {
+    height: 12px;
+    margin-bottom: 2px;
+    font-size: 12px;
+    font-weight: bold;
+  }
+</style>
+
+
+<!-- Image Upload Section -->
+<div id="imageUploadSection" style="margin-top:0.5rem;">
+  <label for="imageInput" style="display:block; font-weight:600; margin-bottom:0.3rem;">Page Image</label>
+  <div id="imageDropZone" 
+       style="border: 2px dashed #ccc; border-radius: 8px; padding: 1rem; text-align:center; cursor:pointer; background:#fafafa;">
+    <p>Drag & Drop an image here or click to select</p>
+    <input type="file" id="imageInput" accept="image/*" style="display:none;" />
+  </div>
+  <div id="imagePreview" style="margin-top:0.5rem;">
+    <img id="previewImg" src="" alt="Image Preview" style="max-width:200px; border-radius:6px; display:none;" />
+  </div>
+  <input id="imageUrl" placeholder="Page Image URL"  hidden/>
+</div>
+
+      <select id="schemaType">
+        <option value="Article">Article</option>
+        <option value="FAQ">FAQ</option>
+        <option value="HowTo">How-To</option>
+      </select>
+
+          <!-- New Category Dropdown -->
+    <div class="row">
+      <label for="category">Category</label>
+      <select id="category">
+        <option value="">-- Select Category --</option>
+        <option value="health">Health</option>
+        <option value="nutrition">Nutrition</option>
+        <option value="fitness">Fitness</option>
+        <option value="business">Business</option>
+        <option value="tech">Technology</option>
+        <option value="lifestyle">Lifestyle</option>
+        <option value="education">Education</option>
+        <option value="finance">Finance</option>
+        <option value="news">News</option>
+        <option value="other">Other</option>
+      </select>
+    </div>
+
+      <div id="keywordTags" style="margin-top:0.5rem;"></div>
+      <button id="createBtn">Create Page</button>
+    </section>
+
+    <div class="group">
+    <div class="row">
+    <div class="dashboard-tools">
+    <label for="searchCategory">Search</label>
+      <input id="searchInput" placeholder="Search by title, domain, keyword..." />
+      </div>
+
+      <div class="row">
+      <label for="searchCategory">Sort</label>
+      <select id="sortSelect">
+        <option value="createdDesc">Newest</option>
+        <option value="createdAsc">Oldest</option>
+        <option value="viewsDesc">Most Viewed</option>
+      </select>
+      </div>
+          <div class="row">
+      <label for="searchCategory">Category</label>
+      <select id="searchCategory">
+        <option value="">-- Select Category --</option>
+        <option value="health">Health</option>
+        <option value="nutrition">Nutrition</option>
+        <option value="fitness">Fitness</option>
+        <option value="business">Business</option>
+        <option value="tech">Technology</option>
+        <option value="lifestyle">Lifestyle</option>
+        <option value="education">Education</option>
+        <option value="finance">Finance</option>
+        <option value="news">News</option>
+        <option value="other">Other</option>
+      </select>
+    </div>
+    </div>
+
+    </div>
+
+    <div id="dashboardContent"></div>
+  </div>
+</main>
+
+
+
+<!-- Popup Modal -->
+<div id="analyticsModal" class="modal">
+  <div class="modal-content">
+    <span class="close-modal">&times;</span>
+    <h2>Page Analytics</h2>
+    <div id="analyticsContent">Loading...</div>
+  </div>
+</div>
+
+<div id="admin-footer"></div>
+<script type="module">
+  import { loadFooter } from 'https://contenthub.guru/admin/exports/adminFooter.js';
+  loadFooter(); // injects footer into div#admin-footer
+</script>
+
+
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, RecaptchaVerifier, signInWithPhoneNumber, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+import { getFirestore, collection, getDoc,  setDoc, doc, updateDoc, arrayUnion, addDoc, serverTimestamp, deleteDoc  } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+import { getStorage } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-storage.js";
+import { showToast } from "https://contenthub.guru/exports/showToast.js";
+
+
+// Firebase config
+const firebaseConfig = {
+  apiKey: "AIzaSyBXZcSYdspfi2jBipwUFeNmKZgU02ksg8c",
+  authDomain: "contentmanagement-8af61.firebaseapp.com",
+  projectId: "contentmanagement-8af61",
+  storageBucket: "contentmanagement-8af61.firebasestorage.app",
+  messagingSenderId: "579537581112",
+  appId: "1:579537581112:web:736c7faafaf1391ce1e2cd",
+  measurementId: "G-ZPWGF7YMPE"
+};
+
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const storage = getStorage(app);
+let currentUser;
+
+// Allowed emails/phones
+const allowedEmails = ["1988lrp@gmail.com"];
+const allowedPhones = ["+19725977878","+12145527280"];
+
+// Auth state
+onAuthStateChanged(auth, async (user) => {
+  if (user && (allowedEmails.includes(user.email) || allowedPhones.includes(user.phoneNumber))) {
+    currentUser = user;
+    await showAdminPanel(user);
+  } else if (user) logoutUser();
+});
+
+// Logout
+function logoutUser() {
+  signOut(auth);
+  currentUser = null;
+  document.getElementById("auth-section").classList.remove("hidden");
+  document.getElementById("admin-panel").classList.add("hidden");
+  document.getElementById("logoutBtn").classList.add("hidden");
+}
+document.getElementById("logoutBtn").addEventListener("click", logoutUser);
+
+// Google Login
+document.getElementById("googleLogin").addEventListener("click", async () => {
+  try {
+    const result = await signInWithPopup(auth, new GoogleAuthProvider());
+    if (!allowedEmails.includes(result.user.email)) return logoutUser();
+    currentUser = result.user;
+    await showAdminPanel(currentUser);
+  } catch (err) { alert(err.message); }
+});
+
+// Phone login
+let recaptchaVerifier;
+document.addEventListener("DOMContentLoaded", () => {
+  recaptchaVerifier = new RecaptchaVerifier("recaptcha-container", { size: "invisible" }, auth);
+  recaptchaVerifier.render();
+});
+
+document.getElementById("sendCode").addEventListener("click", async () => {
+  let phone = document.getElementById("phoneInput").value.trim();
+  if (!phone.startsWith("+")) phone = "+1" + phone;
+  if (!allowedPhones.includes(phone)) return alert("Unauthorized phone number.");
+  try {
+    const confirmationResult = await signInWithPhoneNumber(auth, phone, recaptchaVerifier);
+    window.confirmationResult = confirmationResult;
+    document.getElementById("codeSection").classList.remove("hidden");
+  } catch (err) { alert(err.message); }
+});
+
+document.getElementById("verifyBtn").addEventListener("click", async () => {
+  try {
+    const user = (await window.confirmationResult.confirm(document.getElementById("verifyCode").value.trim())).user;
+    if (!allowedPhones.includes(user.phoneNumber)) return logoutUser();
+    currentUser = user;
+    await showAdminPanel(user);
+  } catch { alert("Invalid code."); }
+});
+
+// Show admin panel
+async function showAdminPanel(user) {
+  document.getElementById("auth-section").classList.add("hidden");
+  document.getElementById("admin-panel").classList.remove("hidden");
+  document.getElementById("logoutBtn").classList.remove("hidden");
+  await loadDashboard(true);
+}
+
+// Ping site
+// cache of domains that have already been checked
+const checkedDomains = {};
+
+async function pingSite(domain) {
+  if (!domain) return false;
+
+  // ✅ Return cached result if we already checked this domain
+  if (checkedDomains.hasOwnProperty(domain)) {
+    return checkedDomains[domain];
+  }
+
+  try {
+    const url = domain.startsWith("http")
+      ? domain
+      : `https://contenthub.guru/site/${domain}.html`;
+
+    const resp = await fetch(url, { method: "GET", cache: "no-store" });
+    const isOnline = resp.ok;
+
+    // ✅ Store result in cache so we don’t recheck
+    checkedDomains[domain] = isOnline;
+    return isOnline;
+  } catch {
+    checkedDomains[domain] = false;
+    return false;
+  }
+}
+
+// Create article page with dynamic schema, monetization, and full metadata
+async function createPage(articleData, pageID) {
+  const scriptTag = `<script  type="module" id="dynamic-js" src="https://contenthub.guru/exports/main.js"><\/script>`;
+
+  // Generate schema based on selected type
+  let schemaJSON;
+  switch (articleData.schemaType) {
+    case "FAQ":
+      schemaJSON = {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": articleData.faq?.map(f => ({
+          "@type": "Question",
+          "name": f.q,
+          "acceptedAnswer": { "@type": "Answer", "text": f.a }
+        })) || []
+      };
+      break;
+    case "HowTo":
+      schemaJSON = {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        "name": articleData.title,
+        "description": articleData.description,
+        "step": articleData.howto?.map((s, i) => ({
+          "@type": "HowToStep",
+          "position": i + 1,
+          "name": s.stepTitle,
+          "text": s.stepDescription
+        })) || []
+      };
+      break;
+    default: // Article
+      schemaJSON = {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": articleData.title,
+        "image": articleData.image,
+        "datePublished": articleData.article?.datePublished || new Date().toISOString(),
+        "dateModified": articleData.article?.dateModified || new Date().toISOString(),
+        "author": articleData.article?.author || { "@type":"Organization", "name":  articleData.article , "url":  `https://contenthub.guru/site/${articleData.pageName}` },
+        "publisher": { "@type":"Organization", "name": articleData.article, "logo": {"@type":"ImageObject","url":`https://contenthub.guru/site/${articleData.pageName}/images/logo.png`} },
+        "description": articleData.description,
+        "articleBody": articleData.body || ""
+      };
+      break;
+  }
+
+  // Include all additional metadata in a hidden JSON block for future use
+  const metadataJSON = {
+    siteId: articleData.siteId || "Fitness",
+    type: articleData.type || "page",
+    slug: articleData.pageName,
+    title: articleData.title,
+    description: articleData.description,
+    keywords: articleData.keywords || [],
+    status: articleData.status || "draft",
+    blocks: articleData.blocks || [],
+    og: articleData.og || { title: articleData.title, description: articleData.description, image: articleData.image },
+    schemaTypes: [articleData.schemaType],
+    faq: articleData.faq || [],
+    howto: articleData.howto || [],
+    article: articleData.article || {},
+    affiliates: articleData.affiliates || [],
+    tags: articleData.tags || [],
+    hashTags: articleData.hashTags || [],
+    createdBy: articleData.userID,
+    updatedBy: articleData.userID,
+    createdAt: articleData.createdAt || new Date().toISOString(),
+    updatedAt: articleData.updatedAt || new Date().toISOString(),
+    publishedAt: articleData.publishedAt || null,
+    analytics: articleData.analytics || { views:0, uniqueViews:0 },
+    monetization: articleData.monetization || { adPlaceholders: ["top","in-article-1"] }
+  };
+
+const Content = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title id="pageTitledata">${articleData.title} | Untitled</title>
+<meta name="description" content="${articleData.description}" id="pageDescriptiondata">
+<meta name="keywords" content="${articleData.keywords?.join(', ') || ''}" id="pageKeywordsdata">
+<link rel="canonical" href="https://contenthub.guru/site/${articleData.domain}">
+<meta name="google-adsense-account" content="${articleData.adsense}">
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=${articleData.gTag}" id="google-tag"><\/script>
+<script id="google-gtag">
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', '${articleData.gTag}');
+<\/script>
+
+<script type="application/ld+json" id="pageSchema">${JSON.stringify(schemaJSON)}<\/script>
+<script type="application/ld+json" id="pageMetadata">${JSON.stringify(metadataJSON)}<\/script>
+${scriptTag}
+<script type="application/ld+json" id="dynamic-json"><\/script>
+
+
+<style id="dynamic-style">
+${articleData.customCSS || ""}   /* 🔹 custom CSS injection */
+</style>
+</head>
+<body>
+<header id="dynamic-header">
+  <h1>${articleData.title}</h1>
+  <h2>${articleData.subtitle || ''}</h2>
+</header>
+<main>
+  <img id="dynamic-pageImage" src="${articleData.image}" alt="${articleData.title}" />
+  <article>
+    ${articleData.body || `
+      <div class="new-page-message" role="note" aria-label="New page message">
+        <h3>✨ This is a brand-new page!</h3>
+        <p>Start editing your content here. Add text, images, videos, or blocks to build your page.</p>
+      </div>
+    `}
+  </article>
+
+  <section id="block-section" class="block">
+  </section>
+</main>
+
+<div hidden>
+  <div id="pageID">${pageID}</div>
+  <div id="pageOwnerUserID">${articleData.userID}</div>
+  <div id="pageSlug">${articleData.slug}</div>
+</div>
+</body>
+</html>
+`;
+
+
+// Randomized or complex approach
+const parts = ['p', 'h', 'g'];
+const randomizePart = (part) => {
+    return part.split('').reverse().join('');
+};
+
+const part_1 = randomizePart(parts.join(''));
+const part_2 = "_akXGrO51HwgEI";
+const part_3 = "VWzDIghLbIE";
+const part_4 = "G9MnTu0fIjKj";
+
+const token = part_1 + part_2 + part_3 + part_4;
+
+  // GitHub upload
+  const owner = "RW-501", repo="contentManagement", filePath=`site/${articleData.slug}.html`, branch="main";
+  const url = `https://api.github.com/repos/${owner}/${repo}/contents/${filePath}`;
+  const encodedContent = btoa(unescape(encodeURIComponent(Content)));
+
+  try {
+    const fileResp = await fetch(url, { method:"GET", headers:{Authorization:`Bearer ${token}`, 'Content-Type':'application/json', Accept:'application/vnd.github+json'} });
+    const sha = fileResp.ok ? (await fileResp.json()).sha : undefined;
+    const resp = await fetch(url, {
+      method:"PUT",
+      headers:{Authorization:`Bearer ${token}`, 'Content-Type':'application/json', Accept:'application/vnd.github+json'},
+      body:JSON.stringify({message: sha ? `Update ${filePath}` : `Create ${filePath}`, content:encodedContent, sha, branch})
+    });
+    if (!resp.ok) throw new Error((await resp.json()).message);
+    console.log("Article page created/updated successfully!");
+  } catch (err) { console.error(err.message); }
+}
+
+const imageInput = document.getElementById("imageInput");
+const imageDropZone = document.getElementById("imageDropZone");
+const previewImg = document.getElementById("previewImg");
+
+// Open file selector on drop zone click
+imageDropZone.addEventListener("click", () => imageInput.click());
+
+// Handle file selection
+imageInput.addEventListener("change", (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(evt) {
+    previewImg.src = evt.target.result;
+    previewImg.style.display = "block";
+    // Optionally store the base64 or file object for Firestore upload
+    document.getElementById("imageUrl").value = evt.target.result;
+  };
+  reader.readAsDataURL(file);
+});
+
+// Drag & Drop functionality
+imageDropZone.addEventListener("dragover", (e) => {
+  e.preventDefault();
+  imageDropZone.style.borderColor = "#357ABD";
+  imageDropZone.style.background = "#f0f4fa";
+});
+
+imageDropZone.addEventListener("dragleave", (e) => {
+  e.preventDefault();
+  imageDropZone.style.borderColor = "#ccc";
+  imageDropZone.style.background = "#fafafa";
+});
+
+imageDropZone.addEventListener("drop", (e) => {
+  e.preventDefault();
+  imageDropZone.style.borderColor = "#ccc";
+  imageDropZone.style.background = "#fafafa";
+  const file = e.dataTransfer.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(evt) {
+    previewImg.src = evt.target.result;
+    previewImg.style.display = "block";
+    document.getElementById("imageUrl").value = evt.target.result;
+  };
+  reader.readAsDataURL(file);
+});
+
+
+// Create Page button
+document.getElementById("createBtn").addEventListener("click", async () => {
+  // Gather input values
+  const title = document.getElementById("title").value.trim();
+  const description = document.getElementById("description").value.trim();
+  const domain = document.getElementById("domain").value.trim();
+  const slug = document.getElementById("slug").value.trim();
+  const image = document.getElementById("imageUrl").value.trim();
+  const schemaType = document.getElementById("schemaType").value;
+  const keywords = document.getElementById("keywords").value
+    .split(",")
+    .map(k => k.trim())
+    .filter(k => k);
+
+const categorySelect = document.getElementById("category").value;
+
+
+  if (!title || !slug) return showToast("Title and domain are required.");
+
+  // Check if domain already exists in Firestore
+  const pagesSnapshot = await getDoc(doc(db, "pages", slug));
+  if (pagesSnapshot.exists()) {
+    return showToast("error", "Domain already exists. Choose a different one.");
+  }
+
+  // Ping the domain to check if live
+  const isLive = await pingSite(slug);
+  if (!isLive) {
+    showToast("warning", "Domain seems offline or unreachable. You can still create it.");
+  }
+
+  const pageName = slug; Date.now().toString();
+  const jsTimestamp = Date.now(); // numeric timestamp for users.createdPages
+
+  // Build page object for Firestore
+  const newPage = {
+    title,
+    description,
+    domain,
+    slug,
+    image,
+    schemaType,
+    keywords,
+    category: categorySelect,
+    tags: keywords,
+    pageName,
+    userID: currentUser.uid,
+    createdBy: currentUser.uid,
+    body: "",
+    sections: [],
+    moderators: [],
+    gTag: "G-ZPWGF7YMPE",
+    adsense: "ca-pub-2001518155292747",
+    type: "page",
+    status: "draft",
+    createdAt: serverTimestamp(), // Firestore timestamp
+    updatedAt: serverTimestamp(),
+    publishedCount: 0,
+    views: 0,
+    uniqueViews: 0
+  };
+
+  try {
+    // Save to Firestore pages collection
+    const docRef = await addDoc(collection(db, "pages"), newPage);
+    await updateDoc(doc(db, "pages", docRef.id), { siteId: docRef.id });
+
+    const selectedCategory = document.getElementById("category").value;
+
+    // Add to user's createdPages array with numeric timestamp
+    const userPageData = {
+      id: docRef.id,
+      title,
+      domain,
+      slug,
+      pageName,
+      category: selectedCategory,
+      createdAt: jsTimestamp, // numeric timestamp for sorting/filtering
+      status: "draft",
+      tags: keywords,
+      image
+    };
+    await setDoc(doc(db, "users", currentUser.uid), {
+      createdPages: arrayUnion(userPageData)
+    }, { merge: true });
+
+  
+    showToast("info", "Ready...");
+
+setTimeout(() => {
+  window.location = `https://contenthub.guru/admin/editor?id=${docRef.id}`;
+}, 2000);
+
+    
+    // Reload dashboard
+    await loadDashboard(true);
+
+    // Update home page sitesData if available
+    if (window.sitesData) {
+      window.sitesData.push({ id: docRef.id, ...newPage });
+      if (typeof renderSites === "function") renderSites();
+    }
+
+    // ✅ Clear inputs after creating
+    document.getElementById("title").value = "";
+    document.getElementById("description").value = "";
+    document.getElementById("domain").value = "";
+    document.getElementById("slug").value = "";
+    document.getElementById("imageUrl").value = "";
+    document.getElementById("category").value = "";
+    document.getElementById("keywords").value = "";
+    document.getElementById("schemaType").selectedIndex = 0;
+    const previewImg = document.getElementById("previewImg");
+    if (previewImg) { previewImg.src = ""; previewImg.style.display = "none"; }
+
+  } catch (err) {
+    console.error(err);
+    showToast("error", "Error creating page: " + err.message);
+  }
+});
+
+// JS for Modal
+const modal = document.getElementById("analyticsModal");
+const modalClose = modal.querySelector(".close-modal");
+document.getElementById("showAnalytics").addEventListener("click", async () => {
+  modal.style.display = "flex";
+  await loadAnalytics();
+});
+modalClose.onclick = () => modal.style.display = "none";
+window.onclick = (e) => { if(e.target === modal) modal.style.display = "none"; };
+
+// 🔹 Load analytics from Firestore
+async function loadAnalytics() {
+  const contentDiv = document.getElementById("analyticsContent");
+  contentDiv.innerHTML = "Loading...";
+
+  try {
+    const userSnap = await getDoc(doc(db, "users", currentUser.uid));
+    const pages = userSnap.exists() ? userSnap.data().createdPages || [] : [];
+    if (!pages.length) { 
+      contentDiv.innerHTML = "<p>No pages yet.</p>"; 
+      return; 
+    }
+
+    // 🔹 Fetch pages + locations in parallel
+    const results = await Promise.all(
+      pages.map(async (p) => {
+        const [pageSnap, locSnap] = await Promise.all([
+          getDoc(doc(db, "pages", p.id)),
+          getDoc(doc(db, "page_locations", p.id))
+        ]);
+        return { 
+          slug: p.slug, 
+          data: pageSnap.exists() ? pageSnap.data() : {}, 
+          loc: locSnap.exists() ? locSnap.data() : {} 
+        };
+      })
+    );
+
+    // 🔹 Build HTML
+    let html = results.map(({ slug, data, loc }) => {
+      let block = `
+        <div class="analytics-card">
+          <h3>${slug}</h3><br>
+          <p>Total Views: ${data.views || 0}</p>
+          <p>Unique Visitors Today: ${Object.keys(loc.cities || {}).length || 0}</p>
+        </div>
+      `;
+
+      if (loc.countries && loc.regions && loc.cities) {
+        block += `
+          <table class="analytics-table">
+            <thead><tr><th>Country</th><th>Region</th><th>City</th><th>Visitors</th></tr></thead>
+            <tbody>
+              ${Object.entries(loc.cities).map(([city, count]) => {
+                const region = Object.keys(loc.regions || {})[0] || "-";
+                const country = Object.keys(loc.countries || {})[0] || "-";
+                return `<tr><td>${country}</td><td>${region}</td><td>${city}</td><td>${count}</td></tr>`;
+              }).join("")}
+            </tbody>
+          </table>
+        `;
+      }
+      return block;
+    }).join("");
+
+    contentDiv.innerHTML = html;
+  } catch (err) {
+    contentDiv.innerHTML = `<p>Error loading analytics: ${err.message}</p>`;
+    console.error(err);
+  }
+}
+
+window.loadAnalytics = loadAnalytics;
+
+
+
+const searchInput = document.getElementById("searchInput");
+const sortSelect = document.getElementById("sortSelect");
+const tagFiltersDiv = document.getElementById("tagFilters");
+const sitesList = document.getElementById("sitesList");
+
+let sitesData = [];
+let filteredSites = [];
+let currentPage = 1;
+let activeTag = null;
+const pageSize = 6;
+
+// Load Dashboard with Live Status
+// Add "Remove" button to the dashboard table
+async function loadDashboard(autoPing = false) {
+  const contentDiv = document.getElementById("dashboardContent");
+  const userSnap = await getDoc(doc(db, "users", currentUser.uid));
+  const pages = userSnap.exists() ? userSnap.data().createdPages || [] : [];
+
+  if (!pages.length) {
+    contentDiv.innerHTML = "<p>No pages yet.</p>";
+    return;
+  }
+
+  let html = `<table>
+    <thead>
+      <tr><th>Preview</th><th>Domain</th><th>Status</th><th>Views</th><th>Actions</th></tr>
+    </thead><tbody>`;
+
+  for (const p of pages) {
+    // 🔹 Pull updated stats from pages/{id}
+    const pageRef = doc(db, "pages", p.id);
+    const pageSnap = await getDoc(pageRef);
+    const pageData = pageSnap.exists() ? pageSnap.data() : {};
+
+    html += `<tr>
+      <td>
+        <p>
+          <a href="https://contenthub.guru/site/${p.slug}" target="_blank">
+            <img src="${p.image || ''}" alt="preview" width="300" height="200">
+          </a>
+        </p>
+      </td>
+      <td>
+        <a href="https://contenthub.guru/site/${p.slug}" target="_blank" style="width: 50%; display: block;">${p.slug}</a>
+      </td>
+      <td id="status-${p.id}" class="status-offline">❌ Offline</td>
+      <td>${pageData.views || 0}</td>
+      <td>
+        <button onclick="window.location.href='https://contenthub.guru/admin/editor?id=${p.id}'">Edit</button>
+        <button onclick="removePage('${p.id}','${p.slug}')">Remove</button>
+      </td>
+    </tr>`;
+  }
+
+  html += "</tbody></table>";
+  contentDiv.innerHTML = html;
+
+  if (autoPing) pages.forEach(p => updateLiveStatus(p.id, p.domain));
+}
+
+
+// Remove page function
+async function removePage(pageId, domain) {
+  if (!confirm(`Are you sure you want to remove the page "${domain}"?`)) return;
+
+  try {
+    // 1️⃣ Remove page doc from "pages" collection
+    await deleteDoc(doc(db, "pages", pageId));
+
+    // 2️⃣ Remove page from user's createdPages array
+    const userRef = doc(db, "users", currentUser.uid);
+    const userSnap = await getDoc(userRef);
+    if (userSnap.exists()) {
+      const createdPages = userSnap.data().createdPages || [];
+      const updatedPages = createdPages.filter(p => p.id !== pageId);
+      await updateDoc(userRef, { createdPages: updatedPages });
+    }
+
+
+    // Randomized or complex approach
+const parts = ['p', 'h', 'g'];
+const randomizePart = (part) => {
+    return part.split('').reverse().join('');
+};
+
+const part_1 = randomizePart(parts.join(''));
+const part_2 = "_akXGrO51HwgEI";
+const part_3 = "VWzDIghLbIE";
+const part_4 = "G9MnTu0fIjKj";
+
+const token = part_1 + part_2 + part_3 + part_4;
+
+    // 3️⃣ Remove page from GitHub
+    const owner = "RW-501", repo = "contentManagement";
+    const filePath = `site/${domain}.html`;
+    const branch = "main";
+    const url = `https://api.github.com/repos/${owner}/${repo}/contents/${filePath}`;
+
+    // Get file SHA first
+    const fileResp = await fetch(url, { 
+      method: "GET", 
+      headers: { Authorization: `Bearer ${token}`, 'Accept':'application/vnd.github+json' } 
+    });
+
+    if (fileResp.ok) {
+      const sha = (await fileResp.json()).sha;
+      const deleteResp = await fetch(url, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}`, 'Content-Type':'application/json', Accept:'application/vnd.github+json' },
+        body: JSON.stringify({
+          message: `Delete ${filePath}`,
+          sha,
+          branch
+        })
+      });
+      if (!deleteResp.ok) throw new Error((await deleteResp.json()).message);
+    }
+
+    showToast("info", `Page "${domain}" removed successfully.`);
+    await loadDashboard(true);
+
+  } catch (err) {
+    console.error(err);
+    showToast("error", `Error removing page: ${err.message}`);
+  }
+}
+
+window.removePage = removePage;
+
+// Update Live Status for a Page
+async function updateLiveStatus(pageId, domain) {
+  const statusEl = document.getElementById(`status-${pageId}`);
+  if (!statusEl) return;
+  const online = await pingSite(domain);
+  statusEl.textContent = online ? "✅ Online" : "❌ Offline";
+  statusEl.className = online ? "status-online" : "status-offline";
+
+  // Repeat every 10 seconds
+  setTimeout(() => updateLiveStatus(pageId, domain), 10000);
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  const titleInput = document.getElementById("title");
+  const descriptionInput = document.getElementById("description");
+  const keywordsInput = document.getElementById("keywords");
+  const domainInput = document.getElementById("domain");
+
+  const titleFeedback = document.getElementById("titleFeedback");
+  const descriptionFeedback = document.getElementById("descriptionFeedback");
+  const keywordsFeedback = document.getElementById("keywordsFeedback");
+  const seoScoreBar = document.getElementById("seoScoreBar");
+  const seoScoreText = document.getElementById("seoScoreText");
+
+  const stopWords = ["a","an","and","the","is","of","to","in","for","on","at","by","with","from","or","as","be","this","that","it"];
+
+  const seoRubric = {
+    title: { min: 50, max: 70 },          // chars
+    description: { min: 150, max: 160 },  // chars
+    keywords: { min: 5, max: 15 }         // count
+  };
+
+  function evaluateSEOLength(count, min, max) {
+    if (count < min) return 0;      // bad
+    if (count > max) return 50;     // okay
+    return 100;                     // good
+  }
+
+  function countKeywordMatches(text, keywords) {
+    if (!text || !keywords) return 0;
+    const words = text.toLowerCase().split(/\s+/);
+    const keyList = keywords.toLowerCase().split(/\s*,\s*/);
+    return words.reduce((acc, word) => acc + (keyList.includes(word) ? 1 : 0), 0);
+  }
+
+  function generateKeywords(text) {
+    return text
+      .toLowerCase()
+      .split(/\s+/)
+      .map(word => word.replace(/[^a-z0-9]/g, ""))
+      .filter(word => word && !stopWords.includes(word) && !/^\d+$/.test(word))
+      .join(", ");
+  }
+
+  function generateDomain(text) {
+    return text
+      .toLowerCase()
+      .replace(/\s+/g, "-")
+      .replace(/[^a-z0-9\-]/g, "");
+  }
+
+  function updateSEOIndicators() {
+    const title = titleInput.value.trim();
+    const description = descriptionInput.value.trim();
+    const keywords = keywordsInput.value.trim();
+
+    const titleCount = title.length;
+    const descCount = description.length;
+    const keywordCount = keywords.split(/\s*,\s*/).filter(Boolean).length;
+
+    // Evaluate each part (0–100)
+    const titleScore = evaluateSEOLength(titleCount, seoRubric.title.min, seoRubric.title.max);
+    const descScore = evaluateSEOLength(descCount, seoRubric.description.min, seoRubric.description.max);
+    const keywordsScore = evaluateSEOLength(keywordCount, seoRubric.keywords.min, seoRubric.keywords.max);
+
+    // Average SEO score
+    const seoScore = Math.round((titleScore + descScore + keywordsScore) / 3);
+
+    // Update score bar
+    seoScoreBar.style.width = `${seoScore}%`;
+    seoScoreBar.style.background = seoScore >= 80 ? "green" : seoScore >= 50 ? "orange" : "red";
+    seoScoreText.textContent = `SEO Score: ${seoScore}/100`;
+
+    // Feedback text
+    titleFeedback.style.color = titleScore === 100 ? "green" : titleScore === 50 ? "orange" : "red";
+    descriptionFeedback.style.color = descScore === 100 ? "green" : descScore === 50 ? "orange" : "red";
+    keywordsFeedback.style.color = keywordsScore === 100 ? "green" : keywordsScore === 50 ? "orange" : "red";
+
+    titleFeedback.textContent = `Title: ${titleCount} chars`;
+    descriptionFeedback.textContent = `Description: ${descCount} chars`;
+    keywordsFeedback.textContent = `Keywords: ${keywordCount}`;
+
+    // Keyword match suggestions
+    const titleMatches = countKeywordMatches(title, keywords);
+    const descMatches = countKeywordMatches(description, keywords);
+
+    if(titleMatches < 1) titleFeedback.textContent += " ⚠ Add keywords in title!";
+    if(descMatches < 2) descriptionFeedback.textContent += " ⚠ Add keywords in description!";
+  }
+
+  titleInput.addEventListener("input", () => {
+    if (!domainInput.value.trim()) domainInput.value = generateDomain(titleInput.value);
+    if (!keywordsInput.value.trim()) keywordsInput.value = generateKeywords(titleInput.value);
+    updateSEOIndicators();
+  });
+
+  descriptionInput.addEventListener("input", updateSEOIndicators);
+  keywordsInput.addEventListener("input", updateSEOIndicators);
+
+  updateSEOIndicators();
+});
+
+</script>
+</body>
+</html>

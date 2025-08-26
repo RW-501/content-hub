@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>404 – Page Not Found | Content Hub</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, follow">
+  <link rel="stylesheet" href="https://contenthub.guru/css/style.css">
+
+  <style>
+    body { font-family: 'Segoe UI', sans-serif; margin:0; background:#f9fafb; color:#333; line-height:1.6; }
+    header { background:linear-gradient(135deg,#4a90e2,#357ABD); color:white; padding:3rem 2rem; text-align:center; }
+    h1 { font-size:3.2rem; margin-bottom:0.5rem; font-weight:700; }
+    .error-code { font-size:1.2rem; opacity:0.9; }
+
+    main { max-width:1100px; margin:3rem auto; padding:0 1rem; }
+    p.subtext { text-align:center; margin-bottom:2rem; font-size:1.15rem; color:#444; }
+
+    .btn-home {
+      display:inline-block;
+      background:#4a90e2;
+      color:white;
+      padding:0.7rem 1.5rem;
+      border-radius:8px;
+      text-decoration:none;
+      font-weight:600;
+      transition:background 0.3s, transform 0.2s;
+    }
+    .btn-home:hover {
+      background:#357ABD;
+      transform:translateY(-2px);
+    }
+    .btn-container { text-align:center; margin-bottom:2.5rem; }
+
+    .sites-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:1.8rem; margin-top:2rem; }
+    .site-card {
+      background:white;
+      border-radius:14px;
+      padding:1.5rem;
+      box-shadow:0 4px 12px rgba(0,0,0,0.06);
+      border:1px solid #e5e7eb;
+      cursor:pointer;
+      transition:transform 0.25s ease, box-shadow 0.25s ease;
+    }
+    .site-card:hover {
+      transform:translateY(-6px);
+      box-shadow:0 12px 24px rgba(0,0,0,0.1);
+    }
+    .site-card h3 { margin-top:0; margin-bottom:0.5rem; color:#357ABD; font-size:1.3rem; }
+    .site-card p { margin:0.3rem 0; font-size:0.92rem; color:#555; }
+    .tag {
+      display:inline-block;
+      background:#4a90e2;
+      color:white;
+      font-size:0.75rem;
+      padding:0.25rem 0.6rem;
+      border-radius:6px;
+      margin:0.2rem 0.2rem 0 0;
+    }
+
+    footer { margin-top:3rem; text-align:center; padding:1.5rem; background:#222; color:white; font-size:0.9rem; }
+    footer a { color:#4a90e2; text-decoration:none; }
+    footer a:hover { text-decoration:underline; }
+  </style>
+</head>
+<body>
+
+<div id="main-header"></div>
+<script type="module">
+  import {  } from 'https://contenthub.guru/exports/header.js';
+</script>
+
+<header>
+  <h1>Oops! Page Not Found</h1>
+  <p class="error-code">Error 404</p>
+
+    <p class="subtext">
+    Sorry, the page you’re looking for doesn’t exist.<br>
+    But don’t worry — you can explore some of our published sites instead.
+  </p>
+  
+</header>
+
+<main>
+
+
+  <div class="btn-container">
+    <a href="/" class="btn-home">← Back to Home</a>
+  </div>
+
+  <section id="sitesList" class="sites-grid">
+    <p style="grid-column:1/-1; text-align:center; color:#888;">Loading sites...</p>
+  </section>
+</main>
+
+
+<div id="main-footer"></div>
+<script type="module">
+  import { loadFooter } from 'https://contenthub.guru/exports/footer.js';
+  loadFooter(); // injects footer into div#main-footer
+</script>
+
+
+
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+import { getFirestore, collection, getDocs, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+
+const firebaseConfig = { 
+  apiKey:"AIzaSyBXZcSYdspfi2jBipwUFeNmKZgU02ksg8c", 
+  authDomain:"contentmanagement-8af61.firebaseapp.com", 
+  projectId:"contentmanagement-8af61", 
+  storageBucket:"contentmanagement-8af61.appspot.com", 
+  messagingSenderId:"579537581112", 
+  appId:"1:579537581112:web:736c7faafaf1391ce1e2cd" 
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+
+async function loadSites(){
+  const sitesList = document.getElementById("sitesList");
+  try {
+    const q = query(collection(db,"pages"), orderBy("createdAt","desc"), limit(6));
+    const snap = await getDocs(q);
+    if(snap.empty){ 
+      sitesList.innerHTML = "<p style='grid-column:1/-1;text-align:center;'>No sites available yet.</p>"; 
+      return; 
+    }
+
+    sitesList.innerHTML = "";
+    snap.docs.forEach(doc=>{
+      const d = doc.data();
+      const card = document.createElement("article");
+      card.className="site-card";
+      card.innerHTML=`
+        <h3>${d.name || d.title || "Untitled Site"}</h3>
+        <p>Domain: ${d.domain || "N/A"}</p>
+        <p>Pages: ${d.pageCount || 0} | Published: ${d.publishedCount || 0}</p>
+        <div>${(d.tags || []).map(tag=>`<span class="tag">${tag}</span>`).join('')}</div>
+      `;
+      card.addEventListener("click",()=>{ window.location.href=`/site/${d.slug}`; });
+      sitesList.appendChild(card);
+    });
+  } catch(err){
+    sitesList.innerHTML = `<p style="grid-column:1/-1;text-align:center;color:red;">Error loading sites: ${err.message}</p>`;
+  }
+}
+
+loadSites();
+</script>
+
+</body>
+</html>

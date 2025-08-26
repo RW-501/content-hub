@@ -812,10 +812,10 @@ let  pageData;
     const pageSnap = await getDoc(pageRef);
      pageData = pageSnap.exists() ? pageSnap.data() : {};
   
-console.log("pages  ",pages);
+console.log("pageData  ",pageData);
 console.log("pageData  ",pageData.siteId);
 console.log("pageData  ",pageData.slug);
-console.log("p  ",p.id);
+//console.log("p  ",p.id);
 
     html += `<tr>
       <td>

@@ -615,7 +615,6 @@ hr {
 </main>
 
 
-
   <footer class="site-footer" role="contentinfo"><p>Version: V1003</p>
     <p>Copyright © ${new Date().getFullYear()}  | <a href="https://contenthub.guru/" target="_blank">ContentHub.guru</a> <br>
       ${articleData.title || "Untitled Site"} <br>

@@ -245,7 +245,7 @@ const bulletStyles = {
   // Only add bullet and link if there’s text
     if (tocHeaders) {
     const bullet = document.createElement('span');
-    bullet.textContent = '• ';
+    bullet.textContent = (bulletStyles[tag] || '• ') + ' '; // default bullet
     li.appendChild(bullet);
 
     a.textContent = tocHeaders;
@@ -256,7 +256,7 @@ const bulletStyles = {
 
   if (tocText) {
     const bullet = document.createElement('span');
-    bullet.textContent = '• ';
+    bullet.textContent = (bulletStyles[tag] || '• ') + ' '; // default bullet
     li.appendChild(bullet);
 
     a.textContent = tocText;
@@ -267,7 +267,7 @@ const bulletStyles = {
 
     if (tocLI) {
     const bullet = document.createElement('span');
-    bullet.textContent = '- ';
+    bullet.textContent = (bulletStyles[tag] || '- ') + ' '; // default bullet
     li.appendChild(bullet);
 
     a.textContent = tocLI;

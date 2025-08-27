@@ -201,6 +201,15 @@ contentItems.forEach((item, index) => {
     item.id = `toc-item-${index}`;
   }
 
+  // Define bullet options
+const bulletStyles = {
+  h2: '•',
+  h3: '–',
+  h4: '▸',
+  p: '•',
+  ul: '–'
+};
+
   const li = document.createElement('li');
   li.setAttribute('role', 'listitem');
 
@@ -228,6 +237,10 @@ contentItems.forEach((item, index) => {
     const firstItem = item.querySelector('li');
     tocLI = firstItem ? firstItem.textContent.substring(0, 40) + '…' : 'List…';
   }
+
+    if (tag === 'h3') li.style.marginLeft = '15px';
+    if (tag === 'h4') li.style.marginLeft = '30px';
+    if (tag === 'p' || tag === 'ul') li.style.marginLeft = '45px';
 
   // Only add bullet and link if there’s text
     if (tocHeaders) {

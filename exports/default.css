@@ -1019,3 +1019,9 @@ html, body {
   overflow-x: hidden;
   width: 100%;
 }
+html {
+  overflow-y: scroll;
+}
+#right-sidebar, #right-sidebar, #in-article-blocks {
+height: fit-content;
+}

@@ -510,12 +510,16 @@ hr {
   ${leftBlocksHTML}
 
 <!-- Table of Contents -->
-<nav id="toc">
-  <h3>Table of Contents</h3>
-  <ul id="toc-list">
+<nav id="toc" aria-label="Table of Contents">
+  <h3 id="toc-heading">Table of Contents</h3>
+  <ul id="toc-list" role="list" aria-labelledby="toc-heading">
     <!-- JavaScript will inject TOC items here -->
+    <!-- Example item for reference:
+    <li role="listitem"><a href="#section1">Introduction</a></li>
+    -->
   </ul>
 </nav>
+
 
 </aside>
 

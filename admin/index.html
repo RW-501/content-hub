@@ -612,10 +612,35 @@ const categorySelect = document.getElementById("category").value;
   const pageName = slug; // Date.now().toString();
   const jsTimestamp = Date.now(); // numeric timestamp for users.createdPages
 
+
+  // 🔽 Get 4 lowest viewed pages (same category optional)
+  let suggested = [];
+  let sq;
+  if (categorySelect) {
+    sq = query(
+      collection(db, "pages"),
+      where("category", "==", categorySelect),
+      orderBy("views", "asc"),
+      limit(4)
+    );
+  } else {
+    sq = query(collection(db, "pages"), orderBy("views", "asc"), limit(4));
+  }
+
+  const sSnap = await getDocs(sq);
+  sSnap.forEach((doc) => {
+    suggested.push({
+      id: doc.id,
+      ...doc.data()
+    });
+  });
+
+
   // Build page object for Firestore
   const newPage = {
     title,
     description,
+    suggested,
     domain,
     slug,
     image,

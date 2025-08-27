@@ -261,6 +261,32 @@ const bottomBlocksHTML = articleData.blocks
     const pageTitle = `${articleData.title}`;
     const encodedPageTitle = encodeURIComponent(articleData.slug); // Use for URL query strings
 
+
+    
+ 
+// 🔹 Suggested Pages HTML builder
+let suggestedHTML = "";
+
+if (Array.isArray(articleData.suggested)) {
+  articleData.suggested.forEach((page) => {
+    suggestedHTML += `
+      <div class="suggested-card">
+        <img src="${page.image || 'https://contenthub.guru/images/placeholder.png'}" alt="${page.title}">
+        <div class="suggested-content">
+          <h3>${page.title}</h3>
+          <p>${(page.description || "").slice(0, 100)}...</p>
+          <a href="https://contenthub.guru/site/${page.slug}">Read More →</a>
+        </div>
+      </div>
+    `;
+  });
+}
+
+
+
+
+
+
   // Modern Layout HTML
 const Content = `
 <!DOCTYPE html>
@@ -528,13 +554,19 @@ hr {
   </div>
 </div>
 
+<section id="suggested-pages" class="suggested">
+  <h2>Suggested for You</h2>
+  <div id="suggested-container" class="suggested-grid">${suggestedHTML}</div>
+</section>
+
+
 </main>
 
 
 
-  <footer class="site-footer" role="contentinfo"><p>V1001</p>
+  <footer class="site-footer" role="contentinfo"><p>Version: V1002</p>
     <p>Copyright © ${new Date().getFullYear()}  | <a href="https://contenthub.guru/" target="_blank">ContentHub.guru</a> <br>
-      ${articleData.slug || "Untitled Site"} <br>
+      ${articleData.title || "Untitled Site"} <br>
       
 <!-- 🔹 Report Page Button -->
 <div id="reportPageBtn" style="

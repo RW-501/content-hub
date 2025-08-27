@@ -657,7 +657,9 @@ if (toggleBtn) toggleBtn.addEventListener('click', toggleSticky);
 <script type="module">
 /* ---------------- Firebase Boot ---------------- */
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
-import {  increment, getFirestore, doc, getDoc, setDoc, addDoc, collection, serverTimestamp, updateDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+import {  increment, query, getFirestore, orderBy, limit,
+   doc, getDoc, where, setDoc, getDocs, addDoc, collection, 
+   serverTimestamp, updateDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-storage.js";
 

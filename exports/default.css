@@ -984,11 +984,10 @@ button:disabled {
 #toc {
     border: 1px solid #ccc;
     padding: 1rem;
-    max-width: 250px;
+    max-width: 90%;
     background: #f9f9f9;
-    position: sticky;
-    top: 1rem;
-  }
+    margin: auto;
+}
 
   #toc h3 {
     margin-top: 0;

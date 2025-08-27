@@ -209,20 +209,27 @@ contentItems.forEach((item, index) => {
 
   const a = document.createElement('a');
   a.href = `#${item.id}`;
-  
-  // Add descriptive text for screen readers
-  if (item.tagName === 'H2' || item.tagName === 'H3') {
+
+  // Use a div to hold text + bullet
+  const div = document.createElement('div');
+
+  if (item.tagName === 'H2' || item.tagName === 'H3' || item.tagName === 'H4') {
     a.textContent = item.textContent;
-  } else if (item.tagName === 'P') {
-    a.textContent = item.textContent.substring(0, 60) + '…'; // summarize paragraph
-  } else if (item.tagName === 'UL') {
-    a.textContent = 'List: ' + item.querySelector('li')?.textContent?.substring(0, 40) + '…';
+    div.innerHTML = `• ${a.textContent}`; // add bullet
+  } /*
+  else if (item.tagName === 'P') {
+    div.innerHTML = `• ${item.textContent.substring(0, 60)}…`; // summarize paragraph
+  }
+    */
+    else if (item.tagName === 'UL') {
+    const firstItem = item.querySelector('li');
+    const listText = firstItem ? firstItem.textContent.substring(0, 40) + '…' : 'List…';
+    div.innerHTML = `• ${listText}`;
   }
 
-  li.appendChild(a);
+  li.appendChild(div);
   tocList.appendChild(li);
 });
-
 
 
 

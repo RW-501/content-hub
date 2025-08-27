@@ -188,16 +188,13 @@ const wpm = 200; // average words per minute
 const minutes = Math.ceil(words / wpm);
 document.getElementById("readingTime").textContent = `${minutes} min read`;
 
-
 const tocList = document.getElementById('toc-list');
 
-// Grab all headings (h2, h3) and key paragraphs or lists you want
 const contentItems = document.querySelectorAll('section h2, section h3, section p[data-start], section ul');
 
-// Iterate and generate TOC
 contentItems.forEach((item, index) => {
-  // Skip empty paragraphs/lists if needed
-  if (item.tagName === 'P' && item.textContent.trim().length < 20) return;
+  // Skip empty paragraphs
+  if ((item.tagName === 'P' || item.tagName === 'p') && item.textContent.trim().length < 20) return;
 
   // Give each item a unique ID if it doesn't have one
   if (!item.id) {
@@ -209,29 +206,24 @@ contentItems.forEach((item, index) => {
 
   const a = document.createElement('a');
   a.href = `#${item.id}`;
+  a.style.textDecoration = 'none'; // optional styling
 
-  // Use a div to hold text + bullet
-  const div = document.createElement('div');
-
-  if (item.tagName === 'H2' || item.tagName === 'H3' || item.tagName === 'H4' ||
-     item.tagName === 'h2' || item.tagName === 'h3' || item.tagName === 'h4') {
-    a.textContent = item.textContent;
-    div.innerHTML = `• ${a.textContent}`; // add bullet
-  } 
-  else if (item.tagName === 'P' || item.tagName === 'p') {
-    div.innerHTML = `• ${item.textContent.substring(0, 60)}…`; // summarize paragraph
-  }
-    
-    else if (item.tagName === 'UL' || item.tagName === 'ul') {
+  // Determine what text to show
+  let tocText = '';
+  if (item.tagName.match(/H[2-4]/i)) {
+    tocText = item.textContent;
+  } else if (item.tagName.match(/P/i)) {
+    tocText = item.textContent.substring(0, 60) + '…';
+  } else if (item.tagName.match(/UL/i)) {
     const firstItem = item.querySelector('li');
-    const listText = firstItem ? firstItem.textContent.substring(0, 40) + '…' : 'List…';
-    div.innerHTML = `• ${listText}`;
+    tocText = firstItem ? firstItem.textContent.substring(0, 40) + '…' : 'List…';
   }
 
-  li.appendChild(div);
+  // Add bullet inside the link
+  a.innerHTML = `• ${tocText}`;
+  li.appendChild(a);
   tocList.appendChild(li);
 });
-
 
 
   const progressBar = document.getElementById("progressBar");

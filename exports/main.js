@@ -190,11 +190,11 @@ document.getElementById("readingTime").textContent = `${minutes} min read`;
 
 const tocList = document.getElementById('toc-list');
 
-const contentItems = document.querySelectorAll('section h2, section h3, section p[data-start], section ul');
+const contentItems = document.querySelectorAll('section h2, section h3, section h4, section p[data-start], section ul');
 
 contentItems.forEach((item, index) => {
   // Skip empty paragraphs
-  if ((item.tagName === 'P' || item.tagName === 'p') && item.textContent.trim().length < 20) return;
+  if ((item.tagName.toLowerCase() === 'p') && item.textContent.trim().length < 20) return;
 
   // Give each item a unique ID if it doesn't have one
   if (!item.id) {
@@ -204,26 +204,33 @@ contentItems.forEach((item, index) => {
   const li = document.createElement('li');
   li.setAttribute('role', 'listitem');
 
+  // Bullet span outside the link
+  const bullet = document.createElement('span');
+  bullet.textContent = '• ';
+  li.appendChild(bullet);
+
   const a = document.createElement('a');
   a.href = `#${item.id}`;
-  a.style.textDecoration = 'none'; // optional styling
+  a.style.textDecoration = 'none';
 
-  // Determine what text to show
   let tocText = '';
-  if (item.tagName.match(/H[2-4]/i)) {
-    tocText = `• ${item.textContent}`;
-  } else if (item.tagName.match(/P/i)) {
-   // tocText = item.textContent.substring(0, 60) + '…';
-  } else if (item.tagName.match(/UL/i)) {
+  const tag = item.tagName.toLowerCase();
+
+  if (tag === 'h2' || tag === 'h3' || tag === 'h4' ||
+     tag === 'H2' || tag === 'H3' || tag === 'H4') {
+    tocText = item.textContent;
+  } else if (tag === 'p') {
+  //  tocText = item.textContent.substring(0, 60) + '…';
+  } else if (tag === 'ul' || tag === 'UL') {
     const firstItem = item.querySelector('li');
     tocText = firstItem ? firstItem.textContent.substring(0, 40) + '…' : 'List…';
   }
 
-  // Add bullet inside the link
-  a.innerHTML = tocText;
+  a.textContent = tocText;
   li.appendChild(a);
   tocList.appendChild(li);
 });
+
 
 
   const progressBar = document.getElementById("progressBar");

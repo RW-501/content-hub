@@ -213,7 +213,8 @@ contentItems.forEach((item, index) => {
   // Use a div to hold text + bullet
   const div = document.createElement('div');
 
-  if (item.tagName === 'H2' || item.tagName === 'H3' || item.tagName === 'H4') {
+  if (item.tagName === 'H2' || item.tagName === 'H3' || item.tagName === 'H4' ||
+     item.tagName === 'h2' || item.tagName === 'h3' || item.tagName === 'h4') {
     a.textContent = item.textContent;
     div.innerHTML = `• ${a.textContent}`; // add bullet
   } /*
@@ -221,7 +222,7 @@ contentItems.forEach((item, index) => {
     div.innerHTML = `• ${item.textContent.substring(0, 60)}…`; // summarize paragraph
   }
     */
-    else if (item.tagName === 'UL') {
+    else if (item.tagName === 'UL' || item.tagName === 'ul') {
     const firstItem = item.querySelector('li');
     const listText = firstItem ? firstItem.textContent.substring(0, 40) + '…' : 'List…';
     div.innerHTML = `• ${listText}`;

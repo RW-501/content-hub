@@ -306,11 +306,12 @@ contentItems.forEach((item, index) => {
 const pageID = document.getElementById("pageID")?.textContent || "unknown";
 const today = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
 
+const pageRef = doc(db, "pages", pageID);
+
 // 🔹 Update page views (total + daily)
 async function updatePageViews(unique = false) {
   if (!pageID) return;
 
-  const pageRef = doc(db, "pages", pageID);
   const pageSnap = await getDoc(pageRef);
 
   if (pageSnap.exists()) {

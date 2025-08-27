@@ -599,11 +599,12 @@ const categorySelect = document.getElementById("category").value;
     collection(db, "pages"),
     where("slug", "==", slug) // check the slug field
   );
-  const querySnapshot = await getDocs(q);
-  
-  if (querySnapshot.exists()) {
-    return showToast("error", "Domain already exists. Choose a different one.",5000);
-  }
+
+const querySnapshot = await getDocs(q);
+
+if (!querySnapshot.empty) {
+  return showToast("error", "Domain already exists. Choose a different one.", 5000);
+}
 
   // Ping the domain to check if live
   const isLive = await pingSite(slug);

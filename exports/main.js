@@ -251,8 +251,8 @@ contentItems.forEach((item, index) => {
     if (scrolled >= 98 && !confettiFired) {
       confettiFired = true;
       confetti({
-        particleCount: 200,
-        spread: 70,
+        particleCount: 300,
+        spread: 80,
         origin: { y: 0.6 },
         colors: ['#4caf50', '#00bfa5', '#ffeb3b', '#ff5722', '#2196f3']
       });

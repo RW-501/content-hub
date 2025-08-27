@@ -434,7 +434,14 @@ hr {
 <div id="progressBar"></div>
 
 <header class="site-header" role="banner">
-  <div class="container header-top">
+
+
+  <div class="container header-main">
+    <h1 id="page-title">${articleData.title}</h1>
+    <p class="subtitle">${articleData.subtitle || ""}</p>
+  </div>
+
+    <div class="header-bottom">
     <nav aria-label="breadcrumb" class="breadcrumb-wrapper">
       <ol class="breadcrumb">
         <li><a href="https://contenthub.guru">Content Hub</a></li>
@@ -443,11 +450,6 @@ hr {
       </ol>
     </nav>
     <p id="readingTime">5 min read</p>
-  </div>
-
-  <div class="container header-main">
-    <h1 id="page-title">${articleData.title}</h1>
-    <p class="subtitle">${articleData.subtitle || ""}</p>
   </div>
 </header>
 

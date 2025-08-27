@@ -264,15 +264,25 @@ figure {
   border-bottom: 4px solid #1e40af;
 }
 
-/* Top row: Breadcrumb & Read Time */
-.header-top {
+.site-header {
+  position: relative;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  max-width: 1200px;
-  margin: 0 auto 1.5rem;
-  padding: 0 1rem;
+  flex-direction: column;
+  justify-content: space-between; /* Push header-bottom to bottom */
+  padding: 20px;
+  min-height: 200px; /* adjust as needed */
 }
+
+
+.header-bottom {
+  /* Footer of header sticks to the bottom */
+  /* optional styling */
+  display: flex;
+  justify-content: space-between; /* breadcrumb left, reading time right */
+  align-items: center;
+  margin-top: auto; /* pushes it to bottom if header grows */
+}
+
 
 .breadcrumb-wrapper {
   flex: 1;
@@ -291,6 +301,7 @@ figure {
   font-size: 0.95rem;
   margin: 0;
   padding: 0;
+  background-color: unset;
 }
 
 .breadcrumb li {

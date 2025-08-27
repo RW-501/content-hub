@@ -499,6 +499,18 @@ hr {
     </section>` : ""}
 
 
+    <!-- Table of Contents -->
+<nav id="toc" aria-label="Table of Contents">
+  <h3 id="toc-heading">Table of Contents</h3>
+  <ul id="toc-list" role="list" aria-labelledby="toc-heading">
+    <!-- JavaScript will inject TOC items here -->
+    <!-- Example item for reference:
+    <li role="listitem"><a href="#section1">Introduction</a></li>
+    -->
+  </ul>
+</nav>
+
+
     <!-- Top banner -->
     <section id="top-banner-container" class="lg:col-span-12 order-2">
       ${topBlocksHTML}
@@ -510,18 +522,6 @@ hr {
 <aside id="left-sidebar" 
        class="lg:col-span-3 space-y-6 order-4 lg:order-2">
   ${leftBlocksHTML}
-
-<!-- Table of Contents -->
-<nav id="toc" aria-label="Table of Contents">
-  <h3 id="toc-heading">Table of Contents</h3>
-  <ul id="toc-list" role="list" aria-labelledby="toc-heading">
-    <!-- JavaScript will inject TOC items here -->
-    <!-- Example item for reference:
-    <li role="listitem"><a href="#section1">Introduction</a></li>
-    -->
-  </ul>
-</nav>
-
 
 </aside>
 
@@ -610,7 +610,7 @@ hr {
 
 
 
-  <footer class="site-footer" role="contentinfo"><p>Version: V1002</p>
+  <footer class="site-footer" role="contentinfo"><p>Version: V1003</p>
     <p>Copyright © ${new Date().getFullYear()}  | <a href="https://contenthub.guru/" target="_blank">ContentHub.guru</a> <br>
       ${articleData.title || "Untitled Site"} <br>
       

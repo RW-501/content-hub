@@ -849,7 +849,7 @@ button:disabled {
 
 
 
-  .feedback {
+.feedback {
     border: 1px solid #ddd;
     padding: 1rem 1.5rem;
     max-width: 300px;
@@ -859,8 +859,9 @@ button:disabled {
     font-family: Arial, sans-serif;
     margin: 1rem 0;
     text-align: center;
-  }
-
+    display: grid;
+    gap: 0.5rem;
+}
   .feedback p {
     font-size: 1rem;
     margin-bottom: 0.8rem;

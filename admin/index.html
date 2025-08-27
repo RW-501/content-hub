@@ -857,7 +857,7 @@ console.log("pageData  ",pageData.slug);
       <td id="status-${pageData.siteId}" class="status-offline">❌ Offline</td>
       <td>${pageData.views || 0}</td>
       <td>
-        <button onclick="updatePage('${pageData.siteId}','${pageData.slug}', '${pageData.category}')">Update</button>
+        <button onclick="updatePageBtn('${pageData.siteId}','${pageData.slug}', '${pageData.category}')">Update</button>
         <button onclick="window.location.href='https://contenthub.guru/admin/editor?id=${pageData.siteId}'">Edit</button>
         <button onclick="removePage('${pageData.siteId}','${pageData.slug}')">Remove</button>
       </td>
@@ -869,7 +869,7 @@ console.log("pageData  ",pageData.slug);
 
   if (autoPing) pages.forEach(p => updateLiveStatus(pageData.siteId, pageData.slug));
 }
-async function updatePage(siteId, slug, category) {
+async function updatePageBtn(siteId, slug, category) {
   try {
     // 🔽 Get 4 lowest viewed pages (same category optional)
     let suggested = [];
@@ -916,7 +916,7 @@ async function updatePage(siteId, slug, category) {
     const articleData = docSnap.data();
 
     // ✅ Update UI row dynamically
-    refreshPageRow(siteId, articleData);
+      updatePage(articleData);
 
     showToast("success", "Page updated!", 2500);
 

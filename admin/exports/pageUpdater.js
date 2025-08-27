@@ -426,13 +426,28 @@ hr {
 <body>
   <!-- 🔹 Skip to main content (screen readers & keyboard users) -->
   <a href="#block-article-0" class="skip-link">Skip to content</a>
+  
+<!-- Progress Bar -->
+<div id="progressBar"></div>
 
-  <header class="site-header" role="banner">
-    <div class="container">
-      <h1 id="page-title">${articleData.title}</h1>
-      <p class="subtitle">${articleData.subtitle || ""}</p>
-    </div>
-  </header>
+<header class="site-header" role="banner">
+  <div class="container header-top">
+    <nav aria-label="breadcrumb" class="breadcrumb-wrapper">
+      <ol class="breadcrumb">
+        <li><a href="https://contenthub.guru">Content Hub</a></li>
+        <li><a href="https://contenthub.guru/category/${articleData.category}">Health</a></li>
+        <li class="active" aria-current="page">${articleData.title}</li>
+      </ol>
+    </nav>
+    <p id="readingTime">5 min read</p>
+  </div>
+
+  <div class="container header-main">
+    <h1 id="page-title">${articleData.title}</h1>
+    <p class="subtitle">${articleData.subtitle || ""}</p>
+  </div>
+</header>
+
 
   
   <main class="mx-auto px-4" id="main-content" role="main">
@@ -490,6 +505,15 @@ hr {
 <aside id="left-sidebar" 
        class="lg:col-span-3 space-y-6 order-4 lg:order-2">
   ${leftBlocksHTML}
+
+<!-- Table of Contents -->
+<nav id="toc">
+  <h3>Table of Contents</h3>
+  <ul id="toc-list">
+    <!-- JavaScript will inject TOC items here -->
+  </ul>
+</nav>
+
 </aside>
 
 <!-- Main content -->
@@ -503,6 +527,15 @@ hr {
 <aside id="right-sidebar" 
        class="lg:col-span-3 space-y-6 order-5 lg:order-4">
   ${rightBlocksHTML}
+
+  <div class="feedback">
+  <p>Was this page helpful?</p>
+  <button id="yesBtn">Yes</button>
+  <button id="noBtn">No</button>
+</div>
+<p id="feedbackMsg"></p>
+
+
 </aside>
 
 

@@ -34,6 +34,20 @@ document.addEventListener("DOMContentLoaded", () => {
   });
   
 
+  // Generate TOC dynamically from all h2 headings
+  const tocList = document.getElementById('toc-list');
+  const headings = document.querySelectorAll('section h2');
+
+  headings.forEach(heading => {
+    const li = document.createElement('li');
+    const a = document.createElement('a');
+    a.href = `#${heading.id}`;
+    a.textContent = heading.textContent;
+    li.appendChild(a);
+    tocList.appendChild(li);
+  });
+
+
 
 const DEBUG = false;
 
@@ -185,9 +199,29 @@ document.addEventListener('DOMContentLoaded', loadPageScripts);
 
 
 
+const words = document.body.innerText.split(/\s+/).length;
+const wpm = 200; // average words per minute
+const minutes = Math.ceil(words / wpm);
+document.getElementById("readingTime").textContent = `${minutes} min read`;
 
 
 
+
+  const progressBar = document.getElementById("progressBar");
+
+  window.addEventListener("scroll", () => {
+    const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+    const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    const scrolled = (scrollTop / scrollHeight) * 100;
+    progressBar.style.width = scrolled + "%";
+
+    // Optional: start glowing when > 50% scrolled
+    if (scrolled > 50) {
+      progressBar.classList.add("glow");
+    } else {
+      progressBar.classList.remove("glow");
+    }
+  });
 
 
     const mainPhoto = document.getElementById('mainImage');
@@ -234,6 +268,7 @@ document.addEventListener('DOMContentLoaded', loadPageScripts);
     }
   });
 
+
 const pageID = document.getElementById("pageID")?.textContent || "unknown";
 const today = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
 
@@ -263,6 +298,33 @@ async function updatePageViews(unique = false) {
   }
 }
 
+  let isUnique = false;
+
+
+  // Feedback buttons
+document.getElementById("yesBtn").onclick = async () => {
+  try {
+    await updateDoc(pageRef, {
+      helpfulCount: increment(1)
+    });
+    document.getElementById("feedbackMsg").textContent = "Thanks for your feedback!";
+  } catch (err) {
+    console.error("Error updating helpful count:", err);
+  }
+};
+
+document.getElementById("noBtn").onclick = async () => {
+  try {
+    await updateDoc(pageRef, {
+      notHelpfulCount: increment(1)
+    });
+    document.getElementById("feedbackMsg").textContent = "Sorry to hear that. We’ll improve!";
+  } catch (err) {
+    console.error("Error updating notHelpful count:", err);
+  }
+};
+
+
 // 🔹 Log visitor info (unique per day)
 async function logVisitor(data) {
   const visitorId = `${pageID}_${data.ip}_${today}`;
@@ -276,7 +338,7 @@ async function logVisitor(data) {
   const browser = navigator.userAgent.match(/(Chrome|Firefox|Safari|Edge)/i)?.[0] || "Other";
 
   const timestamp = new Date();
-  let isUnique = false;
+  //let isUnique = false;
 
   if (!visitorSnap.exists()) {
     isUnique = true;

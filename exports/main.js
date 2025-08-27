@@ -217,11 +217,11 @@ contentItems.forEach((item, index) => {
      item.tagName === 'h2' || item.tagName === 'h3' || item.tagName === 'h4') {
     a.textContent = item.textContent;
     div.innerHTML = `• ${a.textContent}`; // add bullet
-  } /*
-  else if (item.tagName === 'P') {
+  } 
+  else if (item.tagName === 'P' || item.tagName === 'p') {
     div.innerHTML = `• ${item.textContent.substring(0, 60)}…`; // summarize paragraph
   }
-    */
+    
     else if (item.tagName === 'UL' || item.tagName === 'ul') {
     const firstItem = item.querySelector('li');
     const listText = firstItem ? firstItem.textContent.substring(0, 40) + '…' : 'List…';

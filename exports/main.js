@@ -219,15 +219,21 @@ contentItems.forEach((item, index) => {
   if (tag === 'h2' || tag === 'h3' || tag === 'h4' ||
      tag === 'H2' || tag === 'H3' || tag === 'H4') {
     tocText = item.textContent;
-  } else if (tag === 'p') {
-  //  tocText = item.textContent.substring(0, 60) + '…';
-  } else if (tag === 'ul' || tag === 'UL') {
+  }
+ if (tag === 'strong') {
+    tocText = item.textContent.substring(0, 60) + '…';
+  }
+  /* else if (tag === 'p') {
+    tocText = item.textContent.substring(0, 60) + '…';
+  } */
+  if (tag === 'ul' || tag === 'UL') {
     const firstItem = item.querySelector('li');
     tocText = firstItem ? firstItem.textContent.substring(0, 40) + '…' : 'List…';
   }
 
   a.textContent = tocText;
   li.appendChild(a);
+  
   tocList.appendChild(li);
 });
 

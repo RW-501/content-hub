@@ -219,7 +219,7 @@ contentItems.forEach((item, index) => {
     tocHeaders = item.textContent;
   }
  if (tag === 'strong') {
-    tocText = item.textContent.substring(0, 60) + '…';
+    tocText = item.textContent.substring(0, 90) + '…';
   }
   /* else if (tag === 'p') {
     tocText = item.textContent.substring(0, 60) + '…';

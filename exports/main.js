@@ -207,21 +207,37 @@ document.getElementById("readingTime").textContent = `${minutes} min read`;
 
 
 
+
   const progressBar = document.getElementById("progressBar");
+  
+  let confettiFired = false; // Prevent multiple triggers
 
   window.addEventListener("scroll", () => {
     const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
     const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
     const scrolled = (scrollTop / scrollHeight) * 100;
+
     progressBar.style.width = scrolled + "%";
 
-    // Optional: start glowing when > 50% scrolled
+    // Optional glow for >50%
     if (scrolled > 50) {
       progressBar.classList.add("glow");
     } else {
       progressBar.classList.remove("glow");
     }
+
+    // Fire confetti at 100%
+    if (scrolled >= 100 && !confettiFired) {
+      confettiFired = true;
+      confetti({
+        particleCount: 200,
+        spread: 70,
+        origin: { y: 0.6 },
+        colors: ['#4caf50', '#00bfa5', '#ffeb3b', '#ff5722', '#2196f3']
+      });
+    }
   });
+
 
 
     const mainPhoto = document.getElementById('mainImage');

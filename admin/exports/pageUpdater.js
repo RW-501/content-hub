@@ -357,6 +357,9 @@ const Content = `
 <!-- Schema & Metadata -->
 <script type="application/ld+json">${JSON.stringify(schemaJSON)}<\/script>
 <script type="application/ld+json">${JSON.stringify(metadataJSON)}<\/script>
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
 ${scriptTag}
 
 <div id= 'default-style'></div>

@@ -34,19 +34,6 @@ document.addEventListener("DOMContentLoaded", () => {
   });
   
 
-  // Generate TOC dynamically from all h2 headings
-  const tocList = document.getElementById('toc-list');
-  const headings = document.querySelectorAll('section h2');
-
-  headings.forEach(heading => {
-    const li = document.createElement('li');
-    const a = document.createElement('a');
-    a.href = `#${heading.id}`;
-    a.textContent = heading.textContent;
-    li.appendChild(a);
-    tocList.appendChild(li);
-  });
-
 
 
 const DEBUG = false;
@@ -205,11 +192,45 @@ const minutes = Math.ceil(words / wpm);
 document.getElementById("readingTime").textContent = `${minutes} min read`;
 
 
+const tocList = document.getElementById('toc-list');
+
+// Grab all headings (h2, h3) and key paragraphs or lists you want
+const contentItems = document.querySelectorAll('section h2, section h3, section p[data-start], section ul');
+
+// Iterate and generate TOC
+contentItems.forEach((item, index) => {
+  // Skip empty paragraphs/lists if needed
+  if (item.tagName === 'P' && item.textContent.trim().length < 20) return;
+
+  // Give each item a unique ID if it doesn't have one
+  if (!item.id) {
+    item.id = `toc-item-${index}`;
+  }
+
+  const li = document.createElement('li');
+  li.setAttribute('role', 'listitem');
+
+  const a = document.createElement('a');
+  a.href = `#${item.id}`;
+  
+  // Add descriptive text for screen readers
+  if (item.tagName === 'H2' || item.tagName === 'H3') {
+    a.textContent = item.textContent;
+  } else if (item.tagName === 'P') {
+    a.textContent = item.textContent.substring(0, 60) + '…'; // summarize paragraph
+  } else if (item.tagName === 'UL') {
+    a.textContent = 'List: ' + item.querySelector('li')?.textContent?.substring(0, 40) + '…';
+  }
+
+  li.appendChild(a);
+  tocList.appendChild(li);
+});
+
 
 
 
   const progressBar = document.getElementById("progressBar");
-  
+
   let confettiFired = false; // Prevent multiple triggers
 
   window.addEventListener("scroll", () => {

@@ -275,14 +275,12 @@ figure {
 
 
 .header-bottom {
-  /* Footer of header sticks to the bottom */
-  /* optional styling */
-  display: flex;
-  justify-content: space-between; /* breadcrumb left, reading time right */
-  align-items: center;
-  margin-top: auto; /* pushes it to bottom if header grows */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+    margin-bottom: 0;
 }
-
 
 .breadcrumb-wrapper {
   flex: 1;
@@ -301,7 +299,7 @@ figure {
   font-size: 0.95rem;
   margin: 0;
   padding: 0;
-  background-color: unset;
+  background-color: unset !important;
 }
 
 .breadcrumb li {

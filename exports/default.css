@@ -1025,3 +1025,7 @@ html {
 #right-sidebar, #left-sidebar, #in-article-blocks {
 height: fit-content;
 }
+
+#main-content {
+  height: fit-content;
+}

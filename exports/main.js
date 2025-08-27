@@ -183,9 +183,6 @@ document.addEventListener('DOMContentLoaded', loadPageScripts);
 
 
 
-
-
-
 const words = document.body.innerText.split(/\s+/).length;
 const wpm = 200; // average words per minute
 const minutes = Math.ceil(words / wpm);

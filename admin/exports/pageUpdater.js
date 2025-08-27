@@ -384,7 +384,6 @@ ${articleData.customCSS}
 .header-bottom {
     background-color: ${articleData.styles.headerBorder || "#e6e6ea"};
     color: ${articleData.styles.headerText || "#222222"};
-
 }
 
 main {

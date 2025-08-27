@@ -601,7 +601,7 @@ const categorySelect = document.getElementById("category").value;
   );
   const querySnapshot = await getDocs(q);
   
-  if (pagesSnapshot.exists()) {
+  if (querySnapshot.exists()) {
     return showToast("error", "Domain already exists. Choose a different one.",5000);
   }
 

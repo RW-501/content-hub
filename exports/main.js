@@ -248,7 +248,7 @@ contentItems.forEach((item, index) => {
     }
 
     // Fire confetti at 100%
-    if (scrolled >= 100 && !confettiFired) {
+    if (scrolled >= 98 && !confettiFired) {
       confettiFired = true;
       confetti({
         particleCount: 200,

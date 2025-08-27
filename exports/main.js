@@ -298,10 +298,10 @@ contentItems.forEach((item, index) => {
     try {
       //const pageURL = window.location.href; // Get current page URL
       await navigator.clipboard.writeText(pageURL);
-      alert("Link copied to clipboard!");
+      showToast("info", "Link copied to clipboard!");
     } catch (err) {
       console.error("Failed to copy link: ", err);
-      alert("Unable to copy link, please try manually.");
+      showToast("info", "Unable to copy link, please try manually.");
     }
   });
 

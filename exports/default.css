@@ -1012,3 +1012,10 @@ button:disabled {
   #toc a:hover {
     text-decoration: underline;
   }
+
+
+  
+html, body {
+  overflow: hidden;
+  width: 100%;
+}

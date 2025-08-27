@@ -209,12 +209,14 @@ contentItems.forEach((item, index) => {
   a.href = `#${item.id}`;
   a.style.textDecoration = 'none';
 
+  let tocHeaders = '';
   let tocText = '';
+  let tocLI = '';
   const tag = item.tagName.toLowerCase();
 
   if (tag === 'h2' || tag === 'h3' || tag === 'h4' ||
      tag === 'H2' || tag === 'H3' || tag === 'H4') {
-    tocText = item.textContent;
+    tocHeaders = item.textContent;
   }
  if (tag === 'strong') {
     tocText = item.textContent.substring(0, 60) + '…';
@@ -224,16 +226,38 @@ contentItems.forEach((item, index) => {
   } */
   if (tag === 'ul' || tag === 'UL') {
     const firstItem = item.querySelector('li');
-    tocText = firstItem ? firstItem.textContent.substring(0, 40) + '…' : 'List…';
+    tocLI = firstItem ? firstItem.textContent.substring(0, 40) + '…' : 'List…';
   }
 
   // Only add bullet and link if there’s text
+    if (tocHeaders) {
+    const bullet = document.createElement('span');
+    bullet.textContent = '• ';
+    li.appendChild(bullet);
+
+    a.textContent = tocHeaders;
+    li.appendChild(a);
+
+    tocList.appendChild(li);
+  }
+
   if (tocText) {
     const bullet = document.createElement('span');
     bullet.textContent = '• ';
     li.appendChild(bullet);
 
     a.textContent = tocText;
+    li.appendChild(a);
+
+    tocList.appendChild(li);
+  }
+
+    if (tocLI) {
+    const bullet = document.createElement('span');
+    bullet.textContent = '- ';
+    li.appendChild(bullet);
+
+    a.textContent = tocLI;
     li.appendChild(a);
 
     tocList.appendChild(li);

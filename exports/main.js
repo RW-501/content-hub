@@ -204,11 +204,7 @@ contentItems.forEach((item, index) => {
   const li = document.createElement('li');
   li.setAttribute('role', 'listitem');
 
-  // Bullet span outside the link
-  const bullet = document.createElement('span');
-  bullet.textContent = '• ';
-  li.appendChild(bullet);
-
+  
   const a = document.createElement('a');
   a.href = `#${item.id}`;
   a.style.textDecoration = 'none';
@@ -231,10 +227,17 @@ contentItems.forEach((item, index) => {
     tocText = firstItem ? firstItem.textContent.substring(0, 40) + '…' : 'List…';
   }
 
-  a.textContent = tocText;
-  li.appendChild(a);
-  
-  tocList.appendChild(li);
+  // Only add bullet and link if there’s text
+  if (tocText) {
+    const bullet = document.createElement('span');
+    bullet.textContent = '• ';
+    li.appendChild(bullet);
+
+    a.textContent = tocText;
+    li.appendChild(a);
+
+    tocList.appendChild(li);
+  }
 });
 
 

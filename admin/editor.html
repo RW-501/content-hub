@@ -1949,6 +1949,9 @@ case "video":
 async function savePage(pageId, currentUser) { 
   // Serialize blocks from builder
   const blocks = serializeBlocks();
+
+  let categorySelect =  $("#category").value.trim();
+
   // 🔽 Get 4 lowest viewed pages (same category optional)
   let suggested = [];
   let sq;

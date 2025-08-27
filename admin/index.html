@@ -142,7 +142,7 @@
     <input type="file" id="imageInput" accept="image/*" style="display:none;" />
   </div>
   <div id="imagePreview" style="margin-top:0.5rem;">
-    <img id="previewImg" src="" alt="Image Preview" style="max-width:200px; border-radius:6px; display:none;" />
+    <img id="previewImg" src="https://contenthub.guru/images/placeholder.png" alt="Image Preview" style="max-width:200px; border-radius:6px; display:none;" />
   </div>
   <input id="imageUrl" placeholder="Page Image URL"  hidden/>
 </div>
@@ -846,7 +846,7 @@ console.log("pageData  ",pageData.slug);
       <td>
         <p>
           <a href="https://contenthub.guru/site/${pageData.slug}" target="_blank">
-            <img src="${pageData.image || ''}" alt="preview" width="300" height="200">
+            <img src="${pageData.image || 'https://contenthub.guru/images/placeholder.png'}" alt="preview" width="300" height="200">
           </a>
         </p>
       </td>

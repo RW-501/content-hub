@@ -438,26 +438,30 @@ hr {
   <main class="mx-auto px-4" id="main-content" role="main">
   <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
 
-    <!-- Share Section -->
-            <div class="share-section">
-            <div class="share-buttons">
-                <a class="facebook" href="https://www.facebook.com/sharer/sharer.php?u=${pageURL}" target="_blank" title="Share on Facebook">
-                    <i class="fab fa-facebook"></i>
-                </a>
-                <a class="twitter" href="https://twitter.com/intent/tweet?text=${encodedPageTitle}&url=${pageURL}" target="_blank" title="Share on Twitter">
-                    <i class="fab fa-twitter"></i>
-                </a>
-                <a class="linkedin" href="https://www.linkedin.com/shareArticle?mini=true&url=${pageURL}" target="_blank" title="Share on LinkedIn">
-                    <i class="fab fa-linkedin"></i>
-                </a>
-                <a class="whatsapp" href="https://wa.me/?text=${encodedPageTitle}%20${pageURL}" target="_blank" title="Share on WhatsApp">
-                    <i class="fab fa-whatsapp"></i>
-                </a>
-                <button id="deviceShareButton" class="device-share" title="Share using your device">
-                    <i class="fas fa-share-alt"></i> 
-                </button>
-            </div>
-        </div>
+<!-- Share Section -->
+<div class="share-section">
+  <div class="share-buttons">
+    <a class="facebook" href="https://www.facebook.com/sharer/sharer.php?u=${pageURL}" target="_blank" title="Share on Facebook">
+      <i class="fab fa-facebook"></i>
+    </a>
+    <a class="twitter" href="https://twitter.com/intent/tweet?text=${encodedPageTitle}&url=${pageURL}" target="_blank" title="Share on Twitter">
+      <i class="fab fa-twitter"></i>
+    </a>
+    <a class="linkedin" href="https://www.linkedin.com/shareArticle?mini=true&url=${pageURL}" target="_blank" title="Share on LinkedIn">
+      <i class="fab fa-linkedin"></i>
+    </a>
+    <a class="whatsapp" href="https://wa.me/?text=${encodedPageTitle}%20${pageURL}" target="_blank" title="Share on WhatsApp">
+      <i class="fab fa-whatsapp"></i>
+    </a>
+    <button id="deviceShareButton" class="device-share" title="Share using your device">
+      <i class="fas fa-share-alt"></i> 
+    </button>
+    <button id="copyLinkButton" class="copy-link" title="Copy Link">
+      <i class="fas fa-link"></i>
+    </button>
+  </div>
+</div>
+
 
     <!-- Hero / Featured image -->
     ${articleData.image ? `

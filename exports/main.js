@@ -223,7 +223,16 @@ document.addEventListener('DOMContentLoaded', loadPageScripts);
     }
 
 
-
+  document.getElementById("copyLinkButton").addEventListener("click", async () => {
+    try {
+      //const pageURL = window.location.href; // Get current page URL
+      await navigator.clipboard.writeText(pageURL);
+      alert("Link copied to clipboard!");
+    } catch (err) {
+      console.error("Failed to copy link: ", err);
+      alert("Unable to copy link, please try manually.");
+    }
+  });
 
 const pageID = document.getElementById("pageID")?.textContent || "unknown";
 const today = new Date().toISOString().split("T")[0]; // YYYY-MM-DD

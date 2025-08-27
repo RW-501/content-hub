@@ -1022,6 +1022,6 @@ html, body {
 html {
   overflow-y: scroll;
 }
-#right-sidebar, #right-sidebar, #in-article-blocks {
+#right-sidebar, #left-sidebar, #in-article-blocks {
 height: fit-content;
 }

@@ -381,6 +381,12 @@ ${articleData.customCSS}
   border-bottom: 4px solid ${articleData.styles.headerBorder || "#e6e6ea"};
 }
 
+.header-bottom {
+    background-color: ${articleData.styles.headerBorder || "#e6e6ea"};
+    color: ${articleData.styles.headerText || "#222222"};
+
+}
+
 main {
 /* 🔹 CTA Button */
 .content-cta a {
@@ -441,6 +447,9 @@ hr {
     <p class="subtitle">${articleData.subtitle || ""}</p>
   </div>
 
+
+</header>
+
     <div class="header-bottom">
     <nav aria-label="breadcrumb" class="breadcrumb-wrapper">
       <ol class="breadcrumb">
@@ -451,8 +460,6 @@ hr {
     </nav>
     <p id="readingTime">5 min read</p>
   </div>
-</header>
-
 
   
   <main class="mx-auto px-4" id="main-content" role="main">
@@ -634,7 +641,7 @@ hr {
 </p>
   </footer>
 
-  
+
   <!-- 🔹 Hidden meta info for debugging / internal use -->
   <div hidden>
     <div id="pageID">${articleData.siteId}</div>

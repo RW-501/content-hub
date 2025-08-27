@@ -211,16 +211,16 @@ contentItems.forEach((item, index) => {
   // Determine what text to show
   let tocText = '';
   if (item.tagName.match(/H[2-4]/i)) {
-    tocText = item.textContent;
+    tocText = `• ${item.textContent}`;
   } else if (item.tagName.match(/P/i)) {
-    tocText = item.textContent.substring(0, 60) + '…';
+   // tocText = item.textContent.substring(0, 60) + '…';
   } else if (item.tagName.match(/UL/i)) {
     const firstItem = item.querySelector('li');
     tocText = firstItem ? firstItem.textContent.substring(0, 40) + '…' : 'List…';
   }
 
   // Add bullet inside the link
-  a.innerHTML = `• ${tocText}`;
+  a.innerHTML = tocText;
   li.appendChild(a);
   tocList.appendChild(li);
 });

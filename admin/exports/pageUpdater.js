@@ -421,6 +421,7 @@ const Content = `
   }
   <\/script>
 
+<meta name="msvalidate.01" content="41794433A3D0795B3768E9AE59B10997" />
 <meta name="google-adsense-account" content="${articleData.adsense}">
 
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${articleData.adsense}"

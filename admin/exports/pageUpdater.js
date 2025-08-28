@@ -420,7 +420,7 @@ const Content = `
     "mainEntityOfPage":{"@type":"WebPage","@id":"https://contenthub.guru/site/${articleData.slug}"}
   }
   <\/script>
-
+<meta name="yandex-verification" content="26ca8e2174c73ca5" />
 <meta name="msvalidate.01" content="41794433A3D0795B3768E9AE59B10997" />
 <meta name="google-adsense-account" content="${articleData.adsense}">
 

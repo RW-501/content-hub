@@ -250,12 +250,11 @@ const firebaseConfig = {
   apiKey: "AIzaSyBXZcSYdspfi2jBipwUFeNmKZgU02ksg8c",
   authDomain: "contentmanagement-8af61.firebaseapp.com",
   projectId: "contentmanagement-8af61",
-  storageBucket: "contentmanagement-8af61.firebasestorage.app",
+  storageBucket: "contentmanagement-8af61.appspot.com",  // 👈 FIXED
   messagingSenderId: "579537581112",
   appId: "1:579537581112:web:736c7faafaf1391ce1e2cd",
   measurementId: "G-ZPWGF7YMPE"
 };
-
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);

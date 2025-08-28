@@ -544,7 +544,7 @@ hr {
         <li class="active" aria-current="page"><a href="#block-article-0" title="${articleData.title} Content">${articleData.title}</a></li>
       </ol>
     </nav>
-    <p id="readTime">${articleData.readTime || "Read Time: 5 min"}</p>
+    <p id="readTime">Read Time: ${articleData.readTime || "5"} mins</p>
     <p id='navCommentBtn'><a href="#commentForm" title="${articleData.title} Comments" id="navCommentBtn">Comments</a></p>
   </div>
 

@@ -288,12 +288,25 @@ figure {
   flex: 1;
 }
 
-#readingTime {
+
+
+#readTime {
     font-size: 0.95rem;
     opacity: 0.8;
     margin: auto;
     font-weight: bolder;
 }
+
+
+
+#navCommentBtn {
+    margin: .5rem;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+
+
 
 /* Breadcrumb Styling */
 .breadcrumb {
@@ -988,8 +1001,6 @@ button:disabled {
   #progressBar.glow {
     animation: glow 1.5s infinite;
   }
-
-
 
 
 

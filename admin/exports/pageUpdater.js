@@ -299,7 +299,7 @@ if (Array.isArray(articleData.suggested)) {
         <img src="${page.image || 'https://contenthub.guru/images/placeholder.png'}" alt="${page.title}">
         <div class="suggested-content">
           <a href="https://contenthub.guru/site/${page.slug}"><h3>${page.title}</h3></a>
-          <p>Read Time: ${readTime} min</p>
+          <p>Reading Time: ${readTime} min</p>
           <p>${(page.description || "").slice(0, 100)}...</p>
           <a href="https://contenthub.guru/site/${page.slug}"> Read More →</a>
         </div>
@@ -455,11 +455,7 @@ ${scriptTag}
 
 <!-- 🔹 Changeable Theme CSS -->
 <style id="dynamic-style">
-  <!-- styles -->
-${JSON.stringify(articleData.styles)}
 
-<!-- customCSS -->
-${articleData.customCSS}
 
 /* 🔹 Header */
 .site-header {
@@ -546,8 +542,8 @@ hr {
         <li class="active" aria-current="page"><a href="#block-article-0" title="${articleData.title} Content">${articleData.title}</a></li>
       </ol>
     </nav>
-    <p id="readingTime">5 min read</p>
-    <p><a href="#commentForm" title="${articleData.title} Comments" class="skip-link">Comments</a></p>
+    <p id="readTime">${articleData.readTime || "Read Time: 5 min"}</p>
+    <p><a href="#commentForm" title="${articleData.title} Comments" id="navCommentBtn">Comments</a></p>
   </div>
 
   
@@ -735,7 +731,7 @@ hr {
       <br>
       <a href="https://rw-501.github.io/Portfolio" target="_blank" hidden>Created by Ron W.</a></div>
 </p>
-<p>Version: V1004</p>
+<p>Version: V1005</p>
   </footer>
 
 

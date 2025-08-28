@@ -182,16 +182,15 @@ document.addEventListener('DOMContentLoaded', loadPageScripts);
 
 
 
-let readingTime = document.getElementById("readingTime").textContent;
+let readingTime = document.getElementById("readTime").textContent;
 
 const words = document.body.innerText.split(/\s+/).length;
 const wpm = 200; // average words per minute
 const minutes = Math.ceil(words / wpm);
 if (readingTime === ''){
-readingTime = `${minutes} min read`;
+readingTime = `Reading Time ${minutes} min`;
 }
 
-document.getElementById("toc-toggle").click();
 
 document.getElementById("toc-toggle").addEventListener("click", function () {
   const list = document.getElementById("toc-list");
@@ -296,6 +295,11 @@ const bulletStyles = {
 
 
 });
+
+
+document.getElementById("toc-toggle").click();
+
+
 
   // === Add Comments link ===
 const commentsLi = document.createElement("li");

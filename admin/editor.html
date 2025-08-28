@@ -403,6 +403,22 @@ window.addEventListener('resize', () => {
 
 
 
+document.addEventListener("DOMContentLoaded", () => {
+  const toggleButtons = document.querySelectorAll(".toggle-btn");
+
+  toggleButtons.forEach(btn => {
+    btn.addEventListener("click", () => {
+      const targetSelector = btn.getAttribute("data-toggle");
+      const target = document.querySelector(targetSelector);
+
+      if (target) {
+        target.classList.toggle("hidden");
+        btn.textContent = target.classList.contains("hidden") ? "Show" : "Hide";
+      }
+    });
+  });
+});
+
 
 const toggleBtn = document.getElementById('toggle-preview-btn');
 

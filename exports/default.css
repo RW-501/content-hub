@@ -1026,13 +1026,17 @@ button:disabled {
     border: 1px solid #ccc;
     border-radius: 4px;
     color: #007dff;
-      transition: max-height 0.4s ease, opacity 0.4s ease;
-      opacity: 1;
+ 
 
 }
 
 #toc-toggle.hover {
     background: #007dff;
+}
+
+#toc-list {
+     transition: max-height 0.4s ease, opacity 0.4s ease;
+      opacity: 1;
 }
 
 #toc-list[hidden] {

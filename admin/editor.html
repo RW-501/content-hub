@@ -1792,6 +1792,12 @@ onAuthStateChanged(auth, async (user) => {
     (data.faq || []).forEach(addFaqItem);
     (data.howto || []).forEach(addHowtoStep);
 
+    const readTime = document.getElementById("readTime");
+
+  const allText = getAllBlockText(); // your function to get all text
+
+ readTime.innerText = calculateReadingTime(allText);
+
 
     // Toolbar
     $("#pageStatus").textContent = data.status || "draft";
@@ -2019,6 +2025,12 @@ sSnap.forEach((docSnap) => {
     readTime: d.readTime || ''
   });
 });
+
+   const readTime = document.getElementById("readTime");
+
+  const allText = getAllBlockText(); // your function to get all text
+
+ readTime.innerText = calculateReadingTime(allText);
 
 
   const data = {

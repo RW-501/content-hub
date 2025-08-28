@@ -1860,6 +1860,7 @@ imageDropZone.addEventListener("drop", async (e) => {
 
     previewImg.src = url;
     previewImg.style.display = "block";
+    ogImage.value = url;
     imageUrl.value = url;
   } catch (err) {
     console.error("Upload failed:", err);

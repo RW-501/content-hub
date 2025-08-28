@@ -331,9 +331,15 @@ const Content = `
 <meta name="HandheldFriendly" content="true">
 <meta name="MobileOptimized" content="320">
 
+
 <meta name="google-site-verification" content="${articleData.google_Verification}">
 <meta name="bing-site-verification" content="${articleData.bing_Verification}">
 <meta name="yandex-verification" content="${articleData.yandex_Verification}">
+
+<meta name="yandex-verification" content="26ca8e2174c73ca5" />
+<meta name="msvalidate.01" content="41794433A3D0795B3768E9AE59B10997" />
+
+
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
 <meta name="revisit-after" content="3 days">
 <meta name="rating" content="general">
@@ -420,8 +426,7 @@ const Content = `
     "mainEntityOfPage":{"@type":"WebPage","@id":"https://contenthub.guru/site/${articleData.slug}"}
   }
   <\/script>
-<meta name="yandex-verification" content="26ca8e2174c73ca5" />
-<meta name="msvalidate.01" content="41794433A3D0795B3768E9AE59B10997" />
+
 <meta name="google-adsense-account" content="${articleData.adsense}">
 
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${articleData.adsense}"

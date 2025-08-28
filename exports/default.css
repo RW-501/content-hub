@@ -1026,6 +1026,8 @@ button:disabled {
     border: 1px solid #ccc;
     border-radius: 4px;
     color: #007dff;
+      transition: max-height 0.4s ease, opacity 0.4s ease;
+
 }
 
 #toc-toggle.hover {

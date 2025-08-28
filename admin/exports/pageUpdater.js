@@ -273,7 +273,7 @@ if (Array.isArray(articleData.suggested)) {
       <div class="suggested-card">
         <img src="${page.image || 'https://contenthub.guru/images/placeholder.png'}" alt="${page.title}">
         <div class="suggested-content">
-          <h3>${page.title}</h3>
+          <a href="https://contenthub.guru/site/${page.slug}"><h3>${page.title}</h3></a>
           <p>${(page.description || "").slice(0, 100)}...</p>
           <a href="https://contenthub.guru/site/${page.slug}">Read More →</a>
         </div>

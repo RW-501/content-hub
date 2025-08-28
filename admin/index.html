@@ -774,13 +774,14 @@ setTimeout(() => {
 });
 
   const slugInput = document.getElementById("slug");
+  const titleInput = document.getElementById("title");
 
 // Listen for focus out (blur) event
- document.getElementById("title").addEventListener('blur', () => {
+ titleInput.addEventListener('blur', () => {
     console.log("slugInput.value:", slugInput.value);
 
 if (slugInput.value) {
-    slugInput.value = slugInput.value
+    slugInput.value = titleInput.value
         .trim()                        // Remove leading/trailing spaces
         .toLowerCase()                 // Convert to lowercase
         .replace(/\s+/g, '-')          // Replace spaces with hyphens

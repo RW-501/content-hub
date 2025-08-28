@@ -1813,17 +1813,27 @@ $("#dailyViews").textContent = data.dailyViews?.[today] || 0;
   imageDropZone.addEventListener("click", () => imageInput.click());
 
   // Handle file selection
-  imageInput.addEventListener("change", (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (evt) => {
-      previewImg.src = evt.target.result;
-      previewImg.style.display = "block";
-      imageUrl.value = evt.target.result; // store for Firestore
-    };
-    reader.readAsDataURL(file);
-  });
+// Handle file selection
+imageInput.addEventListener("change", async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  try {
+    const fileRef = ref(storage, `page-images/${Date.now()}-${file.name}`);
+    await uploadBytes(fileRef, file);
+
+    const url = await getDownloadURL(fileRef);
+
+    // Preview + store download URL
+    previewImg.src = url;
+    previewImg.style.display = "block";
+    imageUrl.value = url; // ✅ store only URL in Firestore
+  } catch (err) {
+    console.error("Upload failed:", err);
+    alert("Image upload failed");
+  }
+});
+
 
   // Drag & drop
   imageDropZone.addEventListener("dragover", (e) => {
@@ -1834,19 +1844,28 @@ $("#dailyViews").textContent = data.dailyViews?.[today] || 0;
     e.preventDefault();
     imageDropZone.classList.remove("dragover");
   });
-  imageDropZone.addEventListener("drop", (e) => {
-    e.preventDefault();
-    imageDropZone.classList.remove("dragover");
-    const file = e.dataTransfer.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (evt) => {
-      previewImg.src = evt.target.result;
-      previewImg.style.display = "block";
-      imageUrl.value = evt.target.result;
-    };
-    reader.readAsDataURL(file);
-  });
+imageDropZone.addEventListener("drop", async (e) => {
+  e.preventDefault();
+  imageDropZone.classList.remove("dragover");
+
+  const file = e.dataTransfer.files[0];
+  if (!file) return;
+
+  try {
+    const fileRef = ref(storage, `page-images/${Date.now()}-${file.name}`);
+    await uploadBytes(fileRef, file);
+
+    const url = await getDownloadURL(fileRef);
+
+    previewImg.src = url;
+    previewImg.style.display = "block";
+    imageUrl.value = url;
+  } catch (err) {
+    console.error("Upload failed:", err);
+    alert("Image upload failed");
+  }
+});
+
 
 
     // Load existing image when editing

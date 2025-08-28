@@ -301,7 +301,15 @@ const Content = `
 <!-- Canonical URL -->
 <link rel="canonical" href="https://contenthub.guru/site/${articleData.slug}">
 
-  <meta name="author" content="ReelCareer">
+<!-- Favicon -->
+<link rel="icon" type="image/x-icon" href="https://contenthub.guru/images/favicons/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="https://contenthub.guru/images/favicons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://contenthub.guru/images/favicons/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="https://contenthub.guru/images/favicons/favicon-16x16.png">
+<link rel="manifest" href="https://contenthub.guru/images/favicons/site.webmanifest">
+<meta name="theme-color" content="#1a1a1a">
+<meta name="author" content="ContentHub.guru">
+
   <meta name="robots" content="index, follow">
 
   <!-- Open Graph / Facebook -->
@@ -337,9 +345,6 @@ const Content = `
     "mainEntityOfPage":{"@type":"WebPage","@id":"https://contenthub.guru/site/${articleData.slug}"}
   }
   <\/script>
-
-  <!-- Favicon -->
-  <link rel="icon" type="image/x-icon" href="https://contenthub.guru/images/favicons/favicon.ico">
 
 <meta name="google-adsense-account" content="${articleData.adsense}">
 
@@ -543,12 +548,7 @@ hr {
        class="lg:col-span-3 space-y-6 order-5 lg:order-4">
   ${rightBlocksHTML}
 
-  <div class="feedback">
-  <p>Was this page helpful?</p>
-  <button id="yesBtn">Yes</button>
-  <button id="noBtn">No</button>
-</div>
-<p id="feedbackMsg"></p>
+
 
 
 </aside>
@@ -559,6 +559,16 @@ hr {
     <!-- Bottom banner -->
     <section id="bottom-banner-container" class="lg:col-span-12 order-6">
       ${bottomBlocksHTML}
+
+<div id='feedback-area'>
+<div class="feedback">
+  <p>Was this page helpful?</p>
+  <button id="yesBtn">Yes</button>
+  <button id="noBtn">No</button>
+</div>
+<p id="feedbackMsg"></p>
+</div>
+
     </section>
 
   </div>
@@ -615,7 +625,7 @@ hr {
 </main>
 
 
-  <footer class="site-footer" role="contentinfo"><p>Version: V1003</p>
+  <footer class="site-footer" role="contentinfo">
     <p>Copyright © ${new Date().getFullYear()}  | <a href="https://contenthub.guru/" target="_blank">ContentHub.guru</a> <br>
       ${articleData.title || "Untitled Site"} <br>
       
@@ -637,6 +647,7 @@ hr {
       <br>
       <a href="https://rw-501.github.io/Portfolio" target="_blank" hidden>Created by Ron W.</a></div>
 </p>
+<p>Version: V1004</p>
   </footer>
 
 

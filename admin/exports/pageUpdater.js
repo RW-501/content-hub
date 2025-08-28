@@ -463,6 +463,7 @@ hr {
       </ol>
     </nav>
     <p id="readingTime">5 min read</p>
+    <p><a href="#commentForm" class="skip-link">Comments</a></p>
   </div>
 
   

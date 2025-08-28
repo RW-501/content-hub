@@ -153,10 +153,59 @@ case "video":
 }
 
 
+function calculateReadingTime(text) {
+  const wordsPerMinute = 200;
+  const words = text.trim().split(/\s+/).length;
+  const time = Math.ceil(words / wordsPerMinute);
+  return time;
+}
+
+
+// Update UI
+
 export async function updatePage(articleData, location) {
 
 
   const scriptTag = `<script id="dynamic-js" type="module" src="https://contenthub.guru/exports/main.js"><\/script>`;
+
+
+  
+  // Prepare containers with block HTML
+const topBlocksHTML = articleData.blocks
+  .filter(b => b.position === "top")
+  .map((b, i) => `<div id="block-top-${i}" class="block block-${b.type}">${renderBlockHTML(b)}</div>`)
+  .join("");
+
+const leftBlocksHTML = articleData.blocks
+  .filter(b => b.position === "left")
+  .map((b, i) => `<div id="block-left-${i}" class="block block-${b.type}">${renderBlockHTML(b)}</div>`)
+  .join("");
+
+const rightBlocksHTML = articleData.blocks
+  .filter(b => b.position === "right")
+  .map((b, i) => `<div id="block-right-${i}" class="block block-${b.type}">${renderBlockHTML(b)}</div>`)
+  .join("");
+
+const inArticleBlocksHTML = articleData.blocks
+  .filter(b => b.position === "in-article" || !b.position)
+  .map((b, i) => `<div id="block-article-${i}" class="block block-${b.type}">${renderBlockHTML(b)}</div>`)
+  .join("");
+
+const bottomBlocksHTML = articleData.blocks
+  .filter(b => b.position === "bottom")
+  .map((b, i) => `<div id="block-bottom-${i}" class="block block-${b.type}">${renderBlockHTML(b)}</div>`)
+  .join("");
+
+const articleBody = [
+  topBlocksHTML,
+  leftBlocksHTML,
+  rightBlocksHTML,
+  inArticleBlocksHTML,
+  bottomBlocksHTML
+].join(" ");
+
+const readTime = calculateReadingTime(articleBody);
+
 
   // Schema generation
   let schemaJSON;
@@ -192,6 +241,7 @@ export async function updatePage(articleData, location) {
         "@type": "Article",
         "headline": articleData.title,
         "image": articleData.image,
+        "timeRequired":  articleData.readTime || "PT"+readTime+"M",
         "datePublished": articleData.datePublished || new Date().toISOString(),
         "dateModified": articleData.updatedAt || new Date().toISOString(),
         "author": articleData.author || { "@type": "Organization", "name": articleData.updatedBy },
@@ -208,6 +258,7 @@ export async function updatePage(articleData, location) {
     type: articleData.type || "page",
     slug: articleData.slug,
     title: articleData.title,
+    readTime: articleData.readTime || "PT"+readTime+"M",
     description: articleData.description,
     keywords: articleData.keywords || [],
     status: articleData.status || "draft",
@@ -230,32 +281,6 @@ export async function updatePage(articleData, location) {
   };
 
 
-  // Prepare containers with block HTML
-const topBlocksHTML = articleData.blocks
-  .filter(b => b.position === "top")
-  .map((b, i) => `<div id="block-top-${i}" class="block block-${b.type}">${renderBlockHTML(b)}</div>`)
-  .join("");
-
-const leftBlocksHTML = articleData.blocks
-  .filter(b => b.position === "left")
-  .map((b, i) => `<div id="block-left-${i}" class="block block-${b.type}">${renderBlockHTML(b)}</div>`)
-  .join("");
-
-const rightBlocksHTML = articleData.blocks
-  .filter(b => b.position === "right")
-  .map((b, i) => `<div id="block-right-${i}" class="block block-${b.type}">${renderBlockHTML(b)}</div>`)
-  .join("");
-
-const inArticleBlocksHTML = articleData.blocks
-  .filter(b => b.position === "in-article" || !b.position)
-  .map((b, i) => `<div id="block-article-${i}" class="block block-${b.type}">${renderBlockHTML(b)}</div>`)
-  .join("");
-
-const bottomBlocksHTML = articleData.blocks
-  .filter(b => b.position === "bottom")
-  .map((b, i) => `<div id="block-bottom-${i}" class="block block-${b.type}">${renderBlockHTML(b)}</div>`)
-  .join("");
-
 
     const pageURL = `https://contenthub.guru/site/${encodeURIComponent(articleData.slug)}`;
     const pageTitle = `${articleData.title}`;
@@ -274,6 +299,7 @@ if (Array.isArray(articleData.suggested)) {
         <img src="${page.image || 'https://contenthub.guru/images/placeholder.png'}" alt="${page.title}">
         <div class="suggested-content">
           <a href="https://contenthub.guru/site/${page.slug}"><h3>${page.title}</h3></a>
+          <p>Read Time: ${readTime} min</p>
           <p>${(page.description || "").slice(0, 100)}...</p>
           <a href="https://contenthub.guru/site/${page.slug}"> Read More →</a>
         </div>
@@ -294,10 +320,29 @@ const Content = `
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>${articleData.title} ${articleData.domain} | ${articleData.slug || "Untitled"}</title>
+<title>${articleData.title} - ${articleData.domain} | ${articleData.slug || "Untitled"}</title>
 <meta name="description" content="${articleData.description}">
 <meta name="keywords" content="${articleData.keywords?.join(', ') || ''}">
+<meta http-equiv="X-UA-Compatible" content="IE=edge"> <!-- ensures proper rendering in older IE -->
+<meta name="format-detection" content="telephone=no"> <!-- prevents phone number auto-linking -->
+<meta name="theme-color" content="#fdfdfdff"> <!-- already included but ensures mobile browsers pick it up -->
+<meta name="apple-mobile-web-app-capable" content="yes"> <!-- makes page installable as PWA -->
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="HandheldFriendly" content="true">
+<meta name="MobileOptimized" content="320">
 
+<meta name="google-site-verification" content="${articleData.google_Verification}">
+<meta name="bing-site-verification" content="${articleData.bing_Verification}">
+<meta name="yandex-verification" content="${articleData.yandex_Verification}">
+<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+<meta name="revisit-after" content="3 days">
+<meta name="rating" content="general">
+<meta name="theme-color" content="#1a1a1a">
+<meta name="author" content="ContentHub.guru">
+<meta name="readtime" content="PT${readTime}M"> <!-- ISO 8601 duration for structured data -->
+<meta name="docsearch:read_time" content="${readTime} min"> <!-- optional for advanced SEO tools -->
+
+  <meta name="robots" content="index, follow">
 <!-- Canonical URL -->
 <link rel="canonical" href="https://contenthub.guru/site/${articleData.slug}">
 
@@ -307,20 +352,30 @@ const Content = `
 <link rel="icon" type="image/png" sizes="32x32" href="https://contenthub.guru/images/favicons/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="https://contenthub.guru/images/favicons/favicon-16x16.png">
 <link rel="manifest" href="https://contenthub.guru/images/favicons/site.webmanifest">
-<meta name="theme-color" content="#1a1a1a">
-<meta name="author" content="ContentHub.guru">
 
-  <meta name="robots" content="index, follow">
+<link rel="preload" href="${articleData.image}" as="image">
+<link rel="preconnect" href="https://www.google-analytics.com">
+<link rel="dns-prefetch" href="https://www.googletagmanager.com">
+<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+<meta http-equiv="Cache-Control" content="public, max-age=31536000">
 
   <!-- Open Graph / Facebook -->
-  <meta property="og:type" content="article">
-  <meta property="og:title" content="${articleData.title}">
-  <meta property="og:description" content="${articleData.description}">
-  <meta property="og:image" content="${articleData.image}">
-  <meta property="og:url" content="https://contenthub.guru/site/${articleData.slug}">
-  <meta property="og:site_name" content="ContentHub.guru">
-  <meta property="og:locale" content="en_US">
-  <meta property="article:author" content="https://contenthub.guru">
+<meta property="og:type" content="article">
+<meta property="og:title" content="${articleData.title}">
+<meta property="og:description" content="${articleData.description}">
+<meta property="og:image" content="${articleData.image}">
+<meta property="og:image:alt" content="${articleData.title}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://contenthub.guru/site/${articleData.slug}">
+<meta property="og:site_name" content="ContentHub.guru">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="${articleData.publishedAt || new Date().toISOString()}">
+<meta property="article:modified_time" content="${articleData.updatedAt || new Date().toISOString()}">
+<meta property="article:section" content="${articleData.category}">
+<meta property="article:tag" content="${articleData.keywords?.join(', ') || ''}">
+<meta property="og:readtime" content="${readTime} Min">
+<meta property="article:author" content="https://contenthub.guru">
 
   <!-- Twitter Cards -->
   <meta name="twitter:card" content="summary_large_image">
@@ -330,6 +385,25 @@ const Content = `
   <meta name="twitter:site" content="@ContentHub">
   <meta name="twitter:creator" content="@ContentHub">
 
+  <!-- Additional Article Schema/SEO Hints -->
+<meta property="article:published_time" content="${articleData.datePublished || new Date().toISOString()}">
+<meta property="article:modified_time" content="${articleData.updatedAt || new Date().toISOString()}">
+<meta property="article:section" content="${articleData.category}">
+<meta property="article:tag" content="${articleData.keywords?.join(', ') || ''}">
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://contenthub.guru"},
+    {"@type": "ListItem", "position": 2, "name": "${articleData.category}", "item": "https://contenthub.guru/category/${articleData.category}"},
+    {"@type": "ListItem", "position": 3, "name": "${articleData.title}", "item": "https://contenthub.guru/site/${articleData.slug}"}
+  ]
+}
+</script>
+
     <!-- Structured Data: Article + FAQ -->
   <script type="application/ld+json">
   {
@@ -337,7 +411,8 @@ const Content = `
     "@type":"Article",
     "headline":"${articleData.title}",
     "description":"${articleData.description}",
-    "image":["https://contenthub.guru/site/${articleData.slug}"],
+    "timeRequired": "PT${readTime}M",
+    "image":["${articleData.image}"],
     "author":{"@type":"Organization","name":"ContentHub"},
     "publisher":{"@type":"Organization","name":"ContentHub","logo":{"@type":"ImageObject","url":"${articleData.image}"}},
     "datePublished":"${articleData.publishedAt}",
@@ -347,6 +422,9 @@ const Content = `
   <\/script>
 
 <meta name="google-adsense-account" content="${articleData.adsense}">
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${articleData.adsense}"
+     crossorigin="anonymous"></script>
 
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=${articleData.gTag}" id="google-tag"><\/script>
@@ -457,13 +535,13 @@ hr {
     <div class="header-bottom">
     <nav aria-label="breadcrumb" class="breadcrumb-wrapper">
       <ol class="breadcrumb">
-        <li><a href="https://contenthub.guru">Content Hub</a></li>
-        <li><a href="https://contenthub.guru/category/${articleData.category}">Health</a></li>
-        <li class="active" aria-current="page">${articleData.title}</li>
+        <li><a  title="Content Hub Home Page" href="https://contenthub.guru">Content Hub</a></li>
+        <li><a  title="Content Hub ${articleData.category} Category" href="https://contenthub.guru/category/${articleData.category}">${articleData.category}</a></li>
+        <li class="active" aria-current="page"><a href="#block-article-0" title="${articleData.title} Content">${articleData.title}</a></li>
       </ol>
     </nav>
     <p id="readingTime">5 min read</p>
-    <p><a href="#commentForm" class="skip-link">Comments</a></p>
+    <p><a href="#commentForm" title="${articleData.title} Comments" class="skip-link">Comments</a></p>
   </div>
 
   

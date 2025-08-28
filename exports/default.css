@@ -984,16 +984,29 @@ button:disabled {
 
 
 #toc {
-    border: 1px solid #ccc;
-    padding: 1rem;
-    max-width: 90%;
-    background: #f9f9f9;
-    margin: auto;
+  border: 1px solid #ddd;
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+  background: #fafafa;
+  border-radius: 6px;
 }
-
-  #toc h3 {
-    margin-top: 0;
-  }
+#toc h3 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0;
+}
+#toc-toggle {
+  font-size: 0.9rem;
+  padding: 2px 8px;
+  cursor: pointer;
+  background: none;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+#toc-list[hidden] {
+  display: none;
+}
 
   #toc ul {
     list-style: none;

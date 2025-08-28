@@ -510,16 +510,19 @@ hr {
     </section>` : ""}
 
 
-    <!-- Table of Contents -->
+<!-- Table of Contents -->
 <nav id="toc" aria-label="Table of Contents">
-  <h3 id="toc-heading">Table of Contents</h3>
+  <h3 id="toc-heading">
+    Table of Contents
+    <button id="toc-toggle" aria-expanded="true" aria-controls="toc-list">
+      Hide
+    </button>
+  </h3>
   <ul id="toc-list" role="list" aria-labelledby="toc-heading">
-    <!-- JavaScript will inject TOC items here -->
-    <!-- Example item for reference:
-    <li role="listitem"><a href="#section1">Introduction</a></li>
-    -->
+    <!-- JS injects TOC items -->
   </ul>
 </nav>
+
 
 
     <!-- Top banner -->

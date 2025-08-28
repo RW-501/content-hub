@@ -188,6 +188,20 @@ const wpm = 200; // average words per minute
 const minutes = Math.ceil(words / wpm);
 document.getElementById("readingTime").textContent = `${minutes} min read`;
 
+
+
+document.getElementById("toc-toggle").addEventListener("click", function () {
+  const list = document.getElementById("toc-list");
+  const expanded = this.getAttribute("aria-expanded") === "true";
+
+  // Toggle visibility
+  list.hidden = expanded;
+  this.setAttribute("aria-expanded", String(!expanded));
+
+  // Update button text
+  this.textContent = expanded ? "Show" : "Hide";
+});
+
 const tocList = document.getElementById('toc-list');
 
 const contentItems = document.querySelectorAll('section h2, section h3, section h4, section p[data-start], section ul');

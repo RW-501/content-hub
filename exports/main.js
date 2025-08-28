@@ -297,8 +297,6 @@ const bulletStyles = {
 });
 
 
-document.getElementById("toc-toggle").click();
-
 
 
   // === Add Comments link ===

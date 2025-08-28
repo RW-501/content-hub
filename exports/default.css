@@ -1013,10 +1013,11 @@ button:disabled {
   border-radius: 6px;
 }
 #toc h3 {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0;
+    padding: 1rem;
 }
 #toc-toggle {
     font-size: 0.9rem;

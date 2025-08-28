@@ -329,6 +329,7 @@ figure {
     color: #007bff;
     text-decoration: none;
     transition: color 0.2s ease;
+    text-transform: capitalize;
 }
 
 .breadcrumb li a:hover {

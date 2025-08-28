@@ -182,12 +182,14 @@ document.addEventListener('DOMContentLoaded', loadPageScripts);
 
 
 
+let readingTime = document.getElementById("readingTime").textContent;
 
 const words = document.body.innerText.split(/\s+/).length;
 const wpm = 200; // average words per minute
 const minutes = Math.ceil(words / wpm);
-document.getElementById("readingTime").textContent = `${minutes} min read`;
-
+if (readingTime === ''){
+readingTime = `${minutes} min read`;
+}
 
 
 document.getElementById("toc-toggle").addEventListener("click", function () {

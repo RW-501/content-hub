@@ -1717,6 +1717,15 @@ function collectHowtoItems() {
   }));
 }
 
+
+function calculateReadingTime(text) {
+  const wordsPerMinute = 200;
+  const words = text.trim().split(/\s+/).length;
+  const time = Math.ceil(words / wordsPerMinute);
+  return time;
+}
+
+
 /* ---------------- Schema Section Visibility ---------------- */
 function toggleSchemaSections(schemaType) {
   $("#faqSection").classList.toggle("hidden", schemaType !== "FAQ");
@@ -2026,12 +2035,8 @@ sSnap.forEach((docSnap) => {
   });
 });
 
-   const readTime = document.getElementById("readTime");
-
+   
   const allText = getAllBlockText(); // your function to get all text
-
- readTime.innerText = calculateReadingTime(allText);
-
 
   const data = {
     //gTag: "G-ZPWGF7YMPE",
@@ -2049,7 +2054,7 @@ sSnap.forEach((docSnap) => {
     styles: collectPageStyles(),
     blocks,  // ✅ store structured blocks instead of "sections"
     suggested,
-    readTime: $("#readTime").innerText,
+    readTime:  calculateReadingTime(allText),
     image:  $("#imageUrl").value, 
     og: { 
       title: $("#ogTitle").value, 

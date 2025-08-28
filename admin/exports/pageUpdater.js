@@ -326,7 +326,9 @@ const Content = `
 <meta http-equiv="X-UA-Compatible" content="IE=edge"> <!-- ensures proper rendering in older IE -->
 <meta name="format-detection" content="telephone=no"> <!-- prevents phone number auto-linking -->
 <meta name="theme-color" content="#fdfdfdff"> <!-- already included but ensures mobile browsers pick it up -->
-<meta name="apple-mobile-web-app-capable" content="yes"> <!-- makes page installable as PWA -->
+<!-- Progressive Web App meta -->
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="HandheldFriendly" content="true">
 <meta name="MobileOptimized" content="320">

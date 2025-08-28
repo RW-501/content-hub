@@ -1042,8 +1042,13 @@ window.removePage = removePage;
 
 // Update Live Status for a Page
 async function updateLiveStatus(pageId, slug) {
+  console.log("updateLiveStatus Check: pageId  ",pageId, "   slug   ",slug);
+
+
   const statusEl = document.getElementById(`status-${pageId}`);
-  if (!statusEl) console.log("returnD >>>   ",slug);
+    console.log("statusEl: ",statusEl);
+
+  if (!statusEl) 
 return;
   const online = await pingSite(slug);
   statusEl.textContent = online ? "✅ Online" : "❌ Offline";

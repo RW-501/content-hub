@@ -753,7 +753,7 @@ setTimeout(() => {
   const slugInput = document.getElementById("slug");
 
 // Listen for focus out (blur) event
-seoContainer.addEventListener('blur', () => {
+slugInput.addEventListener('blur', () => {
     console.log("slugInput.value:", slugInput.value);
 
 if (slugInput.value) {

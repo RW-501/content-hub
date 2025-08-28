@@ -266,16 +266,8 @@ const bulletStyles = {
 
     a.textContent = tocHeaders;
     li.appendChild(a);
-
-// === Add Comments link ===
-const commentsLi = document.createElement("li");
-const commentsA = document.createElement("a");
-
-commentsA.innerHTML = "<span>Comments</span>";
-commentsA.href = "#commentForm"; // your comment form div id
-
-commentsLi.appendChild(commentsA);
-tocList.appendChild(commentsLi);
+    
+    tocList.appendChild(li);
   }
 
   if (tocText) {
@@ -299,9 +291,20 @@ tocList.appendChild(commentsLi);
 
     tocList.appendChild(li);
   }
+
+
+
 });
 
+  // === Add Comments link ===
+const commentsLi = document.createElement("li");
+const commentsA = document.createElement("a");
 
+commentsA.innerHTML = "<span>Comments</span>";
+commentsA.href = "#commentForm"; // your comment form div id
+
+commentsLi.appendChild(commentsA);
+tocList.appendChild(commentsLi);
 
   const progressBar = document.getElementById("progressBar");
 

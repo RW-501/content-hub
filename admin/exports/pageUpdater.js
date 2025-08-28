@@ -543,7 +543,7 @@ hr {
       </ol>
     </nav>
     <p id="readTime">${articleData.readTime || "Read Time: 5 min"}</p>
-    <p><a href="#commentForm" title="${articleData.title} Comments" id="navCommentBtn">Comments</a></p>
+    <p id='navCommentBtn'><a href="#commentForm" title="${articleData.title} Comments" id="navCommentBtn">Comments</a></p>
   </div>
 
   
@@ -731,7 +731,7 @@ hr {
       <br>
       <a href="https://rw-501.github.io/Portfolio" target="_blank" hidden>Created by Ron W.</a></div>
 </p>
-<p>Version: V1005</p>
+<p>Version: V1006</p>
   </footer>
 
 

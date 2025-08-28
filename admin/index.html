@@ -337,15 +337,15 @@ async function pingSite(domain) {
 
   if (!domain) return false;
 
+    console.log("checkedDomains: ",checkedDomains);
+
   // ✅ Return cached result if we already checked this domain
   if (checkedDomains.hasOwnProperty(domain)) {
     return checkedDomains[domain];
   }
 
   try {
-    const url = domain.startsWith("https")
-      ? domain
-      : `https://contenthub.guru/site/${domain}`;
+    const url = `https://contenthub.guru/site/${domain}`;
   console.log("PING url: ",url);
 
     const resp = await fetch(url, { method: "GET", cache: "no-store" });

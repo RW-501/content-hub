@@ -411,6 +411,8 @@ document.addEventListener("DOMContentLoaded", () => {
       const targetSelector = btn.getAttribute("data-toggle");
       const target = document.querySelector(targetSelector);
 
+            console.log("target  ",target,"targetSelector ? ",targetSelector )
+
       if (target) {
         target.classList.toggle("hidden");
         btn.textContent = target.classList.contains("hidden") ? "Show" : "Hide";
@@ -888,16 +890,7 @@ $("#schemaType").addEventListener("change", e => {
 
 
 /* ---------------- Page Styles ---------------- */
-  // Toggle section visibility
-  document.querySelectorAll(".toggle-btn").forEach(btn => {
-    btn.addEventListener("click", () => {
-      const wrap = document.querySelector(btn.dataset.toggle);
-      wrap.style.display = wrap.style.display === "none" ? "block" : "none";
-        
-      console.log("toggle  ",wrap.style.display,"btn.dataset.toggle ? ",btn.dataset.toggle )
 
-    });
-  });
 
   // Initialize color buttons
   document.querySelectorAll(".color-btn").forEach(btn => {

@@ -1036,13 +1036,16 @@ button:disabled {
 }
 
 #toc-list {
-     transition: max-height 0.4s ease, opacity 0.4s ease;
-      opacity: 1;
+  max-height: 1000px;   /* large enough to fit content */
+  opacity: 1;
+  overflow: hidden;
+  transition: max-height 0.4s ease, opacity 0.4s ease;
 }
 
-#toc-list[hidden] {
-  display: none;
+#toc-list.hidden {
+  max-height: 0;
   opacity: 0;
+  pointer-events: none; /* optional, so clicks don’t register */
 }
 
 

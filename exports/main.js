@@ -191,12 +191,10 @@ if (readingTime === ''){
 readingTime = `Reading Time ${minutes} min`;
 }
 
-  const tocList = document.getElementById("toc-list");
 
 document.getElementById("toc-toggle").addEventListener("click", function () {
   const list = document.getElementById("toc-list");
   const expanded = this.getAttribute("aria-expanded") === "true";
-  list.calssList.toggle("hidden");
 
   // Toggle visibility
   list.hidden = expanded;
@@ -206,6 +204,7 @@ document.getElementById("toc-toggle").addEventListener("click", function () {
   this.textContent = expanded ? "Show" : "Hide";
 });
 
+const tocList = document.getElementById('toc-list');
 
 const contentItems = document.querySelectorAll('section h2, section h3, section h4, section p[data-start], section ul');
 

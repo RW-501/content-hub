@@ -195,7 +195,7 @@ readingTime = `Reading Time ${minutes} min`;
 document.getElementById("toc-toggle").addEventListener("click", function () {
   const list = document.getElementById("toc-list");
   const expanded = this.getAttribute("aria-expanded") === "true";
-  tocList.calssList.toggle("hidden");
+  list.calssList.toggle("hidden");
 
   // Toggle visibility
   list.hidden = expanded;

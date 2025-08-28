@@ -442,6 +442,8 @@ if (toggleBtn) toggleBtn.addEventListener('click', toggleSticky);
       </div>
       
       <div id="bodyFeedback" class="body-feedback"></div>
+      <div id="readTimeArea">Read Time: <div id="ReadTime"></div></div>
+
     </section>
 
     <!-- Body Content -->
@@ -1754,6 +1756,7 @@ onAuthStateChanged(auth, async (user) => {
     $("#keywords").value = (data.keywords || []).join(",");
     $("#domain").value = data.domain || "";
     $("#category").value = data.category || "";
+    $("#readTime").value = data.readTime || "";
     $("#schemaType").value = data.schemaTypes?.[0] || "Article";
     toggleSchemaSections($("#schemaType").value);
 
@@ -1992,6 +1995,8 @@ async function savePage(pageId, currentUser) {
     sq = query(collection(db, "pages"), orderBy("views", "asc"), limit(4));
   }
 
+  
+  
 const sSnap = await getDocs(sq);
 sSnap.forEach((docSnap) => {
   const d = docSnap.data();
@@ -2001,7 +2006,8 @@ sSnap.forEach((docSnap) => {
     title: d.title || "",
     category: d.category || "",
     description: d.description || "",
-    slug: d.slug || ""
+    slug: d.slug || "",
+    readTime: d.readTime || ''
   });
 });
 
@@ -2022,6 +2028,7 @@ sSnap.forEach((docSnap) => {
     styles: collectPageStyles(),
     blocks,  // ✅ store structured blocks instead of "sections"
     suggested,
+    readTime: $("#readTime").value.trim(),
     image:  $("#imageUrl").value, 
     og: { 
       title: $("#ogTitle").value, 
@@ -2316,8 +2323,25 @@ const slugVal = slugInput.value.trim();
 
 
 
+const blocksWrap = document.getElementById("blocksWrap");
+
+blocksWrap.addEventListener('blur', () => {
+const readTime = document.getElementById("readTime");
+
+  const allText = getAllBlockText(); // your function to get all text
+
+ readTime.value = calculateReadingTime(allText);
+
+
+
+console.log("readTime.value:", readTime);
+
+});
+
+const title = document.getElementById("title");
+
 // Listen for focus out (blur) event
-seoContainer.addEventListener('click', () => {
+title.addEventListener('blur', () => {
     console.log("slugInput.value:", slugInput.value);
 
 if (slugInput.value) {

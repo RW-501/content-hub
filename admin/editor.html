@@ -1989,13 +1989,19 @@ async function savePage(pageId, currentUser) {
     sq = query(collection(db, "pages"), orderBy("views", "asc"), limit(4));
   }
 
-  const sSnap = await getDocs(sq);
-  sSnap.forEach((doc) => {
-    suggested.push({
-      id: doc.id,
-      ...doc.data()
-    });
+const sSnap = await getDocs(sq);
+sSnap.forEach((docSnap) => {
+  const d = docSnap.data();
+  suggested.push({
+    id: docSnap.id,
+    image: d.image || null,
+    title: d.title || "",
+    category: d.category || "",
+    description: d.description || "",
+    slug: d.slug || ""
   });
+});
+
 
   const data = {
     //gTag: "G-ZPWGF7YMPE",

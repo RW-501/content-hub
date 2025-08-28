@@ -360,7 +360,7 @@ async function pingSite(domain) {
 }
 
 // Create article page with dynamic schema, monetization, and full metadata
-async function createPage(articleData, pageID) {
+async function createPageXXX(articleData, pageID) {
   const scriptTag = `<script  type="module" id="dynamic-js" src="https://contenthub.guru/exports/main.js"><\/script>`;
 
   // Generate schema based on selected type
@@ -650,13 +650,19 @@ if (!querySnapshot.empty) {
     sq = query(collection(db, "pages"), orderBy("views", "asc"), limit(4));
   }
 
-  const sSnap = await getDocs(sq);
-  sSnap.forEach((doc) => {
-    suggested.push({
-      id: doc.id,
-      ...doc.data()
-    });
+const sSnap = await getDocs(sq);
+sSnap.forEach((docSnap) => {
+  const d = docSnap.data();
+  suggested.push({
+    id: docSnap.id,
+    image: d.image || null,
+    title: d.title || "",
+    category: d.category || "",
+    description: d.description || "",
+    slug: d.slug || ""
   });
+});
+
 
 
   // Build page object for Firestore

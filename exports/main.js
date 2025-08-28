@@ -191,6 +191,7 @@ if (readingTime === ''){
 readingTime = `${minutes} min read`;
 }
 
+document.getElementById("toc-toggle").click();
 
 document.getElementById("toc-toggle").addEventListener("click", function () {
   const list = document.getElementById("toc-list");

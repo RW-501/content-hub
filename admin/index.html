@@ -33,7 +33,7 @@
   th { background:#f4f4f4; }
   tr:nth-child(even) { background:#f9f9f9; }
   img { max-width:60px; border-radius:6px; }
- #admin-panel > img { max-width: 100%; border-radius:6px; }
+ .siteImage { max-width: 100%; border-radius:6px; }
   .status-online { color:green; font-weight:bold; }
   .status-offline { color:red; font-weight:bold; }
   .tag { display:inline-block; background:#357ABD; color:white; padding:0.2rem 0.5rem; margin:0.2rem; border-radius:4px; font-size:0.8rem; }
@@ -893,7 +893,7 @@ console.log("pageData  ",pageData.slug);
       <td>
         <p>
           <a href="https://contenthub.guru/site/${pageData.slug}" target="_blank">
-            <img src="${pageData.image || 'https://contenthub.guru/images/placeholder.png'}" alt="preview" width="300" height="200">
+            <img class='siteImage' src="${pageData.image || 'https://contenthub.guru/images/placeholder.png'}" alt="preview" width="300" height="200">
           </a>
         </p>
       </td>

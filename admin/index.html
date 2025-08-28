@@ -727,6 +727,23 @@ setTimeout(() => {
   }
 });
 
+  const slugInput = document.getElementById("slug");
+
+// Listen for focus out (blur) event
+seoContainer.addEventListener('blur', () => {
+    console.log("slugInput.value:", slugInput.value);
+
+if (slugInput.value) {
+    slugInput.value = slugInput.value
+        .trim()                        // Remove leading/trailing spaces
+        .toLowerCase()                 // Convert to lowercase
+        .replace(/\s+/g, '-')          // Replace spaces with hyphens
+        .replace(/[^a-z0-9\-]/g, '')   // Remove special characters except hyphens
+        .replace(/-+/g, '-');          // Collapse multiple hyphens
+}
+
+});
+
 // JS for Modal
 const modal = document.getElementById("analyticsModal");
 const modalClose = modal.querySelector(".close-modal");

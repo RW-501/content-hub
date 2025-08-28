@@ -997,13 +997,19 @@ button:disabled {
   margin: 0;
 }
 #toc-toggle {
-  font-size: 0.9rem;
-  padding: 2px 8px;
-  cursor: pointer;
-  background: none;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+    font-size: 0.9rem;
+    padding: 2px 8px;
+    cursor: pointer;
+    background: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    color: #007dff;
 }
+
+#toc-toggle.hover {
+    background: #007dff;
+}
+
 #toc-list[hidden] {
   display: none;
 }

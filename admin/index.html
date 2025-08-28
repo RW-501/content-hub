@@ -333,7 +333,7 @@ const checkedDomains = {};
 
 async function pingSite(domain) {
   console.log("PING: ",domain);
-  
+
   if (!domain) return false;
 
   // ✅ Return cached result if we already checked this domain
@@ -344,7 +344,7 @@ async function pingSite(domain) {
   try {
     const url = domain.startsWith("https")
       ? domain
-      : `https://contenthub.guru/site/${domain}.html`;
+      : `https://contenthub.guru/site/${domain}`;
 
     const resp = await fetch(url, { method: "GET", cache: "no-store" });
     const isOnline = resp.ok;

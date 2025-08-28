@@ -269,7 +269,7 @@ const bulletStyles = {
 const commentsLi = document.createElement("li");
 const commentsA = document.createElement("a");
 
-commentsA.textContent.innerHTML = "<span>Comments</span>";
+commentsA.innerHTML = "<span>Comments</span>";
 commentsA.href = "#commentForm"; // your comment form div id
 
 commentsLi.appendChild(commentsA);

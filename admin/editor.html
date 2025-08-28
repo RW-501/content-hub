@@ -1808,6 +1808,7 @@ $("#dailyViews").textContent = data.dailyViews?.[today] || 0;
   const imageDropZone = document.getElementById("imageDropZone");
   const previewImg = document.getElementById("previewImg");
   const imageUrl = document.getElementById("imageUrl");
+  const ogImage = document.getElementById("ogImage");
 
   // Open file selector on drop zone click
   imageDropZone.addEventListener("click", () => imageInput.click());
@@ -1827,6 +1828,7 @@ imageInput.addEventListener("change", async (e) => {
     // Preview + store download URL
     previewImg.src = url;
     previewImg.style.display = "block";
+    ogImage.value = url;
     imageUrl.value = url; // ✅ store only URL in Firestore
   } catch (err) {
     console.error("Upload failed:", err);

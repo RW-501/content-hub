@@ -333,31 +333,50 @@ async function showAdminPanel(user) {
 const checkedDomains = {};
 
 async function pingSite(domain) {
-  console.log("PING: ",domain);
+  console.log("PING: ", domain);
 
   if (!domain) return false;
 
-    console.log("checkedDomains: ",checkedDomains);
+  const url = domain.startsWith("http")
+    ? domain
+    : `https://contenthub.guru/site/${domain}`;
 
-  // ✅ Return cached result if we already checked this domain
-  if (checkedDomains.hasOwnProperty(domain)) {
-    return checkedDomains[domain];
+  console.log("PING url: ", url);
+
+  // ✅ Return cached result if we already checked this URL
+  if (checkedDomains.hasOwnProperty(url)) {
+    return checkedDomains[url];
   }
 
   try {
-    const url = `https://contenthub.guru/site/${domain}`;
-  console.log("PING url: ",url);
-
     const resp = await fetch(url, { method: "GET", cache: "no-store" });
     const isOnline = resp.ok;
 
-    // ✅ Store result in cache so we don’t recheck
-    checkedDomains[domain] = isOnline;
+    // ✅ Cache the result by URL, not just slug
+    checkedDomains[url] = isOnline;
     return isOnline;
   } catch {
-    checkedDomains[domain] = false;
+    checkedDomains[url] = false;
     return false;
   }
+}
+
+async function updateLiveStatus(pageId, slug) {
+  console.log("updateLiveStatus Check: pageId", pageId, "slug", slug);
+
+  const statusEl = document.getElementById(`status-${pageId}`);
+  console.log("statusEl: ", statusEl);
+
+  if (!statusEl) return;
+
+  const online = await pingSite(slug);
+  statusEl.textContent = online ? "✅ Online" : "❌ Offline";
+  statusEl.className = online ? "status-online" : "status-offline";
+
+  console.log("updateLiveStatus Done:", { pageId, slug, online });
+
+  // Repeat every 10 seconds
+  setTimeout(() => updateLiveStatus(pageId, slug), 10000);
 }
 
 // Create article page with dynamic schema, monetization, and full metadata
@@ -1042,24 +1061,6 @@ const token = part_1 + part_2 + part_3 + part_4;
 
 window.removePage = removePage;
 
-// Update Live Status for a Page
-async function updateLiveStatus(pageId, slug) {
-  console.log("updateLiveStatus Check: pageId  ",pageId, "   slug   ",slug);
-
-
-  const statusEl = document.getElementById(`status-${pageId}`);
-    console.log("statusEl: ",statusEl);
-
-  if (!statusEl) 
-return;
-  const online = await pingSite(slug);
-  statusEl.textContent = online ? "✅ Online" : "❌ Offline";
-  statusEl.className = online ? "status-online" : "status-offline";
-console.log("updateLiveStatus Check: pageId  ",pageId, "   slug   ",slug);
-
-  // Repeat every 10 seconds
-  setTimeout(() => updateLiveStatus(pageId, slug), 10000);
-}
 
 document.addEventListener("DOMContentLoaded", () => {
   const titleInput = document.getElementById("title");

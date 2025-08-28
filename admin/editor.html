@@ -2022,6 +2022,7 @@ async function savePage(pageId, currentUser) {
     status: "published",
     updatedAt: serverTimestamp()
   };
+console.log("Data ",data);
 
   if (pageId) {
     await setDoc(doc(db, "pages", pageId), data, { merge: true });

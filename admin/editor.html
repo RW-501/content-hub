@@ -1756,7 +1756,7 @@ onAuthStateChanged(auth, async (user) => {
     $("#keywords").value = (data.keywords || []).join(",");
     $("#domain").value = data.domain || "";
     $("#category").value = data.category || "";
-    $("#readTime").value = data.readTime || "";
+    $("#readTime").innerText = data.readTime || "";
     $("#schemaType").value = data.schemaTypes?.[0] || "Article";
     toggleSchemaSections($("#schemaType").value);
 
@@ -2028,7 +2028,7 @@ sSnap.forEach((docSnap) => {
     styles: collectPageStyles(),
     blocks,  // ✅ store structured blocks instead of "sections"
     suggested,
-    readTime: $("#readTime").value.trim(),
+    readTime: $("#readTime").innerText,
     image:  $("#imageUrl").value, 
     og: { 
       title: $("#ogTitle").value, 
@@ -2330,11 +2330,11 @@ const readTime = document.getElementById("readTime");
 
   const allText = getAllBlockText(); // your function to get all text
 
- readTime.value = calculateReadingTime(allText);
+ readTime.innerText = calculateReadingTime(allText);
 
 
 
-console.log("readTime.value:", readTime);
+console.log("readTime.innerText:", readTime.innerText);
 
 });
 

@@ -1027,6 +1027,7 @@ button:disabled {
     border-radius: 4px;
     color: #007dff;
       transition: max-height 0.4s ease, opacity 0.4s ease;
+      opacity: 1;
 
 }
 
@@ -1036,6 +1037,7 @@ button:disabled {
 
 #toc-list[hidden] {
   display: none;
+  opacity: 0;
 }
 
 

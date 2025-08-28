@@ -332,6 +332,8 @@ async function showAdminPanel(user) {
 const checkedDomains = {};
 
 async function pingSite(domain) {
+  console.log("PING: ",domain);
+  
   if (!domain) return false;
 
   // ✅ Return cached result if we already checked this domain

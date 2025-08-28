@@ -2010,6 +2010,7 @@ async function savePage(pageId, currentUser) {
     styles: collectPageStyles(),
     blocks,  // ✅ store structured blocks instead of "sections"
     suggested,
+    image:  $("#imageUrl").value, 
     og: { 
       title: $("#ogTitle").value, 
       description: $("#ogDesc").value, 

@@ -847,7 +847,11 @@ button:disabled {
   }
 }
 
-
+#feedback-area {
+    margin: auto;
+    display: block;
+    width: fit-content;
+}
 
 .feedback {
     border: 1px solid #ddd;

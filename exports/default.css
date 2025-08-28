@@ -836,6 +836,9 @@ button:disabled {
 
   }
 
+  #top-banner-container {
+    order: 0;
+  }
   #left-sidebar {
     order: 0;
   }
@@ -843,6 +846,9 @@ button:disabled {
     order: 0;
   }
   #right-sidebar {
+    order: 0;
+  }
+  #bottom-banner-container {
     order: 0;
   }
 }

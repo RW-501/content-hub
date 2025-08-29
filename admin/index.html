@@ -388,13 +388,17 @@ async function pingSite(domain) {
 // helper: convert version string to number safely
 function versionToNumber(v) {
   if (!v) return 0;
-  return parseInt(v.replace(/^V/, ''), 10) || 0;
+  return parseInt(v.replace(/^V+/, ''), 10) || 0;  // <-- remove ALL V’s
 }
 
+
 function getLatestVersion(versionsObj) {
-  const nums = Object.values(versionsObj)
-    .filter(v => typeof v === "string" && v.startsWith("V")) // only keep valid version strings
-    .map(v => versionToNumber(v));
+  const cleaned = Object.values(versionsObj)
+    .filter(v => typeof v === "string" && v.startsWith("V"));
+  console.log("All raw versions:", cleaned);
+
+  const nums = cleaned.map(v => versionToNumber(v));
+  console.log("Parsed numbers:", nums);
 
   if (!nums.length) return null;
   return "V" + Math.max(...nums);

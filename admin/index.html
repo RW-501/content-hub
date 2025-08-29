@@ -347,14 +347,6 @@ async function showAdminPanel(user) {
   await loadDashboard(true);
 }
 
-const d = new Date();
-const year = String(d.getFullYear()).slice(-2); // last 2 digits of year
-const month = String(d.getMonth() + 1).padStart(2, "0"); // 01–12
-const day = String(d.getDate()).padStart(2, "0"); // 01–31
-const hour = String(d.getHours()).padStart(2, "0"); // 00–23
-
-const localVersion = `V${year}${month}${day}${hour}`;
-
 const checkedDomains = {};
 const versions = {}; // store versions per pageId
 
@@ -376,9 +368,7 @@ async function pingSite(domain) {
       const doc = parser.parseFromString(html, "text/html");
       const meta = doc.querySelector('meta[name="version"]');
       if (meta) {
-        version = meta.getAttribute("content") || null;
-        // strip any leading/trailing text like "Version: "
-        version = version.replace(/[^V0-9]/g, '');
+        version = meta.getAttribute("content")?.replace(/[^V0-9]/g, '') || null;
       }
     }
 
@@ -392,80 +382,65 @@ async function pingSite(domain) {
   }
 }
 
-// helper: convert version string to number safely
+// convert version string to number for comparison
 function versionToNumber(v) {
   if (!v) return 0;
   return parseInt(v.replace(/^V/, ''), 10) || 0;
 }
 
-function getLatestVersion() {
-  const nums = Object.values(versions)
+// get the newest version from a versions object
+function getLatestVersion(versionsObj) {
+  const nums = Object.values(versionsObj)
     .map(v => versionToNumber(v))
     .filter(v => v > 0);
-  
+
   if (!nums.length) return null;
-  
-  const maxNum = Math.max(...nums);
-  return "V" + maxNum;
+  return "V" + Math.max(...nums);
 }
 
+// ping all pages, then update statuses
+async function updateAllPagesStatus(pages) {
+  // 1️⃣ Ping all pages and collect versions
+  await Promise.all(pages.map(async (p) => {
+    const { online, version } = await pingSite(p.slug);
+    versions[p.id] = version;
+    p.online = online;
+    p.version = version;
+  }));
 
-async function updateLiveStatus(pageId, slug) {
-  //console.log("updateLiveStatus Check: pageId", pageId, "slug", slug);
+  // 2️⃣ Determine latest version
+  const latestVersion = getLatestVersion(versions);
 
-  const statusEl = document.getElementById(`status-${pageId}`);
-  const versionEl = document.getElementById(`version-${pageId}`);
+  // 3️⃣ Update DOM for each page
+  pages.forEach(p => {
+    const statusEl = document.getElementById(`status-${p.id}`);
+    const versionEl = document.getElementById(`version-${p.id}`);
+    if (!statusEl) return;
 
-  if (!statusEl) return;
+    // Online/offline
+    if (!p.online) {
+      statusEl.textContent = "❌ Offline";
+      statusEl.className = "status-offline";
+      if (versionEl) versionEl.textContent = "";
+    } else {
+      statusEl.textContent = "✅ Online";
+      statusEl.className = "status-online";
+    }
 
-  const { online, version } = await pingSite(slug);
+    // Version status
+    if (!p.version) {
+      versionEl.textContent = "⚠️ No version tag";
+      versionEl.className = "status-warning";
+    } else if (p.version === latestVersion) {
+      versionEl.textContent = `✅ Latest (${p.version})`;
+      versionEl.className = "status-latest";
+    } else {
+      versionEl.textContent = `⚠️ Outdated (${p.version})`;
+      versionEl.className = "status-warning";
+    }
 
-     //   console.log("after pingSite, online: ", online);
-
-  // save version for this page
-  versions[pageId] = version;
-
-
-
-  if (!online) {
-    statusEl.textContent = "❌ Offline";
-    statusEl.className = "status-offline";
-    if (versionEl) versionEl.textContent = "";
-  } else {
-        // This is Online
-    statusEl.textContent = "✅ Online";
-    statusEl.className = "status-online";
-  }
-  
-  
-  // figure out the latest version across all pages
-  const expectedVersion = getLatestVersion();
-  
-if (!version) {
-  versionEl.textContent = "⚠️ No version tag";
-  versionEl.className = "status-warning";
-} else if (version === expectedVersion) {
-  versionEl.textContent = `✅ Latest (${version})`;
-  versionEl.className = "status-latest";
-} else {
-  versionEl.textContent = `⚠️ Outdated (${version})`;
-  versionEl.className = "status-warning";
-}
-
-
-  console.log("expectedVersion: ",expectedVersion, "   version: ", version);
-/*
-  console.log("updateLiveStatus Done:", {
-    pageId,
-    slug,
-    online,
-    version,
-    expectedVersion
+    console.log("Page:", p.slug, "version:", p.version, "latest:", latestVersion);
   });
-*/
-
-  // Repeat every 10 seconds
-  //setTimeout(() => updateLiveStatus(pageId, slug), 10000);
 }
 
 

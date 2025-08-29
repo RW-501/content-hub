@@ -395,17 +395,20 @@ async function pingSite(domain) {
 // helper: convert version string to number safely
 function versionToNumber(v) {
   if (!v) return 0;
-  const num = v.replace(/^V/, '').replace(/\D/g, '');
-  return parseInt(num, 10) || 0;
+  return parseInt(v.replace(/^V/, ''), 10) || 0;
 }
-
 
 function getLatestVersion() {
   const nums = Object.values(versions)
     .map(v => versionToNumber(v))
     .filter(v => v > 0);
-  return nums.length ? "V" + Math.max(...nums) : null;
+  
+  if (!nums.length) return null;
+  
+  const maxNum = Math.max(...nums);
+  return "V" + maxNum;
 }
+
 
 async function updateLiveStatus(pageId, slug) {
   //console.log("updateLiveStatus Check: pageId", pageId, "slug", slug);
@@ -422,8 +425,7 @@ async function updateLiveStatus(pageId, slug) {
   // save version for this page
   versions[pageId] = version;
 
-  // figure out the latest version across all pages
-  const expectedVersion = getLatestVersion();
+
 
   if (!online) {
     statusEl.textContent = "❌ Offline";
@@ -436,23 +438,20 @@ async function updateLiveStatus(pageId, slug) {
   }
   
   
+  // figure out the latest version across all pages
+  const expectedVersion = getLatestVersion();
   
-  if (!version) {
-    // Missing version tag
-    versionEl.textContent = "⚠️ Outdated";
-    versionEl.className = "status-warning";
-    if (versionEl) versionEl.textContent = "⚠️ No version tag";
-  } else if (version === expectedVersion) {
-    // This one is the latest
-    versionEl.textContent = "✅ Latest";
-    versionEl.className = "status-latest";
-    if (versionEl) versionEl.textContent = `${version}`;
-  } else {
-    // Online but older/newer than the latest
-    versionEl.textContent = "⚠️ Outdated";
-    versionEl.className = "status-warning";
-    if (versionEl) versionEl.textContent = `⚠️ Outdated ${version}`;
-  }
+if (!version) {
+  versionEl.textContent = "⚠️ No version tag";
+  versionEl.className = "status-warning";
+} else if (version === expectedVersion) {
+  versionEl.textContent = `✅ Latest (${version})`;
+  versionEl.className = "status-latest";
+} else {
+  versionEl.textContent = `⚠️ Outdated (${version})`;
+  versionEl.className = "status-warning";
+}
+
 
   console.log("expectedVersion: ",expectedVersion, "   version: ", version);
 /*

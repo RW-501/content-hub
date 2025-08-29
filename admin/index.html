@@ -413,6 +413,8 @@ async function updateAllPagesStatus(p) {
     p.online = online;
     p.version = version;
 
+  console.log("version:", version);
+
   // 2️⃣ Determine the latest version after all pages are pinged
   const latestVersion = getLatestVersion(versions);
 

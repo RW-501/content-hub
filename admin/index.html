@@ -356,7 +356,6 @@ const checkedDomains = {};
 const versions = {}; // store versions per pageId
 
 async function pingSite(domain) {
-  console.log("PING: ", domain);
   console.log("checkedDomains: ", checkedDomains);
 
   if (!domain) return { online: false, version: null };
@@ -364,6 +363,8 @@ async function pingSite(domain) {
   const url = domain.startsWith("http")
     ? domain
     : `https://contenthub.guru/site/${domain}`;
+
+      console.log("PING: ", url);
 
   if (checkedDomains.hasOwnProperty(url)) {
     return checkedDomains[url];
@@ -1013,13 +1014,17 @@ console.log("pageData  ",pageData.slug);
         <button onclick="removePage('${pageData.siteId}','${pageData.slug}')">Remove</button>
       </td>
     </tr>`;
+      if (autoPing) pages.forEach(p => updateLiveStatus(pageData.siteId, pageData.slug));
+
   }
 
   html += "</tbody></table>";
   contentDiv.innerHTML = html;
 
-  if (autoPing) pages.forEach(p => updateLiveStatus(pageData.siteId, pageData.slug));
 }
+
+
+
 async function updatePageBtn(siteId, slug, category) {
   try {
     // 🔽 Get 4 lowest viewed pages (same category optional)

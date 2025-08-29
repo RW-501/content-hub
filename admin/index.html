@@ -344,22 +344,26 @@ async function showAdminPanel(user) {
   await loadDashboard(true);
 }
 
-// Ping site
-// cache of domains that have already been checked
+const d = new Date();
+const year = String(d.getFullYear()).slice(-2); // last 2 digits of year
+const month = String(d.getMonth() + 1).padStart(2, "0"); // 01–12
+const day = String(d.getDate()).padStart(2, "0"); // 01–31
+const hour = String(d.getHours()).padStart(2, "0"); // 00–23
+
+const localVersion = `V${year}${month}${day}${hour}`;
+
 const checkedDomains = {};
+const versions = {}; // store versions per pageId
 
 async function pingSite(domain) {
   console.log("PING: ", domain);
 
-  if (!domain) return false;
+  if (!domain) return { online: false, version: null };
 
   const url = domain.startsWith("http")
     ? domain
     : `https://contenthub.guru/site/${domain}`;
 
-  console.log("PING url: ", url);
-
-  // ✅ Return cached result if we already checked this URL
   if (checkedDomains.hasOwnProperty(url)) {
     return checkedDomains[url];
   }
@@ -368,32 +372,89 @@ async function pingSite(domain) {
     const resp = await fetch(url, { method: "GET", cache: "no-store" });
     const isOnline = resp.ok;
 
-    // ✅ Cache the result by URL, not just slug
-    checkedDomains[url] = isOnline;
-    return isOnline;
+    let version = null;
+    if (isOnline) {
+      const html = await resp.text();
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(html, "text/html");
+      const meta = doc.querySelector('meta[name="version"]');
+      if (meta) {
+        version = meta.getAttribute("content");
+      }
+    }
+
+    const result = { online: isOnline, version };
+    checkedDomains[url] = result;
+    return result;
   } catch {
-    checkedDomains[url] = false;
-    return false;
+    const result = { online: false, version: null };
+    checkedDomains[url] = result;
+    return result;
   }
+}
+
+// 🔹 helper: strip "V" and compare numerically
+function versionToNumber(v) {
+  if (!v) return 0;
+  return parseInt(v.replace(/^V/, ""), 10);
+}
+
+function getLatestVersion() {
+  const nums = Object.values(versions)
+    .map(v => versionToNumber(v))
+    .filter(v => v > 0);
+  return nums.length ? "V" + Math.max(...nums) : null;
 }
 
 async function updateLiveStatus(pageId, slug) {
   console.log("updateLiveStatus Check: pageId", pageId, "slug", slug);
 
   const statusEl = document.getElementById(`status-${pageId}`);
-  console.log("statusEl: ", statusEl);
+  const versionEl = document.getElementById(`version-${pageId}`);
 
   if (!statusEl) return;
 
-  const online = await pingSite(slug);
-  statusEl.textContent = online ? "✅ Online" : "❌ Offline";
-  statusEl.className = online ? "status-online" : "status-offline";
+  const { online, version } = await pingSite(slug);
 
-  console.log("updateLiveStatus Done:", { pageId, slug, online });
+  // save version for this page
+  versions[pageId] = version;
+
+  // figure out the latest version across all pages
+  const expectedVersion = getLatestVersion();
+
+  if (!online) {
+    statusEl.textContent = "❌ Offline";
+    statusEl.className = "status-offline";
+    if (versionEl) versionEl.textContent = "";
+  } else if (!version) {
+    // Missing version tag
+    statusEl.textContent = "⚠️ Outdated";
+    statusEl.className = "status-warning";
+    if (versionEl) versionEl.textContent = "⚠️ No version tag";
+  } else if (version === expectedVersion) {
+    // This one is the latest
+    statusEl.textContent = "✅ Latest";
+    statusEl.className = "status-latest";
+    if (versionEl) versionEl.textContent = `v${version}`;
+  } else {
+    // Online but older/newer than the latest
+    statusEl.textContent = "⚠️ Outdated";
+    statusEl.className = "status-warning";
+    if (versionEl) versionEl.textContent = `⚠️ Outdated (v${version})`;
+  }
+
+  console.log("updateLiveStatus Done:", {
+    pageId,
+    slug,
+    online,
+    version,
+    expectedVersion
+  });
 
   // Repeat every 10 seconds
   setTimeout(() => updateLiveStatus(pageId, slug), 10000);
 }
+
 
 // Create article page with dynamic schema, monetization, and full metadata
 async function createPageXXX(articleData, pageID) {
@@ -936,7 +997,10 @@ console.log("pageData  ",pageData.slug);
       <td>
          <a href="https://contenthub.guru/site/${pageData.slug}" target="_blank" style="width: 50%; display: block;">${pageData.title}</a>
       </td>
-      <td id="status-${pageData.siteId}" class="status-offline">❌ Offline</td>
+      <td >
+        <div id="status-${pageData.siteId}" class="status-offline">❌ Offline</div>
+        <div id="version-${pageData.siteId}" class="version">version</div>
+        </td>
       <td>${pageData.views || 0}</td>
       <td>
         <button onclick="updatePageBtn('${pageData.siteId}','${pageData.slug}', '${pageData.category}')">Update</button>

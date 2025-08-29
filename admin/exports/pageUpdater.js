@@ -287,7 +287,14 @@ const readTime = calculateReadingTime(articleBody);
     const encodedPageTitle = encodeURIComponent(articleData.slug); // Use for URL query strings
 
 
-    
+      const d = new Date();
+
+  const year = String(d.getFullYear()).slice(-2); // last 2 digits of year
+  const month = String(d.getMonth() + 1).padStart(2, "0"); // 01–12
+  const day = String(d.getDate()).padStart(2, "0"); // 01–31
+  const hour = String(d.getHours()).padStart(2, "0"); // 00–23
+
+  const version = `Version: V${year}${month}${day}${hour}`;
  
 // 🔹 Suggested Pages HTML builder
 let suggestedHTML = "";
@@ -322,6 +329,7 @@ const Content = `
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>${articleData.title} - ${articleData.domain} | ${articleData.slug || "Untitled"}</title>
 <meta name="description" content="${articleData.description}">
+<meta name="version" content="${version}">
 <meta name="keywords" content="${articleData.keywords?.join(', ') || ''}">
 <meta http-equiv="X-UA-Compatible" content="IE=edge"> <!-- ensures proper rendering in older IE -->
 <meta name="format-detection" content="telephone=no"> <!-- prevents phone number auto-linking -->
@@ -540,7 +548,7 @@ hr {
     <nav aria-label="breadcrumb" class="breadcrumb-wrapper">
       <ol class="breadcrumb">
         <li><a  title="Content Hub Home Page" href="https://contenthub.guru">Content Hub</a></li>
-        <li><a  title="Content Hub ${articleData.category} Category" href="https://contenthub.guru/category/${articleData.category}">${articleData.category}</a></li>
+        <li><a  title="Content Hub ${articleData.category} Category" href="https://contenthub.guru/category?c=${articleData.category}">${articleData.category}</a></li>
         <li class="active" aria-current="page"><a href="#block-article-0" title="${articleData.title} Content">${articleData.title}</a></li>
       </ol>
     </nav>
@@ -733,7 +741,7 @@ hr {
       <br>
       <a href="https://rw-501.github.io/Portfolio" target="_blank" hidden>Created by Ron W.</a></div>
 </p>
-<p>Version: V1006</p>
+<p id="version">${version}</p>
   </footer>
 
 

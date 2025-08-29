@@ -349,36 +349,30 @@ async function showAdminPanel(user) {
 
 
 const checkedDomains = {};
-const versions = {}; // store versions per pageId
+const versions = {}; // { siteId: "V########" | null }
 
 /* ---- helpers ---- */
-
-// Pull a clean "V########" from any input like "Version: V25082911" or "VV25082911"
 function extractVersion(input) {
   if (!input) return null;
-  const m = String(input).match(/V+(\d{6,})/i); // one or more V's + 6+ digits
+  const m = String(input).match(/V+(\d{6,})/i);
   return m ? `V${m[1]}` : null;
 }
 
-// Convert to comparable number (25082911)
 function versionToNumber(v) {
   const clean = extractVersion(v);
   return clean ? parseInt(clean.slice(1), 10) || 0 : 0;
 }
 
-// Latest version NUMBER across the map (returns 0 if none)
 function getLatestVersionNumber(versionsObj) {
   const nums = Object.values(versionsObj).map(versionToNumber).filter(n => n > 0);
   return nums.length ? Math.max(...nums) : 0;
 }
 
-// Format a number back to "V########"
 function formatVersion(n) {
   return n > 0 ? `V${n}` : null;
 }
 
 /* ---- network ---- */
-
 async function pingSite(domain) {
   if (!domain) return { online: false, version: null };
 
@@ -396,7 +390,6 @@ async function pingSite(domain) {
       const doc = parser.parseFromString(html, "text/html");
       const meta = doc.querySelector('meta[name="version"]');
       if (meta) {
-        // ✅ normalize to single "V########"
         version = extractVersion(meta.getAttribute("content"));
       }
     }
@@ -411,21 +404,30 @@ async function pingSite(domain) {
   }
 }
 
+/* ---- new flow ---- */
 
-/* ---- your per-item updater (unchanged structure) ---- */
+// Step 1: Ping all pages first
+async function fetchAllPages(pages) {
+  for (const p of pages) {
+    const { online, version } = await pingSite(p.slug);
+    versions[p.siteId] = version;
+    p.online = online;
+    p.version = version;
+  }
+}
 
-async function updateAllPagesStatus(p) {
-  const { online, version } = await pingSite(p.slug);
-  // store the normalized version
-  versions[p.siteId] = version;
-  p.online = online;
-  p.version = version;
+// Step 2: Get the global latest version
+function getLatestVersion() {
+  const latestNum = getLatestVersionNumber(versions);
+  return formatVersion(latestNum);
+}
 
+// Step 3: Update DOM for each page against the global latest
+function renderPageStatus(p, latestVersion) {
   const statusEl  = document.getElementById(`status-${p.siteId}`);
   const versionEl = document.getElementById(`version-${p.siteId}`);
   if (!statusEl) return;
 
-  // online/offline UI
   if (!p.online) {
     statusEl.textContent = "❌ Offline";
     statusEl.className = "status-offline";
@@ -436,22 +438,29 @@ async function updateAllPagesStatus(p) {
     statusEl.className = "status-online";
   }
 
-  // ✅ compare numerically so "VV..." and "V..." match
-  const latestNum = getLatestVersionNumber(versions);
-  const thisNum   = versionToNumber(p.version);
-
   if (!p.version) {
     versionEl.textContent = "⚠️ No version tag";
     versionEl.className = "status-warning";
-  } else if (thisNum === latestNum) {
-    versionEl.textContent = `✅ Latest (${formatVersion(thisNum)})`;
+  } else if (p.version === latestVersion) {
+    versionEl.textContent = `✅ Latest (${p.version})`;
     versionEl.className = "status-latest";
   } else {
-    versionEl.textContent = `⚠️ Outdated (${formatVersion(thisNum)})`;
+    versionEl.textContent = `⚠️ Outdated (${p.version})`;
     versionEl.className = "status-warning";
   }
 
-  console.log("version:", p.version, "latestVersion:", formatVersion(latestNum));
+  console.log("version:", p.version, "latestVersion:", latestVersion);
+}
+
+// Step 4: Orchestrate
+async function updateAllPages(pages) {
+  await fetchAllPages(pages);
+  const latestVersion = getLatestVersion();
+  console.log("🔥 Final latest version:", latestVersion);
+
+  for (const p of pages) {
+    renderPageStatus(p, latestVersion);
+  }
 }
 
 // Create article page with dynamic schema, monetization, and full metadata
@@ -1011,11 +1020,9 @@ async function loadDashboard(autoPing = false) {
 
   // 🔹 Start live status updates using cached pageData
   if (autoPing) {
-    pages.forEach(p => {
-      const pageData = pageCache[p.id];
-      if (pageData) updateAllPagesStatus(pageData);
+// assume `pages` is your list of page objects { siteId, slug }
+updateAllPages(pages);
 
-    });
   }
 }
 

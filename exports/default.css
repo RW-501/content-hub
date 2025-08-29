@@ -18,19 +18,19 @@ header {
   animation-delay: 0.8s;
 }
 .header-bottom {
-  animation-delay: 0.9s;
+  animation-delay: 1s;
 }
 .share-section {
-  animation-delay: 1s;
+  animation-delay: 1.4s;
 }
 #mainImage {
-  animation-delay: 1s;
+  animation-delay: 1.6s;
 }
 #main-Content-Area {
-  animation-delay: 1.1s;
+  animation-delay: 1.8s;
 }
 footer {
-  animation-delay: 1.2s;
+  animation-delay: 2s;
 }
 
 /* Keyframes for fade + slide */

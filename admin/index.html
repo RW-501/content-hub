@@ -347,13 +347,6 @@ async function showAdminPanel(user) {
   await loadDashboard(true);
 }
 
-const d = new Date();
-const year = String(d.getFullYear()).slice(-2); // last 2 digits of year
-const month = String(d.getMonth() + 1).padStart(2, "0"); // 01–12
-const day = String(d.getDate()).padStart(2, "0"); // 01–31
-const hour = String(d.getHours()).padStart(2, "0"); // 00–23
-
-const localVersion = `V${year}${month}${day}${hour}`;
 
 const checkedDomains = {};
 const versions = {}; // store versions per pageId
@@ -407,62 +400,50 @@ function getLatestVersion(versionsObj) {
   return "V" + Math.max(...nums);
 }
 
-async function updateLiveStatus(pageId, slug) {
-  //console.log("updateLiveStatus Check: pageId", pageId, "slug", slug);
 
-  const statusEl = document.getElementById(`status-${pageId}`);
-  const versionEl = document.getElementById(`version-${pageId}`);
+async function updateAllPagesStatus(pages) {
+  // 1️⃣ Ping all pages and store versions
+  await Promise.all(pages.map(async (p) => {
+    const { online, version } = await pingSite(p.slug);
+    versions[p.id] = version;
+    p.online = online;
+    p.version = version;
+  }));
 
-  if (!statusEl) return;
-
-  const { online, version } = await pingSite(slug);
-
-     //   console.log("after pingSite, online: ", online);
-
-  // save version for this page
-  versions[pageId] = version;
-
-
-
-  if (!online) {
-    statusEl.textContent = "❌ Offline";
-    statusEl.className = "status-offline";
-    if (versionEl) versionEl.textContent = "";
-  } else {
-        // This is Online
-    statusEl.textContent = "✅ Online";
-    statusEl.className = "status-online";
-  }
-  
-  
-  // figure out the latest version across all pages
-  // 2️⃣ Determine latest version
+  // 2️⃣ Determine the latest version after all pages are pinged
   const latestVersion = getLatestVersion(versions);
-if (!version) {
-  versionEl.textContent = "⚠️ No version tag";
-  versionEl.className = "status-warning";
-} else if (version === latestVersion) {
-  versionEl.textContent = `✅ Latest (${version})`;
-  versionEl.className = "status-latest";
-} else {
-  versionEl.textContent = `⚠️ Outdated (${version})`;
-  versionEl.className = "status-warning";
+
+  // 3️⃣ Update DOM for each page
+  pages.forEach(p => {
+    const statusEl = document.getElementById(`status-${p.id}`);
+    const versionEl = document.getElementById(`version-${p.id}`);
+    if (!statusEl) return;
+
+    if (!p.online) {
+      statusEl.textContent = "❌ Offline";
+      statusEl.className = "status-offline";
+      if (versionEl) versionEl.textContent = "";
+    } else {
+      statusEl.textContent = "✅ Online";
+      statusEl.className = "status-online";
+    }
+
+    if (!p.version) {
+      versionEl.textContent = "⚠️ No version tag";
+      versionEl.className = "status-warning";
+    } else if (p.version === latestVersion) {
+      versionEl.textContent = `✅ Latest (${p.version})`;
+      versionEl.className = "status-latest";
+    } else {
+      versionEl.textContent = `⚠️ Outdated (${p.version})`;
+      versionEl.className = "status-warning";
+    }
+
+    console.log("Page:", p.slug, "version:", p.version, "latestVersion:", latestVersion);
+  });
 }
 
 
-  console.log("latestVersion: ",latestVersion, "   version: ", version);
-/*
-  console.log("updateLiveStatus Done:", {
-    pageId,
-    slug,
-    online,
-    version,
-latestVersion  });
-*/
-
-  // Repeat every 10 seconds
-  //setTimeout(() => updateLiveStatus(pageId, slug), 10000);
-}
 
 
 // Create article page with dynamic schema, monetization, and full metadata
@@ -1024,7 +1005,8 @@ async function loadDashboard(autoPing = false) {
   if (autoPing) {
     pages.forEach(p => {
       const pageData = pageCache[p.id];
-      if (pageData) updateLiveStatus(pageData.siteId, pageData.slug);
+      if (pageData) updateAllPagesStatus(pageData);
+
     });
   }
 }

@@ -393,8 +393,8 @@ function versionToNumber(v) {
 
 function getLatestVersion(versionsObj) {
   const nums = Object.values(versionsObj)
-    .map(v => versionToNumber(v))
-    .filter(v => v > 0);
+    .filter(v => typeof v === "string" && v.startsWith("V")) // only keep valid version strings
+    .map(v => versionToNumber(v));
 
   if (!nums.length) return null;
   return "V" + Math.max(...nums);
@@ -402,7 +402,6 @@ function getLatestVersion(versionsObj) {
 
 
 async function updateAllPagesStatus(p) {
-      console.log("Page:", p);
 
   // 1️⃣ Ping all pages and store versions
     const { online, version } = await pingSite(p.slug);
@@ -439,7 +438,7 @@ async function updateAllPagesStatus(p) {
       versionEl.className = "status-warning";
     }
 
-    console.log("Page:", p.slug, "version:", p.version, "latestVersion:", latestVersion);
+    console.log("version:", p.version, "latestVersion:", latestVersion);
 
 }
 

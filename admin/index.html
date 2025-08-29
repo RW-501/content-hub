@@ -1021,7 +1021,7 @@ async function loadDashboard(autoPing = false) {
   // 🔹 Start live status updates using cached pageData
   if (autoPing) {
 // assume `pages` is your list of page objects { siteId, slug }
-updateAllPages(pages);
+updateAllPages(pageData);
 
   }
 }

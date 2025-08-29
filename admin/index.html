@@ -460,6 +460,8 @@ async function updateLiveStatus(pageId, slug) {
     versionEl.className = "status-warning";
     if (versionEl) versionEl.textContent = `⚠️ Outdated ${version}`;
   }
+
+  console.log("expectedVersion: ",expectedVersion, "   version: ", version);
 /*
   console.log("updateLiveStatus Done:", {
     pageId,

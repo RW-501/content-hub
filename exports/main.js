@@ -1,3 +1,16 @@
+
+
+document.addEventListener("DOMContentLoaded", () => {
+    const body = document.body;
+    body.style.opacity = 0;
+    body.style.transition = "opacity 2s ease-in-out";
+    body.style.opacity = 1;
+    console.log('Loading...');
+  });
+  
+
+
+
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
 import { getFirestore, doc, getDoc, setDoc, updateDoc, increment, collection, 
     addDoc, serverTimestamp, query, orderBy, onSnapshot, deleteDoc, arrayUnion  } 
@@ -24,15 +37,6 @@ const db = getFirestore(app);
 
 
 
-
-document.addEventListener("DOMContentLoaded", () => {
-    const body = document.body;
-    body.style.opacity = 0;
-    body.style.transition = "opacity 2s ease-in-out";
-    body.style.opacity = 1;
-    console.log('Loading...');
-  });
-  
 
 
 

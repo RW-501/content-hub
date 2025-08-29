@@ -402,6 +402,9 @@ function getLatestVersion(versionsObj) {
 
 
 async function updateAllPagesStatus(p) {
+
+      console.log("Page:", p);
+
   // 1️⃣ Ping all pages and store versions
     const { online, version } = await pingSite(p.slug);
     versions[p.id] = version;

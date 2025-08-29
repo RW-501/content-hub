@@ -966,8 +966,7 @@ const pageSize = 6;
 // Load Dashboard with Live Status
 // Add "Remove" button to the dashboard table
 async function loadDashboard(autoPing = false) {
-
-  console.log("autoPing  ",autoPing);
+  console.log("autoPing  ", autoPing);
 
   const contentDiv = document.getElementById("dashboardContent");
   const userSnap = await getDoc(doc(db, "users", currentUser.uid));
@@ -978,21 +977,19 @@ async function loadDashboard(autoPing = false) {
     return;
   }
 
+  const pageCache = {}; // 🔹 store page data here to avoid multiple DB calls
+
   let html = `<table>
     <thead>
       <tr><th>Preview</th><th>Domain</th><th>Status</th><th>Views</th><th>Actions</th></tr>
     </thead><tbody>`;
-let  pageData;
+
   for (const p of pages) {
-    // 🔹 Pull updated stats from pages/{id}
+    // 🔹 Pull updated stats from pages/{id} and cache it
     const pageRef = doc(db, "pages", p.id);
     const pageSnap = await getDoc(pageRef);
-     pageData = pageSnap.exists() ? pageSnap.data() : {};
-  
-console.log("pageData  ",pageData);
-//console.log("pageData  ",pageData.siteId);
-//console.log("pageData  ",pageData.slug);
-//console.log("p  ",p.id);
+    const pageData = pageSnap.exists() ? pageSnap.data() : {};
+    pageCache[p.id] = pageData; // cache it
 
     html += `<tr>
       <td>
@@ -1005,10 +1002,10 @@ console.log("pageData  ",pageData);
       <td>
          <a href="https://contenthub.guru/site/${pageData.slug}" target="_blank" style="width: 50%; display: block;">${pageData.title}</a>
       </td>
-      <td >
+      <td>
         <div id="status-${pageData.siteId}" class="status-offline">❌ Offline</div>
         <div id="version-${pageData.siteId}" class="version">version</div>
-        </td>
+      </td>
       <td>${pageData.views || 0}</td>
       <td>
         <button onclick="updatePageBtn('${pageData.siteId}','${pageData.slug}', '${pageData.category}')">Update</button>
@@ -1016,18 +1013,19 @@ console.log("pageData  ",pageData);
         <button onclick="removePage('${pageData.siteId}','${pageData.slug}')">Remove</button>
       </td>
     </tr>`;
-     
-    
-    if (autoPing) pages.forEach(p => updateLiveStatus(pageData.siteId, pageData.slug));
-  
   }
 
   html += "</tbody></table>";
   contentDiv.innerHTML = html;
 
+  // 🔹 Start live status updates using cached pageData
+  if (autoPing) {
+    pages.forEach(p => {
+      const pageData = pageCache[p.id];
+      if (pageData) updateLiveStatus(pageData.siteId, pageData.slug);
+    });
+  }
 }
-
-
 
 async function updatePageBtn(siteId, slug, category) {
   try {

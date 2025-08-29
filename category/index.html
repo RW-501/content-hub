@@ -204,7 +204,7 @@
   </section>
 </main>
 
-<div hidden id="loader"><div class="spinner"></div></div>
+<div id="loader" hidden><div class="spinner" hidden></div></div>
 
 <!-- Footer -->
 <div id="main-footer"></div>
@@ -368,9 +368,10 @@ async function initCategory() {
 
   // 🔹 normalize to lowercase for Firestore query
   const category = rawCategory.toLowerCase();
+  const categoryUpperCase = rawCategory.toUpperCase();
 
-  document.title = `Category: ${rawCategory} | ContentHub.guru`; // keep display capitalized
-  document.getElementById("category-title").textContent = rawCategory;
+  document.title = `Category: ${categoryUpperCase} | ContentHub.guru`; // keep display capitalized
+  document.getElementById("category-title").textContent = categoryUpperCase;
 
   await loadCategoryBatch(category);
   await loadSuggestedPages(category);

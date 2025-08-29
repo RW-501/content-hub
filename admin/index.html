@@ -1004,12 +1004,12 @@ async function loadDashboard(autoPing = false) {
 
   // 🔹 Start live status updates using cached pageData
   if (autoPing) {
-      console.log("pages  ", pages);
+    //  console.log("pages  ", pages);
 
     pages.forEach(p => {
               console.log("p  ", p);
 
-      const pageData = pageCache[p.siteId];
+      const pageData = pageCache[p.id];
         console.log("pageData  ", pageData);
 
       if (pageData) updateAllPagesStatus(pageData);

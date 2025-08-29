@@ -1019,11 +1019,11 @@ async function loadDashboard(autoPing = false) {
   contentDiv.innerHTML = html;
 
   // 🔹 Start live status updates using cached pageData
-  if (autoPing) {
-// assume `pages` is your list of page objects { siteId, slug }
-updateAllPages(pageCache);
+if (autoPing) {
+  // convert object values into array
+  updateAllPages(Object.values(pageCache));
+}
 
-  }
 }
 
 async function updatePageBtn(siteId, slug, category) {

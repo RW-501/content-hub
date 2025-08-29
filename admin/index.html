@@ -412,7 +412,7 @@ function getLatestVersion() {
 }
 
 async function updateLiveStatus(pageId, slug) {
-  console.log("updateLiveStatus Check: pageId", pageId, "slug", slug);
+  //console.log("updateLiveStatus Check: pageId", pageId, "slug", slug);
 
   const statusEl = document.getElementById(`status-${pageId}`);
   const versionEl = document.getElementById(`version-${pageId}`);
@@ -420,6 +420,8 @@ async function updateLiveStatus(pageId, slug) {
   if (!statusEl) return;
 
   const { online, version } = await pingSite(slug);
+
+        console.log("after pingSite, online: ", online);
 
   // save version for this page
   versions[pageId] = version;
@@ -1014,8 +1016,10 @@ console.log("pageData  ",pageData.slug);
         <button onclick="removePage('${pageData.siteId}','${pageData.slug}')">Remove</button>
       </td>
     </tr>`;
-      if (autoPing) pages.forEach(p => updateLiveStatus(pageData.siteId, pageData.slug));
-
+     
+    
+    if (autoPing) pages.forEach(p => updateLiveStatus(pageData.siteId, pageData.slug));
+  
   }
 
   html += "</tbody></table>";

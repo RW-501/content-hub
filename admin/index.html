@@ -398,7 +398,7 @@ function getLatestVersion(versionsObj) {
   console.log("All raw versions:", cleaned);
 
   const nums = cleaned.map(v => versionToNumber(v));
-  console.log("Parsed numbers:", nums);
+  //console.log("Parsed numbers:", nums);
 
   if (!nums.length) return null;
   return  Math.max(...nums);

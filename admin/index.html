@@ -351,11 +351,38 @@ async function showAdminPanel(user) {
 const checkedDomains = {};
 const versions = {}; // store versions per pageId
 
+/* ---- helpers ---- */
+
+// Pull a clean "V########" from any input like "Version: V25082911" or "VV25082911"
+function extractVersion(input) {
+  if (!input) return null;
+  const m = String(input).match(/V+(\d{6,})/i); // one or more V's + 6+ digits
+  return m ? `V${m[1]}` : null;
+}
+
+// Convert to comparable number (25082911)
+function versionToNumber(v) {
+  const clean = extractVersion(v);
+  return clean ? parseInt(clean.slice(1), 10) || 0 : 0;
+}
+
+// Latest version NUMBER across the map (returns 0 if none)
+function getLatestVersionNumber(versionsObj) {
+  const nums = Object.values(versionsObj).map(versionToNumber).filter(n => n > 0);
+  return nums.length ? Math.max(...nums) : 0;
+}
+
+// Format a number back to "V########"
+function formatVersion(n) {
+  return n > 0 ? `V${n}` : null;
+}
+
+/* ---- network ---- */
+
 async function pingSite(domain) {
   if (!domain) return { online: false, version: null };
 
   const url = domain.startsWith("http") ? domain : `https://contenthub.guru/site/${domain}`;
-
   if (checkedDomains.hasOwnProperty(url)) return checkedDomains[url];
 
   try {
@@ -369,12 +396,10 @@ async function pingSite(domain) {
       const doc = parser.parseFromString(html, "text/html");
       const meta = doc.querySelector('meta[name="version"]');
       if (meta) {
-        version = meta.getAttribute("content") || null;
-        // strip any leading/trailing text like "Version: "
-        version = version.replace(/[^V0-9]/g, '');
+        // ✅ normalize to single "V########"
+        version = extractVersion(meta.getAttribute("content"));
       }
     }
-  console.log("ping version:", version);
 
     const result = { online: isOnline, version };
     checkedDomains[url] = result;
@@ -384,25 +409,6 @@ async function pingSite(domain) {
     checkedDomains[url] = result;
     return result;
   }
-}
-
-// helper: convert version string to number safely
-function versionToNumber(v) {
-  if (!v) return 0;
-  return parseInt(v.replace(/^V+/, ''), 10) || 0;  // <-- remove ALL V’s
-}
-
-
-function getLatestVersion(versionsObj) {
-  const cleaned = Object.values(versionsObj)
-    .filter(v => typeof v === "string" && v.startsWith("V"));
-  console.log("All raw versions:", cleaned);
-
-  const nums = cleaned.map(v => versionToNumber(v));
-  //console.log("Parsed numbers:", nums);
-
-  if (!nums.length) return null;
-  return  Math.max(...nums);
 }
 
 

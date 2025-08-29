@@ -391,7 +391,7 @@ async function pingSite(domain) {
     const result = { online: isOnline, version };
     checkedDomains[url] = result;
 
-      console.log("result checkedDomains: ", checkedDomains);
+   //   console.log("result checkedDomains: ", checkedDomains);
 
     return result;
   } catch {
@@ -424,7 +424,7 @@ async function updateLiveStatus(pageId, slug) {
 
   const { online, version } = await pingSite(slug);
 
-        console.log("after pingSite, online: ", online);
+     //   console.log("after pingSite, online: ", online);
 
   // save version for this page
   versions[pageId] = version;
@@ -453,14 +453,14 @@ async function updateLiveStatus(pageId, slug) {
     // This one is the latest
     versionEl.textContent = "✅ Latest";
     versionEl.className = "status-latest";
-    if (versionEl) versionEl.textContent = `v${version}`;
+    if (versionEl) versionEl.textContent = `${version}`;
   } else {
     // Online but older/newer than the latest
     versionEl.textContent = "⚠️ Outdated";
     versionEl.className = "status-warning";
-    if (versionEl) versionEl.textContent = `⚠️ Outdated (v${version})`;
+    if (versionEl) versionEl.textContent = `⚠️ Outdated ${version}`;
   }
-
+/*
   console.log("updateLiveStatus Done:", {
     pageId,
     slug,
@@ -468,6 +468,7 @@ async function updateLiveStatus(pageId, slug) {
     version,
     expectedVersion
   });
+*/
 
   // Repeat every 10 seconds
   //setTimeout(() => updateLiveStatus(pageId, slug), 10000);

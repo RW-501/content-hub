@@ -162,98 +162,84 @@
 <meta name="DC.creator" content="ContentHub.guru">
 
 <link rel="stylesheet" href="https://contenthub.guru/css/style.css">
-
 <style>
   body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin:0; padding:0; background:#f4f6f8; color:#333; }
   a { text-decoration:none; color:inherit; }
-
-
-header {
-  background: #4f46e5;
-  color: #fff;
-  padding: 2rem;
-  text-align: center;
-}
-header h1 {
-  margin: 0;
-}
-.container {
-  max-width: 1200px;
-  margin: auto;
-  padding: 1rem;
-}
-.page-card {
-  display: flex;
-  background: #fff;
-  margin-bottom: 1rem;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-}
-.page-card img {
-  width: 200px;
-  object-fit: cover;
-}
-.page-info {
-  padding: 1rem;
-}
-.page-info h3 {
-  margin: 0 0 0.5rem 0;
-}
-.page-info p {
-  margin: 0.25rem 0;
-}
-.page-info a {
-  color: #4f46e5;
-  text-decoration: none;
-  font-weight: bold;
-}
-.page-info a:hover {
-  text-decoration: underline;
-}
+  header { background: #4f46e5; color: #fff; padding: 2rem; text-align: center; }
+  header h1 { margin: 0; font-size: 2rem; }
+  main.container { max-width: 1200px; margin:auto; padding: 1rem; }
+  .category-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:1rem; margin-top:1rem; }
+  .page-card { display:flex; flex-direction:column; background:#fff; border-radius:8px; overflow:hidden; box-shadow:0 2px 6px rgba(0,0,0,0.1); transition: transform 0.2s; }
+  .page-card:hover { transform: translateY(-3px); }
+  .page-card img { width:100%; height:180px; object-fit:cover; }
+  .page-info { padding:1rem; flex:1; display:flex; flex-direction:column; }
+  .page-info h3 { margin:0 0 0.5rem 0; font-size:1.25rem; color:#4f46e5; }
+  .page-info p { margin:0.25rem 0; flex-grow:1; }
+  .page-info a.read-more { margin-top:0.5rem; font-weight:bold; color:#4f46e5; text-decoration:none; }
+  .page-info a.read-more:hover { text-decoration:underline; }
+  .loading { text-align:center; padding:2rem; font-size:1.2rem; color:#555; }
 </style>
 </head>
 <body>
 
-    
+<!-- Header -->
 <div id="main-header"></div>
 <script type="module">
-  import {  } from 'https://contenthub.guru/exports/header.js';
+  import { loadHeader } from 'https://contenthub.guru/exports/header.js';
+  loadHeader();
 </script>
 
+<main class="container">
+  <header>
+    <h1>Category: <span id="category-title">Loading...</span></h1>
+  </header>
 
-  <main class="container">
+  <section id="category-pages" class="category-grid">
+    <p class="loading">Loading pages...</p>
+  </section>
 
-<header>
-  <h1>Category: <span id="category-title">Loading...</span></h1>
-</header>
+  <!-- Suggested Pages Section -->
+  <section id="suggested-pages" class="category-grid" style="margin-top:2rem;">
+    <h2>Suggested Pages</h2>
+    <p class="loading">Loading suggested pages...</p>
+  </section>
+</main>
 
-<div class="container" id="category-pages">
-  <p>Loading pages...</p>
-</div>
-
-
-
-
-  </main>
-
-  <div id="main-footer"></div>
+<!-- Footer -->
+<div id="main-footer"></div>
 <script type="module">
   import { loadFooter } from 'https://contenthub.guru/exports/footer.js';
-  loadFooter(); // injects footer into div#main-footer
+  loadFooter();
 </script>
 
+<style>
+  /* Loader styles */
+  #loader {
+    display: none;
+    text-align: center;
+    margin: 2rem 0;
+  }
+  #loader .spinner {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #4f46e5;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    animation: spin 1s linear infinite;
+    display: inline-block;
+  }
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+</style>
 
+<div id="loader"><div class="spinner"></div></div>
 
-
-<!-- Firebase SDK -->
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
-  import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+import { getFirestore, collection, query, where, getDocs, limit, startAfter, orderBy } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
 
-import { showToast } from "https://contenthub.guru/exports/showToast.js";
-
-// Firebase config
 const firebaseConfig = {
   apiKey: "AIzaSyBXZcSYdspfi2jBipwUFeNmKZgU02ksg8c",
   authDomain: "contentmanagement-8af61.firebaseapp.com",
@@ -264,52 +250,121 @@ const firebaseConfig = {
   measurementId: "G-ZPWGF7YMPE"
 };
 
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
+const categoryContainer = document.getElementById("category-pages");
+const suggestedContainer = document.getElementById("suggested-pages");
+const loader = document.getElementById("loader");
 
-  async function loadCategoryPages() {
-    // Get category from URL
-    const params = new URLSearchParams(window.location.search);
-    const category = params.get("c") || "General";
+let lastDoc = null;
+let isLoading = false;
+const PAGE_LIMIT = 6;
+const listedSlugs = [];
 
-    document.title = `Category: ${category} | ContentHub.guru`;
-    document.getElementById("category-title").textContent = category;
+function showLoader() { loader.style.display = "block"; }
+function hideLoader() { loader.style.display = "none"; }
 
-    // Firestore query for pages in this category
-    const pagesRef = collection(db, "pages");
-    const q = query(pagesRef, where("category", "==", category));
-    const querySnapshot = await getDocs(q);
+async function loadCategoryBatch(category) {
+  if (isLoading) return;
+  isLoading = true;
+  showLoader();
 
-    const container = document.getElementById("category-pages");
-    container.innerHTML = ""; // Clear previous content
+  const pagesRef = collection(db, "pages");
+  const q = lastDoc
+    ? query(pagesRef, where("category", "==", category), orderBy("title"), startAfter(lastDoc), limit(PAGE_LIMIT))
+    : query(pagesRef, where("category", "==", category), orderBy("title"), limit(PAGE_LIMIT));
 
-    if (querySnapshot.empty) {
-      container.innerHTML = `<p>No pages found in "${category}" yet.</p>`;
-      return;
-    }
+  const snapshot = await getDocs(q);
 
-    querySnapshot.forEach((doc) => {
-      const data = doc.data();
+  if (snapshot.empty) {
+    if (!lastDoc) categoryContainer.innerHTML = `<p class="loading">No pages found in "${category}" yet.</p>`;
+    hideLoader();
+    isLoading = false;
+    return;
+  }
+
+  snapshot.forEach(doc => {
+    const data = doc.data();
+    listedSlugs.push(data.slug);
+    const readTime = data.readTime || 5;
+    const image = data.image || "https://contenthub.guru/images/placeholder.png";
+
+    categoryContainer.innerHTML += `
+      <div class="page-card">
+        <img src="${image}" alt="${data.title}" loading="lazy">
+        <div class="page-info">
+          <a href="https://contenthub.guru/site/${data.slug}"><h3>${data.title}</h3></a>
+          <p>${(data.description || "").slice(0, 120)}...</p>
+          <p>Reading Time: ${readTime} min</p>
+          <a href="https://contenthub.guru/site/${data.slug}" class="read-more">Read More →</a>
+        </div>
+      </div>
+    `;
+  });
+
+  lastDoc = snapshot.docs[snapshot.docs.length - 1];
+  hideLoader();
+  isLoading = false;
+}
+
+async function loadSuggestedPages(category) {
+  const pagesRef = collection(db, "pages");
+  const suggestedQuery = query(pagesRef, where("category", "==", category), limit(6));
+  const suggestedSnapshot = await getDocs(suggestedQuery);
+
+  suggestedContainer.innerHTML = "";
+  let suggestionsAdded = 0;
+
+  suggestedSnapshot.forEach(doc => {
+    const data = doc.data();
+    if (!listedSlugs.includes(data.slug)) {
       const readTime = data.readTime || 5;
       const image = data.image || "https://contenthub.guru/images/placeholder.png";
 
-      container.innerHTML += `
+      suggestedContainer.innerHTML += `
         <div class="page-card">
           <img src="${image}" alt="${data.title}" loading="lazy">
           <div class="page-info">
             <a href="https://contenthub.guru/site/${data.slug}"><h3>${data.title}</h3></a>
             <p>${(data.description || "").slice(0, 120)}...</p>
             <p>Reading Time: ${readTime} min</p>
-            <a href="https://contenthub.guru/site/${data.slug}">Read More →</a>
+            <a href="https://contenthub.guru/site/${data.slug}" class="read-more">Read More →</a>
           </div>
         </div>
       `;
-    });
-  }
+      suggestionsAdded++;
+    }
+  });
 
-  window.addEventListener("DOMContentLoaded", loadCategoryPages);
+  if (suggestionsAdded === 0) {
+    suggestedContainer.innerHTML = `<p class="loading">No additional suggested pages in this category.</p>`;
+  }
+}
+
+function setupInfiniteScroll(category) {
+  window.addEventListener("scroll", () => {
+    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 300) {
+      loadCategoryBatch(category);
+    }
+  });
+}
+
+async function initCategory() {
+  const params = new URLSearchParams(window.location.search);
+  const category = params.get("c") || "General";
+
+  document.title = `Category: ${category} | ContentHub.guru`;
+  document.getElementById("category-title").textContent = category;
+
+  await loadCategoryBatch(category);
+  await loadSuggestedPages(category);
+  setupInfiniteScroll(category);
+}
+
+window.addEventListener("DOMContentLoaded", initCategory);
 </script>
+
 
 </body>
 </html>

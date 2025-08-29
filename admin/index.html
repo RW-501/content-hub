@@ -402,12 +402,11 @@ function getLatestVersion(versionsObj) {
 
 
 async function updateAllPagesStatus(p) {
-
       console.log("Page:", p);
 
   // 1️⃣ Ping all pages and store versions
     const { online, version } = await pingSite(p.slug);
-    versions[p.id] = version;
+    versions[p.siteId] = version;
     p.online = online;
     p.version = version;
 
@@ -416,8 +415,8 @@ async function updateAllPagesStatus(p) {
 
   // 3️⃣ Update DOM for each page
  
-    const statusEl = document.getElementById(`status-${p.id}`);
-    const versionEl = document.getElementById(`version-${p.id}`);
+    const statusEl = document.getElementById(`status-${p.siteId}`);
+    const versionEl = document.getElementById(`version-${p.siteId}`);
     if (!statusEl) return;
 
     if (!p.online) {

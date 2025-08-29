@@ -365,10 +365,13 @@ function setupInfiniteScroll(category) {
 
 async function initCategory() {
   const params = new URLSearchParams(window.location.search);
-  const category = params.get("c") || "General";
+  const rawCategory = params.get("c") || "general";
 
-  document.title = `Category: ${category} | ContentHub.guru`;
-  document.getElementById("category-title").textContent = category;
+  // 🔹 normalize to lowercase for Firestore query
+  const category = rawCategory.toLowerCase();
+
+  document.title = `Category: ${rawCategory} | ContentHub.guru`; // keep display capitalized
+  document.getElementById("category-title").textContent = rawCategory;
 
   await loadCategoryBatch(category);
   await loadSuggestedPages(category);

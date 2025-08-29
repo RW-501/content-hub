@@ -359,19 +359,11 @@ const checkedDomains = {};
 const versions = {}; // store versions per pageId
 
 async function pingSite(domain) {
-  console.log("checkedDomains: ", checkedDomains);
-
   if (!domain) return { online: false, version: null };
 
-  const url = domain.startsWith("http")
-    ? domain
-    : `https://contenthub.guru/site/${domain}`;
+  const url = domain.startsWith("http") ? domain : `https://contenthub.guru/site/${domain}`;
 
-      console.log("PING: ", url);
-
-  if (checkedDomains.hasOwnProperty(url)) {
-    return checkedDomains[url];
-  }
+  if (checkedDomains.hasOwnProperty(url)) return checkedDomains[url];
 
   try {
     const resp = await fetch(url, { method: "GET", cache: "no-store" });
@@ -384,15 +376,14 @@ async function pingSite(domain) {
       const doc = parser.parseFromString(html, "text/html");
       const meta = doc.querySelector('meta[name="version"]');
       if (meta) {
-        version = meta.getAttribute("content");
+        version = meta.getAttribute("content") || null;
+        // strip any leading/trailing text like "Version: "
+        version = version.replace(/[^V0-9]/g, '');
       }
     }
 
     const result = { online: isOnline, version };
     checkedDomains[url] = result;
-
-   //   console.log("result checkedDomains: ", checkedDomains);
-
     return result;
   } catch {
     const result = { online: false, version: null };
@@ -401,11 +392,13 @@ async function pingSite(domain) {
   }
 }
 
-// 🔹 helper: strip "V" and compare numerically
+// helper: convert version string to number safely
 function versionToNumber(v) {
   if (!v) return 0;
-  return parseInt(v.replace(/^V/, ""), 10);
+  const num = v.replace(/^V/, '').replace(/\D/g, '');
+  return parseInt(num, 10) || 0;
 }
+
 
 function getLatestVersion() {
   const nums = Object.values(versions)

@@ -1004,8 +1004,14 @@ async function loadDashboard(autoPing = false) {
 
   // 🔹 Start live status updates using cached pageData
   if (autoPing) {
+      console.log("pages  ", pages);
+
     pages.forEach(p => {
+              console.log("p  ", p);
+
       const pageData = pageCache[p.siteId];
+        console.log("pageData  ", pageData);
+
       if (pageData) updateAllPagesStatus(pageData);
 
     });

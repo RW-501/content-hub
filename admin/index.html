@@ -401,7 +401,7 @@ function getLatestVersion(versionsObj) {
   console.log("Parsed numbers:", nums);
 
   if (!nums.length) return null;
-  return "V" + Math.max(...nums);
+  return  Math.max(...nums);
 }
 
 

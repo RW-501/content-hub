@@ -433,20 +433,28 @@ async function updateLiveStatus(pageId, slug) {
     statusEl.textContent = "❌ Offline";
     statusEl.className = "status-offline";
     if (versionEl) versionEl.textContent = "";
-  } else if (!version) {
+  } else {
+        // This is Online
+    statusEl.textContent = "✅ Online";
+    statusEl.className = "status-online";
+  }
+  
+  
+  
+  if (!version) {
     // Missing version tag
-    statusEl.textContent = "⚠️ Outdated";
-    statusEl.className = "status-warning";
+    versionEl.textContent = "⚠️ Outdated";
+    versionEl.className = "status-warning";
     if (versionEl) versionEl.textContent = "⚠️ No version tag";
   } else if (version === expectedVersion) {
     // This one is the latest
-    statusEl.textContent = "✅ Latest";
-    statusEl.className = "status-latest";
+    versionEl.textContent = "✅ Latest";
+    versionEl.className = "status-latest";
     if (versionEl) versionEl.textContent = `v${version}`;
   } else {
     // Online but older/newer than the latest
-    statusEl.textContent = "⚠️ Outdated";
-    statusEl.className = "status-warning";
+    versionEl.textContent = "⚠️ Outdated";
+    versionEl.className = "status-warning";
     if (versionEl) versionEl.textContent = `⚠️ Outdated (v${version})`;
   }
 
@@ -459,7 +467,7 @@ async function updateLiveStatus(pageId, slug) {
   });
 
   // Repeat every 10 seconds
-  setTimeout(() => updateLiveStatus(pageId, slug), 10000);
+  //setTimeout(() => updateLiveStatus(pageId, slug), 10000);
 }
 
 

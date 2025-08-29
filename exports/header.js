@@ -42,9 +42,11 @@
 
   const links = [
     { text: 'Home', href: '/' },
-    { text: 'Dashboard', href: 'https://contenthub.guru/admin', show: currentHost === 'contenthub.guru' || currentPath === '/' },
     { text: 'About', href: '/about' },
-    { text: 'Contact Us', href: '/contact-us' }
+    { text: 'Category', href: '/category' },
+    { text: 'Contact Us', href: '/contact-us' },
+    { text: 'Dashboard', href: 'https://contenthub.guru/admin', show: currentHost === 'contenthub.guru' || currentPath === '/' },
+
   ];
 
   links.forEach((link, i) => {

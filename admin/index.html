@@ -1003,7 +1003,7 @@ async function loadDashboard(autoPing = false) {
   if (autoPing) {
     pages.forEach(p => {
       const pageData = pageCache[p.id];
-      if (pageData) updateLiveStatus(pageData.siteId, pageData.slug);
+      if (pageData) updateAllPagesStatus(pageData.siteId, pageData.slug);
     });
   }
 }

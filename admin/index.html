@@ -1003,11 +1003,15 @@ async function loadDashboard(autoPing = false) {
 
   // 🔹 Start live status updates using cached pageData
   if (autoPing) {
+    updateAllPagesStatus(pages);
+    /*
     pages.forEach(p => {
       const pageData = pageCache[p.id];
-      if (pageData) updateAllPagesStatus(pageData);
+      if (pageData) updateAllPagesStatus(pages);
 
     });
+    */
+
   }
 }
 

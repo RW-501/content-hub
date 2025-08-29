@@ -357,6 +357,7 @@ const versions = {}; // store versions per pageId
 
 async function pingSite(domain) {
   console.log("PING: ", domain);
+  console.log("checkedDomains: ", checkedDomains);
 
   if (!domain) return { online: false, version: null };
 
@@ -385,6 +386,9 @@ async function pingSite(domain) {
 
     const result = { online: isOnline, version };
     checkedDomains[url] = result;
+
+      console.log("result checkedDomains: ", checkedDomains);
+
     return result;
   } catch {
     const result = { online: false, version: null };
@@ -723,12 +727,13 @@ if (!querySnapshot.empty) {
   return showToast("error", "Domain already exists. Choose a different one.", 5000);
 }
 
+/*
   // Ping the domain to check if live
   const isLive = await pingSite(slug);
   if (!isLive) {
     showToast("warning", "Domain seems offline or unreachable. You can still create it.");
   }
-
+*/
   const pageName = slug; // Date.now().toString();
   const jsTimestamp = Date.now(); // numeric timestamp for users.createdPages
 

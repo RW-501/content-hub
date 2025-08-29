@@ -408,12 +408,13 @@ async function updateAllPagesStatus(pages) {
     versions[p.id] = version;
     p.online = online;
     p.version = version;
-
+  }));
 
   // 2️⃣ Determine the latest version after all pages are pinged
   const latestVersion = getLatestVersion(versions);
 
   // 3️⃣ Update DOM for each page
+  pages.forEach(p => {
     const statusEl = document.getElementById(`status-${p.id}`);
     const versionEl = document.getElementById(`version-${p.id}`);
     if (!statusEl) return;
@@ -439,8 +440,7 @@ async function updateAllPagesStatus(pages) {
     }
 
     console.log("Page:", p.slug, "version:", p.version, "latestVersion:", latestVersion);
-
-    }));
+  });
 }
 
 
@@ -1003,15 +1003,12 @@ async function loadDashboard(autoPing = false) {
 
   // 🔹 Start live status updates using cached pageData
   if (autoPing) {
-    updateAllPagesStatus(pages);
-    /*
+    //updateAllPagesStatus(pages);
     pages.forEach(p => {
       const pageData = pageCache[p.id];
-      if (pageData) updateAllPagesStatus(pages);
+      if (pageData) updateAllPagesStatus(p);
 
     });
-    */
-
   }
 }
 

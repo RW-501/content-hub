@@ -526,7 +526,7 @@ hr {
 
 </style>
 </head>
-<body>
+<body style="opacity: 0;">
   <!-- 🔹 Skip to main content (screen readers & keyboard users) -->
   <a href="#block-article-0" class="skip-link">Skip to content</a>
   

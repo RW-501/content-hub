@@ -244,8 +244,8 @@ const readTime = calculateReadingTime(articleBody);
         "timeRequired":  articleData.readTime || "PT"+readTime+"M",
         "datePublished": articleData.datePublished || new Date().toISOString(),
         "dateModified": articleData.updatedAt || new Date().toISOString(),
-        "author": articleData.author || { "@type": "Organization", "name": articleData.updatedBy },
-        "publisher": { "@type": "Organization", "name": articleData.updatedBy },
+        "author": articleData.author || { "@type": "Organization", "name": "ContentHub" },
+        "publisher": { "@type": "Organization", "name": "ContentHub" },
         "description": articleData.description,
         "articleBody": articleData.body || ""
       };

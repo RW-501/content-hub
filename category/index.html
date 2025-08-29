@@ -178,43 +178,7 @@
   .page-info a.read-more { margin-top:0.5rem; font-weight:bold; color:#4f46e5; text-decoration:none; }
   .page-info a.read-more:hover { text-decoration:underline; }
   .loading { text-align:center; padding:2rem; font-size:1.2rem; color:#555; }
-  hidden { display: none;}
-</style>
-</head>
-<body>
 
-<!-- Header -->
-<div id="main-header"></div>
-<script type="module">
-  import {  } from 'https://contenthub.guru/exports/header.js';
-</script>
-
-
-<main class="container">
-  <header>
-    <h1>Category: <span id="category-title">Loading...</span></h1>
-  </header>
-
-  <section id="category-pages" class="category-grid">
-  </section>
-
-  <!-- Suggested Pages Section -->
-  <section id="suggested-pages" class="category-grid" style="margin-top:2rem;">
-    <h2>Suggested Pages</h2>
-    <p class="loading">Loading suggested pages...</p>
-  </section>
-</main>
-
-<div id="loader" hidden><div class="spinner" hidden></div></div>
-
-<!-- Footer -->
-<div id="main-footer"></div>
-<script type="module">
-  import { loadFooter } from 'https://contenthub.guru/exports/footer.js';
-  loadFooter(); // injects footer into div#main-footer
-</script>
-
-<style>
   /* Loader styles */
   #loader {
     display: none;
@@ -248,6 +212,41 @@
     100% { transform: rotate(360deg); }
   }
 </style>
+</head>
+<body>
+
+<!-- Header -->
+<div id="main-header"></div>
+<script type="module">
+  import {  } from 'https://contenthub.guru/exports/header.js';
+</script>
+
+
+<main class="container">
+  <header>
+    <h1>Category: <span id="category-title">Loading...</span></h1>
+  </header>
+
+  <section id="category-pages" class="category-grid">
+  </section>
+
+  <!-- Suggested Pages Section -->
+  <section id="suggested-pages" class="category-grid" style="margin-top:2rem;">
+    <h2>Suggested Pages</h2>
+    <p class="loading">Loading suggested pages...</p>
+  </section>
+</main>
+
+<div id="loader"><div class="spinner"></div></div>
+
+<!-- Footer -->
+<div id="main-footer"></div>
+<script type="module">
+  import { loadFooter } from 'https://contenthub.guru/exports/footer.js';
+  loadFooter(); // injects footer into div#main-footer
+</script>
+
+
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";

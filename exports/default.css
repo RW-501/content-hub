@@ -1166,3 +1166,22 @@ height: fit-content;
 .faq-item.open .faq-answer {
   padding: 12px 16px;
 }
+
+
+
+#text-reader-controls {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #fff;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    z-index: 9999;
+
+    button {
+    background: linear-gradient(90deg, #4caf50, #00bfa5, #4caf50);
+    box-shadow: 0 0 8px rgba(76, 175, 80, 0.6), 0 0 12px rgba(0, 191, 165, 0.4);
+    }
+}

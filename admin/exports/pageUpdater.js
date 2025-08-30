@@ -66,28 +66,69 @@ function getVideo(videoUrl) {
   return "";
 }
 
-function checkContent(html){
 
-html = linkifyContentHub(html);
 
+
+
+
+function checkContent(html) {
+  if (!html) return "";
+
+  // Step 1: Linkify contenthub mentions
+  html = linkifyContentHub(html);
+
+  // Step 2: Detect FAQ patterns and generate schema
+  const faqSchema = generateFAQSchema(html);
+
+  // Step 3: If schema exists, inject as JSON-LD script
+  if (faqSchema) {
+    html += `<script type="application/ld+json">${JSON.stringify(faqSchema)}</script>`;
+  }
 
   return html;
 }
 
+// Helper: Linkify ContentHub mentions
+function linkifyContentHub(html) {
+  const regex = /\b(content\s*hub(?:\.guru)?)\b/gi;
+  return html.replace(regex, (match) => {
+    return `<a href="https://contenthub.guru" title="Visit ContentHub.guru" target="_blank" rel="noopener noreferrer">${match}</a>`;
+  });
+}
 
+// Helper: Generate FAQ schema from HTML
+function generateFAQSchema(html) {
+  const faqItems = [];
+  
+  // Match Q/A patterns (works for both Q1/A1 and Q:/A: formats)
+  const qaRegex = /(?:Q\d*:|Q:)\s*(.*?)\s*(?:A\d*:|A:)\s*(.*?)(?=(?:Q\d*:|Q:|$))/gs;
 
-  // Helper function to linkify contenthub mentions
-  function linkifyContentHub(html) {
-    if (!html) return "";
-    
-    // Regex to match variations of contenthub.guru (case-insensitive, optional spaces)
-    const regex = /\b(content\s*hub(?:\.guru)?)\b/gi;
+  let match;
+  while ((match = qaRegex.exec(html)) !== null) {
+    const question = match[1].trim();
+    const answer = match[2].trim();
 
-    // Replace matches with a link
-    return html.replace(regex, (match) => {
-      return `<a href="https://contenthub.guru" title="Visit ContentHub.guru" target="_blank" rel="noopener noreferrer">${match}</a>`;
-    });
+    if (question && answer) {
+      faqItems.push({
+        "@type": "Question",
+        "name": question,
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": answer
+        }
+      });
+    }
   }
+
+  if (faqItems.length === 0) return null;
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": faqItems
+  };
+}
+
 
   // Load existing image when editing
 function renderBlockHTML(b) {
@@ -187,7 +228,7 @@ function calculateReadingTime(text) {
 export async function updatePage(articleData, location) {
 
 
-  const scriptTag = `<script id="dynamic-js" type="module" src="https://contenthub.guru/exports/main.js"><\/script>`;
+const scriptTag = `<script id="dynamic-js" type="module" src="https://contenthub.guru/exports/main.js"><\/script>`;
 
 
   

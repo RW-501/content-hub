@@ -985,32 +985,39 @@ document.getElementById("downloadBtn").addEventListener("click", async () => {
 });
 
 
-  window.addEventListener("scroll", () => {
-      const textReader = document.getElementById('text-reader-controls');
-      const toc = document.getElementById('toc');
+window.addEventListener("scroll", () => {
+  const textReader = document.getElementById('text-reader-controls');
+  const toc = document.getElementById('toc');
 
-    const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-    const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-    const scrolled = (scrollTop / scrollHeight) * 100;
+  // Get current scroll position
+  const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
 
-    console.log("toc  ",toc);
-    console.log("textReader.clientHeight  ",textReader.clientHeight);
-    console.log("scrolled  ",scrolled);
+  // The position on the page where we want to fix the reader
+  const triggerPosition = toc ? toc.offsetTop + toc.offsetHeight : 200; // fallback if toc missing
 
+  if (scrollTop >= triggerPosition) {
+    // Fix the text reader
+    textReader.style.position = 'fixed';
+    textReader.style.top = '10px';
+    textReader.style.left = '50%';
+    textReader.style.transform = 'translateX(-50%)';
+    textReader.style.zIndex = '1000';
+    textReader.style.boxShadow = '0 2px 10px rgba(0,0,0,0.2)';
+    textReader.style.background = '#fff'; // optional for better visibility
+    textReader.style.padding = '8px 16px';
+    textReader.style.borderRadius = '6px';
+  } else {
+    // Reset
+    textReader.style.position = 'static';
+    textReader.style.top = '';
+    textReader.style.left = '';
+    textReader.style.transform = '';
+    textReader.style.zIndex = '';
+    textReader.style.boxShadow = '';
+    textReader.style.background = '';
+    textReader.style.padding = '';
+    textReader.style.borderRadius = '';
+  }
+});
 
-    const textReaderScrollHeight = textReader.scrollHeight - textReader.clientHeight;
-
-    // Optional glow for >50%
-    if (scrolled > textReaderScrollHeight) {
-      textReader.style.position = 'fixed';
-      textReader.style.boxShadow = '0 2px 10px rgba(0,0,0,0.2)';
-      textReader.style.transform = 'translateX(-50%)';
-    } else {
-      textReader.style.position = 'unset';
-      textReader.style.boxShadow = 'unset';
-      textReader.style.transform = 'none';
-    }
-
-
-  })
 

@@ -983,3 +983,28 @@ document.getElementById("downloadBtn").addEventListener("click", async () => {
   a.click();
   document.body.removeChild(a);
 });
+
+
+  window.addEventListener("scroll", () => {
+      const textReader = document.getElementById('text-reader-controls');
+
+    const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+    const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    const scrolled = (scrollTop / scrollHeight) * 100;
+
+    const textReaderScrollHeight = textReader.scrollHeight - textReader.clientHeight;
+
+    // Optional glow for >50%
+    if (scrolled > textReaderScrollHeight) {
+      textReader.style.position = 'fixed';
+      textReader.style.boxShadow = '0 2px 10px rgba(0,0,0,0.2)';
+      textReader.style.transform = 'translateX(-50%)';
+    } else {
+      textReader.style.position = 'unset';
+      textReader.style.boxShadow = 'unset';
+      textReader.style.transform = 'none';
+    }
+
+
+  })
+

@@ -862,7 +862,7 @@ setTimeout(() => {
   const titleInput = document.getElementById("title");
 
 // Listen for focus out (blur) event
- titleInput.addEventListener('blur', () => {
+ titleInput.addEventListener('input', () => {
     console.log("slugInput.value:", slugInput.value);
 
 if (slugInput.value) {
@@ -876,6 +876,20 @@ if (slugInput.value) {
 
 });
 
+// Listen for focus out (blur) event
+ titleInput.addEventListener('click', () => {
+    console.log("slugInput.value:", slugInput.value);
+
+if (slugInput.value) {
+    slugInput.value = titleInput.value
+        .trim()                        // Remove leading/trailing spaces
+        .toLowerCase()                 // Convert to lowercase
+        .replace(/\s+/g, '-')          // Replace spaces with hyphens
+        .replace(/[^a-z0-9\-]/g, '')   // Remove special characters except hyphens
+        .replace(/-+/g, '-');          // Collapse multiple hyphens
+}
+
+});
 // JS for Modal
 const modal = document.getElementById("analyticsModal");
 const modalClose = modal.querySelector(".close-modal");

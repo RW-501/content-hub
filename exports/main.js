@@ -992,6 +992,11 @@ document.getElementById("downloadBtn").addEventListener("click", async () => {
     const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
     const scrolled = (scrollTop / scrollHeight) * 100;
 
+    console.log("textReader.scrollHeight  ",textReader.scrollHeight);
+    console.log("textReader.clientHeight  ",textReader.clientHeight);
+    console.log("scrolled  ",scrolled);
+
+
     const textReaderScrollHeight = textReader.scrollHeight - textReader.clientHeight;
 
     // Optional glow for >50%

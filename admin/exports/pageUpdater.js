@@ -694,7 +694,7 @@ hr {
   </ul>
 </nav>
 
-<div id="text-reader-controls" style="position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:#fff; padding:10px; border-radius:8px; box-shadow:0 2px 10px rgba(0,0,0,0.2); z-index:9999;">
+<div id="text-reader-controls" >
   <button id="startBtn">Start</button>
   <button id="pauseBtn">Pause</button>
   <button id="resumeBtn">Resume</button>

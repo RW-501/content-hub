@@ -66,21 +66,19 @@ function getVideo(videoUrl) {
   return "";
 }
 
-
-
-
-
-
 function checkContent(html) {
   if (!html) return "";
 
-  // Step 1: Linkify contenthub mentions
+  // Step 1: Linkify ContentHub mentions in the entire HTML
   html = linkifyContentHub(html);
 
-  // Step 2: Detect FAQ patterns and generate schema
+  // Step 2: Render FAQs as collapsible HTML
+  html = renderFAQs(html);
+
+  // Step 3: Generate FAQ schema from the original HTML (plain text)
   const faqSchema = generateFAQSchema(html);
 
-  // Step 3: If schema exists, inject as JSON-LD script
+  // Step 4: If schema exists, inject as JSON-LD script
   if (faqSchema) {
     html += `<script type="application/ld+json">${JSON.stringify(faqSchema)}</script>`;
   }
@@ -88,7 +86,16 @@ function checkContent(html) {
   return html;
 }
 
-// Helper: Linkify ContentHub mentions
+// Render FAQ blocks into collapsible <details> elements
+function renderFAQs(html) {
+  return html.replace(/(?:Q\d*:|Q:)\s*(.*?)\s*(?:A\d*:|A:)\s*(.*?)(?=(?:Q\d*:|Q:|$))/gs, (match, q, a) => {
+    q = linkifyContentHub(q.trim());
+    a = linkifyContentHub(a.trim());
+    return `<details class="faq-item"><summary>${q}</summary><div class="faq-answer">${a}</div></details>`;
+  });
+}
+
+// Linkify ContentHub mentions
 function linkifyContentHub(html) {
   const regex = /\b(content\s*hub(?:\.guru)?)\b/gi;
   return html.replace(regex, (match) => {
@@ -96,25 +103,24 @@ function linkifyContentHub(html) {
   });
 }
 
-// Helper: Generate FAQ schema from HTML
+// Generate FAQ schema for SEO
 function generateFAQSchema(html) {
   const faqItems = [];
-  
-  // Match Q/A patterns (works for both Q1/A1 and Q:/A: formats)
   const qaRegex = /(?:Q\d*:|Q:)\s*(.*?)\s*(?:A\d*:|A:)\s*(.*?)(?=(?:Q\d*:|Q:|$))/gs;
 
   let match;
   while ((match = qaRegex.exec(html)) !== null) {
-    const question = match[1].trim();
-    const answer = match[2].trim();
+    let question = match[1].trim();
+    let answer = match[2].trim();
 
     if (question && answer) {
+      const plainAnswer = answer.replace(/<[^>]+>/g, ""); // remove HTML tags for schema
       faqItems.push({
         "@type": "Question",
         "name": question,
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": answer
+          "text": plainAnswer
         }
       });
     }
@@ -128,7 +134,6 @@ function generateFAQSchema(html) {
     "mainEntity": faqItems
   };
 }
-
 
   // Load existing image when editing
 function renderBlockHTML(b) {

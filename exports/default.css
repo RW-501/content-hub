@@ -1182,7 +1182,7 @@ height: fit-content;
     gap: .5rem;
     
     transition: width 0.2s ease, fade 0.3s ease;
-
+    text-align: center;
     
   input, textarea, select { width:100%; margin:.1rem 0 .8rem; padding:.6rem .65rem;
   border:1px solid var(--border); border-radius:8px; background:#fff; }

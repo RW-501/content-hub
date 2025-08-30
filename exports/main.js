@@ -1015,6 +1015,7 @@ window.addEventListener("scroll", () => {
     textReader.style.background = '';
     textReader.style.padding = '';
     textReader.style.borderRadius = '';
+    textReader.style.display = 'contents';
   }
 });
 

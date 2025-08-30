@@ -987,12 +987,13 @@ document.getElementById("downloadBtn").addEventListener("click", async () => {
 
   window.addEventListener("scroll", () => {
       const textReader = document.getElementById('text-reader-controls');
+      const toc = document.getElementById('toc');
 
     const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
     const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
     const scrolled = (scrollTop / scrollHeight) * 100;
 
-    console.log("textReader.scrollHeight  ",textReader.scrollHeight);
+    console.log("toc  ",toc);
     console.log("textReader.clientHeight  ",textReader.clientHeight);
     console.log("scrolled  ",scrolled);
 

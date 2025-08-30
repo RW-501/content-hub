@@ -1179,6 +1179,7 @@ height: fit-content;
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0,0,0,0.2);
     z-index: 9999;
+    gap: .5rem;
 
     button {
     background: linear-gradient(90deg, #4caf50, #00bfa5, #4caf50);

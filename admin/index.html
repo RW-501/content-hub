@@ -1204,6 +1204,17 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function updateSEOIndicators() {
+
+    
+if (slugInput.value) {
+    slugInput.value = slugInput.value
+        .trim()                        // Remove leading/trailing spaces
+        .toLowerCase()                 // Convert to lowercase
+        .replace(/\s+/g, '-')          // Replace spaces with hyphens
+        .replace(/[^a-z0-9\-]/g, '')   // Remove special characters except hyphens
+        .replace(/-+/g, '-');          // Collapse multiple hyphens
+}
+
     const title = titleInput.value.trim();
     const description = descriptionInput.value.trim();
     const keywords = keywordsInput.value.trim();
@@ -1252,6 +1263,22 @@ document.addEventListener("DOMContentLoaded", () => {
   keywordsInput.addEventListener("input", updateSEOIndicators);
 
   updateSEOIndicators();
+});
+
+
+
+titleInput.addEventListener('blur', () => {
+    console.log("slugInput.value:", slugInput.value);
+
+if (slugInput.value) {
+    slugInput.value = slugInput.value
+        .trim()                        // Remove leading/trailing spaces
+        .toLowerCase()                 // Convert to lowercase
+        .replace(/\s+/g, '-')          // Replace spaces with hyphens
+        .replace(/[^a-z0-9\-]/g, '')   // Remove special characters except hyphens
+        .replace(/-+/g, '-');          // Collapse multiple hyphens
+}
+
 });
 
 </script>

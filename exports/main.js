@@ -761,3 +761,24 @@ onAuthStateChanged(auth, (user) => {
       showToast("error", "Failed to submit report.");
     }
   });
+
+
+  
+document.addEventListener("DOMContentLoaded", () => {
+  document.querySelectorAll(".faq-item summary").forEach(summary => {
+    summary.addEventListener("click", function() {
+      const details = this.parentElement;
+      const answer = this.nextElementSibling;
+
+      details.classList.toggle("open");
+
+      if (details.classList.contains("open")) {
+        // Expand
+        answer.style.maxHeight = answer.scrollHeight + "px";
+      } else {
+        // Collapse
+        answer.style.maxHeight = "0";
+      }
+    });
+  });
+});

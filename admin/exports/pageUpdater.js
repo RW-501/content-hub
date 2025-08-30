@@ -66,6 +66,12 @@ function getVideo(videoUrl) {
   return "";
 }
 
+function formatCategory(category) {
+  if (!category) return "";
+  return category.replace(/[_-]+/g, " ").trim();
+}
+
+
 function checkContent(html) {
   if (!html) return "";
 
@@ -622,7 +628,7 @@ hr {
     <nav aria-label="breadcrumb" class="breadcrumb-wrapper">
       <ol class="breadcrumb">
         <li><a  title="Content Hub Home Page" href="https://contenthub.guru">Content Hub</a></li>
-        <li><a  title="Content Hub ${articleData.category} Category" href="https://contenthub.guru/category?c=${articleData.category}">${articleData.category}</a></li>
+        <li><a  title="Content Hub ${articleData.category} Category" href="https://contenthub.guru/category?c=${articleData.category}">${formatCategory(articleData.category)}</a></li>
         <li class="active" aria-current="page"><a href="#block-article-0" title="${articleData.title} Content">${articleData.title}</a></li>
       </ol>
     </nav>

@@ -330,6 +330,8 @@ const Content = `
 <title>${articleData.title} - ${articleData.domain} | ${articleData.slug || "Untitled"}</title>
 <meta name="description" content="${articleData.description}">
 <meta name="version" content="${version}">
+<meta name="category" content="${articleData.category}">
+<meta name="lang" content="en">
 <meta name="keywords" content="${articleData.keywords?.join(', ') || ''}">
 <meta http-equiv="X-UA-Compatible" content="IE=edge"> <!-- ensures proper rendering in older IE -->
 <meta name="format-detection" content="telephone=no"> <!-- prevents phone number auto-linking -->

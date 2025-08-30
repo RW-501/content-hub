@@ -97,11 +97,16 @@ function renderFAQs(html) {
 
 // Linkify ContentHub mentions
 function linkifyContentHub(html) {
-  const regex = /\b(content\s*hub(?:\.guru)?)\b/gi;
+  if (!html) return "";
+
+  // Matches variations: ContentHub, Content Hub, ContentHub.guru, Content Hub.Guru, case-insensitive
+  const regex = /\bcontent\s*hub(?:\.guru)?\b/gi;
+
   return html.replace(regex, (match) => {
     return `<a href="https://contenthub.guru" title="Visit ContentHub.guru" target="_blank" rel="noopener noreferrer">${match}</a>`;
   });
 }
+
 
 // Generate FAQ schema for SEO
 function generateFAQSchema(html) {
@@ -683,7 +688,14 @@ hr {
   </ul>
 </nav>
 
-
+<div id="text-reader-controls" style="position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:#fff; padding:10px; border-radius:8px; box-shadow:0 2px 10px rgba(0,0,0,0.2); z-index:9999;">
+  <button id="startBtn">Start</button>
+  <button id="pauseBtn">Pause</button>
+  <button id="resumeBtn">Resume</button>
+  <button id="stopBtn">Stop</button>
+  <select id="voiceSelect"></select>
+  <button id="downloadBtn">Download Audio</button>
+</div>
 
     <!-- Top banner -->
     <section id="top-banner-container" class="lg:col-span-12 order-2">

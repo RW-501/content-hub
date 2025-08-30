@@ -782,3 +782,204 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 });
+
+
+
+
+
+
+
+
+const article = document.getElementById("in-article-blocks");
+let synth = window.speechSynthesis;
+let voices = [];
+let utterance;
+let currentIndex = 0;
+let paragraphs = [];
+let isPaused = false;
+
+// Load voices
+function populateVoices() {
+  voices = synth.getVoices();
+  const voiceSelect = document.getElementById("voiceSelect");
+  voiceSelect.innerHTML = "";
+  voices.forEach((v, i) => {
+    const option = document.createElement("option");
+    option.value = i;
+    let gender = /female/i.test(v.name) ? "Female" : /male/i.test(v.name) ? "Male" : "Neutral";
+    option.text = `${v.name} (${v.lang}, ${gender})`;
+    voiceSelect.appendChild(option);
+  });
+}
+populateVoices();
+if (speechSynthesis.onvoiceschanged !== undefined) {
+  speechSynthesis.onvoiceschanged = populateVoices;
+}
+
+// Clean text
+function cleanText(text) {
+  return text.replace(/https?:\/\/\S+/gi, "")
+             .replace(/[\[\]\(\)\{\}<>]/g, "")
+             .replace(/\s+/g, " ")
+             .trim();
+}
+
+// Scroll text
+function scrollToParagraph(idx) {
+  const p = paragraphs[idx];
+  if (p) {
+    const rect = p.getBoundingClientRect();
+    window.scrollBy({
+      top: rect.top - window.innerHeight / 2 + rect.height / 2,
+      behavior: "smooth"
+    });
+  }
+}
+
+// Read next paragraph
+function readNext() {
+  if (currentIndex >= paragraphs.length) return;
+  const p = paragraphs[currentIndex];
+  const text = cleanText(p.innerText);
+  if (!text) { 
+    currentIndex++;
+    readNext();
+    return;
+  }
+
+  utterance = new SpeechSynthesisUtterance(text);
+  const voiceSelect = document.getElementById("voiceSelect");
+  const voiceIndex = voiceSelect.value || 0;
+  utterance.voice = voices[voiceIndex];
+  utterance.rate = 1;
+
+  utterance.onend = () => {
+    if (!isPaused) {
+      currentIndex++;
+      readNext();
+    }
+  };
+
+  scrollToParagraph(currentIndex);
+  synth.speak(utterance);
+}
+
+
+
+
+
+// Controls
+document.getElementById("startBtn").addEventListener("click", () => {
+  if (!paragraphs.length) paragraphs = Array.from(article.querySelectorAll("p"));
+  currentIndex = 0;
+  isPaused = false;
+  synth.cancel();
+  readNext();
+});
+
+document.getElementById("pauseBtn").addEventListener("click", () => {
+  if (synth.speaking && !synth.paused) {
+    synth.pause();
+    isPaused = true;
+  }
+});
+
+document.getElementById("resumeBtn").addEventListener("click", () => {
+  if (synth.paused) {
+    synth.resume();
+    isPaused = false;
+  }
+});
+
+document.getElementById("stopBtn").addEventListener("click", () => {
+  synth.cancel();
+  isPaused = false;
+  currentIndex = 0;
+});
+
+// Download audio via Google TTS chunks
+document.getElementById("downloadBtn").addEventListener("click", async () => {
+  let textToConvert = Array.from(article.querySelectorAll("p"))
+                           .map(p => cleanText(p.innerText))
+                           .join(" ");
+  if (!textToConvert) return;
+
+  const chunkSize = 200; // Google TTS per-request limit
+  let chunks = [];
+  for (let i = 0; i < textToConvert.length; i += chunkSize) {
+    chunks.push(textToConvert.slice(i, i + chunkSize));
+  }
+
+  // Fetch all chunks concurrently
+  const fetchPromises = chunks.map(chunk => {
+    const ttsUrl = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(chunk)}&tl=en&client=tw-ob`;
+    return fetch(ttsUrl, { headers: { "User-Agent": "Mozilla/5.0" }})
+           .then(res => res.arrayBuffer());
+  });
+  const audioBuffers = await Promise.all(fetchPromises);
+
+  // Decode and merge
+  const context = new (window.AudioContext || window.webkitAudioContext)();
+  const decodedBuffers = await Promise.all(audioBuffers.map(buf => context.decodeAudioData(buf)));
+  const totalLength = decodedBuffers.reduce((sum, b) => sum + b.length, 0);
+  const mergedBuffer = context.createBuffer(decodedBuffers[0].numberOfChannels, totalLength, decodedBuffers[0].sampleRate);
+
+  let offset = 0;
+  for (const buffer of decodedBuffers) {
+    for (let ch = 0; ch < buffer.numberOfChannels; ch++) {
+      mergedBuffer.getChannelData(ch).set(buffer.getChannelData(ch), offset);
+    }
+    offset += buffer.length;
+  }
+
+  // Convert to WAV
+  function bufferToWav(abuffer) {
+    const numOfChan = abuffer.numberOfChannels,
+          length = abuffer.length * numOfChan * 2 + 44,
+          buffer = new ArrayBuffer(length),
+          view = new DataView(buffer),
+          channels = [];
+    let sample, offset = 0, pos = 0;
+
+    function setUint16(data){ view.setUint16(pos,data,true); pos+=2; }
+    function setUint32(data){ view.setUint32(pos,data,true); pos+=4; }
+
+    setUint32(0x46464952); // "RIFF"
+    setUint32(length-8);
+    setUint32(0x45564157); // "WAVE"
+    setUint32(0x20746d66); // "fmt "
+    setUint32(16);
+    setUint16(1);
+    setUint16(numOfChan);
+    setUint32(abuffer.sampleRate);
+    setUint32(abuffer.sampleRate*2*numOfChan);
+    setUint16(numOfChan*2);
+    setUint16(16);
+    setUint32(0x61746164); // "data"
+    setUint32(length-pos-4);
+
+    for(let i=0;i<numOfChan;i++) channels.push(abuffer.getChannelData(i));
+
+    while(offset<abuffer.length){
+      for(let i=0;i<numOfChan;i++){
+        sample = Math.max(-1,Math.min(1,channels[i][offset]));
+        view.setInt16(pos,sample<0?sample*0x8000:sample*0x7FFF,true);
+        pos+=2;
+      }
+      offset++;
+    }
+
+    return new Blob([buffer], {type:"audio/wav"});
+  }
+
+  const pageURL = document.getElementById('pageURL').textContent;
+
+  const wavBlob = bufferToWav(mergedBuffer);
+  const url = URL.createObjectURL(wavBlob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `${pageURL}-audio.wav`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+});

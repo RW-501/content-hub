@@ -66,7 +66,28 @@ function getVideo(videoUrl) {
   return "";
 }
 
+function checkContent(html){
 
+html = linkifyContentHub(html);
+
+
+  return html;
+}
+
+
+
+  // Helper function to linkify contenthub mentions
+  function linkifyContentHub(html) {
+    if (!html) return "";
+    
+    // Regex to match variations of contenthub.guru (case-insensitive, optional spaces)
+    const regex = /\b(content\s*hub(?:\.guru)?)\b/gi;
+
+    // Replace matches with a link
+    return html.replace(regex, (match) => {
+      return `<a href="https://contenthub.guru" title="Visit ContentHub.guru" target="_blank" rel="noopener noreferrer">${match}</a>`;
+    });
+  }
 
   // Load existing image when editing
 function renderBlockHTML(b) {
@@ -75,10 +96,10 @@ function renderBlockHTML(b) {
       return `<h${b.level || 2} class="content-heading heading-${b.level || 2}">
                 ${b.text || ""}
               </h${b.level || 2}>`;
-
+    
     case "paragraph":
       return `<div class="content-paragraph prose max-w-none">
-                ${b.html || ""}
+                ${checkContent(b.html || "")}
               </div>`;
 
     case "image":

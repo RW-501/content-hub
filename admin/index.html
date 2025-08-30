@@ -1006,7 +1006,10 @@ async function loadDashboard(autoPing = false) {
         <div id="status-${pageData.siteId}" class="status-offline">❌ Offline</div>
         <div id="version-${pageData.siteId}" class="version">version</div>
       </td>
-      <td>${pageData.views || 0}</td>
+      <td>
+ <div class="views">${pageData.views || 0}</div>
+ <div class="category">${pageData.category}</div>
+      </td>
       <td>
         <button onclick="updatePageBtn('${pageData.siteId}','${pageData.slug}', '${pageData.category}')">Update</button>
         <button onclick="window.location.href='https://contenthub.guru/admin/editor?id=${pageData.siteId}'">Edit</button>

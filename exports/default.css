@@ -1183,8 +1183,13 @@ height: fit-content;
     
     transition: width 0.2s ease, fade 0.3s ease;
 
+    
+  input, textarea, select { width:100%; margin:.1rem 0 .8rem; padding:.6rem .65rem;
+  border:1px solid var(--border); border-radius:8px; background:#fff; }
+
     button {
     background: linear-gradient(90deg, #4caf50, #00bfa5, #4caf50);
     box-shadow: 0 0 8px rgba(76, 175, 80, 0.6), 0 0 12px rgba(0, 191, 165, 0.4);
+    margin: .2rem;
     }
 }

@@ -1320,6 +1320,7 @@ if (slugInput.value) {
 });
 
 
+
 async function updateOutdatedPages() {
   const updateButtons = document.querySelectorAll(".updatePageBTN");
 
@@ -1351,6 +1352,10 @@ async function updateOutdatedPages() {
   console.log(`Found ${outdatedPages.length} pages, checking for outdated versions...`);
 
   let index = 0;
+  let updatedCount = 0;
+  let skippedCount = 0;
+  let errorCount = 0;
+
   const interval = setInterval(() => {
     if (index < outdatedPages.length) {
       const page = outdatedPages[index];
@@ -1359,20 +1364,25 @@ async function updateOutdatedPages() {
         try {
           page.btn.click();
           console.log(`🔄 Updating: "${page.title}" (siteId: ${page.siteId}, slug: ${page.slug})`);
+          updatedCount++;
         } catch (err) {
           console.error(`❌ Error updating "${page.title}" (${page.siteId}):`, err);
+          errorCount++;
         }
       } else {
         console.log(`⏭️ Skipped (Up to date): "${page.title}" (siteId: ${page.siteId})`);
+        skippedCount++;
       }
 
       index++;
     } else {
       clearInterval(interval);
       console.log("🎉 Finished checking all pages.");
+      console.log(`📊 Summary: ${updatedCount} updated, ${skippedCount} skipped, ${errorCount} errors.`);
     }
   }, 3000); // 3 sec per page
 }
+
 
 
   // Attach function to the new button

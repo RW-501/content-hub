@@ -1321,18 +1321,42 @@ if (slugInput.value) {
 
 
 // Function that clicks updateBTN
- function clickUpdateBTN() {
+function updateOutdatedPages() {
+  // Grab all update buttons
   const updateButtons = document.querySelectorAll(".updatePageBTN");
 
-  if (updateButtons.length > 0) {
-    updateButtons.forEach((btn, index) => {
-      btn.click();
-      console.log(`updatePageBTN #${index + 1} was clicked programmatically!`);
-    });
-  } else {
-    console.warn("No buttons with class 'updatePageBTN' found.");
+  // Filter only the ones that are outdated
+  const outdatedButtons = Array.from(updateButtons).filter(btn => {
+    // Extract the siteId from the onclick attribute (assuming format updatePageBtn('SITEID', ...)
+    const match = btn.getAttribute("onclick")?.match(/updatePageBtn\('([^']+)'/);
+    if (!match) return false;
+
+    const siteId = match[1];
+    const versionEl = document.getElementById(`version-${siteId}`);
+
+    return versionEl && versionEl.textContent.includes("Outdated");
+  });
+
+  if (outdatedButtons.length === 0) {
+    console.log("✅ No outdated pages found.");
+    return;
   }
+
+  console.log(`Found ${outdatedButtons.length} outdated pages. Updating...`);
+
+  let index = 0;
+  const interval = setInterval(() => {
+    if (index < outdatedButtons.length) {
+      outdatedButtons[index].click();
+      console.log(`🔄 Clicked update on page #${index + 1}`);
+      index++;
+    } else {
+      clearInterval(interval);
+      console.log("🎉 All outdated pages have been updated.");
+    }
+  }, 3000); // 3 seconds delay
 }
+
 
   // Attach function to the new button
   document.getElementById("updateBTN").addEventListener("click", clickUpdateBTN);

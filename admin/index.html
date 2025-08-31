@@ -171,7 +171,7 @@
   <option value="tools_resources">8. Tools, Resources & Case Studies</option>
   <option value="business_content">9. Content for Businesses</option>
   <option value="future_content">10. Future of Content Creation</option>
-  
+
   <option value="personal-development">Personal Development</option>
   <option value="travel">Travel</option>
   <option value="food">Food & Recipes</option>
@@ -240,8 +240,14 @@
     </div>
 
     </div>
-
+<div id="pageArea">   
+<div id="toolbar">
+  <!-- The button you want to trigger -->
+<button id="updateBTN">Update</button>
+</div>
     <div id="dashboardContent"></div>
+</div> 
+
   </div>
 </main>
 
@@ -1308,6 +1314,22 @@ if (slugInput.value) {
 }
 
 });
+
+
+// Function that clicks updateBTN
+  function clickUpdateBTN() {
+    const updateButton = document.getElementById("updateBTN");
+    if (updateButton) {
+      updateButton.click();
+      console.log("updateBTN was clicked programmatically!");
+    } else {
+      console.warn("No button with id 'updateBTN' found.");
+    }
+  }
+
+  // Attach function to the new button
+  document.getElementById("triggerBTN").addEventListener("click", clickUpdateBTN);
+
 
 </script>
 </body>

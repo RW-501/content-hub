@@ -1020,3 +1020,31 @@ window.addEventListener("scroll", () => {
 });
 
 
+
+document.addEventListener("DOMContentLoaded", () => {
+  const main = document.querySelector("main");
+
+  if (!main) return; // safety check
+
+  // ✅ Allow right-clicks only inside <main>
+  main.addEventListener("contextmenu", (event) => {
+    event.stopPropagation(); // prevent global blocks
+    // allow default right-click
+  });
+
+  // ✅ Detect Ctrl+A (Select All) inside <main>
+  main.addEventListener("keydown", (event) => {
+    if (event.ctrlKey && event.key.toLowerCase() === "a") {
+      event.preventDefault(); // stop select all
+      // Clear selection
+      const selection = window.getSelection();
+      if (selection) {
+        selection.removeAllRanges();
+      }
+      console.log("Select All blocked → Selection cleared");
+    }
+  });
+
+  // ✅ Ensure <main> is focusable so it can detect key presses
+  main.setAttribute("tabindex", "0");
+});

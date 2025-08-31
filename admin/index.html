@@ -1012,7 +1012,7 @@ async function loadDashboard(autoPing = false) {
 
   let html = `<table>
     <thead>
-      <tr><th>Preview</th><th>Domain</th><th>Category</th><th>Status</th><th>Views</th><th>Actions</th></tr>
+      <tr><th>Preview</th><th>Domain</th><th>Category</th><th>Status</th><th>Version</th><th>Views</th><th>Actions</th></tr>
     </thead><tbody>`;
 
   for (const p of pages) {
@@ -1038,10 +1038,12 @@ async function loadDashboard(autoPing = false) {
       </td>
       <td>
         <div id="status-${pageData.siteId}" class="status-offline">❌ Offline</div>
-        <div id="version-${pageData.siteId}" class="version">version</div>
       </td>
       <td>
  <div class="views">${pageData.views || 0}</div>
+      </td>
+            <td>
+        <div id="version-${pageData.siteId}" class="version">version</div>
       </td>
       <td>
         <button class='updatePageBTN' onclick="updatePageBtn('${pageData.siteId}','${pageData.slug}', '${pageData.category}')">Update</button>

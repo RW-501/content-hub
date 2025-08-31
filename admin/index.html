@@ -1042,7 +1042,7 @@ async function loadDashboard(autoPing = false) {
  <div class="category">${pageData.category}</div>
       </td>
       <td>
-        <button onclick="updatePageBtn('${pageData.siteId}','${pageData.slug}', '${pageData.category}')">Update</button>
+        <button class='updatePageBTN' onclick="updatePageBtn('${pageData.siteId}','${pageData.slug}', '${pageData.category}')">Update</button>
         <button onclick="window.location.href='https://contenthub.guru/admin/editor?id=${pageData.siteId}'">Edit</button>
         <button onclick="removePage('${pageData.siteId}','${pageData.slug}')">Remove</button>
       </td>
@@ -1317,15 +1317,18 @@ if (slugInput.value) {
 
 
 // Function that clicks updateBTN
-  function clickUpdateBTN() {
-    const updateButton = document.getElementById("updateBTN");
-    if (updateButton) {
-      updateButton.click();
-      console.log("updateBTN was clicked programmatically!");
-    } else {
-      console.warn("No button with id 'updateBTN' found.");
-    }
+ function clickUpdateBTN() {
+  const updateButtons = document.querySelectorAll(".updatePageBTN");
+
+  if (updateButtons.length > 0) {
+    updateButtons.forEach((btn, index) => {
+      btn.click();
+      console.log(`updatePageBTN #${index + 1} was clicked programmatically!`);
+    });
+  } else {
+    console.warn("No buttons with class 'updatePageBTN' found.");
   }
+}
 
   // Attach function to the new button
   document.getElementById("triggerBTN").addEventListener("click", clickUpdateBTN);

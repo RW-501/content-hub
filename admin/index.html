@@ -440,7 +440,7 @@ async function pingSite(domain) {
     checkedDomains[url] = result;
     return result;
   } catch {
-    const result = { online: false, version: null };
+    const result = { online: false, version: null, faq: null };
     checkedDomains[url] = result;
     return result;
   }
@@ -455,7 +455,7 @@ async function fetchAllPages(pages) {
     versions[p.siteId] = version;
     p.online = online;
     p.version = version;
-    p.faq_bool = faq;
+    p.faq = faq;
   }
 }
 
@@ -473,7 +473,7 @@ function renderPageStatus(p, latestVersion) {
 
   if (!statusEl) return;
 
-      if (faqE1) faqE1.textContent = p.faq_bool;
+      if (faqE1) faqE1.textContent = p.faq;
 
   if (!p.online) {
     statusEl.textContent = "❌ Offline";

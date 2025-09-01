@@ -977,7 +977,7 @@ window.loadAnalytics = loadAnalytics;
 
 let sortState = { field: null, asc: true };
 
-function renderTable(data) {
+function loadDashboard(data) {
   const dashboardContent = document.getElementById("dashboardContent");
 
   if (!data.length) {
@@ -1063,7 +1063,7 @@ function renderTable(data) {
         return 0;
       });
 
-      renderTable(sorted);
+      loadDashboard(sorted);
     };
   });
 }
@@ -1074,7 +1074,7 @@ function shareOnAll(url, text) {
    shareNative(url, text);
 
    return;
-   
+
   // Twitter
   const twitterUrl = `https://twitter.com/intent/tweet?text=${text}&url=${encodeURIComponent(url)}`;
   window.open(twitterUrl, '_blank', 'width=600,height=400');

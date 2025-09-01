@@ -38,6 +38,36 @@ const db = getFirestore(app);
 
 
 
+// 🔹 Watch Auth State (to show admin controls)
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    // Mark admins manually
+    if (user.uid === "CyfMntp5iucjYC94HQ1FNcOiDa23") {
+      user.isAdmin = true;
+    }
+  }
+});
+
+
+
+  // 🔹 Page data
+  const pageData = {
+    id: document.getElementById("pageID").innerText,
+    ownerId: document.getElementById("pageOwnerUserID").innerText,
+    slug: document.getElementById("pageSlug").innerText,
+    title: document.getElementById("pageTitle").innerText,
+    description: document.getElementById("pageDescription").innerText,
+    url: document.getElementById("pageURL").innerText
+  };
+
+
+
+    const mainPhoto = document.getElementById('mainImage');
+    const deviceShareButton = document.getElementById('deviceShareButton');
+    const pageTitle = document.getElementById('pageTitle').textContent;
+    const pageURL = document.getElementById('pageURL').textContent;
+    const pageDescription = document.getElementById('pageDescription').textContent;
+    
 
 
 const DEBUG = false;
@@ -344,13 +374,6 @@ tocList.appendChild(commentsLi);
   });
 
 
-
-    const mainPhoto = document.getElementById('mainImage');
-    const deviceShareButton = document.getElementById('deviceShareButton');
-    const pageTitle = document.getElementById('pageTitle').textContent;
-    const pageURL = document.getElementById('pageURL').textContent;
-    const pageDescription = document.getElementById('pageDescription').textContent;
-    
     if (navigator.share) {
       deviceShareButton.addEventListener('click', async () => {
         try {
@@ -640,27 +663,6 @@ onSnapshot(q, (snapshot) => {
   });
 });
 
-// 🔹 Watch Auth State (to show admin controls)
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    // Mark admins manually
-    if (user.uid === "CyfMntp5iucjYC94HQ1FNcOiDa23") {
-      user.isAdmin = true;
-    }
-  }
-});
-
-
-
-  // 🔹 Page data
-  const pageData = {
-    id: document.getElementById("pageID").innerText,
-    ownerId: document.getElementById("pageOwnerUserID").innerText,
-    slug: document.getElementById("pageSlug").innerText,
-    title: document.getElementById("pageTitle").innerText,
-    description: document.getElementById("pageDescription").innerText,
-    url: document.getElementById("pageURL").innerText
-  };
 
   // 🔹 Create Report Popup
   const reportPopup = document.createElement("div");
@@ -1022,7 +1024,7 @@ window.addEventListener("scroll", () => {
 
 
 document.addEventListener("DOMContentLoaded", () => {
-  const main = document.querySelector("main");
+  const main = document.querySelector("body");
   if (!main) return;
 
   // Make main focusable

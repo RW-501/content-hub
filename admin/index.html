@@ -69,6 +69,31 @@
   color: #333;
 }
 
+.action-buttons, .share-buttons {
+  display: flex;
+  gap: 6px;
+  margin: 4px 0;
+  flex-wrap: wrap;
+}
+
+.action-buttons button {
+  padding: 4px 8px;
+  font-size: 13px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.share-buttons button {
+  padding: 4px 6px;
+  font-size: 14px;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  line-height: 1;
+  text-align: center;
+  cursor: pointer;
+}
+
     
     </style>
 </head>
@@ -473,175 +498,6 @@ async function updateAllPages(pages) {
   }
 }
 
-// Create article page with dynamic schema, monetization, and full metadata
-async function createPageXXX(articleData, pageID) {
-  const scriptTag = `<script  type="module" id="dynamic-js" src="https://contenthub.guru/exports/main.js"><\/script>`;
-
-  // Generate schema based on selected type
-  let schemaJSON;
-  switch (articleData.schemaType) {
-    case "FAQ":
-      schemaJSON = {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": articleData.faq?.map(f => ({
-          "@type": "Question",
-          "name": f.q,
-          "acceptedAnswer": { "@type": "Answer", "text": f.a }
-        })) || []
-      };
-      break;
-    case "HowTo":
-      schemaJSON = {
-        "@context": "https://schema.org",
-        "@type": "HowTo",
-        "name": articleData.title,
-        "description": articleData.description,
-        "step": articleData.howto?.map((s, i) => ({
-          "@type": "HowToStep",
-          "position": i + 1,
-          "name": s.stepTitle,
-          "text": s.stepDescription
-        })) || []
-      };
-      break;
-    default: // Article
-      schemaJSON = {
-        "@context": "https://schema.org",
-        "@type": "Article",
-        "headline": articleData.title,
-        "image": articleData.image,
-        "datePublished": articleData.article?.datePublished || new Date().toISOString(),
-        "dateModified": articleData.article?.dateModified || new Date().toISOString(),
-        "author": articleData.article?.author || { "@type":"Organization", "name":  articleData.article , "url":  `https://contenthub.guru/site/${articleData.pageName}` },
-        "publisher": { "@type":"Organization", "name": articleData.article, "logo": {"@type":"ImageObject","url":`https://contenthub.guru/site/${articleData.pageName}/images/logo.png`} },
-        "description": articleData.description,
-        "articleBody": articleData.body || ""
-      };
-      break;
-  }
-
-  // Include all additional metadata in a hidden JSON block for future use
-  const metadataJSON = {
-    siteId: articleData.siteId || "Fitness",
-    type: articleData.type || "page",
-    slug: articleData.pageName,
-    title: articleData.title,
-    description: articleData.description,
-    keywords: articleData.keywords || [],
-    status: articleData.status || "draft",
-    blocks: articleData.blocks || [],
-    og: articleData.og || { title: articleData.title, description: articleData.description, image: articleData.image },
-    schemaTypes: [articleData.schemaType],
-    faq: articleData.faq || [],
-    howto: articleData.howto || [],
-    article: articleData.article || {},
-    affiliates: articleData.affiliates || [],
-    tags: articleData.tags || [],
-    hashTags: articleData.hashTags || [],
-    createdBy: articleData.userID,
-    updatedBy: articleData.userID,
-    createdAt: articleData.createdAt || new Date().toISOString(),
-    updatedAt: articleData.updatedAt || new Date().toISOString(),
-    publishedAt: articleData.publishedAt || null,
-    analytics: articleData.analytics || { views:0, uniqueViews:0 },
-    monetization: articleData.monetization || { adPlaceholders: ["top","in-article-1"] }
-  };
-
-const Content = `
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title id="pageTitledata">${articleData.title} | Untitled</title>
-<meta name="description" content="${articleData.description}" id="pageDescriptiondata">
-<meta name="keywords" content="${articleData.keywords?.join(', ') || ''}" id="pageKeywordsdata">
-<link rel="canonical" href="https://contenthub.guru/site/${articleData.domain}">
-<meta name="google-adsense-account" content="${articleData.adsense}">
-
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=${articleData.gTag}" id="google-tag"><\/script>
-<script id="google-gtag">
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', '${articleData.gTag}');
-<\/script>
-
-<script type="application/ld+json" id="pageSchema">${JSON.stringify(schemaJSON)}<\/script>
-<script type="application/ld+json" id="pageMetadata">${JSON.stringify(metadataJSON)}<\/script>
-${scriptTag}
-<script type="application/ld+json" id="dynamic-json"><\/script>
-
-
-<style id="dynamic-style">
-${articleData.customCSS || ""}   /* 🔹 custom CSS injection */
-</style>
-</head>
-<body>
-<header id="dynamic-header">
-  <h1>${articleData.title}</h1>
-  <h2>${articleData.subtitle || ''}</h2>
-</header>
-<main>
-  <img id="dynamic-pageImage" src="${articleData.image}" alt="${articleData.title}" />
-  <article>
-    ${articleData.body || `
-      <div class="new-page-message" role="note" aria-label="New page message">
-        <h3>✨ This is a brand-new page!</h3>
-        <p>Start editing your content here. Add text, images, videos, or blocks to build your page.</p>
-      </div>
-    `}
-  </article>
-
-  <section id="block-section" class="block">
-  </section>
-</main>
-
-<div hidden>
-  <div id="pageID">${pageID}</div>
-  <div id="pageOwnerUserID">${articleData.userID}</div>
-  <div id="pageSlug">${articleData.slug}</div>
-</div>
-</body>
-</html>
-`;
-
-
-// Randomized or complex approach
-const parts = ['p', 'h', 'g'];
-const randomizePart = (part) => {
-    return part.split('').reverse().join('');
-};
-
-const part_1 = randomizePart(parts.join(''));
-const part_2 = "_akXGrO51HwgEI";
-const part_3 = "VWzDIghLbIE";
-const part_4 = "G9MnTu0fIjKj";
-
-const token = part_1 + part_2 + part_3 + part_4;
-
-  // GitHub upload
-  const owner = "RW-501", repo="contentManagement", filePath=`site/${articleData.slug}.html`, branch="main";
-  const url = `https://api.github.com/repos/${owner}/${repo}/contents/${filePath}`;
-  const encodedContent = btoa(unescape(encodeURIComponent(Content)));
-
-  try {
-    const fileResp = await fetch(url, { method:"GET", headers:{Authorization:`Bearer ${token}`, 'Content-Type':'application/json', Accept:'application/vnd.github+json'} });
-    const sha = fileResp.ok ? (await fileResp.json()).sha : undefined;
-    const resp = await fetch(url, {
-      method:"PUT",
-      headers:{Authorization:`Bearer ${token}`, 'Content-Type':'application/json', Accept:'application/vnd.github+json'},
-      body:JSON.stringify({message: sha ? `Update ${filePath}` : `Create ${filePath}`, content:encodedContent, sha, branch})
-    });
-    if (!resp.ok) throw new Error((await resp.json()).message);
-    console.log("Article page created/updated successfully!");
-  } catch (err) { console.error(err.message); }
-}
-
-
 const imageInput = document.getElementById("imageInput");
 const imageDropZone = document.getElementById("imageDropZone");
 const previewImg = document.getElementById("previewImg");
@@ -977,14 +833,6 @@ window.loadAnalytics = loadAnalytics;
 
 let sortState = { field: null, asc: true };
 
-
-let sitesData = [];
-let filteredSites = [];
-let currentPage = 1;
-let activeTag = null;
-const pageSize = 6;
-
-// Load Dashboard with Live Status
 async function loadDashboard(autoPing = false) {
   console.log("autoPing  ", autoPing);
 
@@ -997,17 +845,7 @@ async function loadDashboard(autoPing = false) {
     return;
   }
 
-  const pageCache = {}; // 🔹 store page data here to avoid multiple DB calls
-
-
-
   console.log("📊 loadDashboard called with data:", data);
-
-  if (!data || !data.length) {
-    console.warn("⚠️ No data received, dashboard will show empty message.");
-    dashboardContent.innerHTML = "<p style='text-align:center; padding:20px;'>⚠️ No pages match your filters.</p>";
-    return;
-  }
 
   let html = `<table>
     <thead>
@@ -1030,7 +868,8 @@ async function loadDashboard(autoPing = false) {
 
     html += `<tr>
       <td><a href="${pageUrl}" target="_blank">
-        <img class='siteImage' src="${pageData.image || 'https://contenthub.guru/images/placeholder.png'}" alt="preview" width="300" height="200">
+        <img class='siteImage' src="${pageData.image || 'https://contenthub.guru/images/placeholder.png'}" 
+             alt="preview" width="300" height="200">
       </a></td>
       <td>${pageData.title || ''}</td>
       <td>${pageData.category || ''}</td>
@@ -1038,16 +877,16 @@ async function loadDashboard(autoPing = false) {
       <td><div id="version-${pageData.siteId}" class="version">version</div></td>
       <td>${pageData.views || 0}</td>
       <td>
-        <button class='updatePageBTN' onclick="updatePageBtn('${pageData.siteId}','${pageData.slug}', '${pageData.category}')">Update</button>
-        <button onclick="window.open('https://contenthub.guru/admin/editor?id=${pageData.siteId}', '_blank')">Edit</button>
-        <button onclick="removePage('${pageData.siteId}','${pageData.slug}')">Remove</button>
-
-        <!-- 🔗 Social Share -->
+        <div class="action-buttons">
+          <button class='updatePageBTN' onclick="updatePageBtn('${pageData.siteId}','${pageData.slug}', '${pageData.category}')">Update</button>
+          <button onclick="window.open('https://contenthub.guru/admin/editor?id=${pageData.siteId}', '_blank')">Edit</button>
+          <button class="remove-btn" onclick="removePage('${pageData.siteId}','${pageData.slug}')">Remove</button>
+        </div>
         <div class="share-buttons">
-          <button onclick="shareOnTwitter('${pageUrl}', '${shareText}')">🐦 Twitter</button>
-          <button onclick="shareOnLinkedIn('${pageUrl}', '${shareText}')">💼 LinkedIn</button>
-          <button onclick="shareOnFacebook('${pageUrl}')">📘 Facebook</button>
-          <button onclick="shareOnAll('${pageUrl}', '${shareText}')">🌍 Share All</button>
+          <button onclick="shareOnTwitter('${pageUrl}', '${shareText}')">🐦</button>
+          <button onclick="shareOnLinkedIn('${pageUrl}', '${shareText}')">💼</button>
+          <button onclick="shareOnFacebook('${pageUrl}')">📘</button>
+          <button onclick="shareOnAll('${pageUrl}', '${shareText}')">🌍</button>
         </div>
       </td>
     </tr>`;
@@ -1065,26 +904,18 @@ async function loadDashboard(autoPing = false) {
     }
 
     th.onclick = () => {
-      console.log(`↕️ Sorting by field "${th.dataset.field}" | Current asc:`, sortState.asc);
-
       if (sortState.field === th.dataset.field) {
-        sortState.asc = !sortState.asc; // toggle
+        sortState.asc = !sortState.asc;
       } else {
         sortState.field = th.dataset.field;
         sortState.asc = true;
       }
 
-      console.log("🔄 Updated sortState:", sortState);
-
       const sorted = [...data].sort((a, b) => {
         const valA = a[sortState.field] ?? '';
         const valB = b[sortState.field] ?? '';
-
-        console.log(`   Comparing "${valA}" vs "${valB}" on field "${sortState.field}"`);
-
         if (valA < valB) return sortState.asc ? -1 : 1;
         if (valA > valB) return sortState.asc ? 1 : -1;
-
         if (sortState.field !== 'title') {
           const titleA = a.title ?? '';
           const titleB = b.title ?? '';
@@ -1094,11 +925,17 @@ async function loadDashboard(autoPing = false) {
         return 0;
       });
 
-      console.log("📋 Sorted result:", sorted);
       loadDashboard(sorted);
     };
   });
+
+  // 🔥 Auto-ping logic
+  if (autoPing) {
+    console.log("🚀 Auto-pinging all pages for status + version check...");
+    await updateAllPages(data);
+  }
 }
+
 
 
 function shareOnAll(url, text) {

@@ -1281,24 +1281,25 @@ async function updateOutdatedPages() {
   const updateButtons = document.querySelectorAll(".updatePageBTN");
 
   // Build a list of update tasks with page details
-  const outdatedPages = Array.from(updateButtons).map(btn => {
-    const match = btn.getAttribute("onclick")?.match(/updatePageBtn\('([^']+)','([^']+)'/);
-    if (!match) return null;
+const outdatedPages = Array.from(updateButtons).map(btn => { 
+  const match = btn.getAttribute("onclick")?.match(/updatePageBtn\('([^']+)','([^']+)'/);
+  if (!match) return null;
 
-    const siteId = match[1];
-    const slug = match[2];
-    const versionEl = document.getElementById(`version-${siteId}`);
-    const titleEl = btn.closest("tr")?.querySelector("td:nth-child(2) a");
+  const siteId = match[1];
+  const slug = match[2];
+  const versionEl = document.getElementById(`version-${siteId}`);
+  const titleEl = btn.closest("tr")?.querySelector("td:nth-child(2)"); // ✅ fix here
 
-    return {
-      siteId,
-      slug,
-      btn,
-      versionEl,
-      title: titleEl ? titleEl.textContent.trim() : "(No title found)",
-      isOutdated: versionEl && versionEl.textContent.includes("Outdated")
-    };
-  }).filter(p => p !== null);
+  return {
+    siteId,
+    slug,
+    btn,
+    versionEl,
+    title: titleEl ? titleEl.textContent.trim() : "(No title found)", // ✅ works now
+    isOutdated: versionEl && versionEl.textContent.includes("Outdated")
+  };
+}).filter(p => p !== null);
+
 
   if (outdatedPages.length === 0) {
     console.log("✅ No pages found.");

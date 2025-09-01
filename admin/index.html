@@ -1017,11 +1017,13 @@ function renderTable(data) {
         <button onclick="removePage('${pageData.siteId}','${pageData.slug}')">Remove</button>
 
         <!-- 🔗 Social Share -->
-        <div class="share-buttons">
-          <button onclick="shareOnTwitter('${pageUrl}', '${shareText}')">🐦 Twitter</button>
-          <button onclick="shareOnLinkedIn('${pageUrl}', '${shareText}')">💼 LinkedIn</button>
-          <button onclick="shareOnFacebook('${pageUrl}')">📘 Facebook</button>
-        </div>
+<div class="share-buttons">
+  <button onclick="shareOnTwitter('${pageUrl}', '${shareText}')">🐦 Twitter</button>
+  <button onclick="shareOnLinkedIn('${pageUrl}', '${shareText}')">💼 LinkedIn</button>
+  <button onclick="shareOnFacebook('${pageUrl}')">📘 Facebook</button>
+  <button onclick="shareOnAll('${pageUrl}', '${shareText}')">🌍 Share All</button>
+</div>
+
       </td>
     </tr>`;
   });
@@ -1064,6 +1066,40 @@ function renderTable(data) {
       renderTable(sorted);
     };
   });
+}
+
+function shareOnAll(url, text) {
+
+
+   shareNative(url, text);
+
+   return;
+   
+  // Twitter
+  const twitterUrl = `https://twitter.com/intent/tweet?text=${text}&url=${encodeURIComponent(url)}`;
+  window.open(twitterUrl, '_blank', 'width=600,height=400');
+
+  // LinkedIn
+  const linkedinUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}&title=${text}`;
+  window.open(linkedinUrl, '_blank', 'width=600,height=400');
+
+  // Facebook
+  const fbUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
+  window.open(fbUrl, '_blank', 'width=600,height=400');
+}
+
+window.shareOnAll = shareOnAll;
+
+function shareNative(url, text) {
+  if (navigator.share) {
+    navigator.share({
+      title: text,
+      text: text,
+      url: url
+    }).catch(err => console.error("Share failed:", err));
+  } else {
+    alert("Native share not supported in this browser.");
+  }
 }
 
 

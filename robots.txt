@@ -1,8 +1,45 @@
 # robots.txt for contenthub.guru
+# Allow general crawlers on public content
 User-agent: *
-Disallow: /private/
+Allow: /site/
 Disallow: /admin/
-Allow: /
+Disallow: /account/
+Disallow: /auth/
+Disallow: /api/
+Disallow: /checkout/
+Disallow: /private/
+Crawl-delay: 5
+Sitemap: https://contenthub.guru/sitemap.xml
+
+# OpenAI
+User-agent: GPTBot
+Allow: /site/
+Disallow: /admin/ /account/ /auth/ /api/ /checkout/ /private/
+
+# Anthropic
+User-agent: ClaudeBot
+Allow: /site/
+Disallow: /admin/ /account/ /auth/ /api/ /checkout/ /private/
+
+# Perplexity
+User-agent: PerplexityBot
+Allow: /site/
+Disallow: /admin/ /account/ /auth/ /api/ /checkout/ /private/
+
+# Common Crawl
+User-agent: CCBot
+Allow: /site/
+Disallow: /admin/ /account/ /auth/ /api/ /checkout/ /private/
+
+# Google / Apple training extensions
+User-agent: Google-Extended
+Allow: /site/
+Disallow: /admin/ /account/ /auth/ /api/ /checkout/ /private/
+
+User-agent: Applebot-Extended
+Allow: /site/
+Disallow: /admin/ /account/ /auth/ /api/ /checkout/ /private/
+
 
 # Sitemap location
 Sitemap: https://contenthub.guru/sitemap.xml

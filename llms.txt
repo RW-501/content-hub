@@ -1,0 +1,88 @@
+# llms.txt — Guidance for AI crawlers & dataset builders
+# Format: simple key: value lines, with sections. Non-standard but widely recognized.
+# Primary enforcement is still robots.txt; this file is an explicit policy statement.
+
+version: 1.0
+site: https://contenthub.guru
+owner: ContentHub.guru
+contact: mailto:YOUR-EMAIL@YOUR-DOMAIN
+last-updated: 2025-08-31
+copyright: © ContentHub.guru. All rights reserved.
+
+# ----------------------------------------------------------------------
+# GENERAL POLICY
+# ----------------------------------------------------------------------
+policy.training: by-permission-only
+policy.scraping: allowed-noncommercial-with-attribution
+policy.derivatives: allowed-noncommercial-with-attribution
+policy.redistribution: allowed-noncommercial-with-attribution
+policy.commercial-use: by-permission-only
+required-attribution: "Source: ContentHub.guru — https://contenthub.guru"
+
+# Preferred citation format for model outputs or datasets:
+attribution-format: "Title, ContentHub.guru, URL, Accessed YYYY-MM-DD"
+
+# ----------------------------------------------------------------------
+# ACCESS & RATE LIMITS
+# ----------------------------------------------------------------------
+crawl-delay-seconds: 5
+max-requests-per-minute: 60
+respect-robots-txt: true
+
+# ----------------------------------------------------------------------
+# SITEMAPS & FEEDS (for high-signal content)
+# ----------------------------------------------------------------------
+sitemap: https://contenthub.guru/sitemap.xml
+feed.rss: https://contenthub.guru/feed.xml
+feed.atom: https://contenthub.guru/atom.xml
+
+# ----------------------------------------------------------------------
+# URL SCOPES
+# ----------------------------------------------------------------------
+allow-path: /site/
+allow-path: /blog/
+allow-path: /resources/
+disallow-path: /admin/
+disallow-path: /account/
+disallow-path: /auth/
+disallow-path: /api/
+disallow-path: /checkout/
+disallow-path: /storage/
+disallow-path: /private/
+
+# ----------------------------------------------------------------------
+# MODEL / BOT–SPECIFIC GUIDANCE
+# (Advisory here; enforce in robots.txt)
+# ----------------------------------------------------------------------
+[bot: GPTBot]
+allow-path: /site/
+disallow-path: /admin/, /account/, /auth/, /api/, /checkout/, /private/
+notes: "Commercial training or fine-tuning requires a license."
+
+[bot: CCBot]
+allow-path: /site/
+notes: "Common Crawl derivatives must honor this llms.txt and robots.txt."
+
+[bot: Anthropic-claudebot]
+allow-path: /site/
+
+[bot: PerplexityBot]
+allow-path: /site/
+
+[bot: Applebot-Extended]
+allow-path: /site/
+
+[bot: Google-Extended]
+allow-path: /site/
+
+# ----------------------------------------------------------------------
+# LICENSING
+# ----------------------------------------------------------------------
+license.summary: "Noncommercial use with attribution permitted. Commercial training requires permission."
+license.url: https://contenthub.guru/legal/content-license
+
+# ----------------------------------------------------------------------
+# CONTACT & APPEALS
+# ----------------------------------------------------------------------
+data-removal: mailto:YOUR-EMAIL@YOUR-DOMAIN
+report-misuse: mailto:YOUR-EMAIL@YOUR-DOMAIN

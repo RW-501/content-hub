@@ -332,6 +332,114 @@ const bulletStyles = {
 
 
 
+document.addEventListener("DOMContentLoaded", () => {
+  const main = document.querySelector("body");
+  if (!main) return;
+
+  // Make main focusable
+  main.setAttribute("tabindex", "0");
+
+  // Optionally auto-focus so keydown works immediately
+  main.focus();
+
+  // Right-click inside <main> allowed
+  main.addEventListener("contextmenu", (event) => {
+    event.stopPropagation(); // stop global blockers
+  });
+
+  // Detect Ctrl+A inside <main>
+  main.addEventListener("keydown", (event) => {
+    if (event.ctrlKey && event.key.toLowerCase() === "a") {
+      event.preventDefault(); // stop select all
+      const selection = window.getSelection();
+      if (selection) selection.removeAllRanges();
+      console.log("Select All blocked → Selection cleared");
+    }
+  });
+
+  // Optional: listen on the document as a fallback
+  document.addEventListener("keydown", (event) => {
+    if (document.activeElement === main &&
+        event.ctrlKey && event.key.toLowerCase() === "a") {
+      event.preventDefault();
+      const selection = window.getSelection();
+      if (selection) selection.removeAllRanges();
+      console.log("Select All blocked → Selection cleared");
+    }
+  });
+});
+
+
+
+
+
+
+    if (navigator.share) {
+      deviceShareButton.addEventListener('click', async () => {
+        try {
+          // Fetch the image as a Blob and create a File object
+          const imageUrl = mainPhoto.src;
+          const response = await fetch(imageUrl);
+          const blob = await response.blob();
+          const file = new File([blob], 'image.jpg', { type: 'image/jpeg' });
+    
+          // Use the File object in the share method
+          await navigator.share({
+            title: pageTitle,
+            text: pageDescription,
+            url:  pageURL,
+            files: [file], // Share the image file
+          });
+    
+          showToast("info", "Shared successfully!");
+        } catch (error) {
+          console.error('Error sharing:', error);
+        }
+      });
+    } else {
+      deviceShareButton.style.display = 'none'; // Hide the button if the Web Share API is not supported
+    }
+
+
+document.getElementById("copyLinkButton").addEventListener("click", async () => {
+    try {
+      //const pageURL = window.location.href; // Get current page URL
+      await navigator.clipboard.writeText(pageURL);
+      showToast("info", "Link copied to clipboard!");
+    } catch (err) {
+      console.error("Failed to copy link: ", err);
+      showToast("info", "Unable to copy link, please try manually.");
+    }
+  });
+
+  // Feedback buttons
+document.getElementById("yesBtn").onclick = async () => {
+  try {
+    await updateDoc(pageRef, {
+      helpfulCount: increment(1)
+    });
+    document.getElementById("feedbackMsg").textContent = "Thanks for your feedback!";
+  } catch (err) {
+    console.error("Error updating helpful count:", err);
+  }
+};
+
+document.getElementById("noBtn").onclick = async () => {
+  try {
+    await updateDoc(pageRef, {
+      notHelpfulCount: increment(1)
+    });
+    document.getElementById("feedbackMsg").textContent = "Sorry to hear that. We’ll improve!";
+  } catch (err) {
+    console.error("Error updating notHelpful count:", err);
+  }
+};
+
+
+
+
+
+
 
   // === Add Comments link ===
 const commentsLi = document.createElement("li");
@@ -372,185 +480,6 @@ tocList.appendChild(commentsLi);
       });
     }
   });
-
-
-    if (navigator.share) {
-      deviceShareButton.addEventListener('click', async () => {
-        try {
-          // Fetch the image as a Blob and create a File object
-          const imageUrl = mainPhoto.src;
-          const response = await fetch(imageUrl);
-          const blob = await response.blob();
-          const file = new File([blob], 'image.jpg', { type: 'image/jpeg' });
-    
-          // Use the File object in the share method
-          await navigator.share({
-            title: pageTitle,
-            text: pageDescription,
-            url:  pageURL,
-            files: [file], // Share the image file
-          });
-    
-          showToast("info", "Shared successfully!");
-        } catch (error) {
-          console.error('Error sharing:', error);
-        }
-      });
-    } else {
-      deviceShareButton.style.display = 'none'; // Hide the button if the Web Share API is not supported
-    }
-
-
-  document.getElementById("copyLinkButton").addEventListener("click", async () => {
-    try {
-      //const pageURL = window.location.href; // Get current page URL
-      await navigator.clipboard.writeText(pageURL);
-      showToast("info", "Link copied to clipboard!");
-    } catch (err) {
-      console.error("Failed to copy link: ", err);
-      showToast("info", "Unable to copy link, please try manually.");
-    }
-  });
-
-
-const pageID = document.getElementById("pageID")?.textContent || "unknown";
-const today = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
-
-const pageRef = doc(db, "pages", pageID);
-
-// 🔹 Update page views (total + daily)
-async function updatePageViews(unique = false) {
-  if (!pageID) return;
-
-  const pageSnap = await getDoc(pageRef);
-
-  if (pageSnap.exists()) {
-    const updates = {
-      views: increment(1),
-      lastVisited: new Date(),
-      [`dailyViews.${today}`]: increment(1)
-    };
-    if (unique) updates.uniqueViews = increment(1); // increment unique views if needed
-    await updateDoc(pageRef, updates);
-  } else {
-    await setDoc(pageRef, {
-      views: 1,
-      uniqueViews: unique ? 1 : 0,
-      createdAt: new Date(),
-      lastVisited: new Date(),
-      dailyViews: { [today]: 1 }
-    });
-  }
-}
-
-  let isUnique = false;
-
-
-  // Feedback buttons
-document.getElementById("yesBtn").onclick = async () => {
-  try {
-    await updateDoc(pageRef, {
-      helpfulCount: increment(1)
-    });
-    document.getElementById("feedbackMsg").textContent = "Thanks for your feedback!";
-  } catch (err) {
-    console.error("Error updating helpful count:", err);
-  }
-};
-
-document.getElementById("noBtn").onclick = async () => {
-  try {
-    await updateDoc(pageRef, {
-      notHelpfulCount: increment(1)
-    });
-    document.getElementById("feedbackMsg").textContent = "Sorry to hear that. We’ll improve!";
-  } catch (err) {
-    console.error("Error updating notHelpful count:", err);
-  }
-};
-
-
-// 🔹 Log visitor info (unique per day)
-async function logVisitor(data) {
-  const visitorId = `${pageID}_${data.ip}_${today}`;
-  const visitorRef = doc(db, "page_visitors", visitorId);
-  const visitorSnap = await getDoc(visitorRef);
-
-  const pageTitle = document.title;
-  const referrer = document.referrer || "Direct";
-  const refDomain = referrer.includes("://") ? new URL(referrer).hostname : referrer;
-  const device = /Mobi|Android/i.test(navigator.userAgent) ? "Mobile" : "Desktop";
-  const browser = navigator.userAgent.match(/(Chrome|Firefox|Safari|Edge)/i)?.[0] || "Other";
-
-  const timestamp = new Date();
-  //let isUnique = false;
-
-  if (!visitorSnap.exists()) {
-    isUnique = true;
-    await setDoc(visitorRef, {
-      pageID,
-      ip: data.ip,
-      city: data.city,
-      region: data.region,
-      country: data.country_name,
-      device,
-      browser,
-      firstVisit: timestamp,
-      lastVisit: timestamp,
-      visits: 1,
-      referrers: { [refDomain]: 1 },
-      pagesViewed: [{ title: pageTitle, time: timestamp }]
-    });
-  } else {
-    await updateDoc(visitorRef, {
-      visits: increment(1),
-      lastVisit: timestamp,
-      [`referrers.${refDomain}`]: increment(1),
-      pagesViewed: arrayUnion({ title: pageTitle, time: timestamp })
-    });
-  }
-
-  // 🔹 Update aggregate stats in pages/{id}
-  await updateDoc(doc(db, "pages", pageID), {
-    views: increment(1),
-    uniqueViews: isUnique ? increment(1) : increment(0),
-    [`devices.${device}`]: increment(1),
-    [`browsers.${browser}`]: increment(1)
-  });
-
-  // 🔹 Update per-location aggregation
-  const locationRef = doc(db, "page_locations", pageID);
-  await setDoc(locationRef, {
-    countries: { [data.country_name]: increment(1) },
-    regions: { [data.region]: increment(1) },
-    cities: { [data.city]: increment(1) }
-  }, { merge: true });
-
-
-  // Always increment total views, only increment uniqueViews if first time
-  await updatePageViews(isUnique);
-}
-
-// 🔹 Get visitor IP & location
-async function getVisitorLocation() {
-  try {
-    const res = await fetch("https://ipapi.co/json/");
-    const data = await res.json();
-    //console.log("Visitor info:", data);
-    await logVisitor(data);
-  } catch (err) {
-    console.error("Error fetching visitor info:", err);
-  }
-}
-
-// 🔹 Run on page load
-document.addEventListener("DOMContentLoaded", async () => {
-  await getVisitorLocation();
-});
-
-
-
-
 
 
 // 🔹 DOM Elements
@@ -924,46 +853,6 @@ window.addEventListener("scroll", () => {
 
 
 
-document.addEventListener("DOMContentLoaded", () => {
-  const main = document.querySelector("body");
-  if (!main) return;
-
-  // Make main focusable
-  main.setAttribute("tabindex", "0");
-
-  // Optionally auto-focus so keydown works immediately
-  main.focus();
-
-  // Right-click inside <main> allowed
-  main.addEventListener("contextmenu", (event) => {
-    event.stopPropagation(); // stop global blockers
-  });
-
-  // Detect Ctrl+A inside <main>
-  main.addEventListener("keydown", (event) => {
-    if (event.ctrlKey && event.key.toLowerCase() === "a") {
-      event.preventDefault(); // stop select all
-      const selection = window.getSelection();
-      if (selection) selection.removeAllRanges();
-      console.log("Select All blocked → Selection cleared");
-    }
-  });
-
-  // Optional: listen on the document as a fallback
-  document.addEventListener("keydown", (event) => {
-    if (document.activeElement === main &&
-        event.ctrlKey && event.key.toLowerCase() === "a") {
-      event.preventDefault();
-      const selection = window.getSelection();
-      if (selection) selection.removeAllRanges();
-      console.log("Select All blocked → Selection cleared");
-    }
-  });
-});
-
-
-
-
   // 🔹 Create Report Popup
   const reportPopup = document.createElement("div");
   reportPopup.id = "reportPopup";
@@ -1067,3 +956,115 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+
+  
+let isUnique = false;
+
+const pageID = document.getElementById("pageID")?.textContent || "unknown";
+const today = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
+
+const pageRef = doc(db, "pages", pageID);
+
+// 🔹 Update page views (total + daily)
+async function updatePageViews(unique = false) {
+  if (!pageID) return;
+
+  const pageSnap = await getDoc(pageRef);
+
+  if (pageSnap.exists()) {
+    const updates = {
+      views: increment(1),
+      lastVisited: new Date(),
+      [`dailyViews.${today}`]: increment(1)
+    };
+    if (unique) updates.uniqueViews = increment(1); // increment unique views if needed
+    await updateDoc(pageRef, updates);
+  } else {
+    await setDoc(pageRef, {
+      views: 1,
+      uniqueViews: unique ? 1 : 0,
+      createdAt: new Date(),
+      lastVisited: new Date(),
+      dailyViews: { [today]: 1 }
+    });
+  }
+}
+
+
+  // 🔹 Log visitor info (unique per day)
+async function logVisitor(data) {
+  const visitorId = `${pageID}_${data.ip}_${today}`;
+  const visitorRef = doc(db, "page_visitors", visitorId);
+  const visitorSnap = await getDoc(visitorRef);
+
+  const pageTitle = document.title;
+  const referrer = document.referrer || "Direct";
+  const refDomain = referrer.includes("://") ? new URL(referrer).hostname : referrer;
+  const device = /Mobi|Android/i.test(navigator.userAgent) ? "Mobile" : "Desktop";
+  const browser = navigator.userAgent.match(/(Chrome|Firefox|Safari|Edge)/i)?.[0] || "Other";
+
+  const timestamp = new Date();
+  //let isUnique = false;
+
+  if (!visitorSnap.exists()) {
+    isUnique = true;
+    await setDoc(visitorRef, {
+      pageID,
+      ip: data.ip,
+      city: data.city,
+      region: data.region,
+      country: data.country_name,
+      device,
+      browser,
+      firstVisit: timestamp,
+      lastVisit: timestamp,
+      visits: 1,
+      referrers: { [refDomain]: 1 },
+      pagesViewed: [{ title: pageTitle, time: timestamp }]
+    });
+  } else {
+    await updateDoc(visitorRef, {
+      visits: increment(1),
+      lastVisit: timestamp,
+      [`referrers.${refDomain}`]: increment(1),
+      pagesViewed: arrayUnion({ title: pageTitle, time: timestamp })
+    });
+  }
+
+  // 🔹 Update aggregate stats in pages/{id}
+  await updateDoc(doc(db, "pages", pageID), {
+    views: increment(1),
+    uniqueViews: isUnique ? increment(1) : increment(0),
+    [`devices.${device}`]: increment(1),
+    [`browsers.${browser}`]: increment(1)
+  });
+
+  // 🔹 Update per-location aggregation
+  const locationRef = doc(db, "page_locations", pageID);
+  await setDoc(locationRef, {
+    countries: { [data.country_name]: increment(1) },
+    regions: { [data.region]: increment(1) },
+    cities: { [data.city]: increment(1) }
+  }, { merge: true });
+
+
+  // Always increment total views, only increment uniqueViews if first time
+  await updatePageViews(isUnique);
+}
+
+// 🔹 Get visitor IP & location
+async function getVisitorLocation() {
+  try {
+    const res = await fetch("https://ipapi.co/json/");
+    const data = await res.json();
+    //console.log("Visitor info:", data);
+    await logVisitor(data);
+  } catch (err) {
+    console.error("Error fetching visitor info:", err);
+  }
+}
+
+// 🔹 Run on page load
+document.addEventListener("DOMContentLoaded", async () => {
+  await getVisitorLocation();
+});

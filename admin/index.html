@@ -1089,7 +1089,7 @@ async function updatePageBtn(siteId, slug, category) {
 
   } catch (err) {
     console.error("Error updating page:", err);
-    alert("Failed to update page.");
+    console.warn("Failed to update page.");
   }
 }
 

@@ -78,6 +78,7 @@ function renderFAQs(html) {
 
   const qaRegex = /(?:Q\d*:|Q:)\s*(.*?)\s*(?:A\d*:|A:)\s*(.*?)(?=(?:Q\d*:|Q:|$))/gs;
   let hasFAQ = false;
+        console.log("html, ",html);
 
   html = html.replace(qaRegex, (match, q, a) => {
     hasFAQ = true;
@@ -97,6 +98,7 @@ function generateFAQSchema(html) {
   const faqItems = [];
   const qaRegex = /<details class="faq-item"><summary>(.*?)<\/summary><div class="faq-answer">(.*?)<\/div><\/details>/gs;
   let match;
+    //    console.log("html, ",html);
 
   while ((match = qaRegex.exec(html)) !== null) {
     const question = match[1].trim();

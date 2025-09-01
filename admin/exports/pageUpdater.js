@@ -81,6 +81,7 @@ function formatCategory(category) {
 
 
 
+            console.log("???????????");
 
 
 let FAQ_Bool = false;

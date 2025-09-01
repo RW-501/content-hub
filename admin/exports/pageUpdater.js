@@ -605,8 +605,18 @@ hr {
 }
 
 </style>
+
+<script async custom-element="amp-auto-ads"
+        src="https://cdn.ampproject.org/v0/amp-auto-ads-0.1.js">
+</script>
+
 </head>
 <body style="opacity: 0;">
+
+<amp-auto-ads type="adsense"
+        data-ad-client="ca-pub-2001518155292747">
+</amp-auto-ads>
+
   <!-- 🔹 Skip to main content (screen readers & keyboard users) -->
   <a href="#block-article-0" class="skip-link">Skip to content</a>
   

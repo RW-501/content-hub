@@ -71,6 +71,7 @@ function formatCategory(category) {
   return category.replace(/[_-]+/g, " ").trim();
 }
 
+let FAQ_Bool = false;
 
 function checkContent(html) {
   if (!html) return "";
@@ -114,65 +115,11 @@ function linkifyContentHub(html) {
   });
 }
 
-
-function generateFAQSchemaFromDOM(container) {
-  const root = typeof container === "string" ? document.querySelector(container) : container;
-  if (!root) return null;
-
-  const faqItems = [];
-
-  // Find the FAQ heading first (optional)
-  const faqSection = root.querySelector("h3:contains('FAQs')") || root;
-
-  // Loop through all <p> elements in the FAQ section
-  faqSection.querySelectorAll("p").forEach(p => {
-    const strong = p.querySelector("strong");
-    if (!strong) return;
-
-    // Question text
-    const question = strong.textContent.trim();
-
-    // Answer text: everything else in the <p> after <strong> and <br>
-    const answerNodes = Array.from(p.childNodes).filter(n => n !== strong);
-    const answerText = answerNodes.map(n => n.textContent.trim()).join(" ").replace(/\s+/g, " ");
-
-    if (question && answerText) {
-      faqItems.push({
-        "@type": "Question",
-        "name": question,
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": answerText
-        }
-      });
-    }
-  });
-
-  if (!faqItems.length) return null;
-
-  return {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": faqItems
-  };
-}
-
-
 // Generate FAQ schema for SEO
 function generateFAQSchema(html) {
-
-  // Usage example
-const faqSchema = generateFAQSchemaFromDOM(html);
-if (faqSchema) {
   console.log("FAQ Schema injected!");
 
-    console.log("faqSchema  ", faqSchema);
-
-  return faqSchema;
-}
-
-
-
+  console.log("html  ", html);
 
   const faqItems = [];
   const qaRegex = /(?:Q\d*:|Q:)\s*(.*?)\s*(?:A\d*:|A:)\s*(.*?)(?=(?:Q\d*:|Q:|$))/gs;
@@ -196,6 +143,7 @@ if (faqSchema) {
   }
 
   if (faqItems.length === 0) return null;
+FAQ_Bool = true;
 
   return {
     "@context": "https://schema.org",
@@ -466,6 +414,7 @@ const Content = `
 <title>${articleData.title} - ${articleData.domain} | ${articleData.slug || "Untitled"}</title>
 <meta name="description" content="${articleData.description}">
 <meta name="version" content="${version}">
+<meta name="FAQ" content="${FAQ_Bool}">
 <meta name="category" content="${articleData.category}">
 <meta name="lang" content="en">
 <meta name="keywords" content="${articleData.keywords?.join(', ') || ''}">

@@ -419,17 +419,24 @@ async function pingSite(domain) {
     const isOnline = resp.ok;
 
     let version = null;
+    let faq = null;
+
     if (isOnline) {
       const html = await resp.text();
       const parser = new DOMParser();
       const doc = parser.parseFromString(html, "text/html");
       const meta = doc.querySelector('meta[name="version"]');
+      const faq_meta = doc.querySelector('meta[name="FAQ"]');
+
       if (meta) {
         version = extractVersion(meta.getAttribute("content"));
       }
+      if (faq_meta) {
+        faq = extractVersion(faq_meta.getAttribute("content"));
+      }
     }
 
-    const result = { online: isOnline, version };
+    const result = { online: isOnline, version, faq };
     checkedDomains[url] = result;
     return result;
   } catch {
@@ -444,10 +451,11 @@ async function pingSite(domain) {
 // Step 1: Ping all pages first
 async function fetchAllPages(pages) {
   for (const p of pages) {
-    const { online, version } = await pingSite(p.slug);
+    const { online, version, faq } = await pingSite(p.slug);
     versions[p.siteId] = version;
     p.online = online;
     p.version = version;
+    p.faq_bool = faq;
   }
 }
 
@@ -461,7 +469,11 @@ function getLatestVersion() {
 function renderPageStatus(p, latestVersion) {
   const statusEl  = document.getElementById(`status-${p.siteId}`);
   const versionEl = document.getElementById(`version-${p.siteId}`);
+  const faqE1 = document.getElementById(`faq-${siteId}`);
+
   if (!statusEl) return;
+
+      if (faqE1) faqE1.textContent = p.faq_bool;
 
   if (!p.online) {
     statusEl.textContent = "❌ Offline";
@@ -892,7 +904,10 @@ async function loadDashboard(autoPing = false) {
              alt="preview" width="300" height="200">
       </a></td>
       <td>${pageData.title || ''}</td>
-      <td>${pageData.category || ''}</td>
+      <td>
+<div id="category-${pageData.siteId}" class="category">${pageData.category || ''}</div>
+<div id="faq-${pageData.siteId}" class="faq_status">FAQ</div>
+      </td>
       <td><div id="status-${pageData.siteId}" class="status-offline">❌ Offline</div></td>
       <td><div id="version-${pageData.siteId}" class="version">version</div></td>
       <td>${pageData.views || 0}</td>

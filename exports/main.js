@@ -67,7 +67,8 @@ onAuthStateChanged(auth, (user) => {
     const pageTitle = document.getElementById('pageTitle').textContent;
     const pageURL = document.getElementById('pageURL').textContent;
     const pageDescription = document.getElementById('pageDescription').textContent;
-    
+    const pageID = document.getElementById("pageID")?.textContent || "unknown";
+
 
 
 const DEBUG = false;
@@ -960,7 +961,6 @@ window.addEventListener("scroll", () => {
   
 let isUnique = false;
 
-const pageID = document.getElementById("pageID")?.textContent || "unknown";
 const today = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
 
 const pageRef = doc(db, "pages", pageID);

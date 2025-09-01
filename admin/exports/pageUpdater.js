@@ -115,8 +115,65 @@ function linkifyContentHub(html) {
 }
 
 
+function generateFAQSchemaFromDOM(container) {
+  const root = typeof container === "string" ? document.querySelector(container) : container;
+  if (!root) return null;
+
+  const faqItems = [];
+
+  // Find the FAQ heading first (optional)
+  const faqSection = root.querySelector("h3:contains('FAQs')") || root;
+
+  // Loop through all <p> elements in the FAQ section
+  faqSection.querySelectorAll("p").forEach(p => {
+    const strong = p.querySelector("strong");
+    if (!strong) return;
+
+    // Question text
+    const question = strong.textContent.trim();
+
+    // Answer text: everything else in the <p> after <strong> and <br>
+    const answerNodes = Array.from(p.childNodes).filter(n => n !== strong);
+    const answerText = answerNodes.map(n => n.textContent.trim()).join(" ").replace(/\s+/g, " ");
+
+    if (question && answerText) {
+      faqItems.push({
+        "@type": "Question",
+        "name": question,
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": answerText
+        }
+      });
+    }
+  });
+
+  if (!faqItems.length) return null;
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": faqItems
+  };
+}
+
+
 // Generate FAQ schema for SEO
 function generateFAQSchema(html) {
+
+  // Usage example
+const faqSchema = generateFAQSchemaFromDOM(html);
+if (faqSchema) {
+  console.log("FAQ Schema injected!");
+
+    console.log("faqSchema  ", faqSchema);
+
+  return faqSchema;
+}
+
+
+
+
   const faqItems = [];
   const qaRegex = /(?:Q\d*:|Q:)\s*(.*?)\s*(?:A\d*:|A:)\s*(.*?)(?=(?:Q\d*:|Q:|$))/gs;
 

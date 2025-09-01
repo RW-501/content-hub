@@ -980,7 +980,10 @@ let sortState = { field: null, asc: true };
 function loadDashboard(data) {
   const dashboardContent = document.getElementById("dashboardContent");
 
-  if (!data.length) {
+  console.log("📊 loadDashboard called with data:", data);
+
+  if (!data || !data.length) {
+    console.warn("⚠️ No data received, dashboard will show empty message.");
     dashboardContent.innerHTML = "<p style='text-align:center; padding:20px;'>⚠️ No pages match your filters.</p>";
     return;
   }
@@ -998,7 +1001,9 @@ function loadDashboard(data) {
       </tr>
     </thead><tbody>`;
 
-  data.forEach(pageData => {
+  data.forEach((pageData, index) => {
+    console.log(`🔎 Rendering row ${index}`, pageData);
+
     const pageUrl = `https://contenthub.guru/site/${pageData.slug}`;
     const shareText = encodeURIComponent(`Check out this page: ${pageData.title || ''}`);
 
@@ -1017,21 +1022,21 @@ function loadDashboard(data) {
         <button onclick="removePage('${pageData.siteId}','${pageData.slug}')">Remove</button>
 
         <!-- 🔗 Social Share -->
-<div class="share-buttons">
-  <button onclick="shareOnTwitter('${pageUrl}', '${shareText}')">🐦 Twitter</button>
-  <button onclick="shareOnLinkedIn('${pageUrl}', '${shareText}')">💼 LinkedIn</button>
-  <button onclick="shareOnFacebook('${pageUrl}')">📘 Facebook</button>
-  <button onclick="shareOnAll('${pageUrl}', '${shareText}')">🌍 Share All</button>
-</div>
-
+        <div class="share-buttons">
+          <button onclick="shareOnTwitter('${pageUrl}', '${shareText}')">🐦 Twitter</button>
+          <button onclick="shareOnLinkedIn('${pageUrl}', '${shareText}')">💼 LinkedIn</button>
+          <button onclick="shareOnFacebook('${pageUrl}')">📘 Facebook</button>
+          <button onclick="shareOnAll('${pageUrl}', '${shareText}')">🌍 Share All</button>
+        </div>
       </td>
     </tr>`;
   });
 
   html += "</tbody></table>";
   dashboardContent.innerHTML = html;
+  console.log("✅ Dashboard rendered with rows:", data.length);
 
-  // Sorting logic stays the same
+  // Sorting logic
   document.querySelectorAll(".sortable").forEach(th => {
     th.classList.remove("sorted-asc", "sorted-desc");
     if (sortState.field === th.dataset.field) {
@@ -1039,6 +1044,8 @@ function loadDashboard(data) {
     }
 
     th.onclick = () => {
+      console.log(`↕️ Sorting by field "${th.dataset.field}" | Current asc:`, sortState.asc);
+
       if (sortState.field === th.dataset.field) {
         sortState.asc = !sortState.asc; // toggle
       } else {
@@ -1046,9 +1053,13 @@ function loadDashboard(data) {
         sortState.asc = true;
       }
 
+      console.log("🔄 Updated sortState:", sortState);
+
       const sorted = [...data].sort((a, b) => {
         const valA = a[sortState.field] ?? '';
         const valB = b[sortState.field] ?? '';
+
+        console.log(`   Comparing "${valA}" vs "${valB}" on field "${sortState.field}"`);
 
         if (valA < valB) return sortState.asc ? -1 : 1;
         if (valA > valB) return sortState.asc ? 1 : -1;
@@ -1062,10 +1073,12 @@ function loadDashboard(data) {
         return 0;
       });
 
+      console.log("📋 Sorted result:", sorted);
       loadDashboard(sorted);
     };
   });
 }
+
 
 function shareOnAll(url, text) {
 

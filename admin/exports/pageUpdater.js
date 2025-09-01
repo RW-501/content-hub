@@ -78,12 +78,14 @@ function renderFAQs(html) {
 
   const faqRegex = /<p[^>]*>\s*<strong[^>]*>(Q\d*:\s*.+?)<\/strong>\s*<br\s*\/?>\s*(.*?)<\/p>/gs;
   let hasFAQ = false;
-        console.log("html, ",html);
+            console.log("html, ",html);
 
   html = html.replace(faqRegex, (match, q, a) => {
     hasFAQ = true;
     q = linkifyContentHub(q.trim());
     a = linkifyContentHub(a.trim());
+            console.log("hasFAQ, ",hasFAQ);
+
     return `<details class="faq-item"><summary>${q}</summary><div class="faq-answer">${a}</div></details>`;
   });
 
@@ -98,7 +100,6 @@ function generateFAQSchema(html) {
   const faqItems = [];
   const qaRegex = /<details class="faq-item"><summary>(.*?)<\/summary><div class="faq-answer">(.*?)<\/div><\/details>/gs;
   let match;
-    //    console.log("html, ",html);
 
   while ((match = qaRegex.exec(html)) !== null) {
     const question = match[1].trim();
@@ -109,6 +110,9 @@ function generateFAQSchema(html) {
         "name": question,
         "acceptedAnswer": { "@type": "Answer", "text": answer }
       });
+
+            console.log("faqItems, ",faqItems);
+
     }
   }
 

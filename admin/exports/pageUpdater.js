@@ -76,11 +76,11 @@ let FAQ_Bool = false;
 function renderFAQs(html) {
   if (!html) return html;
 
-  const qaRegex = /(?:Q\d*:|Q:)\s*(.*?)\s*(?:A\d*:|A:)\s*(.*?)(?=(?:Q\d*:|Q:|$))/gs;
+  const faqRegex = /<p[^>]*>\s*<strong[^>]*>(Q\d*:\s*.+?)<\/strong>\s*<br\s*\/?>\s*(.*?)<\/p>/gs;
   let hasFAQ = false;
         console.log("html, ",html);
 
-  html = html.replace(qaRegex, (match, q, a) => {
+  html = html.replace(faqRegex, (match, q, a) => {
     hasFAQ = true;
     q = linkifyContentHub(q.trim());
     a = linkifyContentHub(a.trim());

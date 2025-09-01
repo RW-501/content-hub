@@ -70,86 +70,82 @@ function formatCategory(category) {
   if (!category) return "";
   return category.replace(/[_-]+/g, " ").trim();
 }
-
 let FAQ_Bool = false;
 
-function checkContent(html) {
-  if (!html) return "";
-
-  // Step 1: Linkify ContentHub mentions in the entire HTML
-  html = linkifyContentHub(html);
-
-  // Step 2: Render FAQs as collapsible HTML
-  html = renderFAQs(html);
-
-  // Step 3: Generate FAQ schema from the original HTML (plain text)
-  const faqSchema = generateFAQSchema(html);
-
-  // Step 4: If schema exists, inject as JSON-LD script
-  if (faqSchema) {
-    html += `<script id='FAQ_Schema' type="application/ld+json">${JSON.stringify(faqSchema)}</script>`;
-    console.log("FAQ Added");
-  }
-
-  return html;
-}
-
-// Render FAQ blocks into collapsible <details> elements
+// Step 1: Render FAQ blocks into collapsible <details> elements
 function renderFAQs(html) {
-  return html.replace(/(?:Q\d*:|Q:)\s*(.*?)\s*(?:A\d*:|A:)\s*(.*?)(?=(?:Q\d*:|Q:|$))/gs, (match, q, a) => {
+  if (!html) return html;
+
+  const qaRegex = /(?:Q\d*:|Q:)\s*(.*?)\s*(?:A\d*:|A:)\s*(.*?)(?=(?:Q\d*:|Q:|$))/gs;
+  let hasFAQ = false;
+
+  html = html.replace(qaRegex, (match, q, a) => {
+    hasFAQ = true;
     q = linkifyContentHub(q.trim());
     a = linkifyContentHub(a.trim());
     return `<details class="faq-item"><summary>${q}</summary><div class="faq-answer">${a}</div></details>`;
   });
+
+  FAQ_Bool = hasFAQ;
+  return html;
 }
 
-// Linkify ContentHub mentions
-function linkifyContentHub(html) {
-  if (!html) return "";
-
-  // Matches variations: ContentHub, Content Hub, ContentHub.guru, Content Hub.Guru, case-insensitive
-  const regex = /\bcontent\s*hub(?:\.guru)?\b/gi;
-
-  return html.replace(regex, (match) => {
-    return `<a href="https://contenthub.guru" title="Visit ContentHub.guru" target="_blank" rel="noopener noreferrer">${match}</a>`;
-  });
-}
-
-// Generate FAQ schema for SEO
+// Step 2: Generate FAQ schema for SEO
 function generateFAQSchema(html) {
-  console.log("FAQ Schema injected!");
-
-  console.log("html  ", html);
+  if (!FAQ_Bool) return null;
 
   const faqItems = [];
-  const qaRegex = /(?:Q\d*:|Q:)\s*(.*?)\s*(?:A\d*:|A:)\s*(.*?)(?=(?:Q\d*:|Q:|$))/gs;
-
+  const qaRegex = /<details class="faq-item"><summary>(.*?)<\/summary><div class="faq-answer">(.*?)<\/div><\/details>/gs;
   let match;
-  while ((match = qaRegex.exec(html)) !== null) {
-    let question = match[1].trim();
-    let answer = match[2].trim();
 
+  while ((match = qaRegex.exec(html)) !== null) {
+    const question = match[1].trim();
+    const answer = match[2].trim().replace(/<[^>]+>/g, ""); // remove HTML tags
     if (question && answer) {
-      const plainAnswer = answer.replace(/<[^>]+>/g, ""); // remove HTML tags for schema
       faqItems.push({
         "@type": "Question",
         "name": question,
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": plainAnswer
-        }
+        "acceptedAnswer": { "@type": "Answer", "text": answer }
       });
     }
   }
 
   if (faqItems.length === 0) return null;
-FAQ_Bool = true;
 
   return {
     "@context": "https://schema.org",
     "@type": "FAQPage",
     "mainEntity": faqItems
   };
+}
+
+// Step 3: Linkify mentions of ContentHub
+function linkifyContentHub(html) {
+  if (!html) return "";
+  const regex = /\bcontent\s*hub(?:\.guru)?\b/gi;
+  return html.replace(regex, match => `<a href="https://contenthub.guru" target="_blank" rel="noopener noreferrer">${match}</a>`);
+}
+
+// Usage in your pipeline:
+function checkContent(html) {
+  if (!html) return "";
+
+  // Linkify first
+  html = linkifyContentHub(html);
+
+  // Render FAQ blocks
+  html = renderFAQs(html);
+
+  // Generate schema if any FAQs exist
+  const faqSchema = generateFAQSchema(html);
+  if (faqSchema) {
+        console.log("faqScchema, ",faqSchema);
+
+    html += `<script id='FAQ_Schema' type="application/ld+json">${JSON.stringify(faqSchema)}</script>`;
+    console.log("FAQ schema injected!");
+  }
+
+  return html;
 }
 
   // Load existing image when editing

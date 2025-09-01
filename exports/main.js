@@ -1023,28 +1023,37 @@ window.addEventListener("scroll", () => {
 
 document.addEventListener("DOMContentLoaded", () => {
   const main = document.querySelector("main");
+  if (!main) return;
 
-  if (!main) return; // safety check
+  // Make main focusable
+  main.setAttribute("tabindex", "0");
 
-  // ✅ Allow right-clicks only inside <main>
+  // Optionally auto-focus so keydown works immediately
+  main.focus();
+
+  // Right-click inside <main> allowed
   main.addEventListener("contextmenu", (event) => {
-    event.stopPropagation(); // prevent global blocks
-    // allow default right-click
+    event.stopPropagation(); // stop global blockers
   });
 
-  // ✅ Detect Ctrl+A (Select All) inside <main>
+  // Detect Ctrl+A inside <main>
   main.addEventListener("keydown", (event) => {
     if (event.ctrlKey && event.key.toLowerCase() === "a") {
       event.preventDefault(); // stop select all
-      // Clear selection
       const selection = window.getSelection();
-      if (selection) {
-        selection.removeAllRanges();
-      }
+      if (selection) selection.removeAllRanges();
       console.log("Select All blocked → Selection cleared");
     }
   });
 
-  // ✅ Ensure <main> is focusable so it can detect key presses
-  main.setAttribute("tabindex", "0");
+  // Optional: listen on the document as a fallback
+  document.addEventListener("keydown", (event) => {
+    if (document.activeElement === main &&
+        event.ctrlKey && event.key.toLowerCase() === "a") {
+      event.preventDefault();
+      const selection = window.getSelection();
+      if (selection) selection.removeAllRanges();
+      console.log("Select All blocked → Selection cleared");
+    }
+  });
 });

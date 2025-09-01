@@ -1047,7 +1047,7 @@ async function loadDashboard(autoPing = false) {
       </td>
       <td>
         <button class='updatePageBTN' onclick="updatePageBtn('${pageData.siteId}','${pageData.slug}', '${pageData.category}')">Update</button>
-        <button onclick="window.location.href='https://contenthub.guru/admin/editor?id=${pageData.siteId}'">Edit</button>
+<button onclick="window.open('https://contenthub.guru/admin/editor?id=${pageData.siteId}', '_blank')">Edit</button>
         <button onclick="removePage('${pageData.siteId}','${pageData.slug}')">Remove</button>
       </td>
     </tr>`;

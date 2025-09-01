@@ -663,6 +663,8 @@ onSnapshot(q, (snapshot) => {
   });
 });
 
+function createReportPopup(){
+
 
   // 🔹 Create Report Popup
   const reportPopup = document.createElement("div");
@@ -714,9 +716,11 @@ onSnapshot(q, (snapshot) => {
 
   reportPopup.appendChild(popupContent);
   document.body.appendChild(reportPopup);
-
+}
   // 🔹 Show popup
   document.getElementById("reportPageBtn").addEventListener("click", () => {
+    createReportPopup();
+    
     reportPopup.style.display = "flex";
   });
 

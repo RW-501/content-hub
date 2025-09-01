@@ -57,6 +57,18 @@
 }
 .row { display: grid; }
     
+/* Optional styles for highlighting sorted columns */
+.sorted-asc::after {
+  content: " ▲";
+  font-size: 0.7em;
+  color: #333;
+}
+.sorted-desc::after {
+  content: " ▼";
+  font-size: 0.7em;
+  color: #333;
+}
+
     
     </style>
 </head>
@@ -207,48 +219,29 @@
     </section>
 
     <div class="group">
-    <div class="row">
-    <div class="dashboard-tools">
-    <label for="searchCategory">Search</label>
-      <input id="searchInput" placeholder="Search by title, domain, keyword..." />
-      </div>
 
-      <div class="row">
-      <label for="searchCategory">Sort</label>
-      <select id="sortSelect">
-        <option value="createdDesc">Newest</option>
-        <option value="createdAsc">Oldest</option>
-        <option value="viewsDesc">Most Viewed</option>
-      </select>
-      </div>
-          <div class="row">
-      <label for="searchCategory">Category</label>
-      <select id="searchCategory">
-        <option value="">-- Select Category --</option>
-        <option value="health">Health</option>
-        <option value="nutrition">Nutrition</option>
-        <option value="fitness">Fitness</option>
-        <option value="business">Business</option>
-        <option value="tech">Technology</option>
-        <option value="lifestyle">Lifestyle</option>
-        <option value="education">Education</option>
-        <option value="finance">Finance</option>
-        <option value="news">News</option>
-        <option value="other">Other</option>
-      </select>
-    </div>
-    </div>
-
-    </div>
 <div id="pageArea">   
-<div id="toolbar">
-  <!-- The button you want to trigger -->
-<button id="updateBTN">Update</button>
+  <div class="row dashboard-tools">
+    <label for="searchInput">Search</label>
+    <input id="searchInput" placeholder="Search by title, domain, keyword..." />
+  </div>
+
+  <div class="row">
+    <label for="searchCategory">Category</label>
+    <select id="searchCategory">
+      <option value="">-- All Categories --</option>
+    </select>
+  </div>
+
+  <button id="updateBTN">Update</button>
+
+  <div id="dashboardContent"></div>
 </div>
-    <div id="dashboardContent"></div>
-</div> 
+
 
   </div>
+      </div>
+
 </main>
 
 
@@ -982,87 +975,88 @@ async function loadAnalytics() {
 window.loadAnalytics = loadAnalytics;
 
 
+let sortState = { field: null, asc: true };
 
-const searchInput = document.getElementById("searchInput");
-const sortSelect = document.getElementById("sortSelect");
-const tagFiltersDiv = document.getElementById("tagFilters");
-const sitesList = document.getElementById("sitesList");
+function renderTable(data) {
+  const dashboardContent = document.getElementById("dashboardContent");
 
-let sitesData = [];
-let filteredSites = [];
-let currentPage = 1;
-let activeTag = null;
-const pageSize = 6;
-
-// Load Dashboard with Live Status
-// Add "Remove" button to the dashboard table
-async function loadDashboard(autoPing = false) {
-  console.log("autoPing  ", autoPing);
-
-  const contentDiv = document.getElementById("dashboardContent");
-  const userSnap = await getDoc(doc(db, "users", currentUser.uid));
-  const pages = userSnap.exists() ? userSnap.data().createdPages || [] : [];
-
-  if (!pages.length) {
-    contentDiv.innerHTML = "<p>No pages yet.</p>";
+  if (!data.length) {
+    dashboardContent.innerHTML = "<p style='text-align:center; padding:20px;'>⚠️ No pages match your filters.</p>";
     return;
   }
 
-  const pageCache = {}; // 🔹 store page data here to avoid multiple DB calls
-
   let html = `<table>
     <thead>
-      <tr><th>Preview</th><th>Domain</th><th>Category</th><th>Status</th><th>Version</th><th>Views</th><th>Actions</th></tr>
+      <tr>
+        <th>Preview</th>
+        <th class="sortable" data-field="title">Domain</th>
+        <th class="sortable" data-field="category">Category</th>
+        <th>Status</th>
+        <th>Version</th>
+        <th class="sortable" data-field="views">Views</th>
+        <th>Actions</th>
+      </tr>
     </thead><tbody>`;
 
-  for (const p of pages) {
-    // 🔹 Pull updated stats from pages/{id} and cache it
-    const pageRef = doc(db, "pages", p.id);
-    const pageSnap = await getDoc(pageRef);
-    const pageData = pageSnap.exists() ? pageSnap.data() : {};
-    pageCache[p.id] = pageData; // cache it
-
+  data.forEach(pageData => {
     html += `<tr>
-      <td>
-        <p>
-          <a href="https://contenthub.guru/site/${pageData.slug}" target="_blank">
-            <img class='siteImage' src="${pageData.image || 'https://contenthub.guru/images/placeholder.png'}" alt="preview" width="300" height="200">
-          </a>
-        </p>
-      </td>
-      <td>
-         <a href="https://contenthub.guru/site/${pageData.slug}" target="_blank" style="width: 50%; display: block;">${pageData.title}</a>
-      </td>
-      <td>
-        <div class="category">${pageData.category}</div>
-      </td>
-      <td>
-        <div id="status-${pageData.siteId}" class="status-offline">❌ Offline</div>
-      </td>
-      <td>
- <div class="views">${pageData.views || 0}</div>
-      </td>
-            <td>
-        <div id="version-${pageData.siteId}" class="version">version</div>
-      </td>
+      <td><a href="https://contenthub.guru/site/${pageData.slug}" target="_blank">
+        <img class='siteImage' src="${pageData.image || 'https://contenthub.guru/images/placeholder.png'}" alt="preview" width="300" height="200">
+      </a></td>
+      <td>${pageData.title || ''}</td>
+      <td>${pageData.category || ''}</td>
+      <td><div id="status-${pageData.siteId}" class="status-offline">❌ Offline</div></td>
+      <td><div id="version-${pageData.siteId}" class="version">version</div></td>
+      <td>${pageData.views || 0}</td>
       <td>
         <button class='updatePageBTN' onclick="updatePageBtn('${pageData.siteId}','${pageData.slug}', '${pageData.category}')">Update</button>
-<button onclick="window.open('https://contenthub.guru/admin/editor?id=${pageData.siteId}', '_blank')">Edit</button>
+        <button onclick="window.open('https://contenthub.guru/admin/editor?id=${pageData.siteId}', '_blank')">Edit</button>
         <button onclick="removePage('${pageData.siteId}','${pageData.slug}')">Remove</button>
       </td>
     </tr>`;
-  }
+  });
 
   html += "</tbody></table>";
-  contentDiv.innerHTML = html;
+  dashboardContent.innerHTML = html;
 
-  // 🔹 Start live status updates using cached pageData
-if (autoPing) {
-  // convert object values into array
-  updateAllPages(Object.values(pageCache));
+  // Highlight sorted column
+  document.querySelectorAll(".sortable").forEach(th => {
+    th.classList.remove("sorted-asc", "sorted-desc");
+    if (sortState.field === th.dataset.field) {
+      th.classList.add(sortState.asc ? "sorted-asc" : "sorted-desc");
+    }
+
+    th.onclick = () => {
+      if (sortState.field === th.dataset.field) {
+        sortState.asc = !sortState.asc; // toggle
+      } else {
+        sortState.field = th.dataset.field;
+        sortState.asc = true;
+      }
+
+      const filtered = getFilteredPages(); // sort filtered data
+      const sorted = [...filtered].sort((a, b) => {
+        const valA = a[sortState.field] ?? '';
+        const valB = b[sortState.field] ?? '';
+
+        if (valA < valB) return sortState.asc ? -1 : 1;
+        if (valA > valB) return sortState.asc ? 1 : -1;
+
+        // tie breaker by title
+        if (sortState.field !== 'title') {
+          const titleA = a.title ?? '';
+          const titleB = b.title ?? '';
+          if (titleA < titleB) return -1;
+          if (titleA > titleB) return 1;
+        }
+        return 0;
+      });
+
+      renderTable(sorted);
+    };
+  });
 }
 
-}
 
 async function updatePageBtn(siteId, slug, category) {
   try {

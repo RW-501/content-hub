@@ -977,8 +977,29 @@ window.loadAnalytics = loadAnalytics;
 
 let sortState = { field: null, asc: true };
 
-function loadDashboard(data) {
-  const dashboardContent = document.getElementById("dashboardContent");
+
+let sitesData = [];
+let filteredSites = [];
+let currentPage = 1;
+let activeTag = null;
+const pageSize = 6;
+
+// Load Dashboard with Live Status
+async function loadDashboard(autoPing = false) {
+  console.log("autoPing  ", autoPing);
+
+  const contentDiv = document.getElementById("dashboardContent");
+  const userSnap = await getDoc(doc(db, "users", currentUser.uid));
+  const pages = userSnap.exists() ? userSnap.data().createdPages || [] : [];
+
+  if (!pages.length) {
+    contentDiv.innerHTML = "<p>No pages yet.</p>";
+    return;
+  }
+
+  const pageCache = {}; // 🔹 store page data here to avoid multiple DB calls
+
+
 
   console.log("📊 loadDashboard called with data:", data);
 

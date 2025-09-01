@@ -76,7 +76,7 @@ let FAQ_Bool = false;
 function renderFAQs(html) {
   if (!html) return html;
 
-  const faqRegex = /<p[^>]*>\s*<strong[^>]*>(Q\d*:\s*.+?)<\/strong>\s*<br\s*\/?>\s*(.*?)<\/p>/gs;
+const faqRegex = /<p[^>]*>\s*<strong[^>]*>(Q\d+:.*?)<\/strong>\s*<br\s*\/?>\s*([\s\S]*?)<\/p>/gi;
   let hasFAQ = false;
             console.log("html, ",html);
 

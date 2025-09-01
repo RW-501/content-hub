@@ -426,14 +426,15 @@ async function pingSite(domain) {
       const parser = new DOMParser();
       const doc = parser.parseFromString(html, "text/html");
       const meta = doc.querySelector('meta[name="version"]');
-      const faq_meta = doc.querySelector('meta[name="FAQ"]');
+      const faq_meta = doc.querySelector('meta[name="faq"]');
 
       if (meta) {
         version = extractVersion(meta.getAttribute("content"));
       }
-      if (faq_meta) {
-        faq = extractVersion(faq_meta.getAttribute("content"));
-      }
+if (faq_meta) {
+  faq = faq_meta.getAttribute("content") === "true";
+}
+
     }
 
     const result = { online: isOnline, version, faq };
@@ -469,11 +470,11 @@ function getLatestVersion() {
 function renderPageStatus(p, latestVersion) {
   const statusEl  = document.getElementById(`status-${p.siteId}`);
   const versionEl = document.getElementById(`version-${p.siteId}`);
-  const faqE1 = document.getElementById(`faq-${p.siteId}`);
+  const faqEl = document.getElementById(`faq-${p.siteId}`);
 
   if (!statusEl) return;
 
-      if (faqE1) faqE1.textContent = p.faq;
+if (faqEl) faqEl.textContent = p.faq ? "✅ FAQ Available" : "❌ No FAQ";
 
   if (!p.online) {
     statusEl.textContent = "❌ Offline";

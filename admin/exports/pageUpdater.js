@@ -430,7 +430,7 @@ const Content = `
 <title>${articleData.title} - ${articleData.domain} | ${articleData.slug || "Untitled"}</title>
 <meta name="description" content="${articleData.description}">
 <meta name="version" content="${version}">
-<meta name="FAQ" content="${FAQ_Bool}">
+<meta name="faq" content="${FAQ_Bool ? 'true' : 'false'}">
 <meta name="category" content="${articleData.category}">
 <meta name="lang" content="en">
 

@@ -70,6 +70,19 @@ function formatCategory(category) {
   if (!category) return "";
   return category.replace(/[_-]+/g, " ").trim();
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 let FAQ_Bool = false;
 
 // Step 1: Render FAQ blocks into collapsible <details> elements

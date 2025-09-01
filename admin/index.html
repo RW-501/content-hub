@@ -999,8 +999,11 @@ function renderTable(data) {
     </thead><tbody>`;
 
   data.forEach(pageData => {
+    const pageUrl = `https://contenthub.guru/site/${pageData.slug}`;
+    const shareText = encodeURIComponent(`Check out this page: ${pageData.title || ''}`);
+
     html += `<tr>
-      <td><a href="https://contenthub.guru/site/${pageData.slug}" target="_blank">
+      <td><a href="${pageUrl}" target="_blank">
         <img class='siteImage' src="${pageData.image || 'https://contenthub.guru/images/placeholder.png'}" alt="preview" width="300" height="200">
       </a></td>
       <td>${pageData.title || ''}</td>
@@ -1012,6 +1015,13 @@ function renderTable(data) {
         <button class='updatePageBTN' onclick="updatePageBtn('${pageData.siteId}','${pageData.slug}', '${pageData.category}')">Update</button>
         <button onclick="window.open('https://contenthub.guru/admin/editor?id=${pageData.siteId}', '_blank')">Edit</button>
         <button onclick="removePage('${pageData.siteId}','${pageData.slug}')">Remove</button>
+
+        <!-- 🔗 Social Share -->
+        <div class="share-buttons">
+          <button onclick="shareOnTwitter('${pageUrl}', '${shareText}')">🐦 Twitter</button>
+          <button onclick="shareOnLinkedIn('${pageUrl}', '${shareText}')">💼 LinkedIn</button>
+          <button onclick="shareOnFacebook('${pageUrl}')">📘 Facebook</button>
+        </div>
       </td>
     </tr>`;
   });
@@ -1019,7 +1029,7 @@ function renderTable(data) {
   html += "</tbody></table>";
   dashboardContent.innerHTML = html;
 
-  // Highlight sorted column
+  // Sorting logic stays the same
   document.querySelectorAll(".sortable").forEach(th => {
     th.classList.remove("sorted-asc", "sorted-desc");
     if (sortState.field === th.dataset.field) {
@@ -1034,7 +1044,7 @@ function renderTable(data) {
         sortState.asc = true;
       }
 
-      const filtered = getFilteredPages(); // sort filtered data
+      const filtered = getFilteredPages();
       const sorted = [...filtered].sort((a, b) => {
         const valA = a[sortState.field] ?? '';
         const valB = b[sortState.field] ?? '';
@@ -1042,7 +1052,6 @@ function renderTable(data) {
         if (valA < valB) return sortState.asc ? -1 : 1;
         if (valA > valB) return sortState.asc ? 1 : -1;
 
-        // tie breaker by title
         if (sortState.field !== 'title') {
           const titleA = a.title ?? '';
           const titleB = b.title ?? '';
@@ -1057,6 +1066,25 @@ function renderTable(data) {
   });
 }
 
+
+function shareOnTwitter(url, text) {
+  const twitterUrl = `https://twitter.com/intent/tweet?text=${text}&url=${encodeURIComponent(url)}`;
+  window.open(twitterUrl, '_blank', 'width=600,height=400');
+}
+
+function shareOnLinkedIn(url, text) {
+  const linkedinUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}&title=${text}`;
+  window.open(linkedinUrl, '_blank', 'width=600,height=400');
+}
+
+function shareOnFacebook(url) {
+  const fbUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
+  window.open(fbUrl, '_blank', 'width=600,height=400');
+}
+
+window.shareOnTwitter = shareOnTwitter;
+window.shareOnLinkedIn = shareOnLinkedIn;
+window.shareOnFacebook = shareOnFacebook;
 
 async function updatePageBtn(siteId, slug, category) {
   try {

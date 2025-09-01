@@ -845,7 +845,7 @@ async function loadDashboard(autoPing = false) {
     return;
   }
 
-  console.log("📊 loadDashboard called with data:", data);
+//  console.log("📊 loadDashboard called with data:", data);
 
   let html = `<table>
     <thead>
@@ -861,7 +861,7 @@ async function loadDashboard(autoPing = false) {
     </thead><tbody>`;
 
   data.forEach((pageData, index) => {
-    console.log(`🔎 Rendering row ${index}`, pageData);
+   // console.log(`🔎 Rendering row ${index}`, pageData);
 
     const pageUrl = `https://contenthub.guru/site/${pageData.slug}`;
     const shareText = encodeURIComponent(`Check out this page: ${pageData.title || ''}`);

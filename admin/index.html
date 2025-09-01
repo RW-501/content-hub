@@ -469,7 +469,7 @@ function getLatestVersion() {
 function renderPageStatus(p, latestVersion) {
   const statusEl  = document.getElementById(`status-${p.siteId}`);
   const versionEl = document.getElementById(`version-${p.siteId}`);
-  const faqE1 = document.getElementById(`faq-${siteId}`);
+  const faqE1 = document.getElementById(`faq-${p.siteId}`);
 
   if (!statusEl) return;
 

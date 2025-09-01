@@ -1046,8 +1046,7 @@ function loadDashboard(data) {
         sortState.asc = true;
       }
 
-      const filtered = getFilteredPages();
-      const sorted = [...filtered].sort((a, b) => {
+      const sorted = [...data].sort((a, b) => {
         const valA = a[sortState.field] ?? '';
         const valB = b[sortState.field] ?? '';
 

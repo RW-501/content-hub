@@ -1056,13 +1056,20 @@ async function updatePageBtn(siteId, slug, category) {
       );
     }
 
-    const sSnap = await getDocs(sq);
-    sSnap.forEach((docSnap) => {
-      suggested.push({
-        id: docSnap.id,
-        ...docSnap.data()
-      });
-    });
+const sSnap = await getDocs(sq);
+sSnap.forEach((docSnap) => {
+  const d = docSnap.data();
+  suggested.push({
+    id: docSnap.id,
+    image: d.image || null,
+    title: d.title || "",
+    category: d.category || "",
+    description: d.description || "",
+    slug: d.slug || "",
+    readTime: d.readTime || ''
+  });
+});
+
 
     const updateData = {
       suggested,

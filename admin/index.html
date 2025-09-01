@@ -831,16 +831,28 @@ async function loadAnalytics() {
 window.loadAnalytics = loadAnalytics;
 
 
+
+
+
+
+
+
+
+
+
+
 let sortState = { field: null, asc: true };
+  const pageCache = {}; // 🔹 store page data here to avoid multiple DB calls
+
 
 async function loadDashboard(autoPing = false) {
   console.log("autoPing  ", autoPing);
 
   const dashboardContent = document.getElementById("dashboardContent");
   const userSnap = await getDoc(doc(db, "users", currentUser.uid));
-  const data = userSnap.exists() ? userSnap.data().createdPages || [] : [];
+  const pages = userSnap.exists() ? userSnap.data().createdPages || [] : [];
 
-  if (!data.length) {
+  if (!pages.length) {
     dashboardContent.innerHTML = "<p>No pages yet.</p>";
     return;
   }
@@ -860,8 +872,16 @@ async function loadDashboard(autoPing = false) {
       </tr>
     </thead><tbody>`;
 
-  data.forEach((pageData, index) => {
+  //data.forEach((pageData, index) => {
    // console.log(`🔎 Rendering row ${index}`, pageData);
+
+
+     for (const p of pages) {
+    // 🔹 Pull updated stats from pages/{id} and cache it
+    const pageRef = doc(db, "pages", p.id);
+    const pageSnap = await getDoc(pageRef);
+    const pageData = pageSnap.exists() ? pageSnap.data() : {};
+    pageCache[p.id] = pageData; // cache it
 
     const pageUrl = `https://contenthub.guru/site/${pageData.slug}`;
     const shareText = encodeURIComponent(`Check out this page: ${pageData.title || ''}`);
@@ -890,7 +910,15 @@ async function loadDashboard(autoPing = false) {
         </div>
       </td>
     </tr>`;
-  });
+  };
+
+
+
+
+
+
+
+
 
   html += "</tbody></table>";
   dashboardContent.innerHTML = html;
@@ -932,7 +960,7 @@ async function loadDashboard(autoPing = false) {
   // 🔥 Auto-ping logic
   if (autoPing) {
     console.log("🚀 Auto-pinging all pages for status + version check...");
-    await updateAllPages(data);
+    await updateAllPages(Object.values(pageCache));
   }
 }
 

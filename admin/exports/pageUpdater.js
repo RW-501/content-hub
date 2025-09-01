@@ -92,7 +92,7 @@ function renderFAQs(html) {
 
 const faqRegex = /<p[^>]*>\s*<strong[^>]*>(Q\d+:.*?)<\/strong>\s*<br[^>]*>\s*([\s\S]*?)<\/p>/gi;
   let hasFAQ = false;
-            console.log("html, ",html);
+          //  console.log("html, ",html);
 
   html = html.replace(faqRegex, (match, q, a) => {
     hasFAQ = true;
@@ -125,7 +125,7 @@ function generateFAQSchema(html) {
         "acceptedAnswer": { "@type": "Answer", "text": answer }
       });
 
-            console.log("faqItems, ",faqItems);
+            //console.log("faqItems, ",faqItems);
 
     }
   }

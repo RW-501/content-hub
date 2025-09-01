@@ -988,12 +988,12 @@ const pageSize = 6;
 async function loadDashboard(autoPing = false) {
   console.log("autoPing  ", autoPing);
 
-  const contentDiv = document.getElementById("dashboardContent");
+  const dashboardContent = document.getElementById("dashboardContent");
   const userSnap = await getDoc(doc(db, "users", currentUser.uid));
-  const pages = userSnap.exists() ? userSnap.data().createdPages || [] : [];
+  const data = userSnap.exists() ? userSnap.data().createdPages || [] : [];
 
-  if (!pages.length) {
-    contentDiv.innerHTML = "<p>No pages yet.</p>";
+  if (!data.length) {
+    dashboardContent.innerHTML = "<p>No pages yet.</p>";
     return;
   }
 

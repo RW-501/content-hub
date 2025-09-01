@@ -1,5 +1,5 @@
 
-/*
+
 document.addEventListener("DOMContentLoaded", () => {
     const body = document.body;
     body.style.opacity = 0;
@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
     console.log('Loading...');
   });
   
-*/
+
 
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";

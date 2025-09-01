@@ -86,7 +86,8 @@ function checkContent(html) {
 
   // Step 4: If schema exists, inject as JSON-LD script
   if (faqSchema) {
-    html += `<script type="application/ld+json">${JSON.stringify(faqSchema)}</script>`;
+    html += `<script id='FAQ_Schema' type="application/ld+json">${JSON.stringify(faqSchema)}</script>`;
+    console.log("FAQ Added");
   }
 
   return html;

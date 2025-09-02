@@ -93,6 +93,7 @@ function renderFAQs(html) {
 
   const faqRegex = /<p[^>]*>\s*<strong[^>]*>(Q\d+:.*?)<\/strong>\s*(?:<br\s*\/?>\s*)+([\s\S]*?)<\/p>/gi;
   let hasFAQ = false;
+            console.log("HTML: ",html);
 
   html = html.replace(faqRegex, (match, q, a) => {
     hasFAQ = true;

@@ -2,6 +2,7 @@
 # Allow general crawlers on public content
 User-agent: *
 Allow: /site/
+Allow: /page/
 Disallow: /admin/
 Disallow: /account/
 Disallow: /auth/

@@ -40,6 +40,7 @@ feed.atom: https://contenthub.guru/atom.xml
 # URL SCOPES
 # ----------------------------------------------------------------------
 allow-path: /site/
+allow-path: /page/
 allow-path: /blog/
 allow-path: /resources/
 disallow-path: /admin/

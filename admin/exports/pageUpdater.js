@@ -915,7 +915,7 @@ const GITHUB_TOKEN = part_1 + part_2 + part_3 + part_4;
 
 
   // Upload to GitHub
-  const owner = "RW-501", repo = "content-hub", filePath = `site/${articleData.slug}.html`, branch = "main";
+  const owner = "RW-501", repo = "content-hub", filePath = `page/${articleData.slug}.html`, branch = "main";
   const url = `https://api.github.com/repos/${owner}/${repo}/contents/${filePath}`;
   const encodedContent = btoa(unescape(encodeURIComponent(Content)));
 

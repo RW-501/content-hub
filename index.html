@@ -11,7 +11,7 @@
 <meta name="keywords" content="CMS, Content Management, Dashboard, Website Editor, Admin Panel, SEO Tools, ContentHub Guru">
 <meta name="author" content="ContentHub.guru">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
-<meta name="revisit-after" content="7 days">
+<meta name="revisit-after" content="1 hour">
 <meta name="rating" content="general">
 <meta name="format-detection" content="telephone=no">
 <meta name="HandheldFriendly" content="true">
@@ -105,8 +105,8 @@
   "itemListElement": [
     {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://contenthub.guru"},
     {"@type": "ListItem", "position": 2, "name": "Categories", "item": "https://contenthub.guru/category/"},
-    {"@type": "ListItem", "position": 3, "name": "About", "item": "https://contenthub.guru/about"},
-    {"@type": "ListItem", "position": 4, "name": "Contact Us", "item": "https://contenthub.guru/contact-us"}
+    {"@type": "ListItem", "position": 3, "name": "About", "item": "https://contenthub.guru/site/about"},
+    {"@type": "ListItem", "position": 4, "name": "Contact Us", "item": "https://contenthub.guru/site/contact-us"}
   ]
 }
 </script>
@@ -229,7 +229,38 @@
     </select>
   </nav>
 
-  <div class="tag-filters" id="tagFilters" aria-label="Filter by tags"></div>
+  <nav aria-label="Content Hub Categories" class="category-nav" style="margin:20px 0;">
+  <ul style="list-style:none; padding:0; display:flex; flex-wrap:wrap; gap:10px;">
+    <li><a href="https://contenthub.guru/category/?c=general" title="General Content Hub Articles">General</a></li>
+
+    <!-- Guides Section -->
+    <li><a href="https://contenthub.guru/category/?c=guides" title="Guides on Content Creation">Guides</a></li>
+    <li><a href="https://contenthub.guru/category/?c=content_creation_basics" title="Content Creation Basics Guide">Content Creation Basics</a></li>
+    <li><a href="https://contenthub.guru/category/?c=writing_blogging" title="Writing & Blogging Tips">Writing & Blogging</a></li>
+    <li><a href="https://contenthub.guru/category/?c=social_media" title="Social Media Content Strategies">Social Media Content</a></li>
+    <li><a href="https://contenthub.guru/category/?c=seo_organic" title="SEO & Organic Traffic Tips">SEO & Organic Traffic</a></li>
+    <li><a href="https://contenthub.guru/category/?c=content_monetization" title="Content Monetization Methods">Content Monetization</a></li>
+    <li><a href="https://contenthub.guru/category/?c=multimedia" title="Multimedia Content Creation">Multimedia Content</a></li>
+    <li><a href="https://contenthub.guru/category/?c=advanced_strategy" title="Advanced Content Strategy Tips">Advanced Content Strategy</a></li>
+    <li><a href="https://contenthub.guru/category/?c=tools_resources" title="Tools, Resources & Case Studies">Tools, Resources & Case Studies</a></li>
+    <li><a href="https://contenthub.guru/category/?c=business_content" title="Content for Businesses">Content for Businesses</a></li>
+    <li><a href="https://contenthub.guru/category/?c=future_content" title="Future of Content Creation">Future of Content Creation</a></li>
+
+    <!-- Other Categories -->
+    <li><a href="https://contenthub.guru/category/?c=personal-development" title="Personal Development Articles">Personal Development</a></li>
+    <li><a href="https://contenthub.guru/category/?c=travel" title="Travel Articles & Guides">Travel</a></li>
+    <li><a href="https://contenthub.guru/category/?c=food" title="Food & Recipes Content">Food & Recipes</a></li>
+    <li><a href="https://contenthub.guru/category/?c=entertainment" title="Entertainment News & Articles">Entertainment</a></li>
+    <li><a href="https://contenthub.guru/category/?c=people" title="People & Profiles">People</a></li>
+
+    <li><a href="https://contenthub.guru/category/?c=health" title="Health Articles">Health</a></li>
+    <li><a href="https://contenthub.guru/category/?c=fitness" title="Fitness Articles & Tips">Fitness</a></li>
+    <li><a href="https://contenthub.guru/category/?c=business" title="Business Articles & News">Business</a></li>
+    <li><a href="https://contenthub.guru/category/?c=tech" title="Technology & Innovation Articles">Technology</a></li>
+  </ul>
+</nav>
+
+  <div hidden class="tag-filters" id="tagFilters" aria-label="Filter by tags"></div>
 
   <section id="sitesList" class="sites-grid" aria-live="polite">
     <div class="loading">Loading sites...
@@ -439,6 +470,12 @@ adminBtn.addEventListener("click", () => { window.location.href = "https://conte
 
 });
 
+
+function formatCategory(category) {
+  if (!category) return "";
+  return category.replace(/[_-]+/g, " ").trim();
+}
+
 // Render sites for current page
 function renderSites(){
   const queryText = searchInput.value.toLowerCase();
@@ -478,7 +515,7 @@ function renderSites(){
       <div class="views">${data.views || 0} views</div>
       <h3>${data.title}</h3>
       <p><img src="${data.image||'https://contenthub.guru/images/placeholder.png'}" alt="preview" width="300" height="200"></p>
-      <p>Category: ${data.category}</p>
+      <p>Category: ${formatCategory(data.category)}</p>
       <p>Domain: ${data.domain}</p>
       <p>Slug: ${data.slug}</p>
       <p>Pages: ${data.pageCount || 0} | Published: ${data.publishedCount || 0}</p>

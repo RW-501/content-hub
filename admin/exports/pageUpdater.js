@@ -431,7 +431,7 @@ const Content = `
 <meta name="description" content="${articleData.description}">
 <meta name="version" content="${version}">
 <meta name="faq" content="${FAQ_Bool ? 'true' : 'false'}">
-<meta name="category" content="${articleData.category}">
+<meta name="category" content="${formatCategory(articleData.category)}">
 <meta name="lang" content="en">
 
 <meta name="imageCount" content="1">
@@ -495,7 +495,7 @@ const Content = `
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="${articleData.publishedAt || new Date().toISOString()}">
 <meta property="article:modified_time" content="${articleData.updatedAt || new Date().toISOString()}">
-<meta property="article:section" content="${articleData.category}">
+<meta property="article:section" content="${formatCategory(articleData.category)}">
 <meta property="article:tag" content="${articleData.keywords?.join(', ') || ''}">
 <meta property="og:readtime" content="${readTime} Min">
 <meta property="article:author" content="https://contenthub.guru">
@@ -511,7 +511,7 @@ const Content = `
   <!-- Additional Article Schema/SEO Hints -->
 <meta property="article:published_time" content="${articleData.datePublished || new Date().toISOString()}">
 <meta property="article:modified_time" content="${articleData.updatedAt || new Date().toISOString()}">
-<meta property="article:section" content="${articleData.category}">
+<meta property="article:section" content="${formatCategory(articleData.category)}">
 <meta property="article:tag" content="${articleData.keywords?.join(', ') || ''}">
 
 
@@ -521,7 +521,7 @@ const Content = `
   "@type": "BreadcrumbList",
   "itemListElement": [
     {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://contenthub.guru"},
-    {"@type": "ListItem", "position": 2, "name": "${articleData.category}", "item": "https://contenthub.guru/category/${articleData.category}"},
+    {"@type": "ListItem", "position": 2, "name": "${formatCategory(articleData.category)}", "item": "https://contenthub.guru/category?c=${articleData.category}"},
     {"@type": "ListItem", "position": 3, "name": "${articleData.title}", "item": "https://contenthub.guru/page/${articleData.slug}"}
   ]
 }
@@ -661,17 +661,32 @@ hr {
 
 </header>
 
-    <div class="header-bottom">
-    <nav aria-label="breadcrumb" class="breadcrumb-wrapper">
-      <ol class="breadcrumb">
-        <li><a  title="Content Hub Home Page" href="https://contenthub.guru">Content Hub</a></li>
-        <li><a  title="Content Hub ${articleData.category} Category" href="https://contenthub.guru/category?c=${articleData.category}">${formatCategory(articleData.category)}</a></li>
-        <li class="active" aria-current="page"><a href="#block-article-0" title="${articleData.title} Content">${articleData.title}</a></li>
-      </ol>
-    </nav>
-    <p id="readTime">Read Time: ${articleData.readTime || "5"} mins</p>
-    <p id='navCommentBtn'><a href="#commentForm" title="${articleData.title} Comments" id="navCommentBtn">Comments</a></p>
-  </div>
+<div class="header-bottom">
+  <nav aria-label="Breadcrumb" class="breadcrumb-wrapper">
+    <ol class="breadcrumb">
+      <li><a title="Content Hub Home Page" href="https://contenthub.guru">Content Hub</a></li>
+      <li>
+        <a title="Content Hub ${formatCategory(articleData.category)} Category" 
+           href="https://contenthub.guru/category?c=${articleData.category}">
+           ${formatCategory(articleData.category)}
+        </a>
+      </li>
+      <li class="active" aria-current="page">
+        <a href="${articleData.canonicalUrl || window.location.href}" 
+           title="${articleData.title} Content">
+          ${articleData.title}
+        </a>
+      </li>
+    </ol>
+  </nav>
+
+  <p><strong>Read Time:</strong> ${articleData.readTime || "5"} mins</p>
+
+  <p>
+    <a href="#commentForm" title="${articleData.title} Comments" id="navCommentBtn">Comments</a>
+  </p>
+</div>
+
 
   
   <main class="mx-auto px-4" id="main-content" role="main">
@@ -862,9 +877,15 @@ hr {
 ">
     Report Page
 </div>
-      <br>
-      <a href="https://rw-501.github.io/Portfolio" target="_blank" hidden>Created by Ron W.</a></div>
+
+<p class='hidden' style="font-size:10px; color:#999; text-align:center; margin-top:10px;">
+  Website developed by 
+  <a title="Website created by Ron Wilson" href="https://rw-501.github.io/Portfolio" target="_blank" rel="noopener noreferrer">
+    Ron Wilson
+  </a>
 </p>
+
+
 <p id="version">${version}</p>
   </footer>
 

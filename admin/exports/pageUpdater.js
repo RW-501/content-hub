@@ -752,7 +752,7 @@ hr {
   <button id="resumeBtn">Resume</button>
   <button id="stopBtn">Stop</button>
   <select id="voiceSelect"></select>
-  <button id="downloadBtn">Download Audio</button>
+  <button hidden id="downloadBtn">Download Audio</button>
 </div>
 
     <!-- Top banner -->

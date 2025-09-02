@@ -11,29 +11,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
-import { getFirestore, doc, getDoc, setDoc, updateDoc, increment, collection, 
+import { doc, getDoc, setDoc, updateDoc, increment, collection, 
     addDoc, serverTimestamp, query, orderBy, onSnapshot, deleteDoc, arrayUnion  } 
     from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
 
 import { showToast } from "https://contenthub.guru/exports/showToast.js";
 
 // 🔹 Firebase config
-const firebaseConfig = {
-  apiKey: "AIzaSyBXZcSYdspfi2jBipwUFeNmKZgU02ksg8c",
-  authDomain: "contentmanagement-8af61.firebaseapp.com",
-  projectId: "contentmanagement-8af61",
-  storageBucket: "contentmanagement-8af61.appspot.com",
-  messagingSenderId: "579537581112",
-  appId: "1:579537581112:web:736c7faafaf1391ce1e2cd",
-  measurementId: "G-ZPWGF7YMPE"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
+import { db, auth, storage } from "https://contenthub.guru/admin/exports/firebaseConfig.js";
 
 
 

@@ -211,7 +211,7 @@ const loadPagesFromDB = async () => {
 
     // Add each page to the table
     sitesData.forEach(site => {
-      const url = `https://contenthub.guru/site/${site.slug}`;
+      const url = `https://contenthub./page/${site.slug}`;
       const lastmod = site.createdAt.toISOString().split('T')[0];
       
       addLinkToTable(url, url); // Add to table, source URL is same as page

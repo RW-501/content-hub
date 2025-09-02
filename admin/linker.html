@@ -159,7 +159,7 @@ function updateKeywordDisplay(){
   const ul = el('keywordsList'); ul.innerHTML = '';
   keywordsArray.forEach(k=>{
     const li = document.createElement('li');
-    li.textContent = `${k.keyword} → https://contenthub.guru/site/${k.slug}`;
+    li.textContent = `${k.keyword} → https://contenthub./page/${k.slug}`;
     ul.appendChild(li);
   });
   el('testModeStatus').innerText = testMode ? 'ON' : 'OFF';

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About Content Hub – CMS Dashboard for Websites</title>
+<meta name="description" content="Learn about Content Hub, the modern CMS dashboard that helps you manage, edit, and optimize your websites efficiently.">
+<meta name="keywords" content="About Content Hub, CMS, Dashboard, Website Management, SEO Tools, Admin Panel">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://contenthub.guru/site/about">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="About Content Hub – CMS Dashboard for Websites">
+<meta property="og:description" content="Learn about Content Hub, the modern CMS dashboard for managing websites with SEO and analytics tools.">
+<meta property="og:url" content="https://contenthub.guru/site/about">
+<meta property="og:image" content="https://contenthub.guru/images/logo.png">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="About Content Hub – CMS Dashboard for Websites">
+<meta name="twitter:description" content="Learn about Content Hub, the modern CMS dashboard for managing websites with SEO and analytics tools.">
+<meta name="twitter:image" content="https://contenthub.guru/images/logo.png">
+
+<!-- Favicons -->
+<link rel="apple-touch-icon" sizes="180x180" href="https://contenthub.guru/images/favicons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://contenthub.guru/images/favicons/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="https://contenthub.guru/images/favicons/favicon-16x16.png">
+<link rel="manifest" href="https://contenthub.guru/images/favicons/site.webmanifest">
+
+<!-- Monetization -->
+<meta name="google-adsense-account" content="ca-pub-2001518155292747">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2001518155292747" crossorigin="anonymous"></script>
+
+<!-- Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZPWGF7YMPE"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-ZPWGF7YMPE');
+</script>
+
+
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+<link rel="stylesheet" href="https://contenthub.guru/site/css/style.css">
+</head>
+<body>
+
+    
+<div id="main-header"></div>
+<script type="module">
+  import {  } from 'https://contenthub.guru/site/js/header.js';
+</script>
+
+
+<main>
+      <h1>About Us</h1>
+
+  <section>
+    <h2>Our Mission</h2>
+    <p>Content Hub is dedicated to providing a streamlined, intuitive CMS dashboard for creators, developers, and businesses. Our mission is to simplify website management by combining editing, SEO, analytics, and collaboration in one platform.</p>
+  </section>
+
+  <section>
+    <h2>Why Choose Content Hub?</h2>
+    <ul>
+      <li><strong>Easy to Use:</strong> Intuitive interface that anyone can master quickly.</li>
+      <li><strong>Full Control:</strong> Manage pages, content blocks, SEO, and analytics in one place.</li>
+      <li><strong>SEO Optimized:</strong> Built-in tools to improve visibility in search engines.</li>
+      <li><strong>Flexible & Scalable:</strong> Works for personal projects, businesses, or large teams.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Our Story</h2>
+    <p>Content Hub was created to solve the challenges of managing multiple websites efficiently. We wanted a dashboard that combines content creation, editing, analytics, and SEO without the complexity of traditional CMS platforms. With continuous improvements and feedback from our users, we strive to make website management faster, smarter, and more productive.</p>
+  </section>
+
+  <section>
+    <h2>Meet the Team</h2>
+    <p>We’re a small but passionate team of developers, designers, and content strategists committed to building the best CMS experience possible.</p>
+    <ul>
+      <li><strong>Ron Wilson</strong> – Founder & Lead Developer</li>
+      <li><strong>Team Members</strong> – Designers, Backend & Frontend Developers</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Contact Us</h2>
+    <p>If you have questions, feature requests, or feedback, <a href="https://contenthub.guru/site/contact-us">get in touch</a>. We love hearing from our users!</p>
+  </section>
+
+        
+    <!-- Support Links -->
+    <div class="mt-4  text-center">
+      <a href="https://contenthub.guru/site/support.html" class="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl shadow">Visit Support</a>
+      <a href="https://contenthub.guru/site/feedback.html" class="px-5 py-2 bg-yellow-500 hover:bg-yellow-600 text-white rounded-xl shadow">Give Feedback</a>
+      <a href="https://contenthub.guru/site/contact-us" class="px-5 py-2 bg-gray-800 hover:bg-gray-900 text-white rounded-xl shadow">Contact Us</a>
+      <a href="https://contenthub.guru/site/faqs" class="px-5 py-2 bg-gray-800 hover:bg-gray-900 text-white rounded-xl shadow">FAQs</a>
+    </div>
+    
+      <!-- CTA Back Link -->
+      <div class="text-center pt-2">
+        <a href="https://contenthub.guru/" class="text-sm text-blue-600 hover:underline">← Back to Home</a>
+      </div>
+
+</main>
+
+<div id="main-footer"></div>
+<script type="module">
+  import { loadFooter } from 'https://contenthub.guru/site/js/footer.js';
+  loadFooter(); // injects footer into div#main-footer
+
+  
+import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+import { showToast } from "https://contenthub.guru/exports/showToast.js";
+
+import { db, auth, storage } from "https://contenthub.guru/admin/exports/firebaseConfig.js";
+
+
+const loginBtn = document.getElementById("loginBtn");
+const adminBtn = document.getElementById("adminBtn");
+
+onAuthStateChanged(auth, user => {
+  if(user){
+    loginBtn.textContent = "Logged in as " + user.displayName;
+    if(allowedEmails.includes(user.email) || allowedPhones.includes(user.phoneNumber)) adminBtn.style.display="inline-block";
+  } else {
+    loginBtn.textContent="Login";
+    adminBtn.style.display="none";
+  }
+
+  loginBtn.addEventListener("click", async () => {
+  const provider = new GoogleAuthProvider();
+  try { await signInWithPopup(auth, provider); } 
+  catch (err) { alert("Login failed: " + err.message); }
+});
+
+adminBtn.addEventListener("click", () => { window.location.href = "https://contenthub.guru/admin/index.html"; });
+
+});
+
+</script>
+
+
+
+
+</body>
+</html>

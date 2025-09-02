@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>FAQ - Content Hub</title>
+
+
+<!-- Primary Meta Tags -->
+<meta name="description" content="Find answers to the most frequently asked questions about Content Hub. Learn how our CMS dashboard helps you manage websites, optimize SEO, and streamline content management.">
+<meta name="keywords" content="Content Hub FAQ, CMS Help, SEO Tools Questions, Dashboard Support, Content Management Answers">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://contenthub.guru/site/faqs">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="FAQ – Content Hub">
+<meta property="og:description" content="Get quick answers to common questions about Content Hub's CMS dashboard, SEO tools, and content management features.">
+<meta property="og:url" content="https://contenthub.guru/site/faqs">
+<meta property="og:image" content="https://contenthub.guru/images/logo.png">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="FAQ – Content Hub">
+<meta name="twitter:description" content="Explore frequently asked questions about Content Hub’s CMS dashboard, SEO tools, and content management solutions.">
+<meta name="twitter:image" content="https://contenthub.guru/images/logo.png">
+
+<!-- Favicons -->
+<link rel="apple-touch-icon" sizes="180x180" href="https://contenthub.guru/images/favicons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://contenthub.guru/images/favicons/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="https://contenthub.guru/images/favicons/favicon-16x16.png">
+<link rel="manifest" href="https://contenthub.guru/images/favicons/site.webmanifest">
+
+<!-- Schema.org FAQPage -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is Content Hub?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Content Hub is a modern CMS dashboard that helps you manage, edit, and optimize websites with built-in SEO and analytics tools."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is Content Hub SEO-friendly?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, Content Hub includes SEO optimization features, meta tag management, and analytics to help your website rank better in search engines."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How can I get support?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "You can reach out to our support team via the Contact Us page for technical help, business inquiries, or feedback."
+      }
+    }
+  ],
+  "publisher": {
+    "@type": "Organization",
+    "name": "Content Hub",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://contenthub.guru/images/logo.png"
+    }
+  }
+}
+</script>
+
+
+<!-- Monetization -->
+<meta name="google-adsense-account" content="ca-pub-2001518155292747">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2001518155292747" crossorigin="anonymous"></script>
+
+<!-- Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZPWGF7YMPE"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-ZPWGF7YMPE');
+</script>
+
+
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+<link rel="stylesheet" href="https://contenthub.guru/site/css/style.css">
+</head>
+<body>
+
+    
+<div id="main-header"></div>
+<script type="module">
+  import {  } from 'https://contenthub.guru/site/js/header.js';
+</script>
+
+
+<!-- Main Section -->
+  <main id="main">
+
+
+<div class="container my-5" style="max-width: 600px;">
+
+      <h1 class="text-3xl font-bold text-center">❓ Frequently Asked Questions</h1>
+    <div id="faqList" class="space-y-4">
+      <!-- FAQ items will go here -->
+    </div>
+
+      
+    <!-- Support Links -->
+    <div class="mt-4  text-center">
+      <a href="https://contenthub.guru/site/support.html" class="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl shadow">Visit Support</a>
+      <a href="https://contenthub.guru/site/feedback.html" class="px-5 py-2 bg-yellow-500 hover:bg-yellow-600 text-white rounded-xl shadow">Give Feedback</a>
+      <a href="https://contenthub.guru/site/contact-us" class="px-5 py-2 bg-gray-800 hover:bg-gray-900 text-white rounded-xl shadow">Contact Us</a>
+      <a href="https://contenthub.guru/site/faqs" class="px-5 py-2 bg-gray-800 hover:bg-gray-900 text-white rounded-xl shadow">FAQs</a>
+    </div>
+    
+      <!-- CTA Back Link -->
+      <div class="text-center pt-2">
+        <a href="https://contenthub.guru/" class="text-sm text-blue-600 hover:underline">← Back to Home</a>
+      </div>
+
+</div>
+
+  </main>
+
+
+<!-- // injects footer into div#main-footer -->
+<div id="main-footer"></div>
+<script type="module">
+  import { loadFooter } from 'https://contenthub.guru/site/js/footer.js';
+  loadFooter(); 
+</script>
+
+
+  <!-- Firebase + FAQ Loader -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+    import { getFirestore, collection, addDoc,getDocs, serverTimestamp, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+
+import { db, auth, storage } from "https://contenthub.guru/admin/exports/firebaseConfig.js";
+
+    const faqList = document.getElementById("faqList");
+
+    async function loadFAQs() {
+      const snapshot = await getDocs(collection(db, "faq"));
+      if (snapshot.empty) {
+        faqList.innerHTML = `<p class="text-center text-gray-500">No FAQs available at the moment.</p>`;
+        return;
+      }
+
+      snapshot.forEach(doc => {
+        const { question, answer } = doc.data();
+
+        const item = document.createElement("details");
+        item.className = "bg-white border border-gray-300 rounded-xl p-4 shadow-sm";
+
+        item.innerHTML = `
+          <summary class="font-semibold cursor-pointer text-lg">${question}</summary>
+          <p class="mt-2 text-sm text-gray-700">${answer}</p>
+        `;
+
+        faqList.appendChild(item);
+      });
+    }
+
+    loadFAQs();
+  </script>
+</body>
+</html>

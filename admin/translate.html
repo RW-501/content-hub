@@ -726,7 +726,7 @@ const bottomBlocksHTML = articleData.blocks
   .join("");
 
 
-    const pageURL = `https://contenthub.guru/site/${encodeURIComponent(articleData.slug)}`;
+    const pageURL = `https://contenthub./page/${encodeURIComponent(articleData.slug)}`;
     const pageTitle = `${articleData.title}`;
     const encodedPageTitle = encodeURIComponent(articleData.slug); // Use for URL query strings
 
@@ -742,7 +742,7 @@ const Content = `
 <meta name="keywords" content="${articleData.keywords?.join(', ') || ''}">
 
 <!-- Canonical URL -->
-<link rel="canonical" href="https://contenthub.guru/site/${articleData.slug}">
+<link rel="canonical" href="https://contenthub./page/${articleData.slug}">
 
   <meta name="author" content="ReelCareer">
   <meta name="robots" content="index, follow">
@@ -752,7 +752,7 @@ const Content = `
   <meta property="og:title" content="${articleData.title}">
   <meta property="og:description" content="${articleData.description}">
   <meta property="og:image" content="${articleData.image}">
-  <meta property="og:url" content="https://contenthub.guru/site/${articleData.slug}">
+  <meta property="og:url" content="https://contenthub./page/${articleData.slug}">
   <meta property="og:site_name" content="ContentHub.guru">
   <meta property="og:locale" content="en_US">
   <meta property="article:author" content="https://contenthub.guru">
@@ -772,12 +772,12 @@ const Content = `
     "@type":"Article",
     "headline":"${articleData.title}",
     "description":"${articleData.description}",
-    "image":["https://contenthub.guru/site/${articleData.slug}"],
+    "image":["https://contenthub./page/${articleData.slug}"],
     "author":{"@type":"Organization","name":"ContentHub"},
     "publisher":{"@type":"Organization","name":"ContentHub","logo":{"@type":"ImageObject","url":"${articleData.image}"}},
     "datePublished":"${articleData.publishedAt}",
     "dateModified":"${articleData.updatedAt}",
-    "mainEntityOfPage":{"@type":"WebPage","@id":"https://contenthub.guru/site/${articleData.slug}"}
+    "mainEntityOfPage":{"@type":"WebPage","@id":"https://contenthub./page/${articleData.slug}"}
   }
   <\/script>
 
@@ -1030,7 +1030,7 @@ hr {
     <div id="pageSlug">${articleData.slug}</div>
     <div id="pageTitle">${articleData.title}</div>
     <div id="pageDescription">${articleData.description}</div>
-    <div id="pageURL">https://contenthub.guru/site/${articleData.slug}</div>
+    <div id="pageURL">https://contenthub./page/${articleData.slug}</div>
   </div>
 </body>
 </html>

@@ -411,7 +411,7 @@ function formatVersion(n) {
 async function pingSite(domain) {
   if (!domain) return { online: false, version: null };
 
-  const url = domain.startsWith("http") ? domain : `https://contenthub.guru/site/${domain}`;
+  const url = domain.startsWith("http") ? domain : `https://contenthub./page/${domain}`;
   if (checkedDomains.hasOwnProperty(url)) return checkedDomains[url];
 
   try {
@@ -896,7 +896,7 @@ async function loadDashboard(autoPing = false) {
     const pageData = pageSnap.exists() ? pageSnap.data() : {};
     pageCache[p.id] = pageData; // cache it
 
-    const pageUrl = `https://contenthub.guru/site/${pageData.slug}`;
+    const pageUrl = `https://contenthub./page/${pageData.slug}`;
     const shareText = encodeURIComponent(`Check out this page: ${pageData.title || ''}`);
 
     html += `<tr>

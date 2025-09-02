@@ -51,7 +51,7 @@
 <link rel="preconnect" href="https://www.googletagmanager.com">
 <link rel="dns-prefetch" href="https://www.googletagmanager.com">
 <link rel="preload" href="https://contenthub.guru/images/logo.png" as="image">
-<link rel="preload" href="https://contenthub.guru/css/style.css" as="style">
+<link rel="preload" href="https://contenthub.guru/site/css/style.css" as="style">
 
 <!-- Verification / Monetization -->
 <meta name="google-site-verification" content="YOUR_GOOGLE_VERIFICATION_CODE">
@@ -161,7 +161,7 @@
 <meta name="DC.language" content="en">
 <meta name="DC.creator" content="ContentHub.guru">
 
-<link rel="stylesheet" href="https://contenthub.guru/css/style.css">
+<link rel="stylesheet" href="https://contenthub.guru/site/css/style.css">
 <style>
   body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin:0; padding:0; background:#f4f6f8; color:#333; }
   a { text-decoration:none; color:inherit; }
@@ -218,7 +218,7 @@
 <!-- Header -->
 <div id="main-header"></div>
 <script type="module">
-  import {  } from 'https://contenthub.guru/exports/header.js';
+  import {  } from 'https://contenthub.guru/site/js/header.js';
 </script>
 
 
@@ -242,7 +242,7 @@
 <!-- Footer -->
 <div id="main-footer"></div>
 <script type="module">
-  import { loadFooter } from 'https://contenthub.guru/exports/footer.js';
+  import { loadFooter } from 'https://contenthub.guru/site/js/footer.js';
   loadFooter(); // injects footer into div#main-footer
 </script>
 
@@ -306,10 +306,10 @@ async function loadCategoryBatch(category) {
       <div class="page-card">
         <img src="${image}" alt="${data.title}" loading="lazy">
         <div class="page-info">
-          <a href="https://contenthub.guru/site/${data.slug}"><h3>${data.title}</h3></a>
+          <a href="https://contenthub./page/${data.slug}"><h3>${data.title}</h3></a>
           <p>${(data.description || "").slice(0, 120)}...</p>
           <p>Reading Time: ${readTime} min</p>
-          <a href="https://contenthub.guru/site/${data.slug}" class="read-more">Read More →</a>
+          <a href="https://contenthub./page/${data.slug}" class="read-more">Read More →</a>
         </div>
       </div>
     `;
@@ -338,10 +338,10 @@ async function loadSuggestedPages(category) {
         <div class="page-card">
           <img src="${image}" alt="${data.title}" loading="lazy">
           <div class="page-info">
-            <a href="https://contenthub.guru/site/${data.slug}"><h3>${data.title}</h3></a>
+            <a href="https://contenthub./page/${data.slug}"><h3>${data.title}</h3></a>
             <p>${(data.description || "").slice(0, 120)}...</p>
             <p>Reading Time: ${readTime} min</p>
-            <a href="https://contenthub.guru/site/${data.slug}" class="read-more">Read More →</a>
+            <a href="https://contenthub./page/${data.slug}" class="read-more">Read More →</a>
           </div>
         </div>
       `;

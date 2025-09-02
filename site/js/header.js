@@ -43,7 +43,7 @@
   const links = [
     { text: 'Home', href: '/' },
     { text: 'About', href: '/site/about' },
-    { text: 'Category', href: '/site/category' },
+    { text: 'Category', href: '/category' },
     { text: 'Contact Us', href: '/site/contact-us' },
     { text: 'Dashboard', href: 'https://contenthub.guru/admin', show: currentHost === 'contenthub.guru' || currentPath === '/' },
 

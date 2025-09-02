@@ -133,12 +133,71 @@
   </main>
 
 
-<!-- // injects footer into div#main-footer -->
-<div id="main-footer"></div>
+<footer id="main-footer">
+  <nav aria-label="Footer Navigation" style="
+        display:flex;
+        flex-wrap:wrap;
+        justify-content:center;
+        gap:10px;
+        font-size:14px;
+      ">
+    <ul style="list-style:none; display:flex; flex-wrap:wrap; gap:10px; padding:0; margin:0;">
+      <li><a href="https://contenthub.guru" title="Content Hub Home" style="color:#f3f4f6; text-decoration:none;">Home</a></li>
+      <li>|</li>
+      <li><a href="https://contenthub.guru/admin" id="mainAdminBtn" title="Dashboard Login" style="color:#f3f4f6; text-decoration:none;">Dashboard</a></li>
+      <li>|</li>
+      <li><a href="https://contenthub.guru/site/about" title="About Content Hub" style="color:#f3f4f6; text-decoration:none;">About</a></li>
+      <li>|</li>
+      <li><a href="https://contenthub.guru/category" title="Browse Categories" style="color:#f3f4f6; text-decoration:none;">Categories</a></li>
+      <li>|</li>
+      <li><a href="https://contenthub.guru/site/feedback" title="Submit Feedback" style="color:#f3f4f6; text-decoration:none;">Feedback</a></li>
+      <li>|</li>
+      <li><a href="https://contenthub.guru/site/faqs" title="Frequently Asked Questions" style="color:#f3f4f6; text-decoration:none;">FAQs</a></li>
+      <li>|</li>
+      <li><a href="https://contenthub.guru/site/support" title="Support Center" style="color:#f3f4f6; text-decoration:none;">Support</a></li>
+      <li>|</li>
+      <li><a href="https://contenthub.guru/site/contact-us" title="Contact Content Hub" style="color:#f3f4f6; text-decoration:none;">Contact Us</a></li>
+      <li>|</li>
+      <li><a href="https://contenthub.guru/site/privacy-policy" title="Privacy Policy" style="color:#f3f4f6; text-decoration:none;">Privacy Policy</a></li>
+    </ul>
+  </nav>
+</footer>
+
+<!-- JSON-LD Structured Data for Footer Navigation -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SiteNavigationElement",
+  "name": [
+    "Home",
+    "Dashboard",
+    "About",
+    "Categories",
+    "Feedback",
+    "FAQs",
+    "Support",
+    "Contact Us",
+    "Privacy Policy"
+  ],
+  "url": [
+    "https://contenthub.guru",
+    "https://contenthub.guru/admin",
+    "https://contenthub.guru/site/about",
+    "https://contenthub.guru/category",
+    "https://contenthub.guru/site/feedback",
+    "https://contenthub.guru/site/faqs",
+    "https://contenthub.guru/site/support",
+    "https://contenthub.guru/site/contact-us",
+    "https://contenthub.guru/site/privacy-policy"
+  ]
+}
+</script>
+
 <script type="module">
   import { loadFooter } from 'https://contenthub.guru/site/js/footer.js';
-  loadFooter(); 
+  loadFooter(); // injects footer into #main-footer
 </script>
+
 
 
 <script type="module">

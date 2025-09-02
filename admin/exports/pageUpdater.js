@@ -382,7 +382,7 @@ const readTime = calculateReadingTime(articleBody);
 
 
 
-    const pageURL = `https://contenthub./page/${encodeURIComponent(articleData.slug)}`;
+    const pageURL = `https://contenthub.guru/page/${encodeURIComponent(articleData.slug)}`;
     const pageTitle = `${articleData.title}`;
     const encodedPageTitle = encodeURIComponent(articleData.slug); // Use for URL query strings
 
@@ -405,10 +405,10 @@ if (Array.isArray(articleData.suggested)) {
       <div class="suggested-card">
         <img src="${page.image || 'https://contenthub.guru/images/placeholder.png'}" alt="${page.title}">
         <div class="suggested-content">
-          <a href="https://contenthub./page/${page.slug}"><h3>${page.title}</h3></a>
+          <a href="https://contenthub.guru/page/${page.slug}"><h3>${page.title}</h3></a>
           <p>Reading Time: ${readTime} min</p>
           <p>${(page.description || "").slice(0, 100)}...</p>
-          <a href="https://contenthub./page/${page.slug}"> Read More →</a>
+          <a href="https://contenthub.guru/page/${page.slug}"> Read More →</a>
         </div>
       </div>
     `;
@@ -467,7 +467,7 @@ const Content = `
 
   <meta name="robots" content="index, follow">
 <!-- Canonical URL -->
-<link rel="canonical" href="https://contenthub./page/${articleData.slug}">
+<link rel="canonical" href="https://contenthub.guru/page/${articleData.slug}">
 
 <!-- Favicon -->
 <link rel="icon" type="image/x-icon" href="https://contenthub.guru/images/favicons/favicon.ico">
@@ -490,7 +490,7 @@ const Content = `
 <meta property="og:image:alt" content="${articleData.title}">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:url" content="https://contenthub./page/${articleData.slug}">
+<meta property="og:url" content="https://contenthub.guru/page/${articleData.slug}">
 <meta property="og:site_name" content="ContentHub.guru">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="${articleData.publishedAt || new Date().toISOString()}">
@@ -522,7 +522,7 @@ const Content = `
   "itemListElement": [
     {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://contenthub.guru"},
     {"@type": "ListItem", "position": 2, "name": "${articleData.category}", "item": "https://contenthub.guru/category/${articleData.category}"},
-    {"@type": "ListItem", "position": 3, "name": "${articleData.title}", "item": "https://contenthub./page/${articleData.slug}"}
+    {"@type": "ListItem", "position": 3, "name": "${articleData.title}", "item": "https://contenthub.guru/page/${articleData.slug}"}
   ]
 }
 </script>
@@ -540,7 +540,7 @@ const Content = `
     "publisher":{"@type":"Organization","name":"ContentHub","logo":{"@type":"ImageObject","url":"${articleData.image}"}},
     "datePublished":"${articleData.publishedAt}",
     "dateModified":"${articleData.updatedAt}",
-    "mainEntityOfPage":{"@type":"WebPage","@id":"https://contenthub./page/${articleData.slug}"}
+    "mainEntityOfPage":{"@type":"WebPage","@id":"https://contenthub.guru/page/${articleData.slug}"}
   }
   <\/script>
 
@@ -876,7 +876,7 @@ hr {
     <div id="pageSlug">${articleData.slug}</div>
     <div id="pageTitle">${articleData.title}</div>
     <div id="pageDescription">${articleData.description}</div>
-    <div id="pageURL">https://contenthub./page/${articleData.slug}</div>
+    <div id="pageURL">https://contenthub.guru/page/${articleData.slug}</div>
   </div>
 </body>
 </html>

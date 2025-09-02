@@ -34,6 +34,8 @@ export function loadFooter(targetId = "main-footer") {
         <span>|</span>
         <a href="https://contenthub.guru/site/about" style="color:#f3f4f6; text-decoration:none;">About</a>
         <span>|</span>
+        <a href="https://contenthub.guru/category" style="color:#f3f4f6; text-decoration:none;">Categories</a>
+        <span>|</span>
         <a href="https://contenthub.guru/site/feedback" style="color:#f3f4f6; text-decoration:none;">Feedback</a>
         <span>|</span>        
         <a href="https://contenthub.guru/site/faqs" style="color:#f3f4f6; text-decoration:none;">FAQs</a>

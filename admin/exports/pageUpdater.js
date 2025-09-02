@@ -86,20 +86,18 @@ function formatCategory(category) {
 
 let FAQ_Bool = false;
 
-// Step 1: Render FAQ blocks into collapsible <details> elements
+
+
 function renderFAQs(html) {
   if (!html) return html;
 
-const faqRegex = /<p[^>]*>\s*<strong[^>]*>(Q\d+:.*?)<\/strong>\s*<br[^>]*>\s*([\s\S]*?)<\/p>/gi;
+  const faqRegex = /<p[^>]*>\s*<strong[^>]*>(Q\d+:.*?)<\/strong>\s*(?:<br\s*\/?>\s*)+([\s\S]*?)<\/p>/gi;
   let hasFAQ = false;
-          //  console.log("html, ",html);
 
   html = html.replace(faqRegex, (match, q, a) => {
     hasFAQ = true;
     q = linkifyContentHub(q.trim());
     a = linkifyContentHub(a.trim());
-            console.log("hasFAQ, ",hasFAQ);
-
     return `<details class="faq-item"><summary>${q}</summary><div class="faq-answer">${a}</div></details>`;
   });
 
@@ -107,7 +105,6 @@ const faqRegex = /<p[^>]*>\s*<strong[^>]*>(Q\d+:.*?)<\/strong>\s*<br[^>]*>\s*([\
   return html;
 }
 
-// Step 2: Generate FAQ schema for SEO
 function generateFAQSchema(html) {
   if (!FAQ_Bool) return null;
 
@@ -124,9 +121,6 @@ function generateFAQSchema(html) {
         "name": question,
         "acceptedAnswer": { "@type": "Answer", "text": answer }
       });
-
-            //console.log("faqItems, ",faqItems);
-
     }
   }
 

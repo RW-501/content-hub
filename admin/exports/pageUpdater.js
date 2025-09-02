@@ -675,7 +675,7 @@ hr {
     </ol>
   </nav>
 
-  <p><strong>Read Time:</strong> ${articleData.readTime || "5"} mins</p>
+  <p><strong>Read Time:</strong> <div id="readTime">${articleData.readTime || "5"}</div> mins</p>
 
   <p>
     <a href="#commentForm" title="${articleData.title} Comments" id="navCommentBtn">Comments</a>

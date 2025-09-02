@@ -32,7 +32,7 @@ export function loadFooter(targetId = "admin-footer") {
         <span>|</span>
         <a href="https://contenthub.guru/admin" id="mainAdminBtn" style="color:#f3f4f6; text-decoration:none;">Dashboard</a>
         <span>|</span>
-        <a href="https://contenthub.guru/about" style="color:#f3f4f6; text-decoration:none;">About</a>
+        <a href="https://contenthub.guru/site/about" style="color:#f3f4f6; text-decoration:none;">About</a>
         <span>|</span>
         <a href="https://contenthub.guru/contact-us" style="color:#f3f4f6; text-decoration:none;">Contact Us</a>
         <span>|</span>

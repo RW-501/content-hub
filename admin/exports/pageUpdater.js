@@ -171,7 +171,7 @@ function generateHowToSchema(html) {
 
 function checkContent(html) {
   if (!html) return "";
-  //console.log("html, ",html);
+  console.log("html, ",html);
 
   // Linkify contenthub mentions
   html = linkifyContentHub(html);

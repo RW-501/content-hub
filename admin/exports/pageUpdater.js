@@ -83,6 +83,10 @@ function formatCategory(category) {
 
             console.log("???????????");
 
+            
+let HowTo_Bool = false;
+let FAQ_Bool = false;
+
 
 function generateHowToSchema(html) {
   console.log("HTML: ",html);
@@ -105,6 +109,8 @@ function generateHowToSchema(html) {
 
   if (steps.length === 0) return null;
 
+  HowTo_Bool = true;
+  
   return {
     "@context": "https://schema.org",
     "@type": "HowTo",
@@ -113,8 +119,6 @@ function generateHowToSchema(html) {
   };
 }
 
-
-let FAQ_Bool = false;
 
 
 function checkContent(html) {
@@ -486,6 +490,7 @@ const Content = `
 <meta name="description" content="${articleData.description}">
 <meta name="version" content="${version}">
 <meta name="faq" content="${FAQ_Bool ? 'true' : 'false'}">
+<meta name="howTo" content="${HowTo_Bool ? 'true' : 'false'}">
 <meta name="category" content="${formatCategory(articleData.category)}">
 <meta name="lang" content="en">
 

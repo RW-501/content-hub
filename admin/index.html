@@ -420,6 +420,7 @@ async function pingSite(domain) {
 
     let version = null;
     let faq = null;
+    let howTo = null;
 
     if (isOnline) {
       const html = await resp.text();
@@ -427,21 +428,25 @@ async function pingSite(domain) {
       const doc = parser.parseFromString(html, "text/html");
       const meta = doc.querySelector('meta[name="version"]');
       const faq_meta = doc.querySelector('meta[name="faq"]');
+      const howTo_meta = doc.querySelector('meta[name="howTo"]');
 
       if (meta) {
         version = extractVersion(meta.getAttribute("content"));
       }
 if (faq_meta) {
   faq = faq_meta.getAttribute("content") === "true";
+  
 }
-
+  if (howTo_meta) {
+        howTo = extractVersion(howTo_meta.getAttribute("content"));
+      }
     }
 
-    const result = { online: isOnline, version, faq };
+    const result = { online: isOnline, version, faq, howTo };
     checkedDomains[url] = result;
     return result;
   } catch {
-    const result = { online: false, version: null, faq: null };
+    const result = { online: false, version: null, faq: null, howTo: null };
     checkedDomains[url] = result;
     return result;
   }
@@ -452,11 +457,12 @@ if (faq_meta) {
 // Step 1: Ping all pages first
 async function fetchAllPages(pages) {
   for (const p of pages) {
-    const { online, version, faq } = await pingSite(p.slug);
+    const { online, version, faq, howTo } = await pingSite(p.slug);
     versions[p.siteId] = version;
     p.online = online;
     p.version = version;
     p.faq = faq;
+    p.howTo = howTo;
   }
 }
 
@@ -471,10 +477,12 @@ function renderPageStatus(p, latestVersion) {
   const statusEl  = document.getElementById(`status-${p.siteId}`);
   const versionEl = document.getElementById(`version-${p.siteId}`);
   const faqEl = document.getElementById(`faq-${p.siteId}`);
+  const howToEl = document.getElementById(`howTo-${p.siteId}`);
 
   if (!statusEl) return;
 
 if (faqEl) faqEl.textContent = p.faq ? "✅ FAQ Available" : "❌ No FAQ";
+if (howToEl) howToEl.textContent = p.howTo ? "✅ HowTo Available" : "❌ No HowTo";
 
   if (!p.online) {
     statusEl.textContent = "❌ Offline";
@@ -908,6 +916,7 @@ async function loadDashboard(autoPing = false) {
       <td>
 <div id="category-${pageData.siteId}" class="category">${pageData.category || ''}</div>
 <div id="faq-${pageData.siteId}" class="faq_status">FAQ</div>
+<div id="howTo-${pageData.siteId}" class="howTo_status">howTo</div>
       </td>
       <td><div id="status-${pageData.siteId}" class="status-offline">❌ Offline</div></td>
       <td><div id="version-${pageData.siteId}" class="version">version</div></td>

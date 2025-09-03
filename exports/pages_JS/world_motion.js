@@ -121,26 +121,53 @@ const categories = {
   "Health": ["Vaccinations Given", "Hospital Appointments", "Steps Walked", "Calories Burned", "Yoga Sessions"]
 };
 
-function generateActivities(base, categories, target = 200){
+function generateActivities(base, categories, target = 200) {
   let idCounter = base.length + 1;
   let newActivities = [...base];
-  while(newActivities.length < target){
-    for(const [cat, names] of Object.entries(categories)){
-      names.forEach(name=>{
-        if(newActivities.length >= target) return;
-        let id = name.replace(/\s+/g,'').toLowerCase() + idCounter;
-        let rate = +(Math.random()*1000).toFixed(2);
-        let unit = cat==="Population" ? "people" : cat==="Technology" ? "actions" :
-                   cat==="Environment" ? "events" : cat==="Economy" ? "$" :
-                   cat==="Food & Drink" ? "items" : cat==="Entertainment" ? "sessions" :
-                   cat==="Transport" ? "rides" : "units";
-        newActivities.push({id, name, ratePerSecond:rate, category:cat, description:`${name} per second worldwide.`, unit});
+
+  // Map categories to default units
+  const defaultUnits = {
+    "Population": "people",
+    "Technology": "actions",
+    "Environment": "events",
+    "Economy": "$",
+    "Food & Drink": "items",
+    "Entertainment": "sessions",
+    "Transport": "rides",
+    "Health": "units"
+  };
+
+  while (newActivities.length < target) {
+    let done = false; // flag to break out early
+    for (const [cat, names] of Object.entries(categories)) {
+      for (const name of names) {
+        if (newActivities.length >= target) {
+          done = true;
+          break; // break inner loop
+        }
+
+        let id = name.replace(/\s+/g, '').toLowerCase() + idCounter;
+        let rate = +(Math.random() * 1000).toFixed(2);
+        let unit = defaultUnits[cat] || "units"; // fall back to "units" if not mapped
+
+        newActivities.push({
+          id,
+          name,
+          ratePerSecond: rate,
+          category: cat,
+          description: `${name} per second worldwide.`,
+          unit
+        });
+
         idCounter++;
-      });
+      }
+      if (done) break; // break outer loop too
     }
   }
+
   return newActivities;
 }
+
 
 activities = generateActivities(activities, categories, 200);
 
@@ -328,8 +355,9 @@ function animateDots(){
     activityChart.update('none');
     animationId=requestAnimationFrame(step);
   }
-  cancelAnimationFrame(animationId);
-  step();
+if (animationId) cancelAnimationFrame(animationId);
+step();
+
 }
 
 function updateChart(){ if(!activityChart) return; animateChartGrowth(); }

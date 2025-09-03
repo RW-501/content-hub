@@ -102,41 +102,38 @@ let FAQ_Bool = false;
 
 
 function generateHowToSchema(html) {
-  console.log("html, ",html);
-  const howToTitleRegex = /<h2[^>]*>(How[\s-]?To.*?)<\/h2>\s*<p[^>]*>.*?<\/p>/i;
+  console.log("html, ", html);
+
+  // Match <h2> that contains "How to" (case-insensitive, with possible emoji/extra text before)
+  const howToTitleRegex = /<h2[^>]*>.*?(How\s*to.*?)<\/h2>/i;
   const titleMatch = html.match(howToTitleRegex);
   if (!titleMatch) return null;
 
   const title = titleMatch[1].trim();
 
-  // Match step headings: "Step 1:", "step 1:", "1.", "1 of 1:"
+  // Match steps: could be numbered headings (Step 1, 1., etc.) OR list items under a How To section
   const stepRegex = /<h[3-4][^>]*>\s*(?:Step\s*\d+|step\s*\d+|\d+(?:\s*of\s*\d+)?\.?)\s*[:.-]?\s*(.*?)<\/h[3-4]>\s*<p[^>]*>([\s\S]*?)<\/p>/gi;
+  const listStepRegex = /<li[^>]*>\s*<p[^>]*><strong[^>]*>(.*?)<\/strong>\s*(.*?)<\/p>\s*<\/li>/gi;
 
   const steps = [];
   let stepMatch;
+
+  // Capture heading-based steps
   while ((stepMatch = stepRegex.exec(html)) !== null) {
-    HowTo_Bool = true;
     const stepTitle = stepMatch[1].trim();
     const stepText = stepMatch[2].replace(/<[^>]+>/g, "").trim();
     steps.push({ "@type": "HowToStep", "name": stepTitle, "text": stepText });
   }
 
-  if (steps.length === 0) return null;
-
-
-  return {
-    "@context": "https://schema.org",
-    "@type": "HowTo",
-    "name": title,
-    "step": steps
-  };
-}
+  // Capture list-based steps (like in your example)
+  let listStepMatch;
+  while ((listStepMatch = listStepRegex.
 
 
 
 function checkContent(html) {
   if (!html) return "";
-  console.log("html, ",html);
+  //console.log("html, ",html);
 
   // Linkify contenthub mentions
   html = linkifyContentHub(html);

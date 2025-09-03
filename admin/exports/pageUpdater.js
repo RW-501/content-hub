@@ -117,8 +117,10 @@ function generateHowToSchema(html) {
 
 let FAQ_Bool = false;
 
+
 function checkContent(html) {
   if (!html) return "";
+  //console.log("html, ",html);
 
   // Linkify contenthub mentions
   html = linkifyContentHub(html);
@@ -181,27 +183,7 @@ function linkifyContentHub(html) {
   return html.replace(regex, match => `<a href="https://contenthub.guru" target="_blank" rel="noopener noreferrer">${match}</a>`);
 }
 
-// Usage in your pipeline:
-function checkContent(html) {
-  if (!html) return "";
-      
-  //console.log("html, ",html);
 
-  // Linkify first
-  html = linkifyContentHub(html);
-
-  // Render FAQ blocks
-  html = renderFAQs(html);
-
-  // Generate schema if any FAQs exist
-  const faqSchema = generateFAQSchema(html);
-  if (faqSchema) {
-
-    html += `<script id='FAQ_Schema' type="application/ld+json">${JSON.stringify(faqSchema)}</script>`;
-  }
-
-  return html;
-}
 
   // Load existing image when editing
 function renderBlockHTML(b) {

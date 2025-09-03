@@ -112,7 +112,7 @@ function generateHowToSchema(html) {
 
   // Regex patterns for different formats
   const stepRegex = /<h[2-4][^>]*>\s*(?:Step\s*\d+|Week\s*\d+|step\s*\d+|\d+(?:\s*of\s*\d+)?\.?)\s*[:.-]?\s*(.*?)<\/h[2-4]>\s*([\s\S]*?)(?=<h[2-4]|<hr|$)/gi;
-  const listStepRegex = /<li[^>]*>\s*<p[^>]*><strong[^>]*>(.*?)<\/strong>\s*[–-:]?\s*(.*?)<\/p>\s*<\/li>/gi;
+  const listStepRegex = /<li[^>]*>\s*<p[^>]*><strong[^>]*>(.*?)<\/strong>\s*[–\-:]?\s*(.*?)<\/p>\s*<\/li>/gi;
   const simpleListRegex = /<li[^>]*>\s*(?:<p[^>]*>)?(.*?)<\/?(?:p|li)>/gi;
 
   const steps = [];
@@ -144,7 +144,8 @@ function generateHowToSchema(html) {
     while ((subMatch = simpleListRegex.exec(stepBody)) !== null) {
       const rawText = subMatch[1].replace(/<[^>]+>/g, "").trim();
       if (rawText.length > 0) {
-        const parts = rawText.split(/[:–-]/);
+
+        const parts = rawText.split(/[:–\-]/);
         const subTitle = parts.shift().trim();
         const subText = parts.join(" ").trim();
         steps.push({

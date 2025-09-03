@@ -45,7 +45,6 @@ function injectAssetsForPage(targetPath) {
       .activity-card { 
         padding: 15px; border-radius: 12px; margin-bottom: 15px; 
         box-shadow: 0 5px 15px rgba(0,0,0,0.1); cursor:pointer;
-        opacity: 0; transform: translateY(20px); transition: all 0.5s ease, transform 0.5s ease;
       }
       .activity-card.show { opacity: 1; transform: translateY(0); }
       .category-badge { font-size: 0.8rem; margin-left: 5px; }
@@ -61,6 +60,7 @@ function injectAssetsForPage(targetPath) {
     `);
   }
 }
+//         opacity: 0; transform: translateY(20px); transition: all 0.5s ease, transform 0.5s ease;
 
 // Example: only inject on "/analytics" page
 injectAssetsForPage("/page/world-in-motion-counting-life-one-second-at-a-time");
@@ -175,7 +175,7 @@ console.log(activities); // Ready-to-use array of 200+ activities
 
 
 
-let elapsedSeconds = 7200; // default 2 hours
+let elapsedSeconds = 0; // start at 0
 let timerId = null;
 let sortDescending = false;
 
@@ -206,10 +206,19 @@ function renderActivities() {
   const searchTerm = document.getElementById("searchInput").value.toLowerCase();
   const filterCat = document.getElementById("filterCategory").value;
 
+  // Display elapsed time
+  const elapsedLabel = document.getElementById("elapsedLabel");
+  if (elapsedLabel) {
+    const hrs = Math.floor(elapsedSeconds / 3600);
+    const mins = Math.floor((elapsedSeconds % 3600) / 60);
+    const secs = elapsedSeconds % 60;
+    elapsedLabel.textContent = `Elapsed Time: ${hrs}h ${mins}m ${secs}s`;
+  }
+
   const container = document.getElementById("activities");
   container.innerHTML = "";
 
-  let filtered = activities.filter(a => 
+  let filtered = activities.filter(a =>
     (!filterCat || a.category === filterCat) &&
     (!searchTerm || a.name.toLowerCase().includes(searchTerm) || a.description.toLowerCase().includes(searchTerm))
   );
@@ -242,25 +251,26 @@ function renderActivities() {
   });
 }
 
-// Button controls
+// Start button
 document.getElementById("startBtn").addEventListener("click", () => {
-  const timeInput = parseInt(document.getElementById("timeSelect").value);
-  elapsedSeconds = 0;
   if (timerId) clearInterval(timerId);
 
   timerId = setInterval(() => {
     elapsedSeconds++;
-    if (elapsedSeconds > timeInput) clearInterval(timerId);
     renderActivities();
   }, 1000);
 });
 
+// Stop button
 document.getElementById("stopBtn").addEventListener("click", () => {
   if (timerId) clearInterval(timerId);
+  timerId = null;
 });
 
+// Reset button
 document.getElementById("resetBtn").addEventListener("click", () => {
   if (timerId) clearInterval(timerId);
+  timerId = null;
   elapsedSeconds = 0;
   renderActivities();
 });
@@ -273,6 +283,7 @@ document.getElementById("sortRate").addEventListener("click", () => {
   renderActivities();
 });
 
-
+// Initial render
+renderActivities();
 
 export { renderActivities };

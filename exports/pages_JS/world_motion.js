@@ -106,7 +106,7 @@ let activities = [
   { id:"hospitalVisits", name:"Hospital Visits", ratePerSecond:100, category:"Health", description:"Hospital visits worldwide per second.", unit:"visits" },
   { id:"stepsTaken", name:"Steps Taken", ratePerSecond:500000, category:"Health", description:"Steps taken worldwide per second.", unit:"steps" },
   { id:"caloriesBurned", name:"Calories Burned", ratePerSecond:2000000, category:"Health", description:"Calories burned worldwide per second.", unit:"calories" },
-  { id:"waterConsumed", name:"Liters of Water Drunk", ratePerSecond:5000, category:"Health", description:"Liters of water consumed worldwide per second.", unit:"liters" }
+  { id:"waterConsumed", name:"Liters of Water Drunk", ratePerSecond:5000, category:"Health", description:"Liters of water consumed worldwide per second.", unit:"liters" },
 ];
 
 // -------------------- Generate 200+ activities --------------------
@@ -255,7 +255,9 @@ function renderLeaderboard() {
 
 // Start button
 document.getElementById("startBtn").addEventListener("click", () => {
+    console.log("Start?");
   if (timerId) clearInterval(timerId);
+  console.log("yes");
   timerId = setInterval(tickActivities, 1000);
 });
 
@@ -286,8 +288,7 @@ document.getElementById("sortRate").addEventListener("click", () => {
 
 
   timerId = setInterval(() => {
-    elapsedSeconds++;
-    renderActivities();
+    tickActivities();
   }, 1000);
 
 

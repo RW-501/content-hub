@@ -89,15 +89,15 @@ let FAQ_Bool = false;
 
 
 function generateHowToSchema(html) {
-
   const howToTitleRegex = /<h2[^>]*>(How[\s-]?To.*?)<\/h2>\s*<p[^>]*>.*?<\/p>/i;
   const titleMatch = html.match(howToTitleRegex);
   if (!titleMatch) return null;
 
   const title = titleMatch[1].trim();
 
-  // Find all step headings after the HowTo H2
-  const stepRegex = /<h[3-4][^>]*>(Step \d+: .*?)<\/h[3-4]>\s*<p[^>]*>([\s\S]*?)<\/p>/gi;
+  // Match step headings: "Step 1:", "step 1:", "1.", "1 of 1:"
+  const stepRegex = /<h[3-4][^>]*>\s*(?:Step\s*\d+|step\s*\d+|\d+(?:\s*of\s*\d+)?\.?)\s*[:.-]?\s*(.*?)<\/h[3-4]>\s*<p[^>]*>([\s\S]*?)<\/p>/gi;
+
   const steps = [];
   let stepMatch;
   while ((stepMatch = stepRegex.exec(html)) !== null) {

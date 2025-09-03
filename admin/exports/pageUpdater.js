@@ -104,33 +104,48 @@ let FAQ_Bool = false;
 function generateHowToSchema(html) {
   console.log("html, ", html);
 
-  // Match <h2> that contains "How to" (case-insensitive, with possible emoji/extra text before)
-  const howToTitleRegex = /<h2[^>]*>.*?(How\s*to.*?)<\/h2>/i;
+  // Match <h2> that contains "How to" or "How-To" (case-insensitive, emoji/extra allowed)
+  const howToTitleRegex = /<h2[^>]*>.*?(How[\s-]*to.*?)<\/h2>/i;
   const titleMatch = html.match(howToTitleRegex);
   if (!titleMatch) return null;
 
   const title = titleMatch[1].trim();
 
-  // Match steps: could be numbered headings (Step 1, 1., etc.) OR list items under a How To section
+  // Regex for different step formats
   const stepRegex = /<h[3-4][^>]*>\s*(?:Step\s*\d+|step\s*\d+|\d+(?:\s*of\s*\d+)?\.?)\s*[:.-]?\s*(.*?)<\/h[3-4]>\s*<p[^>]*>([\s\S]*?)<\/p>/gi;
-  const listStepRegex = /<li[^>]*>\s*<p[^>]*><strong[^>]*>(.*?)<\/strong>\s*(.*?)<\/p>\s*<\/li>/gi;
+  const listStepRegex = /<li[^>]*>\s*<p[^>]*><strong[^>]*>(.*?)<\/strong>\s*[–-]?\s*(.*?)<\/p>\s*<\/li>/gi;
+  const simpleListRegex = /<li[^>]*>\s*(?:<p[^>]*>)?(.*?)<\/?(?:p|li)>/gi;
 
   const steps = [];
-  let stepMatch;
+  let match;
 
-  // Capture heading-based steps
-  while ((stepMatch = stepRegex.exec(html)) !== null) {
-    const stepTitle = stepMatch[1].trim();
-    const stepText = stepMatch[2].replace(/<[^>]+>/g, "").trim();
+  // Heading-based steps
+  while ((match = stepRegex.exec(html)) !== null) {
+    const stepTitle = match[1].trim();
+    const stepText = match[2].replace(/<[^>]+>/g, "").trim();
     steps.push({ "@type": "HowToStep", "name": stepTitle, "text": stepText });
   }
 
-  // Capture list-based steps (like in your example)
-  let listStepMatch;
-  while ((listStepMatch = listStepRegex.exec(html)) !== null) {
-    const stepTitle = listStepMatch[1].replace(/<[^>]+>/g, "").trim();
-    const stepText = listStepMatch[2].replace(/<[^>]+>/g, "").trim();
+  // List-based with <strong>
+  while ((match = listStepRegex.exec(html)) !== null) {
+    const stepTitle = match[1].replace(/<[^>]+>/g, "").trim();
+    const stepText = match[2].replace(/<[^>]+>/g, "").trim();
     steps.push({ "@type": "HowToStep", "name": stepTitle, "text": stepText });
+  }
+
+  // Fallback: simple <li> without <strong>
+  while ((match = simpleListRegex.exec(html)) !== null) {
+    const rawText = match[1].replace(/<[^>]+>/g, "").trim();
+    if (rawText.length > 0) {
+      const parts = rawText.split(/[:–-]/); // split "Title – Text"
+      const stepTitle = parts.shift().trim();
+      const stepText = parts.join(" ").trim();
+      steps.push({
+        "@type": "HowToStep",
+        "name": stepTitle || "Step",
+        "text": stepText || stepTitle
+      });
+    }
   }
 
   if (steps.length === 0) return null;

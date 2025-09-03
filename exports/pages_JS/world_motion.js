@@ -265,12 +265,16 @@ document.getElementById("startBtn").addEventListener("click", () => {
 
 // Stop button
 document.getElementById("stopBtn").addEventListener("click", () => {
+        console.log("stop");
+
   if (timerId) clearInterval(timerId);
   timerId = null;
 });
 
 // Reset button
 document.getElementById("resetBtn").addEventListener("click", () => {
+        console.log("reset");
+
   if (timerId) clearInterval(timerId);
   timerId = null;
   elapsedSeconds = 0;

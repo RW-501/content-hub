@@ -148,6 +148,26 @@ function checkContent(html) {
   return html;
 }
 
+function renderFAQs(html) {
+  if (!html) return html;
+
+  // Match <p ...><strong ...>Q1...</strong><br ...>Answer</p>
+  const faqRegex = /<p[^>]*>\s*<strong[^>]*>(Q\d+:.*?)<\/strong>\s*(?:<br[^>]*>\s*)+([\s\S]*?)<\/p>/gi;
+
+  let hasFAQ = false;
+
+  html = html.replace(faqRegex, (match, q, a) => {
+    hasFAQ = true;
+    q = linkifyContentHub(q.trim());
+    a = linkifyContentHub(a.trim());
+    return `<details class="faq-item"><summary>${q}</summary><div class="faq-answer">${a}</div></details>`;
+  });
+
+  FAQ_Bool = hasFAQ;
+  return html;
+}
+
+
 function generateFAQSchema(html) {
   if (!FAQ_Bool) return null;
 

@@ -127,7 +127,21 @@ function generateHowToSchema(html) {
 
   // Capture list-based steps (like in your example)
   let listStepMatch;
-  while ((listStepMatch = listStepRegex.
+  while ((listStepMatch = listStepRegex.exec(html)) !== null) {
+    const stepTitle = listStepMatch[1].replace(/<[^>]+>/g, "").trim();
+    const stepText = listStepMatch[2].replace(/<[^>]+>/g, "").trim();
+    steps.push({ "@type": "HowToStep", "name": stepTitle, "text": stepText });
+  }
+
+  if (steps.length === 0) return null;
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": title,
+    "step": steps
+  };
+}
 
 
 

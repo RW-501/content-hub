@@ -318,6 +318,7 @@ function formatNumber(num) {
 }
 
 
+console.log("Rendering activities:", activities.map(a => ({id: a.id, current: a.current})));
 
 // Initialize activity counters
 activities.forEach(a => a.current = 0);

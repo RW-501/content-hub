@@ -83,25 +83,65 @@ function formatCategory(category) {
 
             console.log("???????????");
 
+function generateHowToSchema(html) {
+  // Find How To section
+const howToRegex = /<h2[^>]*>(\bHow[\s-]?To\b.*?)(?::)?<\/h2>\s*<p[^>]*>.*?<\/p>\s*<ol[^>]*>([\s\S]*?)<\/ol>/gi;
+  const match = howToRegex.exec(html);
+
+  if (!match) return null;
+
+  const title = match[1].trim();
+  const stepsHtml = match[2];
+
+  // Extract steps text
+  const stepRegex = /<li[^>]*>([\s\S]*?)<\/li>/gi;
+  const steps = [];
+  let stepMatch;
+  while ((stepMatch = stepRegex.exec(stepsHtml)) !== null) {
+    const text = stepMatch[1].replace(/<[^>]+>/g, "").trim();
+    if (text) {
+      steps.push({ "@type": "HowToStep", "text": text });
+    }
+  }
+
+  if (steps.length === 0) return null;
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": title,
+    "step": steps
+  };
+}
 
 let FAQ_Bool = false;
 
-function renderFAQs(html) {
-  if (!html) return html;
+function checkContent(html) {
+  if (!html) return "";
 
-  // Match <p ...><strong ...>Q1...</strong><br ...>Answer</p>
-  const faqRegex = /<p[^>]*>\s*<strong[^>]*>(Q\d+:.*?)<\/strong>\s*(?:<br[^>]*>\s*)+([\s\S]*?)<\/p>/gi;
+  // Linkify contenthub mentions
+  html = linkifyContentHub(html);
 
-  let hasFAQ = false;
+  // Render FAQ blocks
+  html = renderFAQs(html);
 
-  html = html.replace(faqRegex, (match, q, a) => {
-    hasFAQ = true;
-    q = linkifyContentHub(q.trim());
-    a = linkifyContentHub(a.trim());
-    return `<details class="faq-item"><summary>${q}</summary><div class="faq-answer">${a}</div></details>`;
-  });
+  // Render How To blocks
+  html = renderHowTo(html);
 
-  FAQ_Bool = hasFAQ;
+  // Generate FAQ schema
+  const faqSchema = generateFAQSchema(html);
+  if (faqSchema) {
+    html += `<script id='FAQ_Schema' type="application/ld+json">${JSON.stringify(faqSchema)}</script>`;
+    console.log("FAQ schema injected!");
+  }
+
+  // Generate HowTo schema
+  const howToSchema = generateHowToSchema(html);
+  if (howToSchema) {
+    html += `<script id='HowTo_Schema' type="application/ld+json">${JSON.stringify(howToSchema)}</script>`;
+    console.log("HowTo schema injected!");
+  }
+
   return html;
 }
 

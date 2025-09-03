@@ -310,14 +310,17 @@ let sortDescending = false;
 
 // Format numbers with shorthand
 function formatNumber(num) {
+  if (typeof num !== "number" || isNaN(num)) return "0"; 
   if (num > 1e9) return (num / 1e9).toFixed(2) + "B";
   if (num > 1e6) return (num / 1e6).toFixed(2) + "M";
   if (num > 1e3) return (num / 1e3).toFixed(1) + "K";
   return num.toFixed(0);
 }
 
+
+
 // Initialize activity counters
-//activities.forEach(a => a.current = 0);
+activities.forEach(a => a.current = 0);
 
 // Render activity cards (does not update counts)
 function renderActivities() {

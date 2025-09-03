@@ -174,7 +174,6 @@ activities = generateActivities(activities, categories, 200);
 console.log(activities); // Ready-to-use array of 200+ activities
 
 
-
 let elapsedSeconds = 0; // start at 0
 let timerId = null;
 let sortDescending = false;
@@ -187,33 +186,13 @@ function formatNumber(num) {
   return num.toFixed(0);
 }
 
-// Animate counters
-function animateCount(el, target) {
-  let current = parseFloat(el.dataset.value || 0);
-  let diff = target - current;
-  if (Math.abs(diff) < 1) {
-    el.textContent = formatNumber(target);
-    el.dataset.value = target;
-    return;
-  }
-  el.dataset.value = current + diff * 0.1;
-  el.textContent = formatNumber(current + diff * 0.1);
-  requestAnimationFrame(() => animateCount(el, target));
-}
+// Initialize activity counters
+activities.forEach(a => a.current = 0);
 
-// Render activities
+// Render activity cards (does not update counts)
 function renderActivities() {
   const searchTerm = document.getElementById("searchInput").value.toLowerCase();
   const filterCat = document.getElementById("filterCategory").value;
-
-  // Display elapsed time
-  const elapsedLabel = document.getElementById("elapsedLabel");
-  if (elapsedLabel) {
-    const hrs = Math.floor(elapsedSeconds / 3600);
-    const mins = Math.floor((elapsedSeconds % 3600) / 60);
-    const secs = elapsedSeconds % 60;
-    elapsedLabel.textContent = `Elapsed Time: ${hrs}h ${mins}m ${secs}s`;
-  }
 
   const container = document.getElementById("activities");
   container.innerHTML = "";
@@ -226,20 +205,43 @@ function renderActivities() {
   if (sortDescending) filtered.sort((a, b) => b.ratePerSecond - a.ratePerSecond);
 
   filtered.forEach(a => {
-    const count = a.ratePerSecond * elapsedSeconds;
     const card = document.createElement("div");
     card.className = "col";
     card.innerHTML = `
       <div class="activity-card" data-activity="${a.id}">
         <h5>${a.name} <span class="badge bg-secondary category-badge">${a.category}</span></h5>
         <p>${a.description}</p>
-        <p><i class="bi bi-calculator"></i> Count: <span class="count" data-value="0">${formatNumber(count)}</span> ${a.unit}</p>
+        <p><i class="bi bi-calculator"></i> Count: <span class="count" data-value="${a.current}">${formatNumber(a.current)}</span> ${a.unit}</p>
       </div>`;
     container.appendChild(card);
-    animateCount(card.querySelector(".count"), count);
   });
 
-  // Top 5 leaderboard
+  renderLeaderboard();
+}
+
+// Update counts each second
+function tickActivities() {
+  elapsedSeconds++;
+
+  // Update elapsed time label
+  const elapsedLabel = document.getElementById("elapsedLabel");
+  if (elapsedLabel) {
+    const hrs = Math.floor(elapsedSeconds / 3600);
+    const mins = Math.floor((elapsedSeconds % 3600) / 60);
+    const secs = elapsedSeconds % 60;
+    elapsedLabel.textContent = `Elapsed Time: ${hrs}h ${mins}m ${secs}s`;
+  }
+
+  // Increment activity counts
+  activities.forEach(a => {
+    a.current += a.ratePerSecond;
+    const el = document.querySelector(`.activity-card[data-activity="${a.id}"] .count`);
+    if (el) el.textContent = formatNumber(a.current);
+  });
+}
+
+// Render top 5 leaderboard
+function renderLeaderboard() {
   const leaderboard = document.getElementById("leaderboard");
   leaderboard.innerHTML = "";
   activities.slice().sort((a, b) => b.ratePerSecond - a.ratePerSecond).slice(0, 5).forEach(a => {
@@ -254,13 +256,7 @@ function renderActivities() {
 // Start button
 document.getElementById("startBtn").addEventListener("click", () => {
   if (timerId) clearInterval(timerId);
-
-  console.log("time: ",elapsedSeconds);
-
-  timerId = setInterval(() => {
-    elapsedSeconds++;
-    renderActivities();
-  }, 1000);
+  timerId = setInterval(tickActivities, 1000);
 });
 
 // Stop button
@@ -274,6 +270,7 @@ document.getElementById("resetBtn").addEventListener("click", () => {
   if (timerId) clearInterval(timerId);
   timerId = null;
   elapsedSeconds = 0;
+  activities.forEach(a => a.current = 0);
   renderActivities();
 });
 
@@ -285,13 +282,7 @@ document.getElementById("sortRate").addEventListener("click", () => {
   renderActivities();
 });
 
-
-
-
-  timerId = setInterval(() => {
-    elapsedSeconds++;
-    renderActivities();
-  }, 1000);
-
+// Initial render
+renderActivities();
 
 export { renderActivities };

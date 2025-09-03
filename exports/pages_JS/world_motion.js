@@ -286,15 +286,12 @@ document.getElementById("sortRate").addEventListener("click", () => {
 });
 
 
-// Auto-start the timer on page load
-document.addEventListener("DOMContentLoaded", () => {
-  renderActivities(); // initial render
+
 
   timerId = setInterval(() => {
     elapsedSeconds++;
     renderActivities();
   }, 1000);
-});
 
 
 export { renderActivities };

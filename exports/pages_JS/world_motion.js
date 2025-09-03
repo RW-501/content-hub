@@ -235,6 +235,36 @@ let activities = [
   { id:"claps", name:"Claps", ratePerSecond:3000, category:"Misc", description:"Claps worldwide per second.", unit:"claps" },
   { id:"laughs", name:"Laughs", ratePerSecond:2000, category:"Misc", description:"Laughs per second worldwide.", unit:"laughs" },
   { id:"winks", name:"Winks", ratePerSecond:150, category:"Misc", description:"Winks exchanged per second worldwide.", unit:"winks" },
+
+// === Rare / Tragic Events ===
+{ id:"planeCrashes", name:"Plane Crashes", ratePerSecond:0.000002, category:"Transport", description:"Commercial plane crashes worldwide per second.", unit:"crashes" }, // ~0.07/year per million flights
+{ id:"assassinations", name:"Assassinations", ratePerSecond:0.0000003, category:"Society", description:"Political or high-profile assassinations worldwide per second.", unit:"events" }, 
+{ id:"overdoses", name:"Drug Overdoses", ratePerSecond:0.002, category:"Health", description:"Drug overdose deaths worldwide per second.", unit:"deaths" }, // ~70k/year globally
+{ id:"shootingDeaths", name:"Shooting Deaths", ratePerSecond:0.0025, category:"Health", description:"Deaths caused by firearm globally per second.", unit:"deaths" }, // ~80k/year
+{ id:"stabbingDeaths", name:"Stabbing Deaths", ratePerSecond:0.0005, category:"Health", description:"Deaths caused by stabbing or sharp objects worldwide per second.", unit:"deaths" }, // ~15k/year
+{ id:"terroristAttacks", name:"Terrorist Attacks", ratePerSecond:0.00005, category:"Society", description:"Terrorist attacks worldwide per second.", unit:"attacks" }, // ~1-2/day
+{ id:"homicides", name:"Homicides", ratePerSecond:0.003, category:"Society", description:"Deaths caused by homicide worldwide per second.", unit:"deaths" }, // ~90k/year
+{ id:"naturalDisasters", name:"Major Natural Disasters", ratePerSecond:0.0001, category:"Environment", description:"Significant natural disasters occurring worldwide per second.", unit:"events" },
+{ id:"missingPersons", name:"People Reported Missing", ratePerSecond:0.01, category:"Population", description:"People reported missing worldwide per second.", unit:"people" },
+{ id:"firesFatal", name:"Fatal Fires", ratePerSecond:0.0003, category:"Environment", description:"Deaths caused by fire per second worldwide.", unit:"deaths" },
+
+  // === Rare / Slow Activities ===
+
+  { id:"supernovas", name:"Supernovas Detected", ratePerSecond:0.00001, category:"Science", description:"Supernovae observed per second in the universe.", unit:"events" },
+  { id:"earthquakes", name:"Major Earthquakes", ratePerSecond:0.0003, category:"Environment", description:"Significant earthquakes occurring worldwide per second.", unit:"quakes" },
+  { id:"volcanoes", name:"Volcanoes Erupting", ratePerSecond:0.0002, category:"Environment", description:"Volcano eruptions happening worldwide per second.", unit:"eruptions" },
+  { id:"spaceLaunches", name:"Space Launches", ratePerSecond:0.00005, category:"Technology", description:"Rocket launches into space per second worldwide.", unit:"launches" },
+  { id:"mountainsForming", name:"New Mountains Forming", ratePerSecond:0.0000001, category:"Environment", description:"Tectonic activity creating new mountains per second.", unit:"formations" },
+  { id:"rareAnimalsSighted", name:"Rare Animals Sighted", ratePerSecond:0.001, category:"Nature", description:"Sightings of rare animals per second worldwide.", unit:"sightings" },
+  { id:"meteorites", name:"Meteorites Hit Earth", ratePerSecond:0.0001, category:"Space", description:"Meteorites impacting Earth per second.", unit:"impacts" },
+  { id:"booksPublished", name:"Books Published Globally", ratePerSecond:0.02, category:"Education", description:"Books published per second worldwide.", unit:"books" },
+  { id:"patents", name:"New Patents Granted", ratePerSecond:0.005, category:"Technology", description:"Patents granted worldwide per second.", unit:"patents" },
+  { id:"artworksCreated", name:"New Artworks Created", ratePerSecond:0.01, category:"Culture", description:"Art pieces created worldwide per second.", unit:"artworks" },
+  { id:"weddingsRoyal", name:"Royal Weddings", ratePerSecond:0.000001, category:"Population", description:"Royal weddings occurring worldwide per second.", unit:"weddings" },
+  { id:"volunteerProjects", name:"New Volunteer Projects Started", ratePerSecond:0.001, category:"Society", description:"New volunteer projects started worldwide per second.", unit:"projects" },
+  { id:"scientificDiscoveries", name:"Major Scientific Discoveries", ratePerSecond:0.0002, category:"Science", description:"Significant scientific discoveries per second worldwide.", unit:"discoveries" },
+  { id:"charityDonations", name:"Charitable Donations", ratePerSecond:0.5, category:"Economy", description:"Large charitable donations made per second worldwide.", unit:"donations" },
+  { id:"newLanguagesLearned", name:"People Learning New Languages", ratePerSecond:0.02, category:"Education", description:"People starting to learn a new language per second worldwide.", unit:"learners" },
 ];
 
 

@@ -152,7 +152,7 @@ function renderHowTo(html) {
   if (!html) return html;
 
   // Match <h2>How To: ...</h2> and the next <ol> block
-  const howToRegex = /<h2[^>]*>(How To .*?)<\/h2>\s*<p[^>]*>.*?<\/p>\s*(<ol[^>]*>[\s\S]*?<\/ol>)/gi;
+  const howToRegex = /<h2[^>]*>(How To.*?)<\/h2>\s*<p[^>]*>.*?<\/p>\s*(<ol[^>]*>[\s\S]*?<\/ol>)/gi;
 
   html = html.replace(howToRegex, (match, title, olContent) => {
     return `

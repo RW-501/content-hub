@@ -218,7 +218,6 @@ function renderActivities() {
     container.appendChild(card);
   });
 
-  renderLeaderboard();
 }
 
 // Update counts each second
@@ -242,37 +241,19 @@ function tickActivities() {
   });
 }
 
-// Render top 5 leaderboard
-function renderLeaderboard() {
-  const leaderboard = document.getElementById("leaderboard");
-  leaderboard.innerHTML = "";
-  activities.slice().sort((a, b) => b.ratePerSecond - a.ratePerSecond).slice(0, 5).forEach(a => {
-    const li = document.createElement("li");
-    li.className = "list-group-item d-flex justify-content-between align-items-center";
-    li.textContent = a.name;
-    li.innerHTML += `<span class="badge bg-primary rounded-pill">${formatNumber(a.ratePerSecond)}/s</span>`;
-    leaderboard.appendChild(li);
-  });
-}
+
 
 // Start button
-document.getElementById("startBtn").addEventListener("click", () => {
+document.getElementById("startBTN").addEventListener("click", () => {
     console.log("Start?");
   if (timerId) clearInterval(timerId);
   console.log("yes");
+      renderActivities();
   timerId = setInterval(tickActivities, 1000);
 });
 
-// Stop button
-document.getElementById("stopBtn").addEventListener("click", () => {
-        console.log("stop");
-
-  if (timerId) clearInterval(timerId);
-  timerId = null;
-});
-
 // Reset button
-document.getElementById("resetBtn").addEventListener("click", () => {
+document.getElementById("resetBTN").addEventListener("click", () => {
         console.log("reset");
 
   if (timerId) clearInterval(timerId);

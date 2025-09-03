@@ -698,3 +698,9 @@ button:disabled { background-color: #d1d5db; color: #9ca3af; cursor: not-allowed
     margin: .2rem;
     }
 }
+
+
+
+.faq-answer br {
+    display: none;
+}

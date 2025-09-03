@@ -236,6 +236,16 @@ let activities = [
   { id:"laughs", name:"Laughs", ratePerSecond:2000, category:"Misc", description:"Laughs per second worldwide.", unit:"laughs" },
   { id:"winks", name:"Winks", ratePerSecond:150, category:"Misc", description:"Winks exchanged per second worldwide.", unit:"winks" },
 
+  { id:"tsunamis", name:"Tsunamis Occurring", ratePerSecond:0.00001, category:"Environment", description:"Major tsunamis occurring worldwide per second.", unit:"tsunamis" },
+{ id:"wildfires", name:"Large Wildfires Started", ratePerSecond:0.0001, category:"Environment", description:"Significant wildfires igniting worldwide per second.", unit:"fires" },
+{ id:"massExtinctions", name:"Species Going Extinct", ratePerSecond:0.00001, category:"Nature", description:"Species going extinct worldwide per second.", unit:"species" },
+{ id:"civilUnrest", name:"Civil Unrest Events", ratePerSecond:0.0001, category:"Society", description:"Major riots, protests, or civil unrest events worldwide per second.", unit:"events" },
+{ id:"terroristAttacks", name:"Terrorist Attacks", ratePerSecond:0.00001, category:"Society", description:"Fatal terrorist attacks worldwide per second.", unit:"attacks" },
+{ id:"planeHijackings", name:"Plane Hijackings", ratePerSecond:0.0000002, category:"Transport", description:"Commercial plane hijackings worldwide per second.", unit:"events" },
+{ id:"buildingCollapses", name:"Building Collapses", ratePerSecond:0.00002, category:"Society", description:"Fatal building collapses worldwide per second.", unit:"collapses" },
+{ id:"shipwrecks", name:"Shipwrecks", ratePerSecond:0.00002, category:"Transport", description:"Fatal shipwrecks worldwide per second.", unit:"wrecks" },
+{ id:"bridgeFalls", name:"Bridge Failures", ratePerSecond:0.000005, category:"Transport", description:"Fatal bridge collapses worldwide per second.", unit:"collapses" },
+
 // === Rare / Tragic Events ===
 { id:"planeCrashes", name:"Plane Crashes", ratePerSecond:0.000002, category:"Transport", description:"Commercial plane crashes worldwide per second.", unit:"crashes" }, // ~0.07/year per million flights
 { id:"assassinations", name:"Assassinations", ratePerSecond:0.0000003, category:"Society", description:"Political or high-profile assassinations worldwide per second.", unit:"events" }, 
@@ -248,8 +258,18 @@ let activities = [
 { id:"missingPersons", name:"People Reported Missing", ratePerSecond:0.01, category:"Population", description:"People reported missing worldwide per second.", unit:"people" },
 { id:"firesFatal", name:"Fatal Fires", ratePerSecond:0.0003, category:"Environment", description:"Deaths caused by fire per second worldwide.", unit:"deaths" },
 
-  // === Rare / Slow Activities ===
+{ id:"sharkAttacks", name:"Shark Attacks", ratePerSecond:0.0000003, category:"Nature", description:"Fatal shark attacks worldwide per second.", unit:"attacks" }, // ~10-15/year
+{ id:"lightningDeaths", name:"Deaths by Lightning", ratePerSecond:0.00005, category:"Environment", description:"People killed by lightning strikes worldwide per second.", unit:"deaths" }, 
+{ id:"tornadoes", name:"Tornadoes Occurring", ratePerSecond:0.0005, category:"Environment", description:"Tornadoes hitting populated areas worldwide per second.", unit:"tornadoes" }, 
+{ id:"volcanicDeaths", name:"Deaths by Volcano", ratePerSecond:0.00001, category:"Environment", description:"People killed by volcanic eruptions per second worldwide.", unit:"deaths" },
+{ id:"trainAccidents", name:"Train Accidents", ratePerSecond:0.00001, category:"Transport", description:"Significant train accidents worldwide per second.", unit:"accidents" },
+{ id:"carCrashesFatal", name:"Fatal Car Crashes", ratePerSecond:0.01, category:"Transport", description:"Deaths from road traffic accidents worldwide per second.", unit:"deaths" }, // ~350k/year
+{ id:"drownings", name:"Drowning Deaths", ratePerSecond:0.002, category:"Health", description:"Deaths from drowning worldwide per second.", unit:"deaths" }, 
+{ id:"industrialAccidents", name:"Industrial Accidents", ratePerSecond:0.0003, category:"Economy", description:"Major industrial accidents causing fatalities per second worldwide.", unit:"deaths" },
+{ id:"nuclearIncidents", name:"Nuclear Incidents", ratePerSecond:0.0000001, category:"Technology", description:"Significant nuclear incidents per second worldwide.", unit:"incidents" },
+{ id:"astronautAccidents", name:"Astronaut Accidents", ratePerSecond:0.00000001, category:"Space", description:"Fatal accidents involving astronauts per second worldwide.", unit:"accidents" },
 
+  // === Rare / Slow Activities ===
   { id:"supernovas", name:"Supernovas Detected", ratePerSecond:0.00001, category:"Science", description:"Supernovae observed per second in the universe.", unit:"events" },
   { id:"earthquakes", name:"Major Earthquakes", ratePerSecond:0.0003, category:"Environment", description:"Significant earthquakes occurring worldwide per second.", unit:"quakes" },
   { id:"volcanoes", name:"Volcanoes Erupting", ratePerSecond:0.0002, category:"Environment", description:"Volcano eruptions happening worldwide per second.", unit:"eruptions" },

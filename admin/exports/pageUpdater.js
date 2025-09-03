@@ -153,20 +153,30 @@ function checkContent(html) {
 function renderHowTo(html) {
   if (!html) return html;
 
-  // Match <h2>How To ...</h2> and the next <ol> block
-  const howToRegex = /<h2[^>]*>(How To.*?)<\/h2>\s*<p[^>]*>.*?<\/p>\s*(<ol[^>]*>[\s\S]*?<\/ol>)/gi;
+  // Match H2 How-To section
+  const howToTitleRegex = /<h2[^>]*>(How[\s-]?To.*?)<\/h2>\s*<p[^>]*>.*?<\/p>/i;
+  const match = html.match(howToTitleRegex);
+  if (!match) return html;
 
-  html = html.replace(howToRegex, (match, title, olContent) => {
-    return `
+  const title = match[1];
+
+  // Match H3 steps under this H2
+  const stepRegex = /<h3[^>]*>(Step \d+: .*?)<\/h3>\s*<p[^>]*>([\s\S]*?)<\/p>/gi;
+  const steps = [];
+  let stepMatch;
+  while ((stepMatch = stepRegex.exec(html)) !== null) {
+    steps.push(`<div class="howto-step"><strong>${stepMatch[1]}</strong><p>${stepMatch[2]}</p></div>`);
+  }
+
+  // Replace the How-To section with structured HTML
+  return html.replace(howToTitleRegex, `
     <section class="howto-block">
       <h2 class="howto-title">${title}</h2>
       <div class="howto-steps">
-        ${olContent}
+        ${steps.join("")}
       </div>
-    </section>`;
-  });
-
-  return html;
+    </section>
+  `);
 }
 
 function renderFAQs(html) {

@@ -101,6 +101,7 @@ function generateHowToSchema(html) {
   const steps = [];
   let stepMatch;
   while ((stepMatch = stepRegex.exec(html)) !== null) {
+    HowTo_Bool = true;
     const stepTitle = stepMatch[1].trim();
     const stepText = stepMatch[2].replace(/<[^>]+>/g, "").trim();
     steps.push({ "@type": "HowToStep", "name": stepTitle, "text": stepText });
@@ -108,7 +109,6 @@ function generateHowToSchema(html) {
 
   if (steps.length === 0) return null;
 
-  HowTo_Bool = true;
 
   return {
     "@context": "https://schema.org",

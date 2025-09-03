@@ -1313,7 +1313,6 @@ if (slugInput.value) {
 
 
 
-
 async function scrollAndClick(page) {
   // Scroll the button into view
   page.btn.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -1357,41 +1356,67 @@ async function updateOutdatedPages() {
     .filter(p => p !== null);
 
   if (outdatedPages.length === 0) {
-    console.log("✅ No pages found.");
+    console.log("%c✅ No outdated pages found.", "color: limegreen; font-weight: bold;");
     return;
   }
 
-  console.log(`Found ${outdatedPages.length} pages, checking for outdated versions...`);
+  console.log(`%c🔍 Found ${outdatedPages.length} pages to check...`, "color: dodgerblue; font-weight: bold;");
 
   let updatedCount = 0;
   let skippedCount = 0;
   let errorCount = 0;
 
-  for (const page of outdatedPages) {
+  // Record start time
+  const startTime = new Date();
+  console.log(`%c⏰ Started at: ${startTime.toLocaleTimeString()}`, "color: gray;");
+
+  for (let i = 0; i < outdatedPages.length; i++) {
+    const page = outdatedPages[i];
+    const progress = `(${i + 1}/${outdatedPages.length})`;
+
     if (page.isOutdated) {
       try {
         await scrollAndClick(page);
-        console.log(`🔄 Updating: "${page.title}" (siteId: ${page.siteId}, slug: ${page.slug})
-         ${updatedCount} updated, ${skippedCount} skipped`);
         updatedCount++;
+        console.log(
+          `%c🔄 ${progress} Updated: "${page.title}"`,
+          "color: orange; font-weight: bold;",
+          `siteId: ${page.siteId}, slug: ${page.slug}`
+        );
       } catch (err) {
-        console.error(`❌ Error updating "${page.title}" (${page.siteId}):`, err);
         errorCount++;
+        console.error(
+          `%c❌ ${progress} Error updating "${page.title}" (siteId: ${page.siteId})`,
+          "color: red; font-weight: bold;",
+          err
+        );
       }
 
       // Wait 5 seconds between updates
       await new Promise(r => setTimeout(r, 5000));
     } else {
-      console.log(`⏭️ Skipped (Up to date): "${page.title}" (siteId: ${page.siteId})`);
       skippedCount++;
+      console.log(
+        `%c⏭️ ${progress} Skipped (Up to date): "${page.title}" (siteId: ${page.siteId})`,
+        "color: gray;"
+      );
     }
   }
 
-  console.log("🎉 Finished checking all pages.");
-  console.log(`📊 Summary: ${updatedCount} updated, ${skippedCount} skipped, ${errorCount} errors.`);
+  // Record end time
+  const endTime = new Date();
+  const duration = ((endTime - startTime) / 1000).toFixed(1);
+
+  console.log("%c🎉 Finished checking all pages.", "color: limegreen; font-weight: bold;");
+  console.log(`%c⏰ Ended at: ${endTime.toLocaleTimeString()} (Duration: ${duration}s)`, "color: gray;");
+  console.log(
+    `%c📊 Summary: %c${updatedCount} updated %c| ${skippedCount} skipped %c| ${errorCount} errors`,
+    "color: dodgerblue; font-weight: bold;",
+    "color: orange; font-weight: bold;",
+    "color: gray;",
+    "color: red; font-weight: bold;"
+  );
 }
-
-
 
 
 

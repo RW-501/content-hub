@@ -138,6 +138,8 @@ function checkContent(html) {
   if (faqSchema) {
     html += `<script id='FAQ_Schema' type="application/ld+json">${JSON.stringify(faqSchema)}</script>`;
     console.log("FAQ schema injected!");
+    FAQ_Bool = true;
+
   }
 
   // Generate HowTo schema
@@ -145,6 +147,8 @@ function checkContent(html) {
   if (howToSchema) {
     html += `<script id='HowTo_Schema' type="application/ld+json">${JSON.stringify(howToSchema)}</script>`;
     console.log("HowTo schema injected!");
+    HowTo_Bool = true;
+
   }
 
   return html;

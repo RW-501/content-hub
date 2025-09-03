@@ -255,6 +255,8 @@ function renderActivities() {
 document.getElementById("startBtn").addEventListener("click", () => {
   if (timerId) clearInterval(timerId);
 
+  console.log("time: ",elapsedSeconds);
+
   timerId = setInterval(() => {
     elapsedSeconds++;
     renderActivities();
@@ -283,7 +285,6 @@ document.getElementById("sortRate").addEventListener("click", () => {
   renderActivities();
 });
 
-// Initial render
-renderActivities();
+
 
 export { renderActivities };

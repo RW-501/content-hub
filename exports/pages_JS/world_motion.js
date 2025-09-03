@@ -283,6 +283,12 @@ document.getElementById("sortRate").addEventListener("click", () => {
 });
 
 // Initial render
-renderActivities();
+
+
+  timerId = setInterval(() => {
+    elapsedSeconds++;
+    renderActivities();
+  }, 1000);
+
 
 export { renderActivities };

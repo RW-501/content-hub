@@ -143,6 +143,8 @@ function linkifyContentHub(html) {
 // Usage in your pipeline:
 function checkContent(html) {
   if (!html) return "";
+      
+  console.log("html, ",html);
 
   // Linkify first
   html = linkifyContentHub(html);
@@ -153,7 +155,6 @@ function checkContent(html) {
   // Generate schema if any FAQs exist
   const faqSchema = generateFAQSchema(html);
   if (faqSchema) {
-        console.log("faqScchema, ",faqSchema);
 
     html += `<script id='FAQ_Schema' type="application/ld+json">${JSON.stringify(faqSchema)}</script>`;
     console.log("FAQ schema injected!");

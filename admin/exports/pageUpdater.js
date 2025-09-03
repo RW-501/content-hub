@@ -89,7 +89,6 @@ let FAQ_Bool = false;
 
 
 function generateHowToSchema(html) {
-  console.log("HTML: ",html);
 
   const howToTitleRegex = /<h2[^>]*>(How[\s-]?To.*?)<\/h2>\s*<p[^>]*>.*?<\/p>/i;
   const titleMatch = html.match(howToTitleRegex);
@@ -110,7 +109,7 @@ function generateHowToSchema(html) {
   if (steps.length === 0) return null;
 
   HowTo_Bool = true;
-  
+
   return {
     "@context": "https://schema.org",
     "@type": "HowTo",
@@ -173,8 +172,7 @@ function renderHowTo(html) {
 function renderFAQs(html) {
   if (!html) return html;
 
-  // Match <p ...><strong ...>Q1...</strong><br ...>Answer</p>
-  const faqRegex = /<p[^>]*>\s*<strong[^>]*>(Q\d+:.*?)<\/strong>\s*(?:<br[^>]*>\s*)+([\s\S]*?)<\/p>/gi;
+  const faqRegex = /<p[^>]*>\s*<strong[^>]*>(Q\d+:.*?)<\/strong>\s*([\s\S]*?)<\/p>/gi;
 
   let hasFAQ = false;
 
@@ -188,6 +186,7 @@ function renderFAQs(html) {
   FAQ_Bool = hasFAQ;
   return html;
 }
+
 
 
 function generateFAQSchema(html) {

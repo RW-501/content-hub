@@ -981,37 +981,51 @@ hr {
 
 </main>
 
+<footer class="site-footer" role="contentinfo" style="text-align:center; padding:20px; background:#1f2937; color:#f3f4f6; font-family:Arial, sans-serif;">
+  <p>
+    Copyright © ${new Date().getFullYear()} | 
+    <a href="https://contenthub.guru/" target="_blank" style="color:#4f46e5; text-decoration:none;">ContentHub.guru</a> <br>
+    ${articleData.title || "Untitled Site"}
+  </p>
 
-  <footer class="site-footer" role="contentinfo">
-    <p>Copyright © ${new Date().getFullYear()}  | <a href="https://contenthub.guru/" target="_blank">ContentHub.guru</a> <br>
-      ${articleData.title || "Untitled Site"} <br>
-      
-<!-- 🔹 Report Page Button -->
-<div id="reportPageBtn" style="
-    display: inline-block;
-    padding: 0.5rem 1rem;
-    color: red;                  /* Red text */
-    border: 2px solid red;       /* Red outline */
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: bold;
-    text-align: center;
-    transition: background-color 0.2s, color 0.2s;
-    margin: 1.5rem 0;
-">
-    Report Page
-</div>
+  <!-- 🔹 Social Links -->
+  <div style="margin:15px 0; display:flex; justify-content:center; gap:20px; font-size:22px;">
+    <a href="https://x.com/Contenthub_Guru" target="_blank" style="color:#f3f4f6;"><i class="fab fa-x-twitter"></i></a>
+    <a href="https://www.linkedin.com/showcase/content-hub-guru" target="_blank" style="color:#f3f4f6;"><i class="fab fa-linkedin"></i></a>
+    <a href="https://www.reddit.com/r/ContentHubGuru/" target="_blank" style="color:#f3f4f6;"><i class="fab fa-reddit"></i></a>
+    <a href="#" target="_blank" style="color:#f3f4f6;"><i class="fab fa-facebook"></i></a>
+    <a href="#" target="_blank" style="color:#f3f4f6;"><i class="fab fa-youtube"></i></a>
+  </div>
 
-<p class='hidden' style="font-size:10px; color:#999; text-align:center; margin-top:10px;">
-  Website developed by 
-  <a title="Website created by Ron Wilson" href="https://rw-501.github.io/Portfolio" target="_blank" rel="noopener noreferrer">
-    Ron Wilson
-  </a>
-</p>
+  <!-- 🔹 Report Page Button -->
+  <div id="reportPageBtn" style="
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      color: red;                  
+      border: 2px solid red;       
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      text-align: center;
+      transition: background-color 0.2s, color 0.2s;
+      margin: 1.5rem 0;
+  ">
+      Report Page
+  </div>
 
+  <p class='hidden' style="font-size:10px; color:#9ca3af; text-align:center; margin-top:10px;">
+    Website developed by 
+    <a title="Website created by Ron Wilson" href="https://rw-501.github.io/Portfolio" target="_blank" rel="noopener noreferrer" style="color:#4f46e5; text-decoration:none;">
+      Ron Wilson
+    </a>
+  </p>
 
-<p id="version">${version}</p>
-  </footer>
+  <p id="version">${version}</p>
+</footer>
+
+<!-- Font Awesome for icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
 
 
   <!-- 🔹 Hidden meta info for debugging / internal use -->

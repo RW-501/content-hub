@@ -148,6 +148,25 @@ function checkContent(html) {
   return html;
 }
 
+function renderHowTo(html) {
+  if (!html) return html;
+
+  // Match <h2>How To: ...</h2> and the next <ol> block
+  const howToRegex = /<h2[^>]*>(How To:.*?)<\/h2>\s*<p[^>]*>.*?<\/p>\s*(<ol[^>]*>[\s\S]*?<\/ol>)/gi;
+
+  html = html.replace(howToRegex, (match, title, olContent) => {
+    return `
+    <section class="howto-block">
+      <h2 class="howto-title">${title}</h2>
+      <div class="howto-steps">
+        ${olContent}
+      </div>
+    </section>`;
+  });
+
+  return html;
+}
+
 function renderFAQs(html) {
   if (!html) return html;
 

@@ -317,7 +317,7 @@ function formatNumber(num) {
 }
 
 // Initialize activity counters
-activities.forEach(a => a.current = 0);
+//activities.forEach(a => a.current = 0);
 
 // Render activity cards (does not update counts)
 function renderActivities() {

@@ -102,7 +102,7 @@ let FAQ_Bool = false;
 
 
 function generateHowToSchema(html) {
-  console.log("html, ", html);
+//  console.log("html, ", html);
 
   // Match <h2> that contains "How to" or "How-To" (case-insensitive, emoji/extra allowed)
   const howToTitleRegex = /<h2[^>]*>.*?(How[\s-]*to.*?)<\/h2>/i;

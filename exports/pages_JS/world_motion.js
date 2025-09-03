@@ -356,18 +356,36 @@ function renderActivities() {
 
 }
 
+function formatElapsed(seconds) {
+  const years = Math.floor(seconds / (365 * 24 * 3600));
+  const months = Math.floor((seconds % (365 * 24 * 3600)) / (30 * 24 * 3600));
+  const weeks = Math.floor((seconds % (30 * 24 * 3600)) / (7 * 24 * 3600));
+  const days = Math.floor((seconds % (7 * 24 * 3600)) / (24 * 3600));
+  const hrs = Math.floor((seconds % (24 * 3600)) / 3600);
+  const mins = Math.floor((seconds % 3600) / 60);
+  const secs = seconds % 60;
+
+  let parts = [];
+  if (years) parts.push(`${years}y`);
+  if (months) parts.push(`${months}mo`);
+  if (weeks) parts.push(`${weeks}w`);
+  if (days) parts.push(`${days}d`);
+  if (hrs) parts.push(`${hrs}h`);
+  if (mins) parts.push(`${mins}m`);
+  if (secs || parts.length === 0) parts.push(`${secs}s`);
+
+  return parts.join(" ");
+}
+
 // Update counts each second
 function tickActivities() {
   elapsedSeconds++;
 
   // Update elapsed time label
-  const elapsedLabel = document.getElementById("elapsedLabel");
-  if (elapsedLabel) {
-    const hrs = Math.floor(elapsedSeconds / 3600);
-    const mins = Math.floor((elapsedSeconds % 3600) / 60);
-    const secs = elapsedSeconds % 60;
-    elapsedLabel.textContent = `Elapsed Time: ${hrs}h ${mins}m ${secs}s`;
-  }
+const elapsedLabel = document.getElementById("elapsedLabel");
+if (elapsedLabel) {
+  elapsedLabel.textContent = `Elapsed Time: ${formatElapsed(elapsedSeconds)}`;
+}
 
   // Increment activity counts
   activities.forEach(a => {
@@ -380,17 +398,27 @@ function tickActivities() {
 
 
 // Start button
+// Start button
 document.getElementById("startBTN").addEventListener("click", () => {
-    console.log("Start?");
+  console.log("Start?");
   if (timerId) clearInterval(timerId);
-  let time = timeSelect.value;
-  if(time){
-  elapsedSeconds = time;
+
+  let time = parseInt(timeSelect.value, 10);
+  if (!isNaN(time)) {
+    elapsedSeconds = time;
+
+    // Recalculate activity counts from the selected time
+    activities.forEach(a => {
+      a.current = a.ratePerSecond * elapsedSeconds;
+    });
   }
-  console.log("elapsedSeconds: ",elapsedSeconds);
-      renderActivities();
+
+  console.log("elapsedSeconds: ", elapsedSeconds);
+  renderActivities();
+
   timerId = setInterval(tickActivities, 1000);
 });
+
 
 // Reset button
 document.getElementById("resetBTN").addEventListener("click", () => {
@@ -419,5 +447,16 @@ document.getElementById("sortRate").addEventListener("click", () => {
     tickActivities();
   }, 1000);
 
+
+  timeSelect.addEventListener("change", () => {
+  let time = parseInt(timeSelect.value, 10);
+  if (!isNaN(time)) {
+    elapsedSeconds = time;
+    activities.forEach(a => {
+      a.current = a.ratePerSecond * elapsedSeconds;
+    });
+    renderActivities();
+  }
+});
 
 export { renderActivities };

@@ -83,27 +83,24 @@ function formatCategory(category) {
 
             console.log("???????????");
 
+
 function generateHowToSchema(html) {
-  // Find How To section
-console.log("HTML: ",html);
+  console.log("HTML: ",html);
 
-  const howToRegex = /<h2[^>]*>(\bHow[\s-]?To\b.*?)(?::)?<\/h2>\s*<p[^>]*>.*?<\/p>\s*<ol[^>]*>([\s\S]*?)<\/ol>/gi;
-  const match = howToRegex.exec(html);
+  const howToTitleRegex = /<h2[^>]*>(How[\s-]?To.*?)<\/h2>\s*<p[^>]*>.*?<\/p>/i;
+  const titleMatch = html.match(howToTitleRegex);
+  if (!titleMatch) return null;
 
-  if (!match) return null;
+  const title = titleMatch[1].trim();
 
-  const title = match[1].trim();
-  const stepsHtml = match[2];
-
-  // Extract steps text
-  const stepRegex = /<li[^>]*>([\s\S]*?)<\/li>/gi;
+  // Find all step headings after the HowTo H2
+  const stepRegex = /<h[3-4][^>]*>(Step \d+: .*?)<\/h[3-4]>\s*<p[^>]*>([\s\S]*?)<\/p>/gi;
   const steps = [];
   let stepMatch;
-  while ((stepMatch = stepRegex.exec(stepsHtml)) !== null) {
-    const text = stepMatch[1].replace(/<[^>]+>/g, "").trim();
-    if (text) {
-      steps.push({ "@type": "HowToStep", "text": text });
-    }
+  while ((stepMatch = stepRegex.exec(html)) !== null) {
+    const stepTitle = stepMatch[1].trim();
+    const stepText = stepMatch[2].replace(/<[^>]+>/g, "").trim();
+    steps.push({ "@type": "HowToStep", "name": stepTitle, "text": stepText });
   }
 
   if (steps.length === 0) return null;
@@ -115,6 +112,7 @@ console.log("HTML: ",html);
     "step": steps
   };
 }
+
 
 let FAQ_Bool = false;
 

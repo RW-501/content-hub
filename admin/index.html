@@ -1334,7 +1334,18 @@ function createStatusPopup() {
   popup.style.boxShadow = "0 2px 8px rgba(0,0,0,0.5)";
   popup.style.borderBottom = "2px solid #444";
   popup.innerHTML = `
-    <div style="font-weight:bold; margin-bottom:5px;">🔄 Page Update Status</div>
+    <div style="display:flex; justify-content:space-between; align-items:center; font-weight:bold; margin-bottom:5px;">
+      <span>🔄 Page Update Status</span>
+      <button id="close-popup-btn" style="
+        background:#444; 
+        color:#fff; 
+        border:none; 
+        border-radius:3px; 
+        padding:2px 6px; 
+        cursor:pointer;
+        font-size:12px;
+      ">❌</button>
+    </div>
     <div id="status-progress">Progress: 0%</div>
     <div id="status-timer">⏰ Waiting...</div>
     <div id="status-summary">📊 Summary: 0 updated | 0 skipped | 0 errors</div>
@@ -1342,6 +1353,12 @@ function createStatusPopup() {
     <div id="status-log"></div>
   `;
   document.body.appendChild(popup);
+
+  // Attach close button event
+  document.getElementById("close-popup-btn").addEventListener("click", () => {
+    popup.remove();
+  });
+
   return popup;
 }
 

@@ -39,12 +39,19 @@ export function loadFooter(targetId = "admin-footer") {
         <a href="https://contenthub.guru/site/privacy-policy" style="color:#f3f4f6; text-decoration:none;">Privacy Policy</a>
       </nav>
 
+      <div style="display:flex; gap:15px; font-size:20px; margin-top:10px;">
+        <a href="https://x.com/Contenthub_Guru" target="_blank" style="color:#f3f4f6;"><i class="fab fa-x"></i></a>
+        <a href="https://www.linkedin.com/showcase/content-hub-guru" target="_blank" style="color:#f3f4f6;"><i class="fab fa-linkedin"></i></a>
+        <a href="https://www.reddit.com/r/ContentHubGuru/" target="_blank" style="color:#f3f4f6;"><i class="fab fa-reddit"></i></a>
+        <a href="#" target="_blank" style="color:#f3f4f6;"><i class="fab fa-facebook"></i></a>
+        <a href="#" target="_blank" style="color:#f3f4f6;"><i class="fab fa-youtube"></i></a>
+      </div>
+
       <p style="margin:0; font-size:12px; color:#9ca3af;">
         Created by <a href="https://contenthub.guru" style="color:#4f46e5; text-decoration:none;">ContentHub Team</a>
       </p>
     </footer>
   `;
-//  <div><a href="#">Help & Documentation</a></div>
 
   // Set current year
   const yearEl = document.getElementById("currentYear");

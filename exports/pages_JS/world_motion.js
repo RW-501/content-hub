@@ -107,7 +107,71 @@ let activities = [
   { id:"stepsTaken", name:"Steps Taken", ratePerSecond:500000, category:"Health", description:"Steps taken worldwide per second.", unit:"steps" },
   { id:"caloriesBurned", name:"Calories Burned", ratePerSecond:2000000, category:"Health", description:"Calories burned worldwide per second.", unit:"calories" },
   { id:"waterConsumed", name:"Liters of Water Drunk", ratePerSecond:5000, category:"Health", description:"Liters of water consumed worldwide per second.", unit:"liters" },
+,
+  // === Population ===
+  { id:"popGrowth", name:"Population Growth", ratePerSecond:2.5, category:"Population", description:"Net increase in global population per second.", unit:"people" },
+  { id:"urbanization", name:"People Moving to Cities", ratePerSecond:2.1, category:"Population", description:"People moving to urban areas worldwide per second.", unit:"people" },
+  { id:"refugees", name:"New Refugees", ratePerSecond:0.02, category:"Population", description:"People becoming refugees per second worldwide.", unit:"people" },
+  { id:"migrants", name:"International Migrants", ratePerSecond:0.5, category:"Population", description:"People migrating across borders per second.", unit:"people" },
+  { id:"heartbeats", name:"Total Human Heartbeats", ratePerSecond:500000000, category:"Population", description:"Collective human heartbeats worldwide per second.", unit:"beats" },
+
+  // === Technology ===
+  { id:"tweets", name:"Tweets Sent", ratePerSecond:6000, category:"Technology", description:"Tweets posted on X/Twitter per second.", unit:"tweets" },
+  { id:"tiktoks", name:"TikTok Videos Watched", ratePerSecond:34000, category:"Technology", description:"TikTok videos viewed worldwide per second.", unit:"views" },
+  { id:"facebookLikes", name:"Facebook Likes", ratePerSecond:42000, category:"Technology", description:"Facebook likes given per second.", unit:"likes" },
+  { id:"snapchats", name:"Snapchat Snaps", ratePerSecond:20000, category:"Technology", description:"Snapchat snaps shared per second.", unit:"snaps" },
+  { id:"zoom", name:"Zoom Meeting Minutes", ratePerSecond:120000, category:"Technology", description:"Zoom meeting minutes happening per second worldwide.", unit:"minutes" },
+
+  // === Economy ===
+  { id:"stocks", name:"Stock Trades", ratePerSecond:9000, category:"Economy", description:"Stock trades worldwide per second.", unit:"trades" },
+  { id:"cryptoTx", name:"Crypto Transactions", ratePerSecond:1000, category:"Economy", description:"Cryptocurrency transactions per second.", unit:"transactions" },
+  { id:"amazon", name:"Amazon Purchases", ratePerSecond:4100, category:"Economy", description:"Items purchased on Amazon per second.", unit:"items" },
+  { id:"lottery", name:"Lottery Tickets Bought", ratePerSecond:120, category:"Economy", description:"Lottery tickets purchased per second worldwide.", unit:"tickets" },
+  { id:"adSpending", name:"Ad Dollars Spent Online", ratePerSecond:3000, category:"Economy", description:"Ad spending online per second.", unit:"$" },
+
+  // === Food & Drink ===
+  { id:"alcohol", name:"Alcoholic Drinks", ratePerSecond:450, category:"Food & Drink", description:"Alcoholic drinks consumed worldwide per second.", unit:"drinks" },
+  { id:"chocolate", name:"Chocolate Bars Eaten", ratePerSecond:70, category:"Food & Drink", description:"Chocolate bars eaten per second worldwide.", unit:"bars" },
+  { id:"sandwiches", name:"Sandwiches Eaten", ratePerSecond:300, category:"Food & Drink", description:"Sandwiches eaten worldwide per second.", unit:"sandwiches" },
+  { id:"fruits", name:"Fruits Eaten", ratePerSecond:2000, category:"Food & Drink", description:"Fruits consumed worldwide per second.", unit:"fruits" },
+  { id:"beer", name:"Beer Drunk", ratePerSecond:1000, category:"Food & Drink", description:"Glasses of beer consumed per second worldwide.", unit:"glasses" },
+
+  // === Entertainment ===
+  { id:"netflix", name:"Netflix Hours Watched", ratePerSecond:27000, category:"Entertainment", description:"Hours of Netflix watched worldwide per second.", unit:"hours" },
+  { id:"spotify", name:"Spotify Streams", ratePerSecond:120000, category:"Entertainment", description:"Songs streamed on Spotify per second.", unit:"streams" },
+  { id:"booksSold", name:"Books Sold", ratePerSecond:9, category:"Entertainment", description:"Books sold worldwide per second.", unit:"books" },
+  { id:"boardGames", name:"Board Games Played", ratePerSecond:0.5, category:"Entertainment", description:"Board games started per second worldwide.", unit:"games" },
+  { id:"sportsTickets", name:"Sports Tickets Sold", ratePerSecond:4, category:"Entertainment", description:"Tickets sold for sporting events per second worldwide.", unit:"tickets" },
+
+  // === Environment ===
+  { id:"forestLoss", name:"Forest Loss", ratePerSecond:0.1, category:"Environment", description:"Hectares of forest lost per second worldwide.", unit:"hectares" },
+  { id:"airPollution", name:"Air Pollution Deaths", ratePerSecond:0.2, category:"Environment", description:"Deaths caused by air pollution per second.", unit:"deaths" },
+  { id:"fishCaught", name:"Fish Caught", ratePerSecond:1000, category:"Environment", description:"Fish caught worldwide per second.", unit:"fish" },
+  { id:"meat", name:"Meat Consumed", ratePerSecond:700, category:"Environment", description:"Kg of meat consumed worldwide per second.", unit:"kg" },
+  { id:"electricity", name:"Electricity Used", ratePerSecond:630000, category:"Environment", description:"Kilowatt-hours of electricity consumed per second.", unit:"kWh" },
+
+  // === Health ===
+  { id:"cigarettes", name:"Cigarettes Smoked", ratePerSecond:1000, category:"Health", description:"Cigarettes smoked worldwide per second.", unit:"cigarettes" },
+  { id:"hospitalBeds", name:"Hospital Beds Occupied", ratePerSecond:200, category:"Health", description:"Hospital beds filled worldwide per second.", unit:"beds" },
+  { id:"donations", name:"Blood Donations", ratePerSecond:2.5, category:"Health", description:"Blood donations given worldwide per second.", unit:"donations" },
+  { id:"surgeries", name:"Surgeries Performed", ratePerSecond:1.5, category:"Health", description:"Surgeries performed worldwide per second.", unit:"surgeries" },
+  { id:"condoms", name:"Condoms Used", ratePerSecond:140, category:"Health", description:"Condoms used worldwide per second.", unit:"condoms" },
+
+  // === Transport ===
+  { id:"oil", name:"Barrels of Oil Used", ratePerSecond:1000, category:"Transport", description:"Barrels of oil consumed worldwide per second.", unit:"barrels" },
+  { id:"gasoline", name:"Liters of Gasoline Used", ratePerSecond:44000, category:"Transport", description:"Liters of gasoline consumed per second.", unit:"liters" },
+  { id:"bikeShares", name:"Bike Share Rides", ratePerSecond:15, category:"Transport", description:"Bike-sharing rides started per second worldwide.", unit:"rides" },
+  { id:"evs", name:"EVs Sold", ratePerSecond:0.2, category:"Transport", description:"Electric vehicles sold per second worldwide.", unit:"cars" },
+  { id:"trafficJams", name:"Cars Stuck in Traffic", ratePerSecond:20000, category:"Transport", description:"Cars delayed in traffic worldwide per second.", unit:"cars" },
+
+  // === Miscellaneous ===
+  { id:"photos", name:"Photos Taken", ratePerSecond:10000, category:"Misc", description:"Photos taken worldwide per second.", unit:"photos" },
+  { id:"selfies", name:"Selfies Taken", ratePerSecond:1000, category:"Misc", description:"Selfies taken per second worldwide.", unit:"selfies" },
+  { id:"dogBarks", name:"Dog Barks", ratePerSecond:5000, category:"Misc", description:"Dog barks worldwide per second.", unit:"barks" },
+  { id:"catMeows", name:"Cat Meows", ratePerSecond:6000, category:"Misc", description:"Cat meows worldwide per second.", unit:"meows" },
+  { id:"kisses", name:"Kisses Shared", ratePerSecond:1200, category:"Misc", description:"Kisses shared per second worldwide.", unit:"kisses" },
 ];
+
 
 // -------------------- Generate 200+ activities --------------------
 const categories = {

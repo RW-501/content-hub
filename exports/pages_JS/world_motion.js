@@ -318,7 +318,6 @@ function formatNumber(num) {
 }
 
 
-console.log("Rendering activities:", activities.map(a => ({id: a.id, current: a.current})));
 
 // Initialize activity counters
 activities.forEach(a => a.current = 0);
@@ -349,6 +348,8 @@ function renderActivities() {
         <p>${a.description}</p>
         <p><i class="bi bi-calculator"></i> Count: <span class="count" data-value="${a.current}">${formatNumber(a.current)}</span> ${a.unit}</p>
       </div>`;
+      console.log("Rendering activities:", activities.map(a => ({id: a.id, current: a.current})));
+
     container.appendChild(card);
   });
 

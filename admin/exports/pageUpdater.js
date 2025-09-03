@@ -85,7 +85,8 @@ function formatCategory(category) {
 
 function generateHowToSchema(html) {
   // Find How To section
-const howToRegex = /<h2[^>]*>(\bHow[\s-]?To\b.*?)(?::)?<\/h2>\s*<p[^>]*>.*?<\/p>\s*<ol[^>]*>([\s\S]*?)<\/ol>/gi;
+
+  const howToRegex = /<h2[^>]*>(\bHow[\s-]?To\b.*?)(?::)?<\/h2>\s*<p[^>]*>.*?<\/p>\s*<ol[^>]*>([\s\S]*?)<\/ol>/gi;
   const match = howToRegex.exec(html);
 
   if (!match) return null;

@@ -107,7 +107,7 @@ let activities = [
   { id:"stepsTaken", name:"Steps Taken", ratePerSecond:500000, category:"Health", description:"Steps taken worldwide per second.", unit:"steps" },
   { id:"caloriesBurned", name:"Calories Burned", ratePerSecond:2000000, category:"Health", description:"Calories burned worldwide per second.", unit:"calories" },
   { id:"waterConsumed", name:"Liters of Water Drunk", ratePerSecond:5000, category:"Health", description:"Liters of water consumed worldwide per second.", unit:"liters" },
-,
+
   // === Population ===
   { id:"popGrowth", name:"Population Growth", ratePerSecond:2.5, category:"Population", description:"Net increase in global population per second.", unit:"people" },
   { id:"urbanization", name:"People Moving to Cities", ratePerSecond:2.1, category:"Population", description:"People moving to urban areas worldwide per second.", unit:"people" },
@@ -171,7 +171,7 @@ let activities = [
   { id:"catMeows", name:"Cat Meows", ratePerSecond:6000, category:"Misc", description:"Cat meows worldwide per second.", unit:"meows" },
   { id:"kisses", name:"Kisses Shared", ratePerSecond:1200, category:"Misc", description:"Kisses shared per second worldwide.", unit:"kisses" },
 
-  ,
+  
   
   // === Population / Society ===
   { id:"schoolEnroll", name:"Children Enrolled in School", ratePerSecond:10, category:"Population", description:"Children enrolling in school worldwide per second.", unit:"children" },

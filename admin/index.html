@@ -1313,27 +1313,75 @@ if (slugInput.value) {
 
 
 
-async function scrollAndClick(page) {
-  // Scroll the button into view
-  page.btn.scrollIntoView({ behavior: "smooth", block: "center" });
+function createStatusPopup() {
+  let popup = document.getElementById("update-status-popup");
+  if (popup) return popup;
 
-  // Highlight the row
+  popup = document.createElement("div");
+  popup.id = "update-status-popup";
+  popup.style.position = "fixed";
+  popup.style.top = "0";
+  popup.style.left = "0";
+  popup.style.right = "0";
+  popup.style.zIndex = "9999";
+  popup.style.background = "#111";
+  popup.style.color = "#fff";
+  popup.style.fontFamily = "monospace";
+  popup.style.fontSize = "13px";
+  popup.style.padding = "10px";
+  popup.style.maxHeight = "250px";
+  popup.style.overflowY = "auto";
+  popup.style.boxShadow = "0 2px 8px rgba(0,0,0,0.5)";
+  popup.style.borderBottom = "2px solid #444";
+  popup.innerHTML = `
+    <div style="font-weight:bold; margin-bottom:5px;">🔄 Page Update Status</div>
+    <div id="status-progress">Progress: 0%</div>
+    <div id="status-timer">⏰ Waiting...</div>
+    <div id="status-summary">📊 Summary: 0 updated | 0 skipped | 0 errors</div>
+    <hr style="border:0; border-top:1px solid #444; margin:5px 0;">
+    <div id="status-log"></div>
+  `;
+  document.body.appendChild(popup);
+  return popup;
+}
+
+function updatePopupProgress(current, total, updated, skipped, errors, elapsed) {
+  const percent = ((current / total) * 100).toFixed(0);
+  const barLength = 20;
+  const filled = Math.round((current / total) * barLength);
+  const bar = "█".repeat(filled) + "-".repeat(barLength - filled);
+
+  document.getElementById("status-progress").textContent =
+    `Progress: [${bar}] ${percent}% (${current}/${total})`;
+  document.getElementById("status-timer").textContent =
+    `⏱ Elapsed: ${elapsed}s`;
+  document.getElementById("status-summary").textContent =
+    `📊 Summary: ${updated} updated | ${skipped} skipped | ${errors} errors`;
+}
+
+function logToPopup(message, color = "#ccc") {
+  const logEl = document.getElementById("status-log");
+  if (!logEl) return;
+  const line = document.createElement("div");
+  line.textContent = message;
+  line.style.color = color;
+  logEl.prepend(line); // newest on top
+}
+
+async function scrollAndClick(page) {
+  page.btn.scrollIntoView({ behavior: "smooth", block: "center" });
   const row = page.btn.closest("tr");
   row?.classList.add("highlight-row");
 
-  // Wait a bit for the scroll to finish
   await new Promise(r => setTimeout(r, 600));
-
-  // Click the button
   page.btn.click();
-
-  // Remove highlight after a short delay
   setTimeout(() => row?.classList.remove("highlight-row"), 1500);
 }
 
 async function updateOutdatedPages() {
-  const updateButtons = document.querySelectorAll(".updatePageBTN");
+  const popup = createStatusPopup();
 
+  const updateButtons = document.querySelectorAll(".updatePageBTN");
   const outdatedPages = Array.from(updateButtons)
     .map(btn => {
       const match = btn.getAttribute("onclick")?.match(/updatePageBtn\('([^']+)','([^']+)'/);
@@ -1356,59 +1404,49 @@ async function updateOutdatedPages() {
     .filter(p => p !== null);
 
   if (outdatedPages.length === 0) {
+    logToPopup("✅ No outdated pages found.", "limegreen");
     console.log("%c✅ No outdated pages found.", "color: limegreen; font-weight: bold;");
     return;
   }
 
+  logToPopup(`🔍 Found ${outdatedPages.length} pages to check...`, "dodgerblue");
   console.log(`%c🔍 Found ${outdatedPages.length} pages to check...`, "color: dodgerblue; font-weight: bold;");
 
-  let updatedCount = 0;
-  let skippedCount = 0;
-  let errorCount = 0;
-
-  // Record start time
-  const startTime = new Date();
-  console.log(`%c⏰ Started at: ${startTime.toLocaleTimeString()}`, "color: gray;");
+  let updatedCount = 0, skippedCount = 0, errorCount = 0;
+  const startTime = Date.now();
+  console.log(`%c⏰ Started at: ${new Date(startTime).toLocaleTimeString()}`, "color: gray;");
 
   for (let i = 0; i < outdatedPages.length; i++) {
     const page = outdatedPages[i];
-    const progress = `(${i + 1}/${outdatedPages.length})`;
+    const progressText = `(${i + 1}/${outdatedPages.length})`;
+    const pageStart = Date.now();
 
     if (page.isOutdated) {
       try {
         await scrollAndClick(page);
         updatedCount++;
-        console.log(
-          `%c🔄 ${progress} Updated: "${page.title}"`,
-          "color: orange; font-weight: bold;",
-          `siteId: ${page.siteId}, slug: ${page.slug}`
-        );
+        const took = ((Date.now() - pageStart) / 1000).toFixed(1);
+        logToPopup(`${progressText} 🔄 Updated: "${page.title}" (took ${took}s)`, "orange");
       } catch (err) {
         errorCount++;
-        console.error(
-          `%c❌ ${progress} Error updating "${page.title}" (siteId: ${page.siteId})`,
-          "color: red; font-weight: bold;",
-          err
-        );
+        logToPopup(`${progressText} ❌ Error updating "${page.title}"`, "red");
       }
-
-      // Wait 5 seconds between updates
       await new Promise(r => setTimeout(r, 5000));
     } else {
       skippedCount++;
-      console.log(
-        `%c⏭️ ${progress} Skipped (Up to date): "${page.title}" (siteId: ${page.siteId})`,
-        "color: gray;"
-      );
+      logToPopup(`${progressText} ⏭️ Skipped (Up to date): "${page.title}"`, "gray");
     }
+
+    const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
+    updatePopupProgress(i + 1, outdatedPages.length, updatedCount, skippedCount, errorCount, elapsed);
   }
 
-  // Record end time
-  const endTime = new Date();
+  const endTime = Date.now();
   const duration = ((endTime - startTime) / 1000).toFixed(1);
+  logToPopup(`🎉 Finished all pages in ${duration}s`, "limegreen");
 
   console.log("%c🎉 Finished checking all pages.", "color: limegreen; font-weight: bold;");
-  console.log(`%c⏰ Ended at: ${endTime.toLocaleTimeString()} (Duration: ${duration}s)`, "color: gray;");
+  console.log(`%c⏰ Ended at: ${new Date(endTime).toLocaleTimeString()} (Duration: ${duration}s)`, "color: gray;");
   console.log(
     `%c📊 Summary: %c${updatedCount} updated %c| ${skippedCount} skipped %c| ${errorCount} errors`,
     "color: dodgerblue; font-weight: bold;",
@@ -1418,10 +1456,8 @@ async function updateOutdatedPages() {
   );
 }
 
-
-
-  // Attach function to the new button
-  document.getElementById("updateBTN").addEventListener("click", updateOutdatedPages);
+// Attach function to the button
+document.getElementById("updateBTN").addEventListener("click", updateOutdatedPages);
 
 
 </script>

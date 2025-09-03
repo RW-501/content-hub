@@ -318,6 +318,7 @@ function formatNumber(num) {
 }
 
 
+  const timeSelect = document.getElementById("timeSelect");
 
 // Initialize activity counters
 activities.forEach(a => a.current = 0);
@@ -330,7 +331,6 @@ function renderActivities() {
   const filterCat = document.getElementById("filterCategory").value;
 
   const container = document.getElementById("activities");
-  const timeSelect = document.getElementById("timeSelect");
   container.innerHTML = "";
 
   let filtered = activities.filter(a =>

@@ -191,6 +191,8 @@ activities.forEach(a => a.current = 0);
 
 // Render activity cards (does not update counts)
 function renderActivities() {
+    console.log("render");
+    
   const searchTerm = document.getElementById("searchInput").value.toLowerCase();
   const filterCat = document.getElementById("filterCategory").value;
 
@@ -285,11 +287,12 @@ document.getElementById("sortRate").addEventListener("click", () => {
 });
 
 // Initial render
+  renderActivities();
 
-
+/*
   timerId = setInterval(() => {
     tickActivities();
   }, 1000);
-
+*/
 
 export { renderActivities };

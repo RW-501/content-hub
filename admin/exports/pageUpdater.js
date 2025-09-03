@@ -624,13 +624,20 @@ const Content = `
 <meta property="og:readtime" content="${readTime} Min">
 <meta property="article:author" content="https://contenthub.guru">
 
+<!-- 🔹 Social Profiles for OG -->
+<meta property="og:see_also" content="https://x.com/Contenthub_Guru">
+<meta property="og:see_also" content="https://www.linkedin.com/showcase/content-hub-guru">
+<meta property="og:see_also" content="https://www.reddit.com/r/ContentHubGuru/">
+<!-- (Future) <meta property="og:see_also" content="https://facebook.com/..."> -->
+<!-- (Future) <meta property="og:see_also" content="https://youtube.com/..."> -->
+
   <!-- Twitter Cards -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="${articleData.title}">
   <meta name="twitter:description" content="${articleData.description}">
   <meta name="twitter:image" content="${articleData.image}">
-  <meta name="twitter:site" content="@ContentHub">
-  <meta name="twitter:creator" content="@ContentHub">
+  <meta name="twitter:site" content="@Contenthub_Guru">
+  <meta name="twitter:creator" content="@Contenthub_Guru">
 
   <!-- Additional Article Schema/SEO Hints -->
 <meta property="article:published_time" content="${articleData.datePublished || new Date().toISOString()}">

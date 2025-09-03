@@ -140,3 +140,20 @@ if (i < links.length - 1) {
   // Attach header
   headerContainer.appendChild(header);
 })();
+
+
+function loadFontAwesome() {
+  const id = "fontawesome-css";
+  if (document.getElementById(id)) return; // prevent duplicates
+
+  const link = document.createElement("link");
+  link.id = id;
+  link.rel = "stylesheet";
+  link.href = "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css";
+  link.crossOrigin = "anonymous";
+
+  document.head.appendChild(link);
+}
+
+// Usage
+loadFontAwesome();

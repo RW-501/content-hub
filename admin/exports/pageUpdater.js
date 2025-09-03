@@ -1,5 +1,18 @@
 import { showToast } from "https://contenthub.guru/exports/showToast.js";
 
+function logToPopup(message, color = "#ccc") {
+  try {
+    const logEl = document.getElementById("status-log");
+    if (!logEl) return; // stop if log element doesn't exist
+    const line = document.createElement("div");
+    line.textContent = message;
+    line.style.color = color;
+    logEl.prepend(line); // newest on top
+  } catch (err) {
+    console.warn("logToPopup failed:", err);
+  }
+}
+
 function getVideo(videoUrl) {
   if (!videoUrl) return "";
 
@@ -137,6 +150,7 @@ function checkContent(html) {
   const faqSchema = generateFAQSchema(html);
   if (faqSchema) {
     html += `<script id='FAQ_Schema' type="application/ld+json">${JSON.stringify(faqSchema)}</script>`;
+    logToPopup("FAQ schema injected!", "limegreen");
     console.log("FAQ schema injected!");
     FAQ_Bool = true;
   }
@@ -145,6 +159,7 @@ function checkContent(html) {
   const howToSchema = generateHowToSchema(html);
   if (howToSchema) {
     html += `<script id='HowTo_Schema' type="application/ld+json">${JSON.stringify(howToSchema)}</script>`;
+    logToPopup("HowTo schema injected! ", "limegreen");
     console.log("HowTo schema injected!");
     HowTo_Bool = true;
   }

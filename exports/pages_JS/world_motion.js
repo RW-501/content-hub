@@ -275,8 +275,4 @@ document.getElementById("sortRate").addEventListener("click", () => {
 
 
 
-// Live update for current year
-setInterval(()=>{ if(parseInt(timeline.value)===new Date().getFullYear()) renderActivities(); },1000);
-
-
 export { renderActivities };

@@ -102,6 +102,7 @@ let FAQ_Bool = false;
 
 
 function generateHowToSchema(html) {
+  console.log("html, ",html);
   const howToTitleRegex = /<h2[^>]*>(How[\s-]?To.*?)<\/h2>\s*<p[^>]*>.*?<\/p>/i;
   const titleMatch = html.match(howToTitleRegex);
   if (!titleMatch) return null;

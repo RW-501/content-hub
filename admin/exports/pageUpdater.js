@@ -184,7 +184,7 @@ function linkifyContentHub(html) {
 function checkContent(html) {
   if (!html) return "";
       
-  console.log("html, ",html);
+  //console.log("html, ",html);
 
   // Linkify first
   html = linkifyContentHub(html);
@@ -197,7 +197,6 @@ function checkContent(html) {
   if (faqSchema) {
 
     html += `<script id='FAQ_Schema' type="application/ld+json">${JSON.stringify(faqSchema)}</script>`;
-    console.log("FAQ schema injected!");
   }
 
   return html;

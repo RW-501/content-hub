@@ -330,6 +330,7 @@ function renderActivities() {
   const filterCat = document.getElementById("filterCategory").value;
 
   const container = document.getElementById("activities");
+  const timeSelect = document.getElementById("timeSelect");
   container.innerHTML = "";
 
   let filtered = activities.filter(a =>
@@ -382,7 +383,11 @@ function tickActivities() {
 document.getElementById("startBTN").addEventListener("click", () => {
     console.log("Start?");
   if (timerId) clearInterval(timerId);
-  console.log("yes");
+  let time = timeSelect.value;
+  if(time){
+  elapsedSeconds = time;
+  }
+  console.log("elapsedSeconds: ",elapsedSeconds);
       renderActivities();
   timerId = setInterval(tickActivities, 1000);
 });

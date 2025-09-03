@@ -34,9 +34,9 @@ export function loadFooter(targetId = "admin-footer") {
         <span>|</span>
         <a href="https://contenthub.guru/site/about" style="color:#f3f4f6; text-decoration:none;">About</a>
         <span>|</span>
-        <a href="https://contenthub.guru/contact-us" style="color:#f3f4f6; text-decoration:none;">Contact Us</a>
+        <a href="https://contenthub.guru/site/contact-us" style="color:#f3f4f6; text-decoration:none;">Contact Us</a>
         <span>|</span>
-        <a href="https://contenthub.guru/privacy-policy" style="color:#f3f4f6; text-decoration:none;">Privacy Policy</a>
+        <a href="https://contenthub.guru/site/privacy-policy" style="color:#f3f4f6; text-decoration:none;">Privacy Policy</a>
       </nav>
 
       <p style="margin:0; font-size:12px; color:#9ca3af;">

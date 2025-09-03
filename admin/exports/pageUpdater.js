@@ -85,6 +85,7 @@ function formatCategory(category) {
 
 function generateHowToSchema(html) {
   // Find How To section
+console.log("HTML: ",html);
 
   const howToRegex = /<h2[^>]*>(\bHow[\s-]?To\b.*?)(?::)?<\/h2>\s*<p[^>]*>.*?<\/p>\s*<ol[^>]*>([\s\S]*?)<\/ol>/gi;
   const match = howToRegex.exec(html);
@@ -151,7 +152,7 @@ function checkContent(html) {
 function renderHowTo(html) {
   if (!html) return html;
 
-  // Match <h2>How To: ...</h2> and the next <ol> block
+  // Match <h2>How To ...</h2> and the next <ol> block
   const howToRegex = /<h2[^>]*>(How To.*?)<\/h2>\s*<p[^>]*>.*?<\/p>\s*(<ol[^>]*>[\s\S]*?<\/ol>)/gi;
 
   html = html.replace(howToRegex, (match, title, olContent) => {

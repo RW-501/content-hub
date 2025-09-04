@@ -558,11 +558,11 @@ window.sortTable = sortTable;
         // Function to dynamically calculate priority based on URL depth and importance
         const calculatePriority = (url) => {
           const depth = url.split('/').length;
-          let priority = 8.0;
+          let priority = 1.0;
         
           // Set priority based on depth, homepage gets the highest priority
-          if (depth > 4) {
-            priority = 0.5;
+          if (depth > 3) {
+            priority = 0.8;
           }
           console.log("proiory: ",priority , "url: ",url)
           if (url.includes('/page') || url.includes('index')) {

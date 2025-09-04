@@ -2391,7 +2391,7 @@ sSnap.forEach((docSnap) => {
     suggested,
     readTime:  calculateReadingTime(allText),
     image:  $("#imageUrl").value, 
-    mediaArray,
+    mediaArray: mediaArray || [],
     og: { 
       title: $("#ogTitle").value, 
       description: $("#ogDesc").value, 

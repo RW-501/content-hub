@@ -808,37 +808,79 @@ async function loadPageData(currentUser) {
 
   return { id: pageId, ...pageData };
 }
+let mediaArray = []; // {url, type, storagePath}
 
-  let mediaArray = []; // {url, type, storagePath}
+// --- Media Popup Gallery (create dynamically) ---
+const mediaPopup = document.createElement("div");
+mediaPopup.style.position = "fixed";
+mediaPopup.style.top = "0";
+mediaPopup.style.left = "0";
+mediaPopup.style.width = "100%";
+mediaPopup.style.height = "100%";
+mediaPopup.style.background = "rgba(0,0,0,0.8)";
+mediaPopup.style.display = "none";
+mediaPopup.style.justifyContent = "center";
+mediaPopup.style.alignItems = "center";
+mediaPopup.style.zIndex = "2000";
+mediaPopup.style.overflow = "auto";
+mediaPopup.style.padding = "20px";
 
+const mediaContent = document.createElement("div");
+mediaContent.style.display = "flex";
+mediaContent.style.flexWrap = "wrap";
+mediaContent.style.gap = "10px";
+mediaContent.style.maxWidth = "90%";
+mediaContent.style.maxHeight = "90%";
+mediaContent.style.justifyContent = "center";
+mediaPopup.appendChild(mediaContent);
 
-  // Add a button to open the gallery
-const galleryBtn =  document.getElementById("galleryBtn");
-galleryBtn.textContent = "Open Media Gallery";
-galleryBtn.style.marginLeft = "10px";
-
-galleryBtn.addEventListener("click", () => {
-  mediaContent.innerHTML = ""; // clear previous content
-  mediaArray.forEach(m => {
-    let el;
-    if (m.type === "image") {
-      el = document.createElement("img");
-      el.src = m.url;
-      el.style.maxWidth = "200px";
-      el.style.maxHeight = "150px";
-      el.style.border = "2px solid #fff";
-    } else if (m.type === "video") {
-      el = document.createElement("video");
-      el.src = m.url;
-      el.controls = true;
-      el.style.maxWidth = "200px";
-      el.style.maxHeight = "150px";
-      el.style.border = "2px solid #fff";
-    }
-    mediaContent.appendChild(el);
-  });
-  mediaPopup.style.display = "flex";
+// Close on background click
+mediaPopup.addEventListener("click", e => {
+  if (e.target === mediaPopup) mediaPopup.style.display = "none";
 });
+
+document.body.appendChild(mediaPopup);
+
+// --- Gallery Button ---
+const galleryBtn = document.getElementById("galleryBtn");
+if (!galleryBtn) {
+  console.error("galleryBtn element not found!");
+} else {
+  galleryBtn.textContent = "Open Media Gallery";
+  galleryBtn.style.marginLeft = "10px";
+
+  galleryBtn.addEventListener("click", () => {
+    mediaContent.innerHTML = ""; // clear previous content
+
+    if (!mediaArray.length) {
+      const emptyMsg = document.createElement("p");
+      emptyMsg.textContent = "No media to display.";
+      emptyMsg.style.color = "#fff";
+      mediaContent.appendChild(emptyMsg);
+    } else {
+      mediaArray.forEach(m => {
+        let el;
+        if (m.type === "image") {
+          el = document.createElement("img");
+          el.src = m.url;
+        } else if (m.type === "video") {
+          el = document.createElement("video");
+          el.src = m.url;
+          el.controls = true;
+        }
+        if (el) {
+          el.style.maxWidth = "200px";
+          el.style.maxHeight = "150px";
+          el.style.border = "2px solid #fff";
+          el.style.margin = "5px";
+          mediaContent.appendChild(el);
+        }
+      });
+    }
+
+    mediaPopup.style.display = "flex";
+  });
+}
 
 
 async function initEditor(currentUser) {
@@ -1957,38 +1999,6 @@ function toggleSchemaSections(schemaType) {
   $("#howtoSection").classList.toggle("hidden", schemaType !== "HowTo");
 }
 
-
-
-// --- Media Popup Gallery ---
-const mediaPopup = document.createElement("div");
-mediaPopup.style.position = "fixed";
-mediaPopup.style.top = "0";
-mediaPopup.style.left = "0";
-mediaPopup.style.width = "100%";
-mediaPopup.style.height = "100%";
-mediaPopup.style.background = "rgba(0,0,0,0.8)";
-mediaPopup.style.display = "none";
-mediaPopup.style.justifyContent = "center";
-mediaPopup.style.alignItems = "center";
-mediaPopup.style.zIndex = "2000";
-mediaPopup.style.overflow = "auto";
-mediaPopup.style.padding = "20px";
-
-const mediaContent = document.createElement("div");
-mediaContent.style.display = "flex";
-mediaContent.style.flexWrap = "wrap";
-mediaContent.style.gap = "10px";
-mediaContent.style.maxWidth = "90%";
-mediaContent.style.maxHeight = "90%";
-mediaContent.style.justifyContent = "center";
-mediaPopup.appendChild(mediaContent);
-
-// Close on background click
-mediaPopup.addEventListener("click", e => {
-  if (e.target === mediaPopup) mediaPopup.style.display = "none";
-});
-
-document.body.appendChild(mediaPopup);
 
 
 

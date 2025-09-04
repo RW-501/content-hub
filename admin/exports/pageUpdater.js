@@ -1027,7 +1027,7 @@ hr {
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
 <!-- Scroll to Top -->
-<div id="scrollUpBtn"><i class="fab fa-arrow-up"></i></div>
+<div id="scrollUpBtn"><i class="fas fa-arrow-up"></i></div>
 
 
   <!-- 🔹 Hidden meta info for debugging / internal use -->

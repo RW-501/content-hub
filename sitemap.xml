@@ -1,6 +1,6 @@
 <!-- 
-  Generated: 2025-09-04T14:03:46.722Z
-  Link Count: 123
+  Generated: 2025-09-04T15:58:14.125Z
+  Link Count: 187
 -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
@@ -863,5 +863,453 @@
     <lastmod>2025-08-23</lastmod>
     <changefreq>hourly</changefreq>
     <priority>1</priority>
+  </url>
+
+  <url>
+    <loc>https://contenthub.guru/</loc>
+    <lastmod>2025-09-04</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://contenthub.guru/site/about</loc>
+    <lastmod>2025-09-04</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://contenthub.guru/category</loc>
+    <lastmod>2025-09-04</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://contenthub.guru/site/contact-us</loc>
+    <lastmod>2025-09-04</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://contenthub.guru/admin</loc>
+    <lastmod>2025-09-04</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://contenthub.guru/category/?c=general</loc>
+    <lastmod>2025-09-04</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://contenthub.guru/category/?c=guides</loc>
+    <lastmod>2025-09-04</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://contenthub.guru/category/?c=content_creation_basics</loc>
+    <lastmod>2025-09-04</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://contenthub.guru/category/?c=writing_blogging</loc>
+    <lastmod>2025-09-04</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://contenthub.guru/category/?c=social_media</loc>
+    <lastmod>2025-09-04</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://contenthub.guru/category/?c=seo_organic</loc>
+    <lastmod>2025-09-04</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://contenthub.guru/category/?c=content_monetization</loc>
+    <lastmod>2025-09-04</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://contenthub.guru/category/?c=multimedia</loc>
+    <lastmod>2025-09-04</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://contenthub.guru/category/?c=advanced_strategy</loc>
+    <lastmod>2025-09-04</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://contenthub.guru/category/?c=tools_resources</loc>
+    <lastmod>2025-09-04</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://contenthub.guru/category/?c=business_content</loc>
+    <lastmod>2025-09-04</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://contenthub.guru/category/?c=future_content</loc>
+    <lastmod>2025-09-04</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://contenthub.guru/category/?c=personal-development</loc>
+    <lastmod>2025-09-04</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://contenthub.guru/category/?c=travel</loc>
+    <lastmod>2025-09-04</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://contenthub.guru/category/?c=food</loc>
+    <lastmod>2025-09-04</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://contenthub.guru/category/?c=entertainment</loc>
+    <lastmod>2025-09-04</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://contenthub.guru/category/?c=people</loc>
+    <lastmod>2025-09-04</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://contenthub.guru/category/?c=health</loc>
+    <lastmod>2025-09-04</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://contenthub.guru/category/?c=fitness</loc>
+    <lastmod>2025-09-04</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://contenthub.guru/category/?c=business</loc>
+    <lastmod>2025-09-04</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://contenthub.guru/category/?c=tech</loc>
+    <lastmod>2025-09-04</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://contenthub.guru/site/feedback</loc>
+    <lastmod>2025-09-04</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://contenthub.guru/site/faqs</loc>
+    <lastmod>2025-09-04</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://contenthub.guru/site/support</loc>
+    <lastmod>2025-09-04</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://contenthub.guru/site/privacy-policy</loc>
+    <lastmod>2025-09-04</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://contenthub.guru/#</loc>
+    <lastmod>2025-09-04</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://contenthub.guru/site/support.html</loc>
+    <lastmod>2025-09-04</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://contenthub.guru/site/feedback.html</loc>
+    <lastmod>2025-09-04</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://contenthub.guru/site/about#</loc>
+    <lastmod>2025-09-04</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://contenthub.guru/category/#</loc>
+    <lastmod>2025-09-04</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://contenthub.guru/site/contact-us#</loc>
+    <lastmod>2025-09-04</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://contenthub.guru/admin/#</loc>
+    <lastmod>2025-09-04</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://contenthub.guru/category/?c=general#</loc>
+    <lastmod>2025-09-04</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://contenthub.guru/category/?c=guides#</loc>
+    <lastmod>2025-09-04</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://contenthub.guru/category/?c=content_creation_basics#</loc>
+    <lastmod>2025-09-04</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://contenthub.guru/category/?c=writing_blogging#</loc>
+    <lastmod>2025-09-04</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://contenthub.guru/category/?c=social_media#</loc>
+    <lastmod>2025-09-04</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://contenthub.guru/category/?c=seo_organic#</loc>
+    <lastmod>2025-09-04</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://contenthub.guru/category/?c=content_monetization#</loc>
+    <lastmod>2025-09-04</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://contenthub.guru/category/?c=multimedia#</loc>
+    <lastmod>2025-09-04</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://contenthub.guru/category/?c=advanced_strategy#</loc>
+    <lastmod>2025-09-04</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://contenthub.guru/category/?c=tools_resources#</loc>
+    <lastmod>2025-09-04</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://contenthub.guru/category/?c=business_content#</loc>
+    <lastmod>2025-09-04</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://contenthub.guru/category/?c=future_content#</loc>
+    <lastmod>2025-09-04</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://contenthub.guru/category/?c=personal-development#</loc>
+    <lastmod>2025-09-04</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://contenthub.guru/category/?c=travel#</loc>
+    <lastmod>2025-09-04</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://contenthub.guru/category/?c=food#</loc>
+    <lastmod>2025-09-04</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://contenthub.guru/category/?c=entertainment#</loc>
+    <lastmod>2025-09-04</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://contenthub.guru/category/?c=people#</loc>
+    <lastmod>2025-09-04</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://contenthub.guru/category/?c=health#</loc>
+    <lastmod>2025-09-04</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://contenthub.guru/category/?c=fitness#</loc>
+    <lastmod>2025-09-04</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://contenthub.guru/category/?c=business#</loc>
+    <lastmod>2025-09-04</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://contenthub.guru/category/?c=tech#</loc>
+    <lastmod>2025-09-04</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://contenthub.guru/site/feedback#</loc>
+    <lastmod>2025-09-04</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://contenthub.guru/site/faqs#</loc>
+    <lastmod>2025-09-04</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://contenthub.guru/site/support#</loc>
+    <lastmod>2025-09-04</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://contenthub.guru/site/privacy-policy#</loc>
+    <lastmod>2025-09-04</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://contenthub.guru/site/support.html#</loc>
+    <lastmod>2025-09-04</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://contenthub.guru/site/feedback.html#</loc>
+    <lastmod>2025-09-04</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
   </url>
 </urlset>

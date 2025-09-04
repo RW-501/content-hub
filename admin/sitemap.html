@@ -286,7 +286,9 @@ document.getElementById('selectAllCheckbox').addEventListener('change', function
 
 
 
-        <script>
+<script type="module">
+          import { showToast } from "https://contenthub.guru/exports/showToast.js";
+
         const baseDomain = 'https://contenthub.guru';
         let links = new Set();
         let errors = [];

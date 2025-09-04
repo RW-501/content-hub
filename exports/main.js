@@ -1060,7 +1060,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     btn.style.display = (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) ? "block" : "none";
   };
 
-  document.getElementById('scrollToTop').addEventListener('click', () => {
+  document.getElementById('scrollUpBtn').addEventListener('click', () => {
 
     document.body.scrollTop = 0;
     document.documentElement.scrollTop = 0;

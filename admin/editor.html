@@ -808,7 +808,12 @@ async function loadPageData(currentUser) {
 
   return { id: pageId, ...pageData };
 }
-let mediaArray = []; // {url, type, storagePath}
+
+
+
+// Ensure mediaArray exists
+if (!window.mediaArray) window.mediaArray = []; // fallback in case it was undefined
+const mediaArray = window.mediaArray;
 
 // --- Media Popup Gallery (create dynamically) ---
 const mediaPopup = document.createElement("div");
@@ -852,13 +857,15 @@ if (!galleryBtn) {
   galleryBtn.addEventListener("click", () => {
     mediaContent.innerHTML = ""; // clear previous content
 
-    if (!mediaArray.length) {
+    const safeArray = Array.isArray(mediaArray) ? mediaArray : [];
+
+    if (!safeArray.length) {
       const emptyMsg = document.createElement("p");
       emptyMsg.textContent = "No media to display.";
       emptyMsg.style.color = "#fff";
       mediaContent.appendChild(emptyMsg);
     } else {
-      mediaArray.forEach(m => {
+      safeArray.forEach(m => {
         let el;
         if (m.type === "image") {
           el = document.createElement("img");

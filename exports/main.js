@@ -232,10 +232,12 @@ contentItems.forEach((item, index) => {
   // Skip empty paragraphs
   if ((item.tagName.toLowerCase() === 'p') && item.textContent.trim().length < 20) return;
 
+  // Skip items that contain HTML tags
+  if (item.querySelector('*')) return;
+
   // Give each item a unique ID if it doesn't have one
-  if (!item.id) {
-    item.id = `toc-item-${index}`;
-  }
+  if (!item.id) item.id = `toc-item-${index}`;
+
 
   // Define bullet options
 const bulletStyles = {

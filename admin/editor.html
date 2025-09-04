@@ -813,7 +813,7 @@ async function loadPageData(currentUser) {
 
 // Ensure mediaArray exists
 if (!window.mediaArray) window.mediaArray = []; // fallback in case it was undefined
-const mediaArray = window.mediaArray;
+let mediaArray = window.mediaArray;
 
 // --- Media Popup Gallery (create dynamically) ---
 const mediaPopup = document.createElement("div");

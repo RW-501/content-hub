@@ -470,7 +470,7 @@ const updateProgress = (processedLinks, totalLinks, progressBar) => {
 
 
 // Function to add link to table with dynamic priority and scheduling
-const addLinkToTable = (url, sourceUrl) => {
+function addLinkToTable(url, sourceUrl) {
   const tableBody = document.querySelector('#linkTable tbody');
   const row = document.createElement('tr');
   const priority = calculatePriority(url);
@@ -496,7 +496,8 @@ const addLinkToTable = (url, sourceUrl) => {
   document.getElementById('linkCount').textContent = totalLinks;
 
   checkReachability(url, row, sourceUrl);
-};
+}
+
 
 const checkReachability = async (url, row, sourceUrl) => {
   try {
@@ -590,14 +591,15 @@ window.sortTable = sortTable;
         // Update error log
      
 // When an error occurs, include the URL in the error message
-const updateErrorLog = (errors) => {
+function updateErrorLog(errors) {
   const errorLog = document.getElementById('errorLog');
   if (errorLog) {
     errorLog.value = errors.join('\n');
   } else {
     console.error('Error log element not found!');
   }
-};
+}
+
 
 const handleError = (error, url) => {
   const errorMessage = `Error on ${url}: ${error.message}`;

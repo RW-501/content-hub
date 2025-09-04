@@ -1189,6 +1189,27 @@ function TextEditor(root, { value = "", compact = false, pageId = "default" } = 
   // --- Insert/Manage Media ---
   const insertMediaSwitch = root.querySelector("#insertMediaSwitch");
 
+  // Insert new media at caret when insertMediaSwitch is on
+area.addEventListener("click", async (e) => {
+  if (!insertMediaSwitch.checked) return;
+  
+  // Only trigger if not clicking existing media
+  if (e.target.tagName === "IMG" || e.target.tagName === "VIDEO") return;
+
+  const sel = window.getSelection();
+  if (!sel.rangeCount) return;
+  
+  // Open file picker
+  const fileInput = document.createElement("input");
+  fileInput.type = "file";
+  fileInput.accept = "image/*,video/*";
+  fileInput.click();
+  
+  fileInput.onchange = () => {
+    handleFileUpload(fileInput.files[0]);
+  };
+});
+
 const handleFileUpload = async (file, targetEl = null) => {
   if (!file) return;
   const type = file.type.startsWith("image") ? "image" : file.type.startsWith("video") ? "video" : null;

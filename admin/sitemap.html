@@ -64,7 +64,7 @@
       <button id="selectReachableBtn" class="btn btn-outline-success btn-sm"><i class="bi bi-check-circle"></i> Select Reachable</button>
       <button id="startBtn" class="btn btn-primary btn-sm"><i class="bi bi-play-fill"></i> Start</button>
       <button id="stopBtn" class="btn btn-danger btn-sm"><i class="bi bi-stop-fill"></i> Stop</button>
-      <button id="exportCSV" class="btn btn-warning btn-sm"><i class="bi bi-filetype-csv"></i> Export CSV</button>
+      <button id="saveSiteMap" class="btn btn-warning btn-sm"><i class="bi bi-filetype-csv"></i> Save</button>
       <button id="exportJSON" class="btn btn-info btn-sm text-white"><i class="bi bi-filetype-json"></i> Export JSON</button>
     </div>
 
@@ -740,37 +740,19 @@ document.getElementById("selectAllCheckbox").addEventListener("change", (e) => {
   checkboxes.forEach(cb => cb.checked = e.target.checked);
 });
 
-// Generate Sitemap XML
-document.getElementById("downloadBtn").addEventListener("click", async () => { // async added here
-  const rows = document.querySelectorAll("#linkTable tbody tr");
-  const sitemapUrls = [];
+let sitemapContent;
+let downloaded = false;
 
-  rows.forEach(row => {
-    const data = parseRow(row);
-    if (data && data.ready) {
-      sitemapUrls.push(`
-  <url>
-    <loc>${data.url}</loc>
-    <lastmod>${data.date}</lastmod>
-    <changefreq>${data.schedule}</changefreq>
-    <priority>${data.priority}</priority>
-  </url>`);
-    }
-  });
+// saveSiteMap
+document.getElementById("saveSiteMap").addEventListener("click", async () => { // async added here
 
-  // Metadata (safe XML comment)
-  const now = new Date().toISOString();
-  const metaComment = `<!-- 
-  Generated: ${now}
-  Link Count: ${sitemapUrls.length}
--->`;
+  if(!downloaded){
 
-  const sitemapContent = `${metaComment}
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${sitemapUrls.join("\n")}
-</urlset>`;
+    showToast("info", "Download Sitemap First");
+    return;
+  }
 
-  // GitHub token construction (obfuscation)
+ // GitHub token construction (obfuscation)
   const parts = ['p', 'h', 'g'];
   const randomizePart = (part) => part.split('').reverse().join('');
   const part_1 = randomizePart(parts.join(''));
@@ -827,37 +809,51 @@ ${sitemapUrls.join("\n")}
     console.error("GitHub upload error:", err.message);
   }
 
+  });
+
+
+// Generate Sitemap XML
+document.getElementById("downloadBtn").addEventListener("click", async () => { // async added here
+  const rows = document.querySelectorAll("#linkTable tbody tr");
+  const sitemapUrls = [];
+
+  rows.forEach(row => {
+    const data = parseRow(row);
+    if (data && data.ready) {
+      sitemapUrls.push(`
+  <url>
+    <loc>${data.url}</loc>
+    <lastmod>${data.date}</lastmod>
+    <changefreq>${data.schedule}</changefreq>
+    <priority>${data.priority}</priority>
+  </url>`);
+    }
+  });
+
+  // Metadata (safe XML comment)
+  const now = new Date().toISOString();
+  const metaComment = `<!-- 
+  Generated: ${now}
+  Link Count: ${sitemapUrls.length}
+-->`;
+
+   sitemapContent = `${metaComment}
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${sitemapUrls.join("\n")}
+</urlset>`;
+
+ 
   // Output sitemap content to textarea
   const output = document.getElementById("sitemapOutput");
   if (output) {
     output.value = sitemapContent;
+    downloaded = true;
   } else {
     console.error("sitemapOutput textarea not found!");
   }
 });
 
 
-// Export as CSV
-document.getElementById("exportCSV").addEventListener("click", () => {
-  const rows = document.querySelectorAll("#linkTable tbody tr");
-  const csvData = [["URL", "Priority", "ChangeFreq", "LastMod", "Status"]];
-
-  rows.forEach(row => {
-    const data = parseRow(row);
-    if (data) {
-      csvData.push([data.url, data.priority, data.schedule, data.date, data.status]);
-    }
-  });
-
-  const csvContent = csvData.map(r => r.map(v => `"${v}"`).join(",")).join("\n");
-  const blob = new Blob([csvContent], { type: "text/csv" });
-  const url = URL.createObjectURL(blob);
-
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = "sitemap_links.csv";
-  link.click();
-});
 
 // Export as JSON
 document.getElementById("exportJSON").addEventListener("click", () => {

@@ -168,6 +168,11 @@ export function loadAdminHeader(targetId = "admin-header") {
     const analyticsPanel = document.getElementById("analyticsPanel");
     if (analyticsPanel) analyticsPanel.style.display = analyticsPanel.style.display === "none" ? "block" : "none";
   },"showAnalytics"));
+
+    btnContainer.appendChild(createDashboardButton("Ping Sitemap", null, "#b91016ff", () => {
+  checkAndPingSitemap();
+    },"checkAndPingSitemap"));
+
   btnContainer.appendChild(createDashboardButton("Logout", null, "#ef4444", async () => {
     if (window.firebase && firebase.auth) {
       await firebase.auth().signOut();
@@ -195,3 +200,64 @@ function loadFontAwesome() {
 
 // Usage
 loadFontAwesome();
+
+async function checkAndPingSitemap() {
+  try {
+    const sitemapUrl = "https://contenthub.guru/sitemap.xml";
+
+    // 1. Fetch sitemap
+    const response = await fetch(sitemapUrl);
+    if (!response.ok) throw new Error("Failed to fetch sitemap");
+
+    const text = await response.text();
+
+    // 2. Count <url> entries
+    const urlCount = (text.match(/<url>/g) || []).length;
+
+    // 3. Extract "Generated" timestamp from sitemap comment (if exists)
+    const metaMatch = text.match(/Generated:\s*([0-9T:\.\-Z]+)/);
+    const lastGenerated = metaMatch ? metaMatch[1] : null;
+
+    // 4. Compare with saved values in localStorage
+    const savedCount = parseInt(localStorage.getItem("sitemapLinkCount") || "0", 10);
+    const savedGenerated = localStorage.getItem("sitemapLastGenerated");
+
+    const hasNewLinks = urlCount > savedCount;
+    const hasNewTimestamp = lastGenerated && lastGenerated !== savedGenerated;
+
+    if (hasNewLinks || hasNewTimestamp) {
+      console.log(`New sitemap detected! Links: ${urlCount} (was ${savedCount}), Timestamp: ${lastGenerated}`);
+
+      // Save updated values
+      localStorage.setItem("sitemapLinkCount", urlCount);
+      if (lastGenerated) {
+        localStorage.setItem("sitemapLastGenerated", lastGenerated);
+      }
+
+      // 5. Ping search engines / services
+      const encodedUrl = encodeURIComponent(sitemapUrl);
+
+      const pingUrls = [
+        `https://www.bing.com/ping?sitemap=${encodedUrl}`,
+        `https://www.google.com/ping?sitemap=${encodedUrl}`, // may be ignored now
+        `https://search.yahoo.com/ping?sitemap=${encodedUrl}`, // Yahoo (powered by Bing, but still good)
+        `https://submissions.ask.com/ping?sitemap=${encodedUrl}`, // Ask
+        `https://www.seznam.cz/ping?sitemap=${encodedUrl}`, // Seznam (Czech engine)
+        `https://yandex.com/indexnow?url=${encodedUrl}&key=26ca8e2174c73ca5` // Yandex via IndexNow (needs API key)
+      ];
+
+      pingUrls.forEach(pingUrl => {
+        fetch(pingUrl)
+          .then(r => console.log(`Pinged: ${pingUrl}`, r.status))
+          .catch(err => console.error(`Error pinging: ${pingUrl}`, err));
+      });
+
+    } else {
+      console.log("No new sitemap changes detected.");
+    }
+  } catch (err) {
+    console.error("Error checking sitemap:", err);
+  }
+}
+
+window.checkAndPingSitemap = checkAndPingSitemap;

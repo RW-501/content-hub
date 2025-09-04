@@ -1013,7 +1013,7 @@ hr {
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
 <!-- Scroll to Top -->
-<button id="scrollUpBtn"><i class="bi bi-arrow-up"></i></button>
+<div id="scrollUpBtn"><i class="bi bi-arrow-up"></i></div>
 
 
   <!-- 🔹 Hidden meta info for debugging / internal use -->

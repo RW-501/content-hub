@@ -1016,7 +1016,7 @@ function collectPageStyles() {
 /* ---------------- Reusable Text Editor ----------------
    Minimal toolbar: bold/italic/underline, H2/H3, link, UL/OL, clear, view-html
 ------------------------------------------------------- */
-function TextEditor(root, { value = "", compact = false } = {}) {
+function TextEditor(root, { value = "", compact = false, pageId = "default" } = {}) {
   root.classList.add("te");
   if (compact) root.classList.add("te-compact");
   root.innerHTML = `
@@ -1031,55 +1031,223 @@ function TextEditor(root, { value = "", compact = false } = {}) {
       <button type="button" data-link>Add Link</button>
       <button type="button" data-clear>Clear</button>
       <button type="button" data-toggle-html>View HTML</button>
+      <label style="margin-left:10px;">
+        <input type="checkbox" id="toggleEdit" checked> Editable
+      </label>
+      <label style="margin-left:10px;">
+        <input type="checkbox" id="insertAdSwitch"> Insert $[AD] on Click
+      </label>
+      <label style="margin-left:10px;">
+        <input type="checkbox" id="insertMediaSwitch"> Insert/Manage Media
+      </label>
     </div>
-    <div class="te-area" contenteditable="true"></div>
+    <div class="te-area" contenteditable="true" style="min-height:150px; border:1px solid #ccc; padding:10px;"></div>
     <div class="te-footer">
       <small class="muted">Tip: Paste Markdown/HTML — it will keep basic formatting.</small>
     </div>
   `;
+
   const area = root.querySelector(".te-area");
   let htmlMode = false;
+  let mediaArray = []; // {url, type, storagePath}
   area.innerHTML = value || "";
 
+  // --- Toolbar ---
   root.querySelector(".te-toolbar").addEventListener("click", e => {
     const btn = e.target.closest("button");
     if (!btn) return;
-    if (btn.dataset.cmd) {
-      document.execCommand(btn.dataset.cmd, false);
-      return;
-    }
-    if (btn.dataset.block) {
-      document.execCommand("formatBlock", false, btn.dataset.block);
-      return;
-    }
+
+    if (btn.dataset.cmd) document.execCommand(btn.dataset.cmd, false);
+    if (btn.dataset.block) document.execCommand("formatBlock", false, btn.dataset.block);
     if (btn.hasAttribute("data-link")) {
       const url = prompt("Enter URL");
       if (url) document.execCommand("createLink", false, url);
-      return;
     }
-    if (btn.hasAttribute("data-clear")) {
-      area.innerHTML = "";
-      return;
-    }
+    if (btn.hasAttribute("data-clear")) area.innerHTML = "";
     if (btn.hasAttribute("data-toggle-html")) {
-      if (!htmlMode) {
-        area.textContent = area.innerHTML;
-      } else {
-        area.innerHTML = area.textContent;
-      }
+      if (!htmlMode) area.textContent = area.innerHTML;
+      else area.innerHTML = area.textContent;
       htmlMode = !htmlMode;
-      return;
     }
   });
 
+  // --- Editable toggle ---
+  const toggleEdit = root.querySelector("#toggleEdit");
+  toggleEdit.addEventListener("change", () => {
+    area.contentEditable = toggleEdit.checked;
+  });
+
+  // --- Insert $[AD] on click ---
+  const insertAdSwitch = root.querySelector("#insertAdSwitch");
+  area.addEventListener("click", e => {
+  if (!insertAdSwitch.checked || !area.contentEditable || htmlMode) return;
+    const sel = window.getSelection();
+    if (!sel.rangeCount) return;
+
+    const range = sel.getRangeAt(0);
+    const adNode = document.createTextNode("$[AD]");
+    range.insertNode(adNode);
+    range.setStartAfter(adNode);
+    range.collapse(true);
+    sel.removeAllRanges();
+    sel.addRange(range);
+  });
+
+  // --- Insert/Manage Media ---
+  const insertMediaSwitch = root.querySelector("#insertMediaSwitch");
+
+const handleFileUpload = async (file, targetEl = null) => {
+  if (!file) return;
+  const type = file.type.startsWith("image") ? "image" : file.type.startsWith("video") ? "video" : null;
+  if (!type) return alert("Only images and videos allowed.");
+
+  try {
+    // Generate unique file name to avoid collisions
+    const storagePath = `${pageId}/${Date.now()}_${file.name}`;
+    const storageRef = firebase.storage().ref(storagePath);
+    await storageRef.put(file);
+    const url = await storageRef.getDownloadURL();
+
+    if (targetEl) {
+      // Replace existing
+      const oldUrl = targetEl.src; // Capture old URL before updating
+      targetEl.src = url;
+      const oldMedia = mediaArray.find(m => m.url === oldUrl);
+      if (oldMedia) {
+        firebase.storage().ref(oldMedia.storagePath).delete().catch(console.error);
+        oldMedia.url = url;
+        oldMedia.storagePath = storagePath;
+      }
+    } else {
+      // Insert new
+      const sel = window.getSelection();
+      if (!sel.rangeCount) return;
+      const range = sel.getRangeAt(0);
+      let el;
+      if (type === "image") {
+        el = document.createElement("img");
+        el.className = 'pageImages';
+        el.src = url;
+        el.style.maxWidth = "100%";
+      } else {
+        el = document.createElement("video");
+        el.className = 'pageVideos';
+        el.src = url;
+        el.controls = true;
+        el.style.maxWidth = "100%";
+      }
+      range.insertNode(el);
+      range.setStartAfter(el);
+      range.collapse(true);
+      sel.removeAllRanges();
+      sel.addRange(range);
+      mediaArray.push({ url, type, storagePath });
+    }
+  } catch (err) {
+    console.error("Upload failed", err);
+  }
+};
+
+
+  area.addEventListener("click", e => {
+    if (!insertMediaSwitch.checked) return;
+    const target = e.target;
+
+    if (target.tagName === "IMG" || target.tagName === "VIDEO") {
+      const action = prompt("Type 'replace' to replace, 'remove' to delete the media:", "replace/remove");
+      if (!action) return;
+      const mediaItem = mediaArray.find(m => m.url === target.src);
+      if (!mediaItem) return;
+
+      if (action.toLowerCase() === "remove") {
+        target.remove();
+        firebase.storage().ref(mediaItem.storagePath).delete().catch(console.error);
+        mediaArray = mediaArray.filter(m => m.url !== mediaItem.url);
+      } else if (action.toLowerCase() === "replace") {
+        const fileInput = document.createElement("input");
+        fileInput.type = "file";
+        fileInput.accept = target.tagName === "IMG" ? "image/*" : "video/*";
+        fileInput.click();
+        fileInput.onchange = () => handleFileUpload(fileInput.files[0], target);
+      }
+    }
+  });
+
+  // --- Drag & Drop ---
+  area.addEventListener("dragover", e => {
+    if (!insertMediaSwitch.checked) return;
+    e.preventDefault();
+  });
+  area.addEventListener("drop", e => {
+    if (!insertMediaSwitch.checked) return;
+    e.preventDefault();
+    if (!e.dataTransfer.files.length) return;
+    handleFileUpload(e.dataTransfer.files[0]);
+  });
+
+  // --- Floating Media Toolbar ---
+const mediaToolbar = document.createElement("div");
+mediaToolbar.style.position = "absolute";
+mediaToolbar.style.display = "none";
+mediaToolbar.style.background = "#fff";
+mediaToolbar.style.border = "1px solid #ccc";
+mediaToolbar.style.padding = "5px";
+mediaToolbar.style.zIndex = "1000";
+mediaToolbar.innerHTML = `
+  <button id="replaceMedia">Replace</button>
+  <button id="removeMedia">Remove</button>
+`;
+document.body.appendChild(mediaToolbar);
+
+let currentMedia = null;
+
+area.addEventListener("mouseover", e => {
+  if (!insertMediaSwitch.checked) return;
+  const target = e.target;
+  if (target.tagName === "IMG" || target.tagName === "VIDEO") {
+    currentMedia = target;
+    const rect = target.getBoundingClientRect();
+    mediaToolbar.style.top = rect.top - 35 + window.scrollY + "px";
+    mediaToolbar.style.left = rect.left + "px";
+    mediaToolbar.style.display = "block";
+  }
+});
+
+area.addEventListener("mouseout", e => {
+  if (!insertMediaSwitch.checked) return;
+  const related = e.relatedTarget;
+  if (!mediaToolbar.contains(related)) mediaToolbar.style.display = "none";
+});
+
+document.getElementById("removeMedia").addEventListener("click", () => {
+  if (!currentMedia) return;
+  const mediaItem = mediaArray.find(m => m.url === currentMedia.src);
+  if (mediaItem) {
+    firebase.storage().ref(mediaItem.storagePath).delete().catch(console.error);
+    mediaArray = mediaArray.filter(m => m.url !== mediaItem.url);
+  }
+  currentMedia.remove();
+  mediaToolbar.style.display = "none";
+});
+
+document.getElementById("replaceMedia").addEventListener("click", () => {
+  if (!currentMedia) return;
+  const fileInput = document.createElement("input");
+  fileInput.type = "file";
+  fileInput.accept = currentMedia.tagName === "IMG" ? "image/*" : "video/*";
+  fileInput.click();
+  fileInput.onchange = () => handleFileUpload(fileInput.files[0], currentMedia);
+  mediaToolbar.style.display = "none";
+});
+
+
   return {
     getHTML: () => (htmlMode ? area.textContent : area.innerHTML),
-    setHTML: (html) => { if (htmlMode) { area.textContent = html || ""; } else { area.innerHTML = html || ""; } },
+    setHTML: html => { if (htmlMode) area.textContent = html || ""; else area.innerHTML = html || ""; },
+    mediaArray,
     el: root
   };
 }
-
-
 
 
 function makePreviewClickable(previewBlock, card) {
@@ -2125,6 +2293,7 @@ sSnap.forEach((docSnap) => {
     suggested,
     readTime:  calculateReadingTime(allText),
     image:  $("#imageUrl").value, 
+    mediaArray,
     og: { 
       title: $("#ogTitle").value, 
       description: $("#ogDesc").value, 

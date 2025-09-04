@@ -708,3 +708,10 @@ button:disabled { background-color: #d1d5db; color: #9ca3af; cursor: not-allowed
 .visually-hidden {
   display: none;
 }
+
+.pageVideos {
+display: block;
+}
+.pageImages {
+display: block;
+}

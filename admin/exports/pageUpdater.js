@@ -409,7 +409,7 @@ const rightBlocksHTML = articleData.blocks
   .map((b, i) => `<div id="block-right-${i}" class="block block-${b.type}">${renderBlockHTML(b)}</div>`)
   .join("");
 
-const inArticleBlocksHTML = articleData.blocks
+const inArticleBlocksHTML_Clean = articleData.blocks
   .filter(b => b.position === "in-article" || !b.position)
   .map((b, i) => `<div id="block-article-${i}" class="block block-${b.type}">${renderBlockHTML(b)}</div>`)
   .join("");
@@ -423,12 +423,30 @@ const articleBody = [
   topBlocksHTML,
   leftBlocksHTML,
   rightBlocksHTML,
-  inArticleBlocksHTML,
+  inArticleBlocksHTML_Clean,
   bottomBlocksHTML
 ].join(" ");
 
 const readTime = calculateReadingTime(articleBody);
 
+
+// Your ad code as a string
+const adCode = `
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2001518155292747"
+     crossorigin="anonymous"></script>
+<ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-2001518155292747"
+     data-ad-slot="3066695507"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+`;
+
+// Replace $[AD] placeholders in your content
+const inArticleBlocksHTML = inArticleBlocksHTML_Clean.replace(/\$\[AD\]/g, adCode);
 
   // Schema generation
   let schemaJSON;
@@ -475,43 +493,12 @@ const readTime = calculateReadingTime(articleBody);
       break;
   }
 
-  // Metadata
-  const metadataJSON = {
-    siteId: articleData.siteId || "Fitness",
-    type: articleData.type || "page",
-    slug: articleData.slug,
-    title: articleData.title,
-    readTime: articleData.readTime || "PT"+readTime+"M",
-    description: articleData.description,
-    keywords: articleData.keywords || [],
-    status: articleData.status || "draft",
-    blocks: articleData.blocks || [],
-    og: articleData.og,
-    schemaTypes: [articleData.schemaType],
-    faq: articleData.faq || [],
-    howto: articleData.howto || [],
-    article: articleData.article || {},
-    affiliates: articleData.affiliates || [],
-    tags: articleData.tags || [],
-    hashTags: articleData.hashTags || [],
-    createdBy: articleData.createdBy,
-    updatedBy: articleData.updatedBy,
-    createdAt: articleData.createdAt,
-    updatedAt: articleData.updatedAt,
-    publishedAt: articleData.publishedAt || null,
-    analytics: articleData.analytics || { views: 0, uniqueViews: 0 },
-    monetization: articleData.monetization || { adPlaceholders: ["top", "in-article-1"] }
-  };
-
-
 
     const pageURL = `https://contenthub.guru/page/${encodeURIComponent(articleData.slug)}`;
     const pageTitle = `${articleData.title}`;
     const encodedPageTitle = encodeURIComponent(articleData.slug); // Use for URL query strings
 
-
-      const d = new Date();
-
+  const d = new Date();
   const year = String(d.getFullYear()).slice(-2); // last 2 digits of year
   const month = String(d.getMonth() + 1).padStart(2, "0"); // 01–12
   const day = String(d.getDate()).padStart(2, "0"); // 01–31
@@ -565,6 +552,7 @@ const Content = `
 <meta http-equiv="X-UA-Compatible" content="IE=edge"> <!-- ensures proper rendering in older IE -->
 <meta name="format-detection" content="telephone=no"> <!-- prevents phone number auto-linking -->
 <meta name="theme-color" content="#fdfdfdff"> <!-- already included but ensures mobile browsers pick it up -->
+
 <!-- Progressive Web App meta -->
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -572,24 +560,21 @@ const Content = `
 <meta name="HandheldFriendly" content="true">
 <meta name="MobileOptimized" content="320">
 
-
 <meta name="google-site-verification" content="${articleData.google_Verification}">
 <meta name="bing-site-verification" content="${articleData.bing_Verification}">
 <meta name="yandex-verification" content="${articleData.yandex_Verification}">
 
-<meta name="yandex-verification" content="26ca8e2174c73ca5" />
 <meta name="msvalidate.01" content="41794433A3D0795B3768E9AE59B10997" />
 
 
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
-<meta name="revisit-after" content="3 days">
+<meta name="revisit-after" content="1 days">
 <meta name="rating" content="general">
 <meta name="theme-color" content="#1a1a1a">
 <meta name="author" content="ContentHub.guru">
 <meta name="readtime" content="PT${readTime}M"> <!-- ISO 8601 duration for structured data -->
 <meta name="docsearch:read_time" content="${readTime} min"> <!-- optional for advanced SEO tools -->
-
-  <meta name="robots" content="index, follow">
+  
 <!-- Canonical URL -->
 <link rel="canonical" href="https://contenthub.guru/page/${articleData.slug}">
 
@@ -690,12 +675,10 @@ const Content = `
   gtag('config', '${articleData.gTag}');
 <\/script>
 
-
 <!-- Schema & Metadata -->
 <script type="application/ld+json">${JSON.stringify(schemaJSON)}<\/script>
-<script type="application/ld+json">${JSON.stringify(metadataJSON)}<\/script>
 
-<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"><\/script>
 
 ${scriptTag}
 
@@ -703,7 +686,6 @@ ${scriptTag}
 
 <!-- 🔹 Changeable Theme CSS -->
 <style id="dynamic-style">
-
 
 /* 🔹 Header */
 .site-header {
@@ -897,7 +879,6 @@ hr {
 <aside id="left-sidebar" 
        class="lg:col-span-3 space-y-6 order-4 lg:order-2">
   ${leftBlocksHTML}
-
 </aside>
 
 <!-- Main content -->
@@ -911,10 +892,6 @@ hr {
 <aside id="right-sidebar" 
        class="lg:col-span-3 space-y-6 order-5 lg:order-4">
   ${rightBlocksHTML}
-
-
-
-
 </aside>
 
 
@@ -939,11 +916,13 @@ hr {
 
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2001518155292747"
      crossorigin="anonymous"><\/script>
+<!-- new bottom ad -->
 <ins class="adsbygoogle"
      style="display:block"
-     data-ad-format="autorelaxed"
      data-ad-client="ca-pub-2001518155292747"
-     data-ad-slot="4160274610"></ins>
+     data-ad-slot="2543951326"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
 <script>
      (adsbygoogle = window.adsbygoogle || []).push({});
 <\/script>

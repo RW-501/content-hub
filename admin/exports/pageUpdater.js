@@ -202,11 +202,10 @@ function checkContent(html) {
 
   return html;
 }
-
 function renderHowTo(html) {
   if (!html) return html;
 
-  // Match How-To section from <h2> to next <h2> or end of string
+  // Match How-To section from <h2> to next <h2> or end
   const howToSectionRegex = /<h2[^>]*>(How[\s-]?To.*?)<\/h2>([\s\S]*?)(?=(<h2|$))/i;
   const match = html.match(howToSectionRegex);
   if (!match) return html;
@@ -214,15 +213,30 @@ function renderHowTo(html) {
   const title = match[1];
   const sectionContent = match[2];
 
-  // Extract all <h3> steps in this block
-  const stepRegex = /<h3[^>]*>(Step \d+: .*?)<\/h3>\s*<p[^>]*>([\s\S]*?)<\/p>/gi;
   const steps = [];
+
+  // 1. Capture <h3> + <p> as steps
+  const stepHeadingRegex = /<h3[^>]*>(.*?)<\/h3>\s*<p[^>]*>([\s\S]*?)<\/p>/gi;
   let stepMatch;
-  while ((stepMatch = stepRegex.exec(sectionContent)) !== null) {
+  while ((stepMatch = stepHeadingRegex.exec(sectionContent)) !== null) {
     steps.push(`<div class="howto-step"><strong>${stepMatch[1]}</strong><p>${stepMatch[2]}</p></div>`);
   }
 
-  // Replace the entire original How-To block with new structured HTML
+  // 2. Capture ordered or unordered list steps <ol>/<ul>
+  const listRegex = /<(ol|ul)[^>]*>([\s\S]*?)<\/\1>/gi;
+  let listMatch;
+  while ((listMatch = listRegex.exec(sectionContent)) !== null) {
+    const items = [];
+    const liRegex = /<li[^>]*>([\s\S]*?)<\/li>/gi;
+    let liMatch;
+    while ((liMatch = liRegex.exec(listMatch[2])) !== null) {
+      const liContent = liMatch[1].replace(/<[^>]+>/g, "").trim(); // remove inner tags
+      if (liContent.length > 0) items.push(`<div class="howto-step"><p>${liContent}</p></div>`);
+    }
+    if (items.length) steps.push(items.join(""));
+  }
+
+  // Replace the original How-To block with structured HTML
   return html.replace(howToSectionRegex, `
     <section class="howto-block">
       <h2 class="howto-title">${title}</h2>

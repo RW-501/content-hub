@@ -715,3 +715,11 @@ display: block;
 .pageImages {
 display: block;
 }
+
+#scrollUpBtn {
+  z-index: 3000;
+  display: inline;
+  width: fit-content;
+  height: fit-content;
+  font-size: 2.0rem;
+}

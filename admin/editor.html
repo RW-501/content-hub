@@ -809,6 +809,7 @@ async function loadPageData(currentUser) {
   return { id: pageId, ...pageData };
 }
 
+  let mediaArray = []; // {url, type, storagePath}
 
 
   // Add a button to open the gallery
@@ -1044,7 +1045,6 @@ function collectPageStyles() {
   // Initial application
   applyPageStyles(collectPageStyles());
 
-  let mediaArray = []; // {url, type, storagePath}
 
 
 

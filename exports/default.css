@@ -747,3 +747,7 @@ display: block;
 #scrollUpBtn:hover{
   background-color: #0a004c;
 }
+
+.hidden {
+  display: none !important;
+}

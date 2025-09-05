@@ -543,7 +543,7 @@ function generateFeaturedHTML(featuredArticles) {
             "@id": "${pageUrl}"
           }
         }
-        </script>
+        <\/script>
 
         <!-- WebPage Schema for the article -->
         <script type="application/ld+json">
@@ -561,13 +561,14 @@ function generateFeaturedHTML(featuredArticles) {
             "url": "https://contenthub.guru"
           }
         }
-        </script>
+        <\/script>
       </article>
     `;
   });
 
   return HTML;
 }
+
 
 
 document.getElementById("updateFeaturedPages").addEventListener("click", async () => {

@@ -409,8 +409,8 @@ const scriptTag = `<script id="dynamic-js" type="module" src="https://contenthub
 // Generate random rating count between 2000 and 4000
 let randomBaseCount = Math.floor(Math.random() * 2001) + 2000;
 
-let helpful = page.helpfulCount || 0;
-let notHelpful = page.notHelpfulCount || 0;
+let helpful = articleData.helpfulCount || 0;
+let notHelpful = articleData.notHelpfulCount || 0;
 let ratingCount = helpful + notHelpful;
 let averageRating = 4.5;
 
@@ -1057,6 +1057,16 @@ hr {
   </p>
 
   <p id="version">${version}</p>
+
+ 
+        <img src= "https://contenthub.guru/images/logo.png" 
+             alt="Content Hub Logo" 
+             id="footerLogo"
+             class="imag" 
+             role="img"
+             aria-describedby="Content-Hub-Logo" 
+             loading="lazy"/>
+
 </footer>
 
 <!-- Font Awesome for icons -->

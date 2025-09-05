@@ -406,20 +406,26 @@ export async function updatePage(articleData, location) {
 const scriptTag = `<script id="dynamic-js" type="module" src="https://contenthub.guru/exports/main.js"><\/script>`;
 
 
-let helpful = articleData.helpfulCount || 0;
-let notHelpful = articleData.notHelpfulCount || 0;
+// Generate random rating count between 2000 and 4000
+let randomBaseCount = Math.floor(Math.random() * 2001) + 2000;
+
+let helpful = page.helpfulCount || 0;
+let notHelpful = page.notHelpfulCount || 0;
 let ratingCount = helpful + notHelpful;
 let averageRating = 4.5;
 
-// fallback if no votes
+// Fallback if not enough votes yet
 if (ratingCount < 10) {
-  ratingCount = 150; // default base count
-  averageRating = 4.5; // default ratingValue
+  ratingCount = randomBaseCount; // give it a natural-looking base
+  averageRating = 4.5;           // keep rating high but realistic
 } else {
-  // calculate rating out of 5
-   averageRating = (helpful / ratingCount) * 5;
-}
+  // Calculate rating on a 1–5 scale
+  averageRating = (helpful / ratingCount) * 5;
 
+  // Prevent out-of-range issues
+  if (averageRating < 1) averageRating = 1;
+  if (averageRating > 5) averageRating = 5;
+}
   
   // Prepare containers with block HTML
 const topBlocksHTML = articleData.blocks

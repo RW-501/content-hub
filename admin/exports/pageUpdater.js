@@ -956,6 +956,8 @@ hr {
     <span id="rating-stars">⭐⭐⭐⭐⭐</span>
     <span id="rating-value">4.5</span> / 5
     <span hidden id="rating-count">0</span>
+    <span hidden id="helpfulCount">${articleData.helpfulCount}</span>
+    <span hidden id="notHelpfulCount">${articleData.notHelpfulCount}</span>
   </div>
 </div>
 

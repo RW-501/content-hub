@@ -403,37 +403,37 @@ document.getElementById("copyLinkButton").addEventListener("click", async () => 
 
   
 
-
-  // Function to update rating display
 function updateRatingDisplay(helpful, notHelpful) {
-  let ratingCount = helpful + notHelpful;
-  let averageRating = ratingCount < 1 ? 4.5 : (helpful / ratingCount) * 5;
+  const ratingCount = helpful + notHelpful;
+  const averageRating = ratingCount < 1 ? 4.5 : (helpful / ratingCount) * 5;
 
-  // Update stars (rounded to nearest half star)
+  // Update stars (full, half, empty)
   const fullStars = Math.floor(averageRating);
   const halfStar = averageRating - fullStars >= 0.5 ? 1 : 0;
   const emptyStars = 5 - fullStars - halfStar;
-
-  let stars = '⭐'.repeat(fullStars) + (halfStar ? '✬' : '') + '☆'.repeat(emptyStars);
+  const stars = '⭐'.repeat(fullStars) + (halfStar ? '✬' : '') + '☆'.repeat(emptyStars);
 
   document.getElementById('rating-stars').textContent = stars;
   document.getElementById('rating-value').textContent = averageRating.toFixed(1);
   document.getElementById('rating-count').textContent = ratingCount;
+
+  // Update hidden counts
+  document.getElementById('helpfulCount').textContent = helpful;
+  document.getElementById('notHelpfulCount').textContent = notHelpful;
 }
 
-// Initialize with existing data
-updateRatingDisplay(page.helpfulCount || 0, page.notHelpfulCount || 0);
+// Initialize from hidden spans
+let helpful = parseInt(document.getElementById('helpfulCount').textContent) || 0;
+let notHelpful = parseInt(document.getElementById('notHelpfulCount').textContent) || 0;
+updateRatingDisplay(helpful, notHelpful);
 
-// Feedback buttons
+// Yes button
 document.getElementById("yesBtn").onclick = async () => {
   try {
-    await updateDoc(pageRef, {
-      helpfulCount: increment(1)
-    });
-    
-    // Update local counts and display
-    page.helpfulCount = (page.helpfulCount || 0) + 1;
-    updateRatingDisplay(page.helpfulCount, page.notHelpfulCount || 0);
+    await updateDoc(pageRef, { helpfulCount: increment(1) });
+
+    helpful += 1; // increment local
+    updateRatingDisplay(helpful, notHelpful);
 
     document.getElementById("feedbackMsg").textContent = "Thanks for your feedback!";
   } catch (err) {
@@ -441,23 +441,19 @@ document.getElementById("yesBtn").onclick = async () => {
   }
 };
 
+// No button
 document.getElementById("noBtn").onclick = async () => {
   try {
-    await updateDoc(pageRef, {
-      notHelpfulCount: increment(1)
-    });
+    await updateDoc(pageRef, { notHelpfulCount: increment(1) });
 
-    // Update local counts and display
-    page.notHelpfulCount = (page.notHelpfulCount || 0) + 1;
-    updateRatingDisplay(page.helpfulCount || 0, page.notHelpfulCount);
+    notHelpful += 1; // increment local
+    updateRatingDisplay(helpful, notHelpful);
 
     document.getElementById("feedbackMsg").textContent = "Sorry to hear that. We’ll improve!";
   } catch (err) {
     console.error("Error updating notHelpful count:", err);
   }
 };
-
-
 
 
 

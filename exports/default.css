@@ -689,8 +689,15 @@ button:disabled { background-color: #d1d5db; color: #9ca3af; cursor: not-allowed
     transition: width 0.2s ease, fade 0.3s ease;
     text-align: center;
     
-  input, textarea, select { width:100%; margin:.1rem 0 .8rem; padding:.6rem .65rem;
-  border:1px solid var(--border); border-radius:8px; background:#fff; }
+input, textarea, select {
+    width: 100%;
+    margin: .1rem 0 .8rem;
+    padding: .6rem .65rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: #fff;
+    color: #39b366;
+}
 
     button {
     background: linear-gradient(90deg, #4caf50, #00bfa5, #4caf50);
@@ -757,5 +764,5 @@ display: block;
   width: 50px;
   height: 50px;
   object-fit: fill;
-  
+
 }

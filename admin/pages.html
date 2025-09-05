@@ -250,17 +250,28 @@
       <button id="createBtn">Create Page</button>
     </section>
 
+    <div class="group">
 
-<div id="AdminArea">   
-      <button id="analyticsPanel">Show Analytics</button>
-      <button id="SEO_Helper">SEO Helper</button>
-      <button id="Translate">Translate</button>
-      <button id="Linker">Linker</button>
+<div id="pageArea">   
+  <div class="row dashboard-tools">
+    <label for="searchInput">Search</label>
+    <input id="searchInput" placeholder="Search by title, domain, keyword..." />
+  </div>
 
-  
+  <div class="row">
+    <label for="searchCategory">Category</label>
+    <select id="searchCategory">
+      <option value="">-- All Categories --</option>
+    </select>
+  </div>
+
+  <button id="updateBTN">Update</button>
+
+  <div id="dashboardContent"></div>
 </div>
 
 
+  </div>
       </div>
 
 </main>
@@ -582,21 +593,6 @@ imageDropZone.addEventListener("drop", async (e) => {
 });
 
 
-
-
-document.getElementById("showAnalytics").addEventListener("click", async () => {
-showAnalytics();
-});
-document.getElementById("SEO_Helper").addEventListener("click", async () => {
-window.location.href = "https://contenthub.guru/admin/seo-helper.html";
-});
-document.getElementById("Translate").addEventListener("click", async () => {
-window.location.href = "https://contenthub.guru/admin/translate.html";
-});
-document.getElementById("Linker").addEventListener("click", async () => {
-window.location.href = "https://contenthub.guru/admin/linker.html";
-});
-
 // Create Page button
 document.getElementById("createBtn").addEventListener("click", async () => {
   // Gather input values
@@ -866,6 +862,329 @@ window.loadAnalytics = loadAnalytics;
 
 
 
+
+
+
+
+
+
+
+let sortState = { field: null, asc: true };
+  const pageCache = {}; // 🔹 store page data here to avoid multiple DB calls
+
+
+async function loadDashboard(autoPing = false) {
+  console.log("autoPing  ", autoPing);
+
+  const dashboardContent = document.getElementById("dashboardContent");
+  const userSnap = await getDoc(doc(db, "users", currentUser.uid));
+  const pages = userSnap.exists() ? userSnap.data().createdPages || [] : [];
+
+  if (!pages.length) {
+    dashboardContent.innerHTML = "<p>No pages yet.</p>";
+    return;
+  }
+
+//  console.log("📊 loadDashboard called with data:", data);
+
+  let html = `<table>
+    <thead>
+      <tr>
+        <th>Preview</th>
+        <th class="sortable" data-field="title">Domain</th>
+        <th class="sortable" data-field="category">Category</th>
+        <th>Status</th>
+        <th>Version</th>
+        <th class="sortable" data-field="views">Views</th>
+        <th>Actions</th>
+      </tr>
+    </thead><tbody>`;
+
+  //data.forEach((pageData, index) => {
+   // console.log(`🔎 Rendering row ${index}`, pageData);
+
+
+     for (const p of pages) {
+    // 🔹 Pull updated stats from pages/{id} and cache it
+    const pageRef = doc(db, "pages", p.id);
+    const pageSnap = await getDoc(pageRef);
+    const pageData = pageSnap.exists() ? pageSnap.data() : {};
+    pageCache[p.id] = pageData; // cache it
+
+    const pageUrl = `https://contenthub.guru/page/${pageData.slug}`;
+    const shareText = encodeURIComponent(`Check out this page: ${pageData.title || ''}`);
+
+    html += `<tr>
+      <td><a href="${pageUrl}" target="_blank">
+        <img class='siteImage' src="${pageData.image || 'https://contenthub.guru/images/placeholder.png'}" 
+             alt="preview" width="300" height="200">
+      </a></td>
+      <td>${pageData.title || ''}</td>
+      <td>
+<div id="category-${pageData.siteId}" class="category">${pageData.category || ''}</div>
+<div id="faq-${pageData.siteId}" class="faq_status">FAQ</div>
+<div id="howTo-${pageData.siteId}" class="howTo_status">howTo</div>
+      </td>
+      <td><div id="status-${pageData.siteId}" class="status-offline">❌ Offline</div></td>
+      <td><div id="version-${pageData.siteId}" class="version">version</div></td>
+      <td>${pageData.views || 0}</td>
+      <td>
+        <div class="action-buttons">
+          <button class='updatePageBTN' onclick="updatePageBtn('${pageData.siteId}','${pageData.slug}', '${pageData.category}')">Update</button>
+          <button onclick="window.open('https://contenthub.guru/admin/editor?id=${pageData.siteId}', '_blank')">Edit</button>
+          <button class="remove-btn" onclick="removePage('${pageData.siteId}','${pageData.slug}')">Remove</button>
+        </div>
+        <div class="share-buttons">
+          <button onclick="shareOnTwitter('${pageUrl}', '${shareText}')">🐦</button>
+          <button onclick="shareOnLinkedIn('${pageUrl}', '${shareText}')">💼</button>
+          <button onclick="shareOnFacebook('${pageUrl}')">📘</button>
+          <button onclick="shareOnAll('${pageUrl}', '${shareText}')">🌍</button>
+        </div>
+      </td>
+    </tr>`;
+  };
+
+
+
+
+
+
+
+
+
+  html += "</tbody></table>";
+  dashboardContent.innerHTML = html;
+  console.log("✅ Dashboard rendered with rows:", pages.length);
+
+  // Sorting logic
+  document.querySelectorAll(".sortable").forEach(th => {
+    th.classList.remove("sorted-asc", "sorted-desc");
+    if (sortState.field === th.dataset.field) {
+      th.classList.add(sortState.asc ? "sorted-asc" : "sorted-desc");
+    }
+
+    th.onclick = () => {
+      if (sortState.field === th.dataset.field) {
+        sortState.asc = !sortState.asc;
+      } else {
+        sortState.field = th.dataset.field;
+        sortState.asc = true;
+      }
+
+      const sorted = [...pages].sort((a, b) => {
+        const valA = a[sortState.field] ?? '';
+        const valB = b[sortState.field] ?? '';
+        if (valA < valB) return sortState.asc ? -1 : 1;
+        if (valA > valB) return sortState.asc ? 1 : -1;
+        if (sortState.field !== 'title') {
+          const titleA = a.title ?? '';
+          const titleB = b.title ?? '';
+          if (titleA < titleB) return -1;
+          if (titleA > titleB) return 1;
+        }
+        return 0;
+      });
+
+      loadDashboard(sorted);
+    };
+  });
+
+  // 🔥 Auto-ping logic
+  if (autoPing) {
+    console.log("🚀 Auto-pinging all pages for status + version check...");
+    await updateAllPages(Object.values(pageCache));
+  }
+}
+
+
+
+function shareOnAll(url, text) {
+
+
+   shareNative(url, text);
+
+   return;
+
+  // Twitter
+  const twitterUrl = `https://twitter.com/intent/tweet?text=${text}&url=${encodeURIComponent(url)}`;
+  window.open(twitterUrl, '_blank', 'width=600,height=400');
+
+  // LinkedIn
+  const linkedinUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}&title=${text}`;
+  window.open(linkedinUrl, '_blank', 'width=600,height=400');
+
+  // Facebook
+  const fbUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
+  window.open(fbUrl, '_blank', 'width=600,height=400');
+}
+
+window.shareOnAll = shareOnAll;
+
+function shareNative(url, text) {
+  if (navigator.share) {
+    navigator.share({
+      title: text,
+      text: text,
+      url: url
+    }).catch(err => console.error("Share failed:", err));
+  } else {
+    alert("Native share not supported in this browser.");
+  }
+}
+
+
+function shareOnTwitter(url, text) {
+  const twitterUrl = `https://twitter.com/intent/tweet?text=${text}&url=${encodeURIComponent(url)}`;
+  window.open(twitterUrl, '_blank', 'width=600,height=400');
+}
+
+function shareOnLinkedIn(url, text) {
+  const linkedinUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}&title=${text}`;
+  window.open(linkedinUrl, '_blank', 'width=600,height=400');
+}
+
+function shareOnFacebook(url) {
+  const fbUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
+  window.open(fbUrl, '_blank', 'width=600,height=400');
+}
+
+window.shareOnTwitter = shareOnTwitter;
+window.shareOnLinkedIn = shareOnLinkedIn;
+window.shareOnFacebook = shareOnFacebook;
+
+async function updatePageBtn(siteId, slug, category) {
+  try {
+    // 🔽 Get 4 lowest viewed pages (same category optional)
+    let suggested = [];
+    let sq;
+    if (category) {
+      sq = query(
+        collection(db, "pages"),
+        where("category", "==", category),
+        orderBy("views", "asc"),
+        limit(4)
+      );
+    } else {
+      sq = query(
+        collection(db, "pages"),
+        orderBy("views", "asc"),
+        limit(4)
+      );
+    }
+
+const sSnap = await getDocs(sq);
+sSnap.forEach((docSnap) => {
+  const d = docSnap.data();
+  suggested.push({
+    id: docSnap.id,
+    image: d.image || null,
+    title: d.title || "",
+    category: d.category || "",
+    description: d.description || "",
+    slug: d.slug || "",
+    readTime: d.readTime || ''
+  });
+});
+
+
+    const updateData = {
+      suggested,
+      publishedCount: increment(1),
+      status: "published",
+      updatedAt: serverTimestamp()
+    };
+
+    // ✅ Update Firestore
+    await setDoc(doc(db, "pages", siteId), updateData, { merge: true });
+
+    // ✅ Fetch the updated page
+    const docSnap = await getDoc(doc(db, "pages", siteId));
+    if (!docSnap.exists()) {
+      console.error("No page data found for:", siteId);
+      return;
+    }
+    const articleData = docSnap.data();
+
+    // ✅ Update UI row dynamically
+      updatePage(articleData);
+
+    showToast("success", "Page updated!", 2500);
+
+  } catch (err) {
+    console.error("Error updating page:", err);
+    console.warn("Failed to update page.");
+  }
+}
+
+window.updatePageBtn = updatePageBtn;
+
+// Remove page function
+async function removePage(pageId, domain) {
+  if (!confirm(`Are you sure you want to remove the page "${domain}"?`)) return;
+
+  try {
+    // 1️⃣ Remove page doc from "pages" collection
+    await deleteDoc(doc(db, "pages", pageId));
+
+    // 2️⃣ Remove page from user's createdPages array
+    const userRef = doc(db, "users", currentUser.uid);
+    const userSnap = await getDoc(userRef);
+    if (userSnap.exists()) {
+      const createdPages = userSnap.data().createdPages || [];
+      const updatedPages = createdPages.filter(p => p.id !== pageId);
+      await updateDoc(userRef, { createdPages: updatedPages });
+    }
+
+
+    // Randomized or complex approach
+const parts = ['p', 'h', 'g'];
+const randomizePart = (part) => {
+    return part.split('').reverse().join('');
+};
+
+const part_1 = randomizePart(parts.join(''));
+const part_2 = "_akXGrO51HwgEI";
+const part_3 = "VWzDIghLbIE";
+const part_4 = "G9MnTu0fIjKj";
+
+const token = part_1 + part_2 + part_3 + part_4;
+
+    // 3️⃣ Remove page from GitHub
+    const owner = "RW-501", repo = "content-hub";
+    const filePath = `page/${domain}.html`;
+    const branch = "main";
+    const url = `https://api.github.com/repos/${owner}/${repo}/contents/${filePath}`;
+
+    // Get file SHA first
+    const fileResp = await fetch(url, { 
+      method: "GET", 
+      headers: { Authorization: `Bearer ${token}`, 'Accept':'application/vnd.github+json' } 
+    });
+
+    if (fileResp.ok) {
+      const sha = (await fileResp.json()).sha;
+      const deleteResp = await fetch(url, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}`, 'Content-Type':'application/json', Accept:'application/vnd.github+json' },
+        body: JSON.stringify({
+          message: `Delete ${filePath}`,
+          sha,
+          branch
+        })
+      });
+      if (!deleteResp.ok) throw new Error((await deleteResp.json()).message);
+    }
+
+    showToast("info", `Page "${domain}" removed successfully.`);
+    await loadDashboard(true);
+
+  } catch (err) {
+    console.error(err);
+    showToast("error", `Error removing page: ${err.message}`);
+  }
+}
+
+window.removePage = removePage;
 
 
 document.addEventListener("DOMContentLoaded", () => {

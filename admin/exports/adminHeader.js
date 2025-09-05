@@ -160,15 +160,9 @@ export function loadAdminHeader(targetId = "admin-header") {
   // Add buttons
   btnContainer.appendChild(createDashboardButton("Home", "https://contenthub.guru"));
   btnContainer.appendChild(createDashboardButton("Admin Home", "https://contenthub.guru/admin"));
+  btnContainer.appendChild(createDashboardButton("Pages", "https://contenthub.guru/pages"));
   btnContainer.appendChild(createDashboardButton("Sitemap", "https://contenthub.guru/admin/sitemap.html", "#10b981"));
-  btnContainer.appendChild(createDashboardButton("Linker", "https://contenthub.guru/admin/linker.html", "#10b981"));
-  btnContainer.appendChild(createDashboardButton("Translate", "https://contenthub.guru/admin/translate.html", "#36099fff"));
-  btnContainer.appendChild(createDashboardButton("SEO Helper", "https://contenthub.guru/admin/seo-helper.html", "#f59e0b"));
-  btnContainer.appendChild(createDashboardButton("Show Analytics", null, "#10b981", () => {
-    const analyticsPanel = document.getElementById("analyticsPanel");
-    if (analyticsPanel) analyticsPanel.style.display = analyticsPanel.style.display === "none" ? "block" : "none";
-  },"showAnalytics"));
-
+  
     btnContainer.appendChild(createDashboardButton("Ping Sitemap", null, "#b91016ff", () => {
   checkAndPingSitemap();
     },"checkAndPingSitemap"));

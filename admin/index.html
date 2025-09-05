@@ -589,7 +589,7 @@ const url = `https://api.github.com/repos/${owner}/${repo}/contents/${filePath}`
 
   if (!resp.ok) throw new Error((await resp.json()).message);
   console.log("Featured section updated successfully!");
-  showToast.log("info","Featured section updated successfully!");
+  showToast("info","Featured section updated successfully!");
 }
 
 

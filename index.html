@@ -533,9 +533,9 @@ function renderSites(){
       <h3>${data.title}</h3>
       <p><img src="${data.image||'https://contenthub.guru/images/placeholder.png'}" alt="preview" width="300" height="200"></p>
       <p>Category: ${formatCategory(data.category)}</p>
-      <p>Domain: ${data.domain}</p>
-      <p>Slug: ${data.slug}</p>
-      <p>Pages: ${data.pageCount || 0} | Published: ${data.publishedCount || 0}</p>
+      <p hidden>Domain: ${data.domain}</p>
+      <p hidden>Slug: ${data.slug}</p>
+      <p>Published: ${data.publishedCount || 0}</p>
       <div class="tags">${(data.tags||[]).map(tag=>`<span class="tag">${tag}</span>`).join('')}</div>
     `;
     card.addEventListener("click",()=>{window.location.href=`https://contenthub.guru/page/${data.slug}`});
@@ -599,6 +599,10 @@ async function loadSites(){
         pageCount: d.pageCount||0,
         publishedCount: d.publishedCount||0,
         views: d.views||0,
+
+        readTime: d.readTime||0,
+        uniqueViews: d.uniqueViews||0,
+
         tags: d.tags||[],
         image: d.image || 'https://contenthub.guru/images/placeholder.png',
         createdAt: d.createdAt?.toDate().getTime()||Date.now()

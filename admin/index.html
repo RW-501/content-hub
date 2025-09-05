@@ -445,9 +445,6 @@ imageDropZone.addEventListener("drop", async (e) => {
 
 
 
-document.getElementById("showAnalytics").addEventListener("click", async () => {
-showAnalytics();
-});
 document.getElementById("SEO_Helper").addEventListener("click", async () => {
 window.location.href = "https://contenthub.guru/admin/seo-helper.html";
 });
@@ -496,9 +493,9 @@ async function getFeaturedArticles() {
         slug: d.slug || "",
         readTime: d.readTime || ""
       });
-    });
-      console.log("Catagory: ", d.category,"  Page : ",d.title);
+            console.log("Catagory: ", d.category,"  Page : ",d.title);
 
+    });
   }
 
   return featured;

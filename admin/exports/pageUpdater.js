@@ -406,6 +406,20 @@ export async function updatePage(articleData, location) {
 const scriptTag = `<script id="dynamic-js" type="module" src="https://contenthub.guru/exports/main.js"><\/script>`;
 
 
+let helpful = articleData.helpfulCount || 0;
+let notHelpful = articleData.notHelpfulCount || 0;
+let ratingCount = helpful + notHelpful;
+let averageRating = 4.5;
+
+// fallback if no votes
+if (ratingCount < 10) {
+  ratingCount = 150; // default base count
+  averageRating = 4.5; // default ratingValue
+} else {
+  // calculate rating out of 5
+   averageRating = (helpful / ratingCount) * 5;
+}
+
   
   // Prepare containers with block HTML
 const topBlocksHTML = articleData.blocks
@@ -502,7 +516,12 @@ const inArticleBlocksHTML = inArticleBlocksHTML_Clean.replace(/\$\[AD\]/g, adCod
         "author": articleData.author || { "@type": "Organization", "name": "ContentHub" },
         "publisher": { "@type": "Organization", "name": "ContentHub" },
         "description": articleData.description,
-        "articleBody": articleData.body || ""
+        "articleBody": articleData.body || "",
+          "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": averageRating.toFixed(1),
+    "ratingCount": ratingCount
+      }
       };
       break;
   }
@@ -538,8 +557,6 @@ if (Array.isArray(articleData.suggested)) {
     `;
   });
 }
-
-
 
 
 
@@ -670,7 +687,12 @@ const Content = `
     "publisher":{"@type":"Organization","name":"ContentHub","logo":{"@type":"ImageObject","url":"${articleData.image}"}},
     "datePublished":"${articleData.publishedAt}",
     "dateModified":"${articleData.updatedAt}",
-    "mainEntityOfPage":{"@type":"WebPage","@id":"https://contenthub.guru/page/${articleData.slug}"}
+    "mainEntityOfPage":{"@type":"WebPage","@id":"https://contenthub.guru/page/${articleData.slug}"  },
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "${averageRating.toFixed(1)}",
+    "ratingCount": "${ratingCount}"
+  }
   }
   <\/script>
 

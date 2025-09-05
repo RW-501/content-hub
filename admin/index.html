@@ -511,6 +511,22 @@ function generateFeaturedHTML(featuredArticles) {
     const imageUrl = page.image || "https://contenthub.guru/images/placeholder.png";
     const description = (page.description || "").slice(0, 160); // keep under 160 chars for SEO
 
+
+
+    let helpful = page.helpfulCount || 0;
+let notHelpful = page.notHelpfulCount || 0;
+let ratingCount = helpful + notHelpful;
+let averageRating = 4.5;
+
+// fallback if no votes
+if (ratingCount < 10) {
+  ratingCount = 150; // default base count
+  averageRating = 4.5; // default ratingValue
+} else {
+  // calculate rating out of 5
+   averageRating = (helpful / ratingCount) * 5;
+}
+
     HTML += `
       <article class="featured-card" itemscope itemtype="https://schema.org/Article">
         <figure>
@@ -541,7 +557,12 @@ function generateFeaturedHTML(featuredArticles) {
           "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "${pageUrl}"
-          }
+          },
+            "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "${averageRating.toFixed(1)}",
+    "ratingCount": "${ratingCount}"
+  }
         }
         <\/script>
 

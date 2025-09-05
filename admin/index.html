@@ -508,7 +508,7 @@ function generateFeaturedHTML(featuredArticles) {
     HTML += `
       <div class="featured-card">
         <img src="${page.image || 'https://contenthub.guru/images/placeholder.png'}" alt="${page.title}">
-        <div class="suggested-content">
+        <div class="featured-content">
           <a href="https://contenthub.guru/page/${page.slug}"><h3>${page.title}</h3></a>
           ${page.readTime ? `<p>Reading Time: ${page.readTime} min</p>` : ''}
           <p>${(page.description || "").slice(0, 100)}...</p>
@@ -524,10 +524,10 @@ document.getElementById("updateFeaturedPages").addEventListener("click", async (
   const articles = await getFeaturedArticles();
   console.log("articles: ",articles);
   const featuredHTML = generateFeaturedHTML(articles);
-  console.log("featuredHTML: ",featuredHTML);
+//  console.log("featuredHTML: ",featuredHTML);
 
 
-//  await updateFeaturedSection(featuredHTML);
+  await updateFeaturedSection(featuredHTML);
 });
 
 
@@ -565,8 +565,8 @@ const url = `https://api.github.com/repos/${owner}/${repo}/contents/${filePath}`
 
   // 2️⃣ Replace only the #featured-page content
   content = content.replace(
-    /<div id="featured-page">[\s\S]*?<\/div>/,
-    `<div id="featured-page">${featuredHTML}</div>`
+    /<div id="featured-pages"  class="featured-grid" aria-label="featuredPages">[\s\S]*?<\/div>/,
+    `<div id="featured-pages"  class="featured-grid" aria-label="featuredPages">${featuredHTML}</div>`
   );
 
   // 3️⃣ Encode and push updated file

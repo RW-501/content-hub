@@ -234,7 +234,7 @@
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 1.5rem;
 }
-.suggested-card {
+.featured-card {
   background: #fff;
   border: 1px solid #ddd;
   border-radius: 12px;
@@ -242,12 +242,12 @@
   box-shadow: 0 2px 6px rgba(0,0,0,0.08);
   transition: transform 0.2s;
 }
-.suggested-card:hover { transform: translateY(-4px); }
-.suggested-card img { width: 100%; height: 160px; object-fit: cover; }
-.suggested-content { padding: 1rem; }
-.suggested-content h3 { margin: 0; font-size: 1.1rem; color: #357ABD; }
-.suggested-content p { font-size: 0.9rem; margin: 0.5rem 0; color: #555; }
-.suggested-content a { display: inline-block; margin-top: 0.5rem; font-size: 0.9rem; color: #4a90e2; text-decoration: none; font-weight: 600; }
+.featured-card:hover { transform: translateY(-4px); }
+.featured-card img { width: 100%; height: 160px; object-fit: cover; }
+.featured-content { padding: 1rem; }
+.featured-content h3 { margin: 0; font-size: 1.1rem; color: #357ABD; }
+.featured-content p { font-size: 0.9rem; margin: 0.5rem 0; color: #555; }
+.featured-content a { display: inline-block; margin-top: 0.5rem; font-size: 0.9rem; color: #4a90e2; text-decoration: none; font-weight: 600; }
 
 
 
@@ -390,10 +390,10 @@
 
 
   
-  <section id="featuredArea" class="featured-grid" aria-live="polite">
+  <section id="featuredArea" aria-live="polite">
   <h2 id="toc-item-78">Featured</h2>
 
-  <div id="featured-pages" aria-label="featuredPages">
+  <div id="featured-pages"  class="featured-grid" aria-label="featuredPages">
       <div class="suggested-card">
         <img src="https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1757084362977-pexels-photo-3566357.jpeg?alt=media&amp;token=a02d7afb-06f4-453b-80fe-f009c409196d" alt="White Castle Copycat Sliders (Tastel Mini Burgers) – Small but Mighty">
         <div class="suggested-content">

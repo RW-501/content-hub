@@ -640,10 +640,10 @@ const url = `https://api.github.com/repos/${owner}/${repo}/contents/${filePath}`
   let content = decodeURIComponent(escape(atob(encodedContent)));
 
   // 2️⃣ Replace only the #featured-page content
-  content = content.replace(
-    /<div id="featured-pages"  class="featured-grid" aria-label="featuredPages">[\s\S]*?<\/div>/,
-    `<div id="featured-pages"  class="featured-grid" aria-label="featuredPages">${featuredHTML}</div>`
-  );
+content = content.replace(
+  /<div id="featured-pages"[^>]*>[\s\S]*?<\/div>/,
+  `<div id="featured-pages" class="featured-grid" aria-label="featuredPages">${featuredHTML}</div>`
+);
 
   // 3️⃣ Encode and push updated file
   const updatedContent = btoa(unescape(encodeURIComponent(content)));

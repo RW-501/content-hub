@@ -738,10 +738,11 @@ display: block;
 
 #scrollUpBtn i {
     color: white;
-    font-size: 1rem;
+    /* font-size: 1rem; */
     width: fit-content;
     display: block;
     margin: auto;
+    padding: 0.5rem;
 }
 
 #scrollUpBtn:hover{

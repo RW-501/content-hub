@@ -396,21 +396,17 @@ const crawlLinks = async (url) => {
     const linksFromPage = await fetchLinksUsingIframe(url);
     crawledPages.add(url);
 
-    linksFromPage.forEach(link => {
-      if (!links.has(link) && link.startsWith(baseDomain)) {
-        // Ensure the link is valid before adding it
-        if (!isValidLink(link)) {
-          console.log(`Skipping invalid link: ${link}`);
-          return;
-        }
+linksFromPage.forEach(link => {
+  const cleanLink = link.split('#')[0]; // strip hash
+  if (!links.has(cleanLink) && isValidLink(cleanLink)) {
+    addLinkToTable(cleanLink, url);
+    highlightDuplicate(cleanLink);
 
-        addLinkToTable(link, url);
-        highlightDuplicate(link); 
+    links.add(cleanLink);
+    pendingUrls.push(cleanLink);
+  }
+});
 
-        links.add(link);
-        pendingUrls.push(link);
-      }
-    });
 
     // Update progress
     totalLinks++;
@@ -426,10 +422,22 @@ const crawlLinks = async (url) => {
   }
 };
 
+
+
 // Helper function to validate the link
 const isValidLink = (link) => {
-  // Logic to check if the link is valid, could be as simple as ensuring it doesn't return a 404
-  return !link.includes("404") && link.includes(baseDomain);
+  // Remove fragments (#...) to avoid duplicates and skipping anchors
+  const cleanLink = link.split('#')[0];
+
+  // Ensure link is part of the base domain and not empty
+  if (!cleanLink.startsWith(baseDomain)) return false;
+  if (!cleanLink || cleanLink.trim() === '') return false;
+
+  // Ignore media or downloads if needed
+  const skipExtensions = /\.(gif|png|jpg|jpeg|svg|mp4|pdf|docx?|xlsx?|zip|csv|txt)$/i;
+  if (skipExtensions.test(cleanLink)) return false;
+
+  return true;
 };
 
   // Start the crawling process

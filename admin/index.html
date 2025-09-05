@@ -502,23 +502,73 @@ async function getFeaturedArticles() {
 }
 
 
+
 function generateFeaturedHTML(featuredArticles) {
   let HTML = "";
+
   featuredArticles.forEach((page) => {
+    const pageUrl = `https://contenthub.guru/page/${page.slug}`;
+    const imageUrl = page.image || "https://contenthub.guru/images/placeholder.png";
+    const description = (page.description || "").slice(0, 160); // keep under 160 chars for SEO
+
     HTML += `
-      <div class="featured-card">
-        <img src="${page.image || 'https://contenthub.guru/images/placeholder.png'}" alt="${page.title}">
-        <div class="featured-content">
-          <a href="https://contenthub.guru/page/${page.slug}"><h3>${page.title}</h3></a>
-          ${page.readTime ? `<p>Reading Time: ${page.readTime} min</p>` : ''}
-          <p>${(page.description || "").slice(0, 100)}...</p>
-          <a href="https://contenthub.guru/page/${page.slug}"> Read More →</a>
+      <article class="featured-card" itemscope itemtype="https://schema.org/Article">
+        <figure>
+          <a href="${pageUrl}" itemprop="url">
+            <img src="${imageUrl}" alt="${page.title}" loading="lazy" itemprop="image">
+          </a>
+        </figure>
+        <div class="featured-content" role="group" aria-labelledby="title-${page.id}">
+          <h3 id="title-${page.id}" itemprop="headline">
+            <a href="${pageUrl}" title="${page.title}" itemprop="mainEntityOfPage">${page.title}</a>
+          </h3>
+          ${page.readTime ? `<p><span aria-label="Estimated reading time">${page.readTime} min read</span></p>` : ""}
+          <p itemprop="description">${description}...</p>
+          <a href="${pageUrl}" aria-label="Read more about ${page.title}" itemprop="url">Read More →</a>
         </div>
-      </div>
+
+        <!-- Schema.org JSON-LD for SEO -->
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "Article",
+          "headline": "${page.title.replace(/"/g, '\\"')}",
+          "image": "${imageUrl}",
+          "url": "${pageUrl}",
+          "description": "${description.replace(/"/g, '\\"')}",
+          "genre": "${page.category || "General"}",
+          "timeRequired": "${page.readTime ? `PT${page.readTime}M` : "PT1M"}",
+          "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "${pageUrl}"
+          }
+        }
+        </script>
+
+        <!-- WebPage Schema for the article -->
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "WebPage",
+          "@id": "${pageUrl}",
+          "url": "${pageUrl}",
+          "name": "${page.title.replace(/"/g, '\\"')}",
+          "description": "${description.replace(/"/g, '\\"')}",
+          "inLanguage": "en",
+          "isPartOf": {
+            "@type": "WebSite",
+            "name": "Content Hub",
+            "url": "https://contenthub.guru"
+          }
+        }
+        </script>
+      </article>
     `;
   });
+
   return HTML;
 }
+
 
 document.getElementById("updateFeaturedPages").addEventListener("click", async () => {
   const articles = await getFeaturedArticles();

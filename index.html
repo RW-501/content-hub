@@ -523,6 +523,9 @@ function renderSites(){
     card.className="site-card";
     card.setAttribute("role","button");
     card.setAttribute("tabindex","0");
+    console.log("date.image: ",data.image);
+    console.log("date: ",data);
+    
     card.innerHTML=`
       <div class="views">${data.views || 0} views</div>
       <h3>${data.title}</h3>

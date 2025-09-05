@@ -628,6 +628,15 @@ function renderTagFilters(){
   });
 }
 
+
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
 // Load sites from Firebase
 async function loadSites(){
   sitesList.innerHTML='<div class="loading">Loading sites...</div>';
@@ -636,30 +645,28 @@ async function loadSites(){
     const snap=await getDocs(q);
     if(snap.empty){ sitesList.innerHTML="<p class='loading'>No websites yet. Create one after login.</p>"; return; }
 
-    sitesData=snap.docs.map(doc=>{
-      const d=doc.data();
-         //   console.log(`https://contenthub.guru/page/${d.slug}`);
+sitesData = shuffleArray(
+  snap.docs.map(doc => {
+    const d = doc.data();
+             //   console.log(`https://contenthub.guru/page/${d.slug}`);
+    return {
+      id: doc.id,
+      title: d.name || d.title || "Untitled Site",
+      domain: d.domain || "N/A",
+      slug: d.slug || "N/A",
+      category: d.category || 'N/A',
+      pageCount: d.pageCount || 0,
+      publishedCount: d.publishedCount || 0,
+      views: d.views || 0,
+      readTime: d.readTime || 0,
+      uniqueViews: d.uniqueViews || 0,
+      tags: d.tags || [],
+      image: d.image || 'https://contenthub.guru/images/placeholder.png',
+      createdAt: d.createdAt?.toDate().getTime() || Date.now()
+    };
+  })
+);
 
-             console.log("date: ",d);
-
-      return {
-        id: doc.id,
-        title: d.name||d.title||"Untitled Site",
-        domain: d.domain||"N/A",
-        slug: d.slug || "N/A",
-        category: d.category || 'N/A',
-        pageCount: d.pageCount||0,
-        publishedCount: d.publishedCount||0,
-        views: d.views||0,
-
-        readTime: d.readTime||0,
-        uniqueViews: d.uniqueViews||0,
-
-        tags: d.tags||[],
-        image: d.image || 'https://contenthub.guru/images/placeholder.png',
-        createdAt: d.createdAt?.toDate().getTime()||Date.now()
-      }
-    });
 
     renderTagFilters();
     renderSites();

@@ -524,7 +524,6 @@ function renderSites(){
     card.setAttribute("role","button");
     card.setAttribute("tabindex","0");
     console.log("date.image: ",data.image);
-    console.log("date: ",data);
     
     card.innerHTML=`
       <div class="views">${data.views || 0} views</div>
@@ -584,7 +583,9 @@ async function loadSites(){
 
     sitesData=snap.docs.map(doc=>{
       const d=doc.data();
-            console.log(`https://contenthub.guru/page/${d.slug}`);
+         //   console.log(`https://contenthub.guru/page/${d.slug}`);
+
+             console.log("date: ",d);
 
       return {
         id: doc.id,
@@ -596,6 +597,7 @@ async function loadSites(){
         publishedCount: d.publishedCount||0,
         views: d.views||0,
         tags: d.tags||[],
+        image: d.image || 'https://contenthub.guru/images/placeholder.png',
         createdAt: d.createdAt?.toDate().getTime()||Date.now()
       }
     });

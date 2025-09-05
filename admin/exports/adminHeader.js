@@ -160,7 +160,7 @@ export function loadAdminHeader(targetId = "admin-header") {
   // Add buttons
   btnContainer.appendChild(createDashboardButton("Home", "https://contenthub.guru"));
   btnContainer.appendChild(createDashboardButton("Admin Home", "https://contenthub.guru/admin"));
-  btnContainer.appendChild(createDashboardButton("Pages", "https://contenthub.guru/pages"));
+  btnContainer.appendChild(createDashboardButton("Pages", "https://contenthub.guru/admin/pages"));
   btnContainer.appendChild(createDashboardButton("Sitemap", "https://contenthub.guru/admin/sitemap.html", "#10b981"));
   
     btnContainer.appendChild(createDashboardButton("Ping Sitemap", null, "#b91016ff", () => {

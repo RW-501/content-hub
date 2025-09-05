@@ -237,13 +237,15 @@ async function checkAndPingSitemap() {
       // 5. Ping search engines / services
       const encodedUrl = encodeURIComponent(sitemapUrl);
 
+      // Made-up IndexNow key
+      const INDEXNOW_KEY = "123abc456def789ghi012jkl345mno678pqr";
+      const INDEXNOW_KEY_LOCATION = `https://contenthub.guru/${INDEXNOW_KEY}.txt`;
+
       const pingUrls = [
         `https://www.bing.com/ping?sitemap=${encodedUrl}`,
-        `https://www.google.com/ping?sitemap=${encodedUrl}`, // may be ignored now
-        `https://search.yahoo.com/ping?sitemap=${encodedUrl}`, // Yahoo (powered by Bing, but still good)
-        `https://submissions.ask.com/ping?sitemap=${encodedUrl}`, // Ask
-        `https://www.seznam.cz/ping?sitemap=${encodedUrl}`, // Seznam (Czech engine)
-        `https://yandex.com/indexnow?url=${encodedUrl}&key=26ca8e2174c73ca5` // Yandex via IndexNow (needs API key)
+        `https://search.yahoo.com/ping?sitemap=${encodedUrl}`,
+        `https://www.seznam.cz/ping?sitemap=${encodedUrl}`,
+        `https://api.indexnow.org/indexnow?url=${encodedUrl}&key=${INDEXNOW_KEY}&keyLocation=${encodeURIComponent(INDEXNOW_KEY_LOCATION)}`
       ];
 
       pingUrls.forEach(pingUrl => {

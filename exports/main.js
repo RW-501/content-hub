@@ -400,12 +400,41 @@ document.getElementById("copyLinkButton").addEventListener("click", async () => 
     }
   });
 
-  // Feedback buttons
+
+  
+
+
+  // Function to update rating display
+function updateRatingDisplay(helpful, notHelpful) {
+  let ratingCount = helpful + notHelpful;
+  let averageRating = ratingCount < 1 ? 4.5 : (helpful / ratingCount) * 5;
+
+  // Update stars (rounded to nearest half star)
+  const fullStars = Math.floor(averageRating);
+  const halfStar = averageRating - fullStars >= 0.5 ? 1 : 0;
+  const emptyStars = 5 - fullStars - halfStar;
+
+  let stars = '⭐'.repeat(fullStars) + (halfStar ? '✬' : '') + '☆'.repeat(emptyStars);
+
+  document.getElementById('rating-stars').textContent = stars;
+  document.getElementById('rating-value').textContent = averageRating.toFixed(1);
+  document.getElementById('rating-count').textContent = ratingCount;
+}
+
+// Initialize with existing data
+updateRatingDisplay(page.helpfulCount || 0, page.notHelpfulCount || 0);
+
+// Feedback buttons
 document.getElementById("yesBtn").onclick = async () => {
   try {
     await updateDoc(pageRef, {
       helpfulCount: increment(1)
     });
+    
+    // Update local counts and display
+    page.helpfulCount = (page.helpfulCount || 0) + 1;
+    updateRatingDisplay(page.helpfulCount, page.notHelpfulCount || 0);
+
     document.getElementById("feedbackMsg").textContent = "Thanks for your feedback!";
   } catch (err) {
     console.error("Error updating helpful count:", err);
@@ -417,12 +446,16 @@ document.getElementById("noBtn").onclick = async () => {
     await updateDoc(pageRef, {
       notHelpfulCount: increment(1)
     });
+
+    // Update local counts and display
+    page.notHelpfulCount = (page.notHelpfulCount || 0) + 1;
+    updateRatingDisplay(page.helpfulCount || 0, page.notHelpfulCount);
+
     document.getElementById("feedbackMsg").textContent = "Sorry to hear that. We’ll improve!";
   } catch (err) {
     console.error("Error updating notHelpful count:", err);
   }
 };
-
 
 
 

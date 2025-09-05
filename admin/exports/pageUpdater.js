@@ -943,14 +943,22 @@ hr {
     <section id="bottom-banner-container" class="lg:col-span-12 order-6">
       ${bottomBlocksHTML}
 
-<div id='feedback-area'>
-<div class="feedback">
-  <p>Was this page helpful?</p>
-  <button id="yesBtn">Yes</button>
-  <button id="noBtn">No</button>
+<div id="feedback-area">
+  <div class="feedback">
+    <p>Was this page helpful?</p>
+    <button id="yesBtn">Yes</button>
+    <button id="noBtn">No</button>
+  </div>
+  <p id="feedbackMsg"></p>
+  
+  <!-- Rating display -->
+  <div id="rating-display" style="margin-top: 10px;">
+    <span id="rating-stars">⭐⭐⭐⭐⭐</span>
+    <span id="rating-value">4.5</span> / 5
+    <span hidden id="rating-count">0</span>
+  </div>
 </div>
-<p id="feedbackMsg"></p>
-</div>
+
 
     </section>
 

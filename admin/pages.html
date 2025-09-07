@@ -798,7 +798,10 @@ async function loadDashboard(autoPing = false) {
   console.log("Loading...  ");
 
   const dashboardContent = document.getElementById("dashboardContent");
-  const userSnap = await getDoc(doc(db, "users", currentUser.uid));
+
+        console.log("currentUser.uid:", currentUser.uid);
+
+  const userSnap = await getDoc(doc(db, "users", "CyfMntp5iucjYC94HQ1FNcOiDa23"));
   const pages = userSnap.exists() ? userSnap.data().createdPages || [] : [];
 
   if (!pages.length) {

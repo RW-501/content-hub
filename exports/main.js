@@ -28,7 +28,7 @@ import { db, auth, storage } from "https://contenthub.guru/admin/exports/firebas
 onAuthStateChanged(auth, (user) => {
   if (user) {
     // Mark admins manually
-    if (user.uid === "CyfMntp5iucjYC94HQ1FNcOiDa23") {
+    if (user.uid === "5bShzf1KNZV1HmA9jlNc20eqvRm1") {
       user.isAdmin = true;
     }
   }

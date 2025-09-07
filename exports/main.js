@@ -938,8 +938,6 @@ window.addEventListener("scroll", () => {
 
   // 🔹 Show popup
   document.getElementById("reportPageBtn").addEventListener("click", () => {
-    createReportPopup();
-
     reportPopup.style.display = "flex";
   });
 
@@ -1102,7 +1100,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   window.onscroll = function () {
     const btn = document.getElementById("scrollUpBtn");
-    btn.style.display = (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) ? "block" : "none";
+    btn.style.display = (document.body.scrollTop > 200 || document.documentElement.scrollTop > 300) ? "block" : "none";
   };
 document.getElementById('scrollUpBtn').addEventListener('click', () => {
   window.scrollTo({

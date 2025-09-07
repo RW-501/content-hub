@@ -1060,14 +1060,14 @@ hr {
 
   <p id="version">${version}</p>
 
- 
+      <a href="https://contenthub.guru" title="Content Hub Home" style="text-decoration:none;">
         <img src= "https://contenthub.guru/images/logo.png" 
              alt="Content Hub Logo" 
              id="footerLogo"
              class="imag" 
              role="img"
              aria-describedby="Content-Hub-Logo" 
-             loading="lazy"/>
+             loading="lazy"/></a>
 
 </footer>
 

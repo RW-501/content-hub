@@ -310,73 +310,115 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 const storage = getStorage(app);
-let currentUser;
+let currentUser = null;
 
-// Allowed emails/phones
+// ✅ Whitelist (never expose these in client-only apps — best in server rules)
 const allowedEmails = ["1988lrp@gmail.com"];
-const allowedPhones = ["+19725977878","+12145527280"];
+const allowedPhones = ["+19725977878", "+12145527280"];
 
-// Auth state
+// 🔐 Utility: Check if user is allowed
+function isAuthorized(user) {
+  return (
+    (user?.email && allowedEmails.includes(user.email)) ||
+    (user?.phoneNumber && allowedPhones.includes(user.phoneNumber))
+  );
+}
+
+// 🔒 Logout
+async function logoutUser() {
+  try {
+    await signOut(auth);
+  } catch (err) {
+    console.error("Logout error:", err);
+  }
+  currentUser = null;
+  toggleUI(false);
+}
+
+// 🖼️ Toggle UI
+function toggleUI(isLoggedIn) {
+  document.getElementById("auth-section").classList.toggle("hidden", isLoggedIn);
+  document.getElementById("admin-panel").classList.toggle("hidden", !isLoggedIn);
+  document.getElementById("logoutBtn").classList.toggle("hidden", !isLoggedIn);
+}
+
+// 👀 Firebase Auth state listener
 onAuthStateChanged(auth, async (user) => {
-  if (user && (allowedEmails.includes(user.email) || allowedPhones.includes(user.phoneNumber))) {
+  if (isAuthorized(user)) {
     currentUser = user;
     await showAdminPanel(user);
-  } else if (user) logoutUser();
+    toggleUI(true);
+  } else {
+    logoutUser();
+  }
 });
 
-// Logout
-function logoutUser() {
-  signOut(auth);
-  currentUser = null;
-  document.getElementById("auth-section").classList.remove("hidden");
-  document.getElementById("admin-panel").classList.add("hidden");
-  document.getElementById("logoutBtn").classList.add("hidden");
-}
+// 🚪 Logout button
 document.getElementById("logoutBtn").addEventListener("click", logoutUser);
 
-// Google Login
+// 🔑 Google Login (redirect flow avoids popup blockers)
 document.getElementById("googleLogin").addEventListener("click", async () => {
   try {
     await signInWithRedirect(auth, new GoogleAuthProvider());
   } catch (err) {
-    alert(err.message);
+    alert("Google login failed: " + err.message);
   }
 });
 
-// On page load, check result
-getRedirectResult(auth).then(async (result) => {
-  if (result?.user) {
-    if (!allowedEmails.includes(result.user.email)) return logoutUser();
-    currentUser = result.user;
-    await showAdminPanel(currentUser);
-  }
-}).catch(err => alert(err.message));
+// 🔄 Handle redirect result
+getRedirectResult(auth)
+  .then(async (result) => {
+    if (result?.user) {
+      if (!isAuthorized(result.user)) return logoutUser();
+      currentUser = result.user;
+      await showAdminPanel(currentUser);
+      toggleUI(true);
+    }
+  })
+  .catch((err) => {
+    console.error("Redirect error:", err);
+    alert("Login error: " + err.message);
+  });
 
-// Phone login
+// 📱 Phone login
 let recaptchaVerifier;
 document.addEventListener("DOMContentLoaded", () => {
   recaptchaVerifier = new RecaptchaVerifier("recaptcha-container", { size: "invisible" }, auth);
   recaptchaVerifier.render();
 });
 
+// Send SMS code
 document.getElementById("sendCode").addEventListener("click", async () => {
   let phone = document.getElementById("phoneInput").value.trim();
   if (!phone.startsWith("+")) phone = "+1" + phone;
-  if (!allowedPhones.includes(phone)) return alert("Unauthorized phone number.");
+
+  if (!allowedPhones.includes(phone)) {
+    return alert("Unauthorized phone number.");
+  }
+
   try {
     const confirmationResult = await signInWithPhoneNumber(auth, phone, recaptchaVerifier);
     window.confirmationResult = confirmationResult;
     document.getElementById("codeSection").classList.remove("hidden");
-  } catch (err) { alert(err.message); }
+  } catch (err) {
+    alert("Failed to send code: " + err.message);
+  }
 });
 
+// Verify SMS code
 document.getElementById("verifyBtn").addEventListener("click", async () => {
   try {
-    const user = (await window.confirmationResult.confirm(document.getElementById("verifyCode").value.trim())).user;
-    if (!allowedPhones.includes(user.phoneNumber)) return logoutUser();
+    const code = document.getElementById("verifyCode").value.trim();
+    const result = await window.confirmationResult.confirm(code);
+    const user = result.user;
+
+    if (!isAuthorized(user)) return logoutUser();
     currentUser = user;
     await showAdminPanel(user);
-  } catch { alert("Invalid code."); }
+    toggleUI(true);
+  } catch {
+    alert("Invalid verification code.");
+  }
 });
 
 // Show admin panel

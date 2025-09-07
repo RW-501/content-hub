@@ -97,16 +97,18 @@ async function linkifyKeywordsFromJSON(input, jsonUrl = 'https://contenthub.guru
 
     let currentURL;
 
+
 // Flatten {keyword, url, title} pairs, skipping current page
 const entries = [];
 for (const [url, data] of Object.entries(keywordMap)) {
-  if (url === currentURL)               console.log("Skip url: ", url);
-continue; // skip linking keywords for the current page
+  if (url === currentURL) {
+    console.log("Skip url: ", url); // log skipped URL
+    continue; // skip linking keywords for the current page
+  }
 
   const title = data.title || '';
   (data.keywords || []).forEach(keyword => entries.push({ keyword, url, title }));
 }
-
     // Sort longest first
     entries.sort((a, b) => b.keyword.length - a.keyword.length);
 

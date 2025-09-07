@@ -790,8 +790,10 @@ display: block;
 }
 
 .adsbygoogle {
-    display: block;
-    height: 280px;
     margin: auto;
-    width: max-content;
+    width: min-content;
+
+    div {
+          width: fit-content;
+    }
 }

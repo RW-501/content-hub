@@ -326,12 +326,16 @@ let currentUser;
 const allowedEmails = ["1988lrp@gmail.com"];
 const allowedPhones = ["+19725977878","+12145527280"];
 
-// Auth state
-onAuthStateChanged(auth, async (user) => {
-  if (user && (allowedEmails.includes(user.email) || allowedPhones.includes(user.phoneNumber))) {
-    currentUser = user;
-    await showAdminPanel(user);
-  } else if (user) logoutUser();
+document.addEventListener("DOMContentLoaded", () => {
+  // Auth state
+  onAuthStateChanged(auth, async (user) => {
+    if (user && (allowedEmails.includes(user.email) || allowedPhones.includes(user.phoneNumber))) {
+      currentUser = user;
+      await showAdminPanel(user);
+    } else if (user) {
+      logoutUser();
+    }
+  });
 });
 
 // Logout

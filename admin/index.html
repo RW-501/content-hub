@@ -392,7 +392,8 @@ document.getElementById("googleLogin").addEventListener("click", async () => {
   console.log("[GoogleLogin] Button clicked (popup)");
   try {
     const provider = new GoogleAuthProvider();
-    const result = await signInWithPopup(auth, provider);
+  //  const result = await signInWithPopup(auth, provider);
+    const result = await signInWithPopup();
     console.log("[GoogleLogin] User logged in via popup:", result.user);
 
     if (!isAuthorized(result.user)) return logoutUser();

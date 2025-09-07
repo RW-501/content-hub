@@ -901,7 +901,7 @@ for (const p of pageData) {
 
   html += "</tbody></table>";
   dashboardContent.innerHTML = html;
-  console.log("✅ Dashboard rendered with rows:", pages.length);
+  console.log("✅ Dashboard rendered with rows:", pageData.length);
 
   // Sorting logic
   document.querySelectorAll(".sortable").forEach(th => {
@@ -918,7 +918,7 @@ for (const p of pageData) {
         sortState.asc = true;
       }
 
-      const sorted = [...pages].sort((a, b) => {
+      const sorted = [...pageData].sort((a, b) => {
         const valA = a[sortState.field] ?? '';
         const valB = b[sortState.field] ?? '';
         if (valA < valB) return sortState.asc ? -1 : 1;

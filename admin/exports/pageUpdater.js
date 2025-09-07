@@ -86,6 +86,7 @@ function formatCategory(category) {
 
 
 let currentURL ;
+
 async function linkifyKeywordsFromJSON(input, jsonUrl = 'https://contenthub.guru/internal-Links.json') {
   try {
     const res = await fetch(jsonUrl);
@@ -108,35 +109,63 @@ async function linkifyKeywordsFromJSON(input, jsonUrl = 'https://contenthub.guru
       ? Object.assign(document.createElement('div'), { innerHTML: input })
       : input;
 
-    function walk(node) {
-      if (node.nodeType === Node.TEXT_NODE && node.nodeValue.trim()) {
-        let text = node.nodeValue;
-        let replaced = false;
+    function linkifyTextNode(textNode) {
+      const parent = textNode.parentElement;
 
-        // skip if parent is already an <a>
-        if (node.parentElement && node.parentElement.tagName === 'A') return;
+      // Skip links to contenthub.guru
+      if (parent?.tagName === 'A' && /contenthub\.guru/i.test(parent.href)) return;
+
+      let text = textNode.nodeValue;
+      let replaced = false;
+
+      const fragment = document.createDocumentFragment();
+
+      while (text.length) {
+        let matched = false;
 
         for (const { keyword, url, title } of entries) {
-          const regex = new RegExp(`\\b${keyword.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&")}\\b`, 'i'); // replace first only
-          if (regex.test(text)) {
+          const regex = new RegExp(`\\b${keyword.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&")}\\b`, 'i');
+          const match = regex.exec(text);
+          if (match) {
+            matched = true;
             replaced = true;
-            text = text.replace(
-              regex,
-              `<a class='linked' href="${url}" title="${title}" target="_blank" rel="noopener noreferrer">${keyword}</a>`
-            );
-                            
-          logToPopup("Replaced: "+keyword, "limegreen");
-          console.log("Replaced: "+keyword);
-            break; // only replace first keyword per node to avoid huge string growth
+
+            // Text before match
+            if (match.index > 0) {
+              fragment.appendChild(document.createTextNode(text.slice(0, match.index)));
+            }
+
+            // Create link
+            const a = document.createElement('a');
+            a.className = 'linked';
+            a.href = url;
+            a.title = title;
+            a.target = '_blank';
+            a.rel = 'noopener noreferrer';
+            a.textContent = match[0];
+            fragment.appendChild(a);
+
+            logToPopup("Replaced: " + keyword, "limegreen");
+            console.log("Replaced: " + keyword);
+
+            // Remaining text
+            text = text.slice(match.index + match[0].length);
+            break; // process one match at a time
           }
         }
 
-        if (replaced) {
-          const span = document.createElement('span');
-          span.innerHTML = text;
-          node.replaceWith(span);
+        if (!matched) {
+          fragment.appendChild(document.createTextNode(text));
+          break;
         }
+      }
 
+      if (replaced) textNode.replaceWith(fragment);
+    }
+
+    function walk(node) {
+      if (node.nodeType === Node.TEXT_NODE && node.nodeValue.trim()) {
+        linkifyTextNode(node);
       } else if (node.nodeType === Node.ELEMENT_NODE && !['SCRIPT', 'STYLE', 'A'].includes(node.tagName)) {
         [...node.childNodes].forEach(walk);
       }
@@ -151,7 +180,6 @@ async function linkifyKeywordsFromJSON(input, jsonUrl = 'https://contenthub.guru
     return typeof input === 'string' ? input : input.outerHTML;
   }
 }
-
 
             console.log("Loading...");
 

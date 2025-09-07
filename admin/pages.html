@@ -803,17 +803,23 @@ async function loadDashboard(autoPing = false) {
 
   const dashboardContent = document.getElementById("dashboardContent");
 
+//CyfMntp5iucjYC94HQ1FNcOiDa23
 
 const usersCol = collection(db, "users");
 const usersSnap = await getDocs(usersCol);
-  const pages = usersSnap.exists() ? usersSnap.data() || [] : [];
 
-  if (!pages.length) {
-    dashboardContent.innerHTML = "<p>No pages yet.</p>";
-    return;
-  }
+// Map through the documents to get their data
+const allUsers = usersSnap.docs.map(doc => doc.data());
 
-  console.log("📊 loadDashboard called with pages:", pages);
+// Example: Get createdPages from each user (flatten if needed)
+const pages = allUsers.flatMap(user => user.createdPages || []);
+
+if (!pages.length) {
+  dashboardContent.innerHTML = "<p>No pages yet.</p>";
+  return;
+}
+
+console.log("📊 loadDashboard called with pages:", pages);
 
   let html = `<table>
     <thead>

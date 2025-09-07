@@ -94,12 +94,18 @@ async function linkifyKeywordsFromJSON(input, jsonUrl = 'https://contenthub.guru
     if (!res.ok) throw new Error(`Failed to fetch ${jsonUrl}`);
     const keywordMap = await res.json();
 
-    // Flatten {keyword, url, title} pairs
-    const entries = [];
-    for (const [url, data] of Object.entries(keywordMap)) {
-      const title = data.title || '';
-      (data.keywords || []).forEach(keyword => entries.push({ keyword, url, title }));
-    }
+
+    let currentURL;
+
+// Flatten {keyword, url, title} pairs, skipping current page
+const entries = [];
+for (const [url, data] of Object.entries(keywordMap)) {
+  if (url === currentURL)               console.log("Skip url: ", url);
+continue; // skip linking keywords for the current page
+
+  const title = data.title || '';
+  (data.keywords || []).forEach(keyword => entries.push({ keyword, url, title }));
+}
 
     // Sort longest first
     entries.sort((a, b) => b.keyword.length - a.keyword.length);
@@ -118,6 +124,7 @@ async function linkifyKeywordsFromJSON(input, jsonUrl = 'https://contenthub.guru
           const regex = new RegExp(`\\b${keyword.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&")}\\b`, 'gi');
           if (regex.test(text)) {
             hasChange = true;
+          console.log("Linked: ", text);
             text = text.replace(
               regex,
               `<a href="${url}" title="${title}" target="_blank" rel="noopener noreferrer">${keyword}</a>`
@@ -460,9 +467,11 @@ function calculateReadingTime(text) {
 
 
 // Update UI
-
 export async function updatePage(articleData, location) {
 
+currentURL = "https://contenthub.guru"+articleData.slug+"html";
+
+console.log("currentURL: ",currentURL);
 
 const scriptTag = `<script id="dynamic-js" type="module" src="https://contenthub.guru/exports/main.js"><\/script>`;
 

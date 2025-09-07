@@ -1227,6 +1227,9 @@ async function updateOutdatedPages() {
     "color: gray;",
     "color: red; font-weight: bold;"
   );
+
+//   updateStaticPageData();
+
 }
 
 
@@ -1251,6 +1254,8 @@ async function updateStaticPageData() {
         domain: d.domain || "N/A",
         slug: d.slug || "N/A",
         category: d.category || "N/A",
+        keywords: d.category || "N/A",
+        tags: d.category || "N/A",
         pageCount: d.pageCount || 0,
         publishedCount: d.publishedCount || 0,
         views: d.views || 0,
@@ -1322,6 +1327,8 @@ async function updateStaticPageData() {
     showToast("error", `Update failed: ${err.message}`);
   }
 }
+
+  updateStaticPageData();
 
 </script>
 </body>

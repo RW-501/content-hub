@@ -75,10 +75,13 @@ async function init() {
     const keywords = page.keywords;
     if (url && !keywordMap[url]) {
       keywordMap[url] = [];
+      keywordMap[page] = [];
     }
     console.log("URL: ",url);
     console.log("Title: ",title);
     console.log("keywords: ",keywords);
+    
+    
     
     /*
     if (title && !keywordMap[title]) {

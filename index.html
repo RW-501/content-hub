@@ -1835,7 +1835,7 @@ async function loadSites(){
 sitesData = shuffleArray(
   snap.docs.map(doc => {
     const d = doc.data();
-             //   console.log(`https://contenthub.guru/page/${d.slug}`);
+                console.log("Title: ",d.title,"  URL: ",`https://contenthub.guru/page/${d.slug}`);
     return {
       id: doc.id,
       title: d.name || d.title || "Untitled Site",

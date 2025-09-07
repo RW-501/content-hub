@@ -116,6 +116,10 @@ async function linkifyKeywordsFromJSON(input, jsonUrl = 'https://contenthub.guru
           const regex = new RegExp(`\\b${keyword.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&")}\\b`, 'gi');
 
           if (regex.test(text)) {
+                
+          logToPopup("Replaced: "+text, "limegreen");
+    console.log("Replaced: "+text);
+
             replaced = true;
             text = text.replace(regex, `<a class='linked' href="${url}" title="${title}" target="_blank" rel="noopener noreferrer">${keyword}</a>`);
           }

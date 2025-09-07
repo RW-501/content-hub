@@ -366,7 +366,8 @@ console.log("[Auth] Full browser reset complete");
 document.getElementById("logoutBtn").addEventListener("click", logoutUser);
 
 // ✅ Persist session in browser (LOCAL = survives tabs/refresh until logout)
-setPersistence(auth, browserLocalPersistence)
+// 🔑 Set Firebase Auth persistence
+await setPersistence(auth, browserLocalPersistence)
   .then(() => console.log("[Auth] Persistence set"))
   .catch(err => console.error("[Auth] Persistence error:", err));
 
@@ -388,35 +389,9 @@ onAuthStateChanged(auth, async (user) => {
   }
 });
 
-/*
-
-// 🔑 Google Login
-document.getElementById("googleLogin").addEventListener("click", async () => {
-  console.log("[GoogleLogin] Button clicked (popup)");
-  try {
-    const provider = new GoogleAuthProvider();
-   const result = await signInWithPopup(auth, provider);
-   // const result = await signInWithPopup();
-    console.log("[GoogleLogin] User logged in via popup:", result.user);
-
-    if (!isAuthorized(result.user)) return logoutUser();
-
-    currentUser = result.user;
-    await showAdminPanel(currentUser);
-    toggleUI(true);
-  } catch (err) {
-    console.error("[GoogleLogin] Popup login error:", err);
-    alert("Google login failed: " + err.message);
-  }
-});
-*/
-
-// 🔄 Handle redirect result
-console.log("[RedirectResult] Checking for redirect result...");
+// 🔄 Handle redirect result (if using redirect login)
 getRedirectResult(auth)
   .then(async (result) => {
-    console.log("[RedirectResult] Raw result:", result);
-
     if (result?.user) {
       console.log("[RedirectResult] User returned:", result.user);
 
@@ -429,32 +404,22 @@ getRedirectResult(auth)
       console.log("[RedirectResult] Authorized user, UID:", currentUser.uid);
 
       await showAdminPanel(currentUser);
-      console.log("[RedirectResult] Admin panel shown");
-
       toggleUI(true);
-      console.log("[RedirectResult] UI toggled for logged-in user");
     } else {
-      console.log("[RedirectResult] No user returned (likely first page load before redirect)");
+      console.log("[RedirectResult] No user returned (likely first page load)");
     }
   })
   .catch((err) => {
     console.error("[RedirectResult] Error:", err);
     alert("Login error: " + err.message);
   });
-    const provider = new GoogleAuthProvider();
 
-
-  const result = await signInWithPopup(auth, provider).catch(err => {
-  if (err.code === "auth/cancelled-popup-request") {
-    console.warn("Popup was cancelled, retrying...");
-  } else throw err;
-});
-
-  const loginBtn = document.getElementById("googleLogin");
-
+// 🔑 Google login with popup
+const loginBtn = document.getElementById("googleLogin");
 loginBtn.addEventListener("click", async () => {
   loginBtn.disabled = true;
   console.log("[GoogleLogin] Button clicked (popup)");
+
   try {
     const provider = new GoogleAuthProvider();
     const result = await signInWithPopup(auth, provider);
@@ -465,13 +430,22 @@ loginBtn.addEventListener("click", async () => {
     currentUser = result.user;
     await showAdminPanel(currentUser);
     toggleUI(true);
+
   } catch (err) {
-    console.error("[GoogleLogin] Popup login error:", err);
-    alert("Google login failed: " + err.message);
+    // Handle specific Firebase Auth popup errors
+    if (err.code === "auth/popup-closed-by-user") {
+      console.warn("[GoogleLogin] Popup was closed before completing login.");
+    } else if (err.code === "auth/cancelled-popup-request") {
+      console.warn("[GoogleLogin] Previous popup request cancelled.");
+    } else {
+      console.error("[GoogleLogin] Popup login error:", err);
+      alert("Google login failed: " + err.message);
+    }
   } finally {
     loginBtn.disabled = false;
   }
 });
+
 
 // 📱 Phone login
 let recaptchaVerifier;

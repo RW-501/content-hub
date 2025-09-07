@@ -87,6 +87,7 @@ function formatCategory(category) {
 
 
 
+    let currentURL;
 
 async function linkifyKeywordsFromJSON(input, jsonUrl = 'https://contenthub.guru/internal-Links.json') {
   try {
@@ -95,7 +96,6 @@ async function linkifyKeywordsFromJSON(input, jsonUrl = 'https://contenthub.guru
     const keywordMap = await res.json();
 
 
-    let currentURL;
 
 
 // Flatten {keyword, url, title} pairs, skipping current page

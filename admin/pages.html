@@ -799,18 +799,17 @@ async function loadDashboard(autoPing = false) {
 
   const dashboardContent = document.getElementById("dashboardContent");
 
-        console.log("currentUser.uid:", currentUser.uid);
 
 const usersCol = collection(db, "users");
 const usersSnap = await getDocs(usersCol);
-  const pages = usersSnap.exists() ? usersSnap.data().createdPages || [] : [];
+  const pages = usersSnap.exists() ? usersSnap.data() || [] : [];
 
   if (!pages.length) {
     dashboardContent.innerHTML = "<p>No pages yet.</p>";
     return;
   }
 
-//  console.log("📊 loadDashboard called with data:", data);
+  console.log("📊 loadDashboard called with pages:", pages);
 
   let html = `<table>
     <thead>

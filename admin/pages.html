@@ -797,111 +797,32 @@ let sortState = { field: null, asc: true };
   const pageCache = {}; // 🔹 store page data here to avoid multiple DB calls
 
 
+let pageData = []; // global or module-level
+let pageCache = {};
+let sortState = { field: 'title', asc: true };
+
 async function loadDashboard(autoPing = false) {
   console.log("autoPing  ", autoPing);
   console.log("Loading...  ");
 
   const dashboardContent = document.getElementById("dashboardContent");
+  if (!dashboardContent) return;
 
-//CyfMntp5iucjYC94HQ1FNcOiDa23
+  // Fetch all pages from Firestore
+  const pagesCol = collection(db, "pages");
+  const pagesSnap = await getDocs(pagesCol);
+  pageData = pagesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
-/*
-const usersCol = collection(db, "users");
-  console.log("usersCol  ", usersCol);
+  if (!pageData.length) {
+    dashboardContent.innerHTML = "<p>No pages yet.</p>";
+    return;
+  }
 
-const usersSnap = await getDocs(usersCol);
-  console.log("usersSnap  ", usersSnap);
+  // Cache pages
+  pageCache = {};
+  pageData.forEach(p => pageCache[p.id] = p);
 
-// Map through the documents to get their data
-const allUsers = usersSnap.docs.map(doc => doc.data());
-
-// Example: Get createdPages from each user (flatten if needed)
-const pages = allUsers.flatMap(user => user.createdPages || []);
-
-if (!pages.length) {
-  dashboardContent.innerHTML = "<p>No pages yet.</p>";
-  return;
-}
-
-console.log("📊 loadDashboard called with pages:", pages);
-
-*/
-
-  let html = `<table>
-    <thead>
-      <tr>
-        <th>Preview</th>
-        <th class="sortable" data-field="title">Domain</th>
-        <th class="sortable" data-field="category">Category</th>
-        <th>Status</th>
-        <th>Version</th>
-        <th class="sortable" data-field="views">Views</th>
-        <th>Actions</th>
-      </tr>
-    </thead><tbody>`;
-
-  //data.forEach((pageData, index) => {
-   // console.log(`🔎 Rendering row ${index}`, pageData);
-
-
-// Reference the "pages" collection
-const pagesCol = collection(db, "pages");
-
-// Get all documents in the collection
-const pagesSnap = await getDocs(pagesCol);
-
-// Map through the documents to get their data
-const pageData = pagesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-
-// Now you can loop through all pages
-for (const p of pageData) {
-
-    pageCache[p.id] = pageData; // cache it
-
-    const pageUrl = `https://contenthub.guru/page/${pageData.slug}`;
-    const shareText = encodeURIComponent(`Check out this page: ${pageData.title || ''}`);
-
-    html += `<tr>
-      <td><a href="${pageUrl}" target="_blank">
-        <img class='siteImage' src="${pageData.image || 'https://contenthub.guru/images/placeholder.png'}" 
-             alt="preview" width="300" height="200">
-      </a></td>
-      <td>${pageData.title || ''}</td>
-      <td>
-<div id="category-${pageData.siteId}" class="category">${pageData.category || ''}</div>
-<div id="faq-${pageData.siteId}" class="faq_status">FAQ</div>
-<div id="howTo-${pageData.siteId}" class="howTo_status">howTo</div>
-      </td>
-      <td><div id="status-${pageData.siteId}" class="status-offline">❌ Offline</div></td>
-      <td><div id="version-${pageData.siteId}" class="version">version</div></td>
-      <td>${pageData.views || 0}</td>
-      <td>
-        <div class="action-buttons">
-          <button class='updatePageBTN' onclick="updatePageBtn('${pageData.siteId}','${pageData.slug}', '${pageData.category}')">Update</button>
-          <button onclick="window.open('https://contenthub.guru/admin/editor?id=${pageData.siteId}', '_blank')">Edit</button>
-          <button class="remove-btn" onclick="removePage('${pageData.siteId}','${pageData.slug}')">Remove</button>
-        </div>
-        <div class="share-buttons">
-          <button onclick="shareOnTwitter('${pageUrl}', '${shareText}')">🐦</button>
-          <button onclick="shareOnLinkedIn('${pageUrl}', '${shareText}')">💼</button>
-          <button onclick="shareOnFacebook('${pageUrl}')">📘</button>
-          <button onclick="shareOnAll('${pageUrl}', '${shareText}')">🌍</button>
-        </div>
-      </td>
-    </tr>`;
-  };
-
-
-
-
-
-
-
-
-
-  html += "</tbody></table>";
-  dashboardContent.innerHTML = html;
-  console.log("✅ Dashboard rendered with rows:", pageData.length);
+  renderDashboard(pageData);
 
   // Sorting logic
   document.querySelectorAll(".sortable").forEach(th => {
@@ -923,26 +844,74 @@ for (const p of pageData) {
         const valB = b[sortState.field] ?? '';
         if (valA < valB) return sortState.asc ? -1 : 1;
         if (valA > valB) return sortState.asc ? 1 : -1;
-        if (sortState.field !== 'title') {
-          const titleA = a.title ?? '';
-          const titleB = b.title ?? '';
-          if (titleA < titleB) return -1;
-          if (titleA > titleB) return 1;
-        }
         return 0;
       });
 
-      loadDashboard(sorted);
+      renderDashboard(sorted);
     };
   });
 
-  // 🔥 Auto-ping logic
+  // Auto-ping logic
   if (autoPing) {
-    console.log("🚀 Auto-pinging all pages for status + version check...");
+    console.log("🚀 Auto-pinging all pages...");
     await updateAllPages(Object.values(pageCache));
   }
 }
 
+// Separate function to render HTML table
+function renderDashboard(pages) {
+  const dashboardContent = document.getElementById("dashboardContent");
+  let html = `<table>
+    <thead>
+      <tr>
+        <th>Preview</th>
+        <th class="sortable" data-field="title">Domain</th>
+        <th class="sortable" data-field="category">Category</th>
+        <th>Status</th>
+        <th>Version</th>
+        <th class="sortable" data-field="views">Views</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>`;
+
+  for (const p of pages) {
+    const pageUrl = `https://contenthub.guru/page/${p.slug}`;
+    const shareText = encodeURIComponent(`Check out this page: ${p.title || ''}`);
+    html += `<tr>
+      <td><a href="${pageUrl}" target="_blank">
+        <img class='siteImage' src="${p.image || 'https://contenthub.guru/images/placeholder.png'}" 
+             alt="preview" width="300" height="200">
+      </a></td>
+      <td>${p.title || ''}</td>
+      <td>
+        <div id="category-${p.id}" class="category">${p.category || ''}</div>
+        <div id="faq-${p.id}" class="faq_status">FAQ</div>
+        <div id="howTo-${p.id}" class="howTo_status">howTo</div>
+      </td>
+      <td><div id="status-${p.id}" class="status-offline">❌ Offline</div></td>
+      <td><div id="version-${p.id}" class="version">version</div></td>
+      <td>${p.views || 0}</td>
+      <td>
+        <div class="action-buttons">
+          <button class='updatePageBTN' onclick="updatePageBtn('${p.id}','${p.slug}', '${p.category}')">Update</button>
+          <button onclick="window.open('https://contenthub.guru/admin/editor?id=${p.id}', '_blank')">Edit</button>
+          <button class="remove-btn" onclick="removePage('${p.id}','${p.slug}')">Remove</button>
+        </div>
+        <div class="share-buttons">
+          <button onclick="shareOnTwitter('${pageUrl}', '${shareText}')">🐦</button>
+          <button onclick="shareOnLinkedIn('${pageUrl}', '${shareText}')">💼</button>
+          <button onclick="shareOnFacebook('${pageUrl}')">📘</button>
+          <button onclick="shareOnAll('${pageUrl}', '${shareText}')">🌍</button>
+        </div>
+      </td>
+    </tr>`;
+  }
+
+  html += "</tbody></table>";
+  dashboardContent.innerHTML = html;
+  console.log("✅ Dashboard rendered with rows:", pages.length);
+}
 
 
 function shareOnAll(url, text) {

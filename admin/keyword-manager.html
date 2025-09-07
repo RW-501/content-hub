@@ -69,19 +69,23 @@ async function init() {
   const sitePages = await fetchJSON('https://contenthub.guru/sitePages.json') || [];
 
   // Fill in missing pages from sitePages
-  sitePages.forEach(page => {
-    const url = page.url || page.slug;
-    const title = page.title;
-    const keywords = page.keywords;
-    if (url && !keywordMap[url]) {
-keywordMap[url] = {
-  url: url,
-  title: title,
-  keywords: keywords
-};
-    }
-   
-  });
+sitePages.forEach(page => {
+  const url = page.url || page.slug;
+  const title = page.title || '';
+  let keywords = page.keywords || [];
+
+  // Filter out keywords containing "contenthub.guru" or "contenthub" (case-insensitive)
+  keywords = keywords.filter(k => !/contenthub(\.guru)?/i.test(k));
+
+  if (url && !keywordMap[url]) {
+    keywordMap[url] = {
+      url,
+      title,
+      keywords
+    };
+  }
+});
+
 
   renderKeywordManager(keywordMap);
 }

@@ -388,6 +388,8 @@ onAuthStateChanged(auth, async (user) => {
   }
 });
 
+/*
+
 // 🔑 Google Login
 document.getElementById("googleLogin").addEventListener("click", async () => {
   console.log("[GoogleLogin] Button clicked (popup)");
@@ -407,7 +409,7 @@ document.getElementById("googleLogin").addEventListener("click", async () => {
     alert("Google login failed: " + err.message);
   }
 });
-
+*/
 
 // 🔄 Handle redirect result
 console.log("[RedirectResult] Checking for redirect result...");
@@ -439,6 +441,13 @@ getRedirectResult(auth)
     console.error("[RedirectResult] Error:", err);
     alert("Login error: " + err.message);
   });
+
+
+  const result = await signInWithPopup(auth, provider).catch(err => {
+  if (err.code === "auth/cancelled-popup-request") {
+    console.warn("Popup was cancelled, retrying...");
+  } else throw err;
+});
 
   const loginBtn = document.getElementById("googleLogin");
 

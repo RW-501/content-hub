@@ -805,6 +805,7 @@ async function loadDashboard(autoPing = false) {
 
 //CyfMntp5iucjYC94HQ1FNcOiDa23
 
+/*
 const usersCol = collection(db, "users");
   console.log("usersCol  ", usersCol);
 
@@ -824,6 +825,8 @@ if (!pages.length) {
 
 console.log("📊 loadDashboard called with pages:", pages);
 
+*/
+
   let html = `<table>
     <thead>
       <tr>
@@ -841,11 +844,18 @@ console.log("📊 loadDashboard called with pages:", pages);
    // console.log(`🔎 Rendering row ${index}`, pageData);
 
 
-     for (const p of pages) {
-    // 🔹 Pull updated stats from pages/{id} and cache it
-    const pageRef = doc(db, "pages", p.id);
-    const pageSnap = await getDoc(pageRef);
-    const pageData = pageSnap.exists() ? pageSnap.data() : {};
+// Reference the "pages" collection
+const pagesCol = collection(db, "pages");
+
+// Get all documents in the collection
+const pagesSnap = await getDocs(pagesCol);
+
+// Map through the documents to get their data
+const pages = pagesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+// Now you can loop through all pages
+for (const p of pages) {
+
     pageCache[p.id] = pageData; // cache it
 
     const pageUrl = `https://contenthub.guru/page/${pageData.slug}`;

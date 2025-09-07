@@ -468,7 +468,7 @@ if (faq_meta) {
 // Step 1: Ping all pages first
 async function fetchAllPages(pages) {
 
-      console.log("pages:", pages);
+    //  console.log("pages:", pages);
 
   for (const p of pages) {
     const { online, version, faq, howTo } = await pingSite(p.slug);

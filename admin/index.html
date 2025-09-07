@@ -365,20 +365,22 @@ setPersistence(auth, browserLocalPersistence).catch((err) => {
 
 // 👀 Firebase Auth state listener
 onAuthStateChanged(auth, async (user) => {
-  if (isAuthorized(user)) {
+  console.log("[AuthStateChanged] User:", user);
+  if (user) {
+    if (!isAuthorized(user)) {
+      console.warn("[AuthStateChanged] Unauthorized user, logging out");
+      return logoutUser();
+    }
     currentUser = user;
-    localStorage.setItem("contenthubUser", JSON.stringify({
-      uid: user.uid,
-      email: user.email || null,
-      phone: user.phoneNumber || null,
-      provider: user.providerData[0]?.providerId || "unknown"
-    }));
+    console.log("[AuthStateChanged] Authorized user:", user.uid);
     await showAdminPanel(user);
     toggleUI(true);
   } else {
+    console.log("[AuthStateChanged] No user signed in");
     logoutUser();
   }
 });
+
 // 🔑 Google Login
 document.getElementById("googleLogin").addEventListener("click", async () => {
   console.log("[GoogleLogin] Button clicked (popup)");

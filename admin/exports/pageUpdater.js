@@ -90,7 +90,43 @@ function formatCategory(category) {
 
 
 
+async function linkifyKeywordsFromJSON(html, jsonUrl = 'https://contenthub.guru/internal-Links.json') {
+  try {
+    const res = await fetch(jsonUrl);
+    if (!res.ok) throw new Error(`Failed to fetch ${jsonUrl}`);
+    const keywordMap = await res.json();
 
+    // Flatten {keyword, url} pairs
+    const entries = [];
+    for (const [url, keywords] of Object.entries(keywordMap)) {
+      keywords.forEach(keyword => entries.push({ keyword, url }));
+    }
+    // Sort longest first
+    entries.sort((a, b) => b.keyword.length - a.keyword.length);
+
+    function walk(node) {
+      if (node.nodeType === Node.TEXT_NODE) {
+        let text = node.nodeValue;
+        entries.forEach(({ keyword, url }) => {
+          const regex = new RegExp(`\\b${keyword.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&")}\\b`, 'gi');
+          text = text.replace(regex, `<a href="${url}" target="_blank" rel="noopener noreferrer">${keyword}</a>`);
+        });
+
+        if (text !== node.nodeValue) {
+          const span = document.createElement('span');
+          span.innerHTML = text;
+          node.replaceWith(span);
+        }
+      } else if (node.nodeType === Node.ELEMENT_NODE && !['SCRIPT', 'STYLE', 'A'].includes(node.tagName)) {
+        node.childNodes.forEach(walk);
+      }
+    }
+
+    walk(html);
+  } catch (err) {
+    console.error('linkifyKeywordsInDOM error:', err);
+  }
+}
 
 
 
@@ -175,6 +211,14 @@ function checkContent(html) {
 
   // Linkify contenthub mentions
   html = linkifyContentHub(html);
+
+
+
+  
+ html = linkifyKeywordsFromJSON(html);
+
+console.log(html);
+
 
   // Render FAQ blocks
   html = renderFAQs(html);
@@ -1139,67 +1183,3 @@ if (location) {
   }
 }
 
-
-// Keyword(s) → URL map
-const keywordMap = {
-  "https://contenthub.guru/page/zoom-login-password-reset-2fa-recovery": [
-    "Zoom", "Zoom Meeting", "Zoom App"
-  ],
-  "https://contenthub.guru/page/microsoft-teams-office365-login-password-2fa-guide": [
-    "Microsoft Teams", "Teams", "MS Teams"
-  ],
-  "https://contenthub.guru/page/dropbox-login-password-recovery-2fa-guide": [
-    "Dropbox", "Dropbox App"
-  ],
-  "https://contenthub.guru/page/google-drive-workspace-login-password-2fa-guide": [
-    "Google Drive", "Drive", "GDrive"
-  ],
-  "https://contenthub.guru/page/stripe-login-account-security-guide": [
-    "Stripe", "Stripe Payments"
-  ],
-  "https://contenthub.guru/page/cash-app-login-2fa-guide": [
-    "Cash App", "Square Cash"
-  ],
-  "https://contenthub.guru/page/venmo-account-recovery-2fa-login-guide": [
-    "Venmo"
-  ],
-  "https://contenthub.guru/page/paypal-login-password-recovery-2fa-guide": [
-    "PayPal", "Paypal App"
-  ]
-  // ... keep adding more
-};
-
-// Function to replace keywords with <a> tags
-function linkifyKeywords(text, map) {
-  let result = text;
-
-  // Build a big array of {keyword, url}
-  let entries = [];
-  for (const [url, keywords] of Object.entries(map)) {
-    keywords.forEach(keyword => entries.push({ keyword, url }));
-  }
-
-  // Sort by keyword length (longest first)
-  entries.sort((a, b) => b.keyword.length - a.keyword.length);
-
-  // Replace all keywords
-  entries.forEach(({ keyword, url }) => {
-    const regex = new RegExp(
-      `\\b${keyword.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&")}\\b`,
-      "gi"
-    );
-    result = result.replace(
-      regex,
-      `<a href="${url}" target="_blank" rel="noopener noreferrer">${keyword}</a>`
-    );
-  });
-
-  return result;
-}
-
-// Example usage
-const text = "We use Zoom, Dropbox, and Microsoft Teams every day.";
-const linkedText = linkifyKeywords(text, keywordMap);
-
-console.log(linkedText);
-// → We use <a href="...">Zoom</a>, <a href="...">Dropbox</a>, and <a href="...">Microsoft Teams</a> every day.

@@ -253,6 +253,7 @@
 
 <div id="AdminArea">   
       <button id="showAnalytics">Show Analytics</button>
+      <button id="keyword-manager">Keyword Manager</button>
       <button id="SEO_Helper">SEO Helper</button>
       <button id="Translate">Translate</button>
       <button id="Linker">Linker</button>
@@ -444,6 +445,9 @@ imageDropZone.addEventListener("drop", async (e) => {
 
 
 
+document.getElementById("keyword-manager").addEventListener("click", async () => {
+window.location.href = "https://contenthub.guru/admin/keyword-manager.html";
+});
 
 document.getElementById("SEO_Helper").addEventListener("click", async () => {
 window.location.href = "https://contenthub.guru/admin/seo-helper.html";

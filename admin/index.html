@@ -349,10 +349,11 @@ async function logoutUser() {
 localStorage.clear();
 sessionStorage.clear();
 indexedDB.deleteDatabase('firebaseLocalStorageDb');
-await auth.signOut(); // clear any auth session
+await auth.signOut();
 currentUser = null;
 toggleUI(false);
-console.log("Browser fully cleared, ready for login");
+console.log("[Auth] Full browser reset complete");
+
   } catch (err) {
     console.error("Logout error:", err);
   }
@@ -392,8 +393,8 @@ document.getElementById("googleLogin").addEventListener("click", async () => {
   console.log("[GoogleLogin] Button clicked (popup)");
   try {
     const provider = new GoogleAuthProvider();
-  //  const result = await signInWithPopup(auth, provider);
-    const result = await signInWithPopup();
+   const result = await signInWithPopup(auth, provider);
+   // const result = await signInWithPopup();
     console.log("[GoogleLogin] User logged in via popup:", result.user);
 
     if (!isAuthorized(result.user)) return logoutUser();
@@ -438,6 +439,29 @@ getRedirectResult(auth)
     console.error("[RedirectResult] Error:", err);
     alert("Login error: " + err.message);
   });
+
+  const loginBtn = document.getElementById("googleLogin");
+
+loginBtn.addEventListener("click", async () => {
+  loginBtn.disabled = true;
+  console.log("[GoogleLogin] Button clicked (popup)");
+  try {
+    const provider = new GoogleAuthProvider();
+    const result = await signInWithPopup(auth, provider);
+    console.log("[GoogleLogin] User logged in via popup:", result.user);
+
+    if (!isAuthorized(result.user)) return logoutUser();
+
+    currentUser = result.user;
+    await showAdminPanel(currentUser);
+    toggleUI(true);
+  } catch (err) {
+    console.error("[GoogleLogin] Popup login error:", err);
+    alert("Google login failed: " + err.message);
+  } finally {
+    loginBtn.disabled = false;
+  }
+});
 
 // 📱 Phone login
 let recaptchaVerifier;

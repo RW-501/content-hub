@@ -324,6 +324,13 @@ function isAuthorized(user) {
   );
 }
 
+// 🖼️ Toggle UI
+function toggleUI(isLoggedIn) {
+  document.getElementById("auth-section").classList.toggle("hidden", isLoggedIn);
+  document.getElementById("admin-panel").classList.toggle("hidden", !isLoggedIn);
+  document.getElementById("logoutBtn").classList.toggle("hidden", !isLoggedIn);
+}
+
 // 🔒 Logout
 async function logoutUser() {
   try {
@@ -332,20 +339,28 @@ async function logoutUser() {
     console.error("Logout error:", err);
   }
   currentUser = null;
+  localStorage.removeItem("reelcareerUser"); // 🔑 clear local session
   toggleUI(false);
 }
 
-// 🖼️ Toggle UI
-function toggleUI(isLoggedIn) {
-  document.getElementById("auth-section").classList.toggle("hidden", isLoggedIn);
-  document.getElementById("admin-panel").classList.toggle("hidden", !isLoggedIn);
-  document.getElementById("logoutBtn").classList.toggle("hidden", !isLoggedIn);
-}
+// 🚪 Logout button
+document.getElementById("logoutBtn").addEventListener("click", logoutUser);
+
+// ✅ Persist session in browser (LOCAL = survives tabs/refresh until logout)
+setPersistence(auth, browserLocalPersistence).catch((err) => {
+  console.error("Persistence error:", err);
+});
 
 // 👀 Firebase Auth state listener
 onAuthStateChanged(auth, async (user) => {
   if (isAuthorized(user)) {
     currentUser = user;
+    localStorage.setItem("reelcareerUser", JSON.stringify({
+      uid: user.uid,
+      email: user.email || null,
+      phone: user.phoneNumber || null,
+      provider: user.providerData[0]?.providerId || "unknown"
+    }));
     await showAdminPanel(user);
     toggleUI(true);
   } else {
@@ -353,10 +368,7 @@ onAuthStateChanged(auth, async (user) => {
   }
 });
 
-// 🚪 Logout button
-document.getElementById("logoutBtn").addEventListener("click", logoutUser);
-
-// 🔑 Google Login (redirect flow avoids popup blockers)
+// 🔑 Google Login
 document.getElementById("googleLogin").addEventListener("click", async () => {
   try {
     await signInWithRedirect(auth, new GoogleAuthProvider());
@@ -385,6 +397,17 @@ let recaptchaVerifier;
 document.addEventListener("DOMContentLoaded", () => {
   recaptchaVerifier = new RecaptchaVerifier("recaptcha-container", { size: "invisible" }, auth);
   recaptchaVerifier.render();
+
+  // 🔄 Restore UI immediately if localStorage shows logged in
+  const cachedUser = localStorage.getItem("reelcareerUser");
+  if (cachedUser) {
+    try {
+      const parsed = JSON.parse(cachedUser);
+      toggleUI(true); // Show admin panel fast
+      document.getElementById("admin-panel").querySelector(".user-info").textContent =
+        parsed.email || parsed.phone || parsed.uid;
+    } catch {}
+  }
 });
 
 // Send SMS code
@@ -420,6 +443,7 @@ document.getElementById("verifyBtn").addEventListener("click", async () => {
     alert("Invalid verification code.");
   }
 });
+
 
 // Show admin panel
 async function showAdminPanel(user) {

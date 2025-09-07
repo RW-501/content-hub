@@ -293,6 +293,20 @@ figure { margin: 0; }
   padding: 0 1rem;
 }
 
+@media (max-width: 768px) {
+.header-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+    margin-bottom: 0;
+    padding: 0 1rem;
+    flex-wrap: wrap;
+    flex-direction: column;
+}
+}
+
+
 .breadcrumb-wrapper { flex: 1; }
 
 #readTime { font-size: 0.95rem; opacity: 0.8; margin: auto; font-weight: bolder; }

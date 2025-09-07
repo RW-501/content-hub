@@ -85,6 +85,7 @@ function formatCategory(category) {
 }
 
 
+let currentURL ;
 
 async function linkifyKeywordsFromJSON(input, jsonUrl = 'https://contenthub.guru/internal-Links.json') {
   try {

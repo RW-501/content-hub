@@ -86,61 +86,47 @@ function formatCategory(category) {
 
 
 
-
-    let currentURL;
-
 async function linkifyKeywordsFromJSON(input, jsonUrl = 'https://contenthub.guru/internal-Links.json') {
   try {
     const res = await fetch(jsonUrl);
     if (!res.ok) throw new Error(`Failed to fetch ${jsonUrl}`);
     const keywordMap = await res.json();
 
+    const entries = [];
+    for (const [url, data] of Object.entries(keywordMap)) {
+      if (url === currentURL) continue; // skip current page
+      const title = data.title || '';
+      (data.keywords || []).forEach(keyword => entries.push({ keyword, url, title }));
+    }
 
-
-
-// Flatten {keyword, url, title} pairs, skipping current page
-const entries = [];
-for (const [url, data] of Object.entries(keywordMap)) {
-  if (url === currentURL) {
-    console.log("Skip url: ", url); // log skipped URL
-    continue; // skip linking keywords for the current page
-  }
-
-  const title = data.title || '';
-  (data.keywords || []).forEach(keyword => entries.push({ keyword, url, title }));
-}
-    // Sort longest first
+    // Sort longest keyword first (prevents partial matches breaking longer keywords)
     entries.sort((a, b) => b.keyword.length - a.keyword.length);
 
-    // Convert string HTML to a temporary container if needed
     const container = typeof input === 'string' 
       ? Object.assign(document.createElement('div'), { innerHTML: input })
       : input;
 
     function walk(node) {
-      if (node.nodeType === Node.TEXT_NODE) {
+      if (node.nodeType === Node.TEXT_NODE && node.nodeValue.trim()) {
         let text = node.nodeValue;
-        let hasChange = false;
+        let replaced = false;
 
         entries.forEach(({ keyword, url, title }) => {
+          // Only replace if keyword exists in text
           const regex = new RegExp(`\\b${keyword.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&")}\\b`, 'gi');
-          if (regex.test(text)) {
-            hasChange = true;
-          console.log("Linked: ", text);
-              logToPopup("Linked: ", text, "limegreen");
 
-            text = text.replace(
-              regex,
-              `<a href="${url}" title="${title}" target="_blank" rel="noopener noreferrer">${keyword}</a>`
-            );
+          if (regex.test(text)) {
+            replaced = true;
+            text = text.replace(regex, `<a class='linked' href="${url}" title="${title}" target="_blank" rel="noopener noreferrer">${keyword}</a>`);
           }
         });
 
-        if (hasChange) {
+        if (replaced) {
           const span = document.createElement('span');
           span.innerHTML = text;
           node.replaceWith(span);
         }
+
       } else if (node.nodeType === Node.ELEMENT_NODE && !['SCRIPT', 'STYLE', 'A'].includes(node.tagName)) {
         [...node.childNodes].forEach(walk);
       }
@@ -155,7 +141,6 @@ for (const [url, data] of Object.entries(keywordMap)) {
     return typeof input === 'string' ? input : input.outerHTML;
   }
 }
-
 
 
             console.log("Loading...");

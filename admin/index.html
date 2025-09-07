@@ -359,9 +359,9 @@ async function logoutUser() {
 document.getElementById("logoutBtn").addEventListener("click", logoutUser);
 
 // ✅ Persist session in browser (LOCAL = survives tabs/refresh until logout)
-setPersistence(auth, browserLocalPersistence).catch((err) => {
-  console.error("Persistence error:", err);
-});
+setPersistence(auth, browserLocalPersistence)
+  .then(() => console.log("[Auth] Persistence set"))
+  .catch(err => console.error("[Auth] Persistence error:", err));
 
 // 👀 Firebase Auth state listener
 onAuthStateChanged(auth, async (user) => {

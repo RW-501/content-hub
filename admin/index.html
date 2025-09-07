@@ -381,17 +381,23 @@ onAuthStateChanged(auth, async (user) => {
 });
 // 🔑 Google Login
 document.getElementById("googleLogin").addEventListener("click", async () => {
-  console.log("[GoogleLogin] Button clicked");
+  console.log("[GoogleLogin] Button clicked (popup)");
   try {
     const provider = new GoogleAuthProvider();
-    console.log("[GoogleLogin] Starting signInWithRedirect...");
-    await signInWithRedirect(auth, provider);
-    console.log("[GoogleLogin] Redirect triggered");
+    const result = await signInWithPopup(auth, provider);
+    console.log("[GoogleLogin] User logged in via popup:", result.user);
+
+    if (!isAuthorized(result.user)) return logoutUser();
+
+    currentUser = result.user;
+    await showAdminPanel(currentUser);
+    toggleUI(true);
   } catch (err) {
-    console.error("[GoogleLogin] Error during signInWithRedirect:", err);
+    console.error("[GoogleLogin] Popup login error:", err);
     alert("Google login failed: " + err.message);
   }
 });
+
 
 // 🔄 Handle redirect result
 console.log("[RedirectResult] Checking for redirect result...");

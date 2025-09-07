@@ -468,7 +468,7 @@ function calculateReadingTime(text) {
 // Update UI
 export async function updatePage(articleData, location) {
 
-currentURL = "https://contenthub.guru"+articleData.slug+"html";
+currentURL = "https://contenthub.guru"+articleData.slug+".html";
 
 console.log("currentURL: ",currentURL);
 

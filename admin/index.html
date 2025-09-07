@@ -441,6 +441,7 @@ getRedirectResult(auth)
     console.error("[RedirectResult] Error:", err);
     alert("Login error: " + err.message);
   });
+    const provider = new GoogleAuthProvider();
 
 
   const result = await signInWithPopup(auth, provider).catch(err => {

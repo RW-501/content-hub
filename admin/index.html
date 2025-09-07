@@ -346,7 +346,13 @@ function toggleUI(isLoggedIn) {
 // 🔒 Logout
 async function logoutUser() {
   try {
-    await signOut(auth);
+localStorage.clear();
+sessionStorage.clear();
+indexedDB.deleteDatabase('firebaseLocalStorageDb');
+await auth.signOut(); // clear any auth session
+currentUser = null;
+toggleUI(false);
+console.log("Browser fully cleared, ready for login");
   } catch (err) {
     console.error("Logout error:", err);
   }

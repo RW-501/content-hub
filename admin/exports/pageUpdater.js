@@ -95,7 +95,7 @@ async function linkifyKeywordsFromJSON(input, jsonUrl = 'https://contenthub.guru
 
     const entries = [];
     for (const [url, data] of Object.entries(keywordMap)) {
-      console.log("url: ",url);
+     // console.log("url: ",url);
 
       if (url === currentURL) continue; // skip current page
       const title = data.title || '';
@@ -468,7 +468,7 @@ function calculateReadingTime(text) {
 // Update UI
 export async function updatePage(articleData, location) {
 
-currentURL = "https://contenthub.guru"+articleData.slug+".html";
+currentURL = "https://contenthub.guru/"+articleData.slug;
 
 console.log("currentURL: ",currentURL);
 

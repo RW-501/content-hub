@@ -788,3 +788,10 @@ display: block;
   object-fit: fill;
 
 }
+
+.adsbygoogle {
+    display: block;
+    height: 280px;
+    margin: auto;
+    width: max-content;
+}

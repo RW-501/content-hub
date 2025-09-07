@@ -351,7 +351,7 @@ async function logoutUser() {
     console.error("Logout error:", err);
   }
   currentUser = null;
-  localStorage.removeItem("reelcareerUser"); // 🔑 clear local session
+  localStorage.removeItem("contenthubUser"); // 🔑 clear local session
   toggleUI(false);
 }
 
@@ -367,7 +367,7 @@ setPersistence(auth, browserLocalPersistence).catch((err) => {
 onAuthStateChanged(auth, async (user) => {
   if (isAuthorized(user)) {
     currentUser = user;
-    localStorage.setItem("reelcareerUser", JSON.stringify({
+    localStorage.setItem("contenthubUser", JSON.stringify({
       uid: user.uid,
       email: user.email || null,
       phone: user.phoneNumber || null,
@@ -411,7 +411,7 @@ document.addEventListener("DOMContentLoaded", () => {
   recaptchaVerifier.render();
 
   // 🔄 Restore UI immediately if localStorage shows logged in
-  const cachedUser = localStorage.getItem("reelcareerUser");
+  const cachedUser = localStorage.getItem("contenthubUser");
   if (cachedUser) {
     try {
       const parsed = JSON.parse(cachedUser);

@@ -1849,6 +1849,7 @@ async function loadSites(){
     // Render filters + sites
     renderTagFilters();
     renderSites();
+    console.log("loaded Json");
 
   } catch (err) {
     sitesList.innerHTML = `<p class="loading">Error loading sites: ${err.message}</p>`;

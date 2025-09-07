@@ -801,8 +801,9 @@ async function loadDashboard(autoPing = false) {
 
         console.log("currentUser.uid:", currentUser.uid);
 
-  const userSnap = await getDoc(doc(db, "users"));
-  const pages = userSnap.exists() ? userSnap.data().createdPages || [] : [];
+const usersCol = collection(db, "users");
+const usersSnap = await getDocs(usersCol);
+  const pages = usersSnap.exists() ? usersSnap.data().createdPages || [] : [];
 
   if (!pages.length) {
     dashboardContent.innerHTML = "<p>No pages yet.</p>";

@@ -127,6 +127,8 @@ for (const [url, data] of Object.entries(keywordMap)) {
           if (regex.test(text)) {
             hasChange = true;
           console.log("Linked: ", text);
+              logToPopup("Linked: ", text, "limegreen");
+
             text = text.replace(
               regex,
               `<a href="${url}" title="${title}" target="_blank" rel="noopener noreferrer">${keyword}</a>`

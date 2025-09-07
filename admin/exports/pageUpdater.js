@@ -224,24 +224,18 @@ function generateHowToSchema(html) {
 }
 
 
-
-function checkContent(html) {
+async function checkContent(html) {
   if (!html) return "";
 
-              console.log("checkContent...");
-
-// console.log("html, ",html);
+  console.log("checkContent...");
 
   // Linkify contenthub mentions
   html = linkifyContentHub(html);
 
+  // Await the async linkifyKeywordsFromJSON
+  html = await linkifyKeywordsFromJSON(html);
 
-
-  
- html = linkifyKeywordsFromJSON(html);
-
-console.log(html);
-
+  console.log(html);
 
   // Render FAQ blocks
   html = renderFAQs(html);
@@ -269,6 +263,7 @@ console.log(html);
 
   return html;
 }
+
 function renderHowTo(html) {
   if (!html) return html;
 

@@ -86,7 +86,6 @@ function formatCategory(category) {
 
 
 let currentURL ;
-
 async function linkifyKeywordsFromJSON(input, jsonUrl = 'https://contenthub.guru/internal-Links.json') {
   try {
     const res = await fetch(jsonUrl);
@@ -95,17 +94,17 @@ async function linkifyKeywordsFromJSON(input, jsonUrl = 'https://contenthub.guru
 
     const entries = [];
     for (const [url, data] of Object.entries(keywordMap)) {
-     // console.log("url: ",url);
-
-      if (url === currentURL) continue; // skip current page
+      if (url === currentURL) continue;
       const title = data.title || '';
-      (data.keywords || []).forEach(keyword => entries.push({ keyword, url, title }));
+      (data.keywords || []).forEach(keyword => {
+        if (/contenthub\.guru/i.test(keyword)) return; // skip ContentHub
+        entries.push({ keyword, url, title });
+      });
     }
 
-    // Sort longest keyword first (prevents partial matches breaking longer keywords)
     entries.sort((a, b) => b.keyword.length - a.keyword.length);
 
-    const container = typeof input === 'string' 
+    const container = typeof input === 'string'
       ? Object.assign(document.createElement('div'), { innerHTML: input })
       : input;
 
@@ -114,19 +113,20 @@ async function linkifyKeywordsFromJSON(input, jsonUrl = 'https://contenthub.guru
         let text = node.nodeValue;
         let replaced = false;
 
-        entries.forEach(({ keyword, url, title }) => {
-          // Only replace if keyword exists in text
-          const regex = new RegExp(`\\b${keyword.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&")}\\b`, 'gi');
+        // skip if parent is already an <a>
+        if (node.parentElement && node.parentElement.tagName === 'A') return;
 
+        for (const { keyword, url, title } of entries) {
+          const regex = new RegExp(`\\b${keyword.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&")}\\b`, 'i'); // replace first only
           if (regex.test(text)) {
-                
-          logToPopup("Replaced: "+keyword, "limegreen");
-          console.log("Replaced: "+keyword);
-
             replaced = true;
-            text = text.replace(regex, `<a class='linked' href="${url}" title="${title}" target="_blank" rel="noopener noreferrer">${keyword}</a>`);
+            text = text.replace(
+              regex,
+              `<a class='linked' href="${url}" title="${title}" target="_blank" rel="noopener noreferrer">${keyword}</a>`
+            );
+            break; // only replace first keyword per node to avoid huge string growth
           }
-        });
+        }
 
         if (replaced) {
           const span = document.createElement('span');

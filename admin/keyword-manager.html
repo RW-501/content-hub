@@ -127,16 +127,28 @@ function renderKeywordManager(map) {
     `;
     container.appendChild(card);
 
+    const input = document.getElementById(`inputKeyword${index}`);
+    const addBtn = document.getElementById(`addKeywordBtn${index}`);
+    const titleInput = document.getElementById(`titleInput${index}`);
+
+    // Press Enter in keyword input -> click add button
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        addBtn.focus(); // focus on button
+        addBtn.click();
+      }
+    });
+
     // Add keyword event
-    document.getElementById(`addKeywordBtn${index}`).addEventListener('click', () => {
-      const input = document.getElementById(`inputKeyword${index}`);
+    addBtn.addEventListener('click', () => {
       const value = input.value.trim();
       if (!value) return;
 
       keywords.push(value);
-      input.value = '';
       map[url].keywords = keywords; // save changes
       renderKeywordManager(map);
+      input.focus(); // keep focus in input after re-render
     });
 
     // Remove keyword event
@@ -146,16 +158,16 @@ function renderKeywordManager(map) {
         keywords.splice(i, 1);
         map[url].keywords = keywords;
         renderKeywordManager(map);
+        input.focus(); // focus back on input
       });
     });
 
     // Title input change
-    document.getElementById(`titleInput${index}`).addEventListener('input', (e) => {
+    titleInput.addEventListener('input', (e) => {
       map[url].title = e.target.value.trim();
     });
   });
 }
-
 
 
 document.getElementById('saveKeywordsBtn').addEventListener('click', async () => {

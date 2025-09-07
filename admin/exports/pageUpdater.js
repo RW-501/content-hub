@@ -124,6 +124,9 @@ async function linkifyKeywordsFromJSON(input, jsonUrl = 'https://contenthub.guru
               regex,
               `<a class='linked' href="${url}" title="${title}" target="_blank" rel="noopener noreferrer">${keyword}</a>`
             );
+                            
+          logToPopup("Replaced: "+keyword, "limegreen");
+          console.log("Replaced: "+keyword);
             break; // only replace first keyword per node to avoid huge string growth
           }
         }

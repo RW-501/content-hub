@@ -649,10 +649,10 @@ main article:hover { box-shadow: 0 6px 18px rgba(0,0,0,0.1); }
 
 #rating-display {
     margin: auto;
+    margin-bottom: 20px;
     margin-top: 10px;
     display: table;
 }
-
 
 
 /* ========== Buttons (Base / Outline / Ghost / Danger / Disabled) ========== */

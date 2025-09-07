@@ -952,7 +952,7 @@ hr {
   <p id="feedbackMsg"></p>
   
   <!-- Rating display -->
-  <div id="rating-display" style="margin-top: 10px;">
+  <div id="rating-display">
     <span id="rating-stars">⭐⭐⭐⭐⭐</span>
     <span id="rating-value">4.5</span> / 5
     <span hidden id="rating-count">0</span>

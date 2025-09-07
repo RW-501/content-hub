@@ -74,8 +74,7 @@ async function init() {
     const title = page.title;
     const keywords = page.keywords;
     if (url && !keywordMap[url]) {
-      keywordMap[url] = [];
-      keywordMap[page] = [];
+      keywordMap[url] = [url, title, keywords];
     }
     console.log("URL: ",url);
     console.log("Title: ",title);
@@ -99,6 +98,7 @@ async function init() {
 function renderKeywordManager(map) {
   const container = document.getElementById('pagesList');
   container.innerHTML = '';
+    console.log("map: ",map);
 
   Object.entries(map).forEach(([url, data], index) => {
     const title = data.title || '';

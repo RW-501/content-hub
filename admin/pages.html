@@ -851,10 +851,10 @@ const pagesCol = collection(db, "pages");
 const pagesSnap = await getDocs(pagesCol);
 
 // Map through the documents to get their data
-const pages = pagesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+const pageData = pagesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
 // Now you can loop through all pages
-for (const p of pages) {
+for (const p of pageData) {
 
     pageCache[p.id] = pageData; // cache it
 

@@ -379,28 +379,48 @@ onAuthStateChanged(auth, async (user) => {
     logoutUser();
   }
 });
-
 // 🔑 Google Login
 document.getElementById("googleLogin").addEventListener("click", async () => {
+  console.log("[GoogleLogin] Button clicked");
   try {
-    await signInWithRedirect(auth, new GoogleAuthProvider());
+    const provider = new GoogleAuthProvider();
+    console.log("[GoogleLogin] Starting signInWithRedirect...");
+    await signInWithRedirect(auth, provider);
+    console.log("[GoogleLogin] Redirect triggered");
   } catch (err) {
+    console.error("[GoogleLogin] Error during signInWithRedirect:", err);
     alert("Google login failed: " + err.message);
   }
 });
 
 // 🔄 Handle redirect result
+console.log("[RedirectResult] Checking for redirect result...");
 getRedirectResult(auth)
   .then(async (result) => {
+    console.log("[RedirectResult] Raw result:", result);
+
     if (result?.user) {
-      if (!isAuthorized(result.user)) return logoutUser();
+      console.log("[RedirectResult] User returned:", result.user);
+
+      if (!isAuthorized(result.user)) {
+        console.warn("[RedirectResult] Unauthorized user:", result.user.email || result.user.phoneNumber);
+        return logoutUser();
+      }
+
       currentUser = result.user;
+      console.log("[RedirectResult] Authorized user, UID:", currentUser.uid);
+
       await showAdminPanel(currentUser);
+      console.log("[RedirectResult] Admin panel shown");
+
       toggleUI(true);
+      console.log("[RedirectResult] UI toggled for logged-in user");
+    } else {
+      console.log("[RedirectResult] No user returned (likely first page load before redirect)");
     }
   })
   .catch((err) => {
-    console.error("Redirect error:", err);
+    console.error("[RedirectResult] Error:", err);
     alert("Login error: " + err.message);
   });
 

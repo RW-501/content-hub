@@ -535,7 +535,7 @@ const inArticleBlocksHTML = inArticleBlocksHTML_Clean.replace(/\$\[AD\]/g, adCod
 
     const pageURL = `https://contenthub.guru/page/${encodeURIComponent(articleData.slug)}`;
     const pageTitle = `${articleData.title}`;
-    const encodedPageTitle = encodeURIComponent(articleData.slug); // Use for URL query strings
+    const encodedPageTitle = encodeURIComponent(pageTitle); // Use for URL query strings
 
   const d = new Date();
   const year = String(d.getFullYear()).slice(-2); // last 2 digits of year

@@ -533,7 +533,39 @@ submitBtn.addEventListener("click", async () => {
   if (isPrivate && !auth.currentUser) return alert("Only logged-in users can make private comments.");
 
   // 🔹 Simple blacklist
-  const blacklist = ["spamword1", "spamword2"];
+const blacklist = [
+  "viagra",
+  "cialis",
+  "porn",
+  "xxx",
+  "casino",
+  "gambling",
+  "loan",
+  "credit",
+  "debt",
+  "bitcoin",
+  "crypto",
+  "forex",
+  "escort",
+  "dating",
+  "pharmacy",
+  "win money",
+  "work from home",
+  "cheap",
+  "free trial",
+  "click here",
+  "buy now",
+  "limited offer",
+  "make money fast",
+  "weight loss",
+  "miracle",
+  "investment",
+  "betting",
+  "adult",
+  "nude",
+  "hack",
+  "scam"
+];
   for (const word of blacklist) {
     if (message.toLowerCase().includes(word)) return alert("Please avoid inappropriate language.");
   }

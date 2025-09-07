@@ -102,8 +102,12 @@ Object.entries(map).forEach(([url, data], index) => {
   const card = document.createElement('div');
   card.className = 'accordion-item';
 
+    console.log("keywords: ",keywords)
+
   // Determine outline color based on keywords
   const hasMultiWord = keywords.some(k => k.trim().split(/\s+/).length > 1);
+    console.log("hasMultiWord: ",hasMultiWord)
+
   const outlineColor = hasMultiWord ? 'orange' : 'green';
   card.style.border = `2px solid ${outlineColor}`;
 

@@ -243,7 +243,7 @@ function checkContent(html) {
   
  html = linkifyKeywordsFromJSON(html);
 
-console.log(html);
+//console.log(html);
 
 
   // Render FAQ blocks

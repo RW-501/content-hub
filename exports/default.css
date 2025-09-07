@@ -647,6 +647,14 @@ main article:hover { box-shadow: 0 6px 18px rgba(0,0,0,0.1); }
 .feedback button:hover { background-color: #0056b3; transform: translateY(-2px); }
 #feedbackMsg { font-size: 0.95rem; color: #28a745; font-weight: 500; margin-top: 0.5rem; }
 
+#rating-display {
+    margin: auto;
+    margin-top: 10px;
+    display: table;
+}
+
+
+
 /* ========== Buttons (Base / Outline / Ghost / Danger / Disabled) ========== */
 button { background-color: #22c55e; color: #ffffff; border-radius: 8px; border: 1px solid #16a34a; padding: 0.5rem 1rem; font-weight: 500; cursor: pointer; transition: background-color 0.2s, transform 0.1s; }
 button:hover { background-color: #16a34a; transform: translateY(-1px); }

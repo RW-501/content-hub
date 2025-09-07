@@ -361,32 +361,46 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
+async function imageToFile(imgElement, filename = "image.jpg") {
+  return new Promise((resolve, reject) => {
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
 
-    if (navigator.share) {
-      deviceShareButton.addEventListener('click', async () => {
-        try {
-          // Fetch the image as a Blob and create a File object
-          const imageUrl = mainPhoto.src;
-          const response = await fetch(imageUrl);
-          const blob = await response.blob();
-          const file = new File([blob], 'image.jpg', { type: 'image/jpeg' });
-    
-          // Use the File object in the share method
-          await navigator.share({
-            title: pageTitle,
-            text: pageDescription,
-            url:  pageURL,
-            files: [file], // Share the image file
-          });
-    
-          showToast("info", "Shared successfully!");
-        } catch (error) {
-          console.error('Error sharing:', error);
-        }
+    canvas.width = imgElement.naturalWidth;
+    canvas.height = imgElement.naturalHeight;
+
+    ctx.drawImage(imgElement, 0, 0);
+
+    canvas.toBlob((blob) => {
+      if (blob) {
+        resolve(new File([blob], filename, { type: blob.type }));
+      } else {
+        reject(new Error("Failed to create blob from canvas"));
+      }
+    }, "image/jpeg", 0.95);
+  });
+}
+
+if (navigator.share) {
+  deviceShareButton.addEventListener("click", async () => {
+    try {
+      const file = await imageToFile(mainPhoto, "shared.jpg");
+
+      await navigator.share({
+        title: pageTitle,
+        text: pageDescription,
+        url: pageURL,
+        files: [file],
       });
-    } else {
-      deviceShareButton.style.display = 'none'; // Hide the button if the Web Share API is not supported
+
+      showToast("info", "Shared successfully!");
+    } catch (error) {
+      console.error("Error sharing:", error);
     }
+  });
+} else {
+  deviceShareButton.style.display = "none";
+}
 
 
 document.getElementById("copyLinkButton").addEventListener("click", async () => {

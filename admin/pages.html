@@ -792,6 +792,7 @@ let sortState = { field: null, asc: true };
 
 async function loadDashboard(autoPing = false) {
   console.log("autoPing  ", autoPing);
+  console.log("Loading...  ");
 
   const dashboardContent = document.getElementById("dashboardContent");
   const userSnap = await getDoc(doc(db, "users", currentUser.uid));

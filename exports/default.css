@@ -797,3 +797,9 @@ display: block;
           width: fit-content;
     }
 }
+
+.content-paragraph {
+  padding: 2rem;   /* adds space on all sides */
+  max-width: 70ch; /* keeps line length readable */
+  margin: 0 auto;  /* centers content on page */
+}

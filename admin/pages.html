@@ -806,7 +806,10 @@ async function loadDashboard(autoPing = false) {
 //CyfMntp5iucjYC94HQ1FNcOiDa23
 
 const usersCol = collection(db, "users");
+  console.log("usersCol  ", usersCol);
+
 const usersSnap = await getDocs(usersCol);
+  console.log("usersSnap  ", usersSnap);
 
 // Map through the documents to get their data
 const allUsers = usersSnap.docs.map(doc => doc.data());

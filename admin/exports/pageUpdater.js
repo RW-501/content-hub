@@ -88,43 +88,60 @@ function formatCategory(category) {
 
 
 
-
-
-async function linkifyKeywordsFromJSON(html, jsonUrl = 'https://contenthub.guru/internal-Links.json') {
+async function linkifyKeywordsFromJSON(input, jsonUrl = 'https://contenthub.guru/internal-Links.json') {
   try {
     const res = await fetch(jsonUrl);
     if (!res.ok) throw new Error(`Failed to fetch ${jsonUrl}`);
     const keywordMap = await res.json();
 
-    // Flatten {keyword, url} pairs
+    // Flatten {keyword, url, title} pairs
     const entries = [];
-    for (const [url, keywords] of Object.entries(keywordMap)) {
-      keywords.forEach(keyword => entries.push({ keyword, url }));
+    for (const [url, data] of Object.entries(keywordMap)) {
+      const title = data.title || '';
+      (data.keywords || []).forEach(keyword => entries.push({ keyword, url, title }));
     }
+
     // Sort longest first
     entries.sort((a, b) => b.keyword.length - a.keyword.length);
+
+    // Convert string HTML to a temporary container if needed
+    const container = typeof input === 'string' 
+      ? Object.assign(document.createElement('div'), { innerHTML: input })
+      : input;
 
     function walk(node) {
       if (node.nodeType === Node.TEXT_NODE) {
         let text = node.nodeValue;
-        entries.forEach(({ keyword, url }) => {
+        let hasChange = false;
+
+        entries.forEach(({ keyword, url, title }) => {
           const regex = new RegExp(`\\b${keyword.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&")}\\b`, 'gi');
-          text = text.replace(regex, `<a href="${url}" target="_blank" rel="noopener noreferrer">${keyword}</a>`);
+          if (regex.test(text)) {
+            hasChange = true;
+            text = text.replace(
+              regex,
+              `<a href="${url}" title="${title}" target="_blank" rel="noopener noreferrer">${keyword}</a>`
+            );
+          }
         });
 
-        if (text !== node.nodeValue) {
+        if (hasChange) {
           const span = document.createElement('span');
           span.innerHTML = text;
           node.replaceWith(span);
         }
       } else if (node.nodeType === Node.ELEMENT_NODE && !['SCRIPT', 'STYLE', 'A'].includes(node.tagName)) {
-        node.childNodes.forEach(walk);
+        [...node.childNodes].forEach(walk);
       }
     }
 
-    walk(html);
+    walk(container);
+
+    return typeof input === 'string' ? container.innerHTML : container;
+
   } catch (err) {
-    console.error('linkifyKeywordsInDOM error:', err);
+    console.error('linkifyKeywordsFromJSON error:', err);
+    return typeof input === 'string' ? input : input.outerHTML;
   }
 }
 

@@ -71,8 +71,16 @@ async function init() {
   // Fill in missing pages from sitePages
   sitePages.forEach(page => {
     const url = page.url || page.slug;
+    const title = page.title;
+    const keywords = page.keywords;
     if (url && !keywordMap[url]) {
       keywordMap[url] = [];
+    }
+    if (title && !keywordMap[title]) {
+      keywordMap[title] = [];
+    }    
+    if (keywords && !keywordMap[keywords]) {
+      keywordMap[keywords] = [];
     }
   });
 
@@ -83,7 +91,10 @@ function renderKeywordManager(map) {
   const container = document.getElementById('pagesList');
   container.innerHTML = '';
 
-  Object.entries(map).forEach(([url, keywords], index) => {
+  Object.entries(map).forEach(([url, data], index) => {
+    const title = data.title || '';
+    const keywords = data.keywords || [];
+
     const card = document.createElement('div');
     card.className = 'accordion-item';
     card.innerHTML = `
@@ -94,6 +105,10 @@ function renderKeywordManager(map) {
       </h2>
       <div id="collapse${index}" class="accordion-collapse collapse" aria-labelledby="heading${index}" data-bs-parent="#pagesList">
         <div class="accordion-body">
+          <div class="mb-2">
+            <label>Title:</label>
+            <input type="text" class="form-control mb-2" id="titleInput${index}" value="${title}">
+          </div>
           <ul class="list-group mb-2" id="keywordsList${index}">
             ${keywords.map(k => `<li class="list-group-item d-flex justify-content-between align-items-center">${k} <button class="btn btn-sm btn-danger btn-remove">Remove</button></li>`).join('')}
           </ul>
@@ -114,7 +129,8 @@ function renderKeywordManager(map) {
 
       keywords.push(value);
       input.value = '';
-      renderKeywordManager(map); // Re-render to update list
+      map[url].keywords = keywords; // save changes
+      renderKeywordManager(map);
     });
 
     // Remove keyword event
@@ -122,11 +138,18 @@ function renderKeywordManager(map) {
     removeBtns.forEach((btn, i) => {
       btn.addEventListener('click', () => {
         keywords.splice(i, 1);
+        map[url].keywords = keywords;
         renderKeywordManager(map);
       });
     });
+
+    // Title input change
+    document.getElementById(`titleInput${index}`).addEventListener('input', (e) => {
+      map[url].title = e.target.value.trim();
+    });
   });
 }
+
 
 
 document.getElementById('saveKeywordsBtn').addEventListener('click', async () => {

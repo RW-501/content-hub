@@ -235,6 +235,9 @@ function generateHowToSchema(html) {
 
 function checkContent(html) {
   if (!html) return "";
+
+              console.log("checkContent...");
+
 // console.log("html, ",html);
 
   // Linkify contenthub mentions

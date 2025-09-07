@@ -6,6 +6,7 @@
 <meta name="description" content="Manage your pages, add tags, keywords, and monitor page performance.">
 <meta name="keywords" content="CMS, Admin, Dashboard, Keywords, Tags, SEO, Pages">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cross-Origin-Opener-Policy" content="unsafe-none">
 
 <!-- Favicons -->
 <link rel="apple-touch-icon" sizes="180x180" href="https://contenthub.guru/images/favicons/apple-touch-icon.png">
@@ -336,12 +337,20 @@ document.getElementById("logoutBtn").addEventListener("click", logoutUser);
 // Google Login
 document.getElementById("googleLogin").addEventListener("click", async () => {
   try {
-    const result = await signInWithPopup(auth, new GoogleAuthProvider());
+    await signInWithRedirect(auth, new GoogleAuthProvider());
+  } catch (err) {
+    alert(err.message);
+  }
+});
+
+// On page load, check result
+getRedirectResult(auth).then(async (result) => {
+  if (result?.user) {
     if (!allowedEmails.includes(result.user.email)) return logoutUser();
     currentUser = result.user;
     await showAdminPanel(currentUser);
-  } catch (err) { alert(err.message); }
-});
+  }
+}).catch(err => alert(err.message));
 
 // Phone login
 let recaptchaVerifier;

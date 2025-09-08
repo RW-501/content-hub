@@ -83,6 +83,9 @@ body {
     text-indent: 1rem;
 }
 
+#in-article-blocks h2 {
+    border-left: 4px solid #19ba8a;
+}
 /* ==========================================
    PARAGRAPHS
 ========================================== */

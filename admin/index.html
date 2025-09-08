@@ -323,6 +323,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 const storage = getStorage(app);
+
 let currentUser;
 
 // Allowed emails/phones
@@ -334,6 +335,8 @@ document.addEventListener("DOMContentLoaded", () => {
   onAuthStateChanged(auth, async (user) => {
     if (user && (allowedEmails.includes(user.email) || allowedPhones.includes(user.phoneNumber))) {
       currentUser = user;
+          console.log("User ID: ",currentUser);
+
       await showAdminPanel(user);
     } else if (user) {
       logoutUser();
@@ -354,17 +357,29 @@ document.getElementById("logoutBtn").addEventListener("click", logoutUser);
 // Google Login
 
 document.getElementById("googleLogin").addEventListener("click", async () => {
+      console.log("googleLogin");
+
   await signInWithRedirect(auth, new GoogleAuthProvider());
 });
 
-// On page load, check redirect result
-getRedirectResult(auth).then((result) => {
-  if (result?.user) {
-    if (!allowedEmails.includes(result.user.email)) return logoutUser();
-    currentUser = result.user;
-    showAdminPanel(result.user);
-  }
-}).catch((err) => console.error(err));
+// Handle redirect result (AFTER redirect)
+getRedirectResult(auth)
+  .then((result) => {
+    if (result?.user) {
+      if (!allowedEmails.includes(result.user.email)) {
+        return logoutUser();
+      }
+      currentUser = result.user;
+      showAdminPanel(result.user);
+    }
+  })
+  .catch((err) => {
+    if (err.code === "auth/redirect-cancelled-by-user") {
+      console.log("User cancelled login.");
+    } else if (err.code !== "auth/no-auth-event") {
+      console.error("Redirect error:", err.message);
+    }
+  });
 
 // Phone login
 let recaptchaVerifier;

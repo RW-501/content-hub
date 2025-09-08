@@ -745,6 +745,36 @@ content = content.replace(
 }
 
 
+
+
+
+
+// Function to generate a random hex color
+function getRandomColor() {
+  const letters = "0123456789ABCDEF";
+  let color = "#";
+  for (let i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
+}
+
+// Base style (with your keys)
+const baseStyle = {
+  hrColor: "#19ba8a",
+  headerBorder: "#19ba8a",
+};
+
+// Generate up to 10 random style variations
+const styles = Array.from({ length: 10 }, () => {
+  const randomColor = getRandomColor();
+  return Object.fromEntries(
+    Object.entries(baseStyle).map(([key]) => [key, randomColor])
+  );
+});
+
+//console.log(styles);
+
 // Create Page button
 document.getElementById("createBtn").addEventListener("click", async () => {
   // Gather input values
@@ -863,7 +893,8 @@ sSnap.forEach((docSnap) => {
       createdAt: jsTimestamp, // numeric timestamp for sorting/filtering
       status: "draft",
       tags: keywords,
-      image
+      image,
+      styles: styles,
     };
     await setDoc(doc(db, "users", currentUser.uid), {
       createdPages: arrayUnion(userPageData)
@@ -1311,10 +1342,6 @@ async function updateOutdatedPages() {
 
 
 
-
-
-
-
 async function updateStaticPageData() {
   try {
     // Fetch pages from Firestore
@@ -1341,7 +1368,7 @@ async function updateStaticPageData() {
         tags: d.tags || [],
         image: d.image || "https://contenthub.guru/images/placeholder.png",
         createdAt: d.createdAt?.toDate().getTime() || Date.now()
-      };
+            };
     });
 
     const sitePagesJson = JSON.stringify(sitePages, null, 2);

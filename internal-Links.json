@@ -14,7 +14,10 @@
       "Zoom troubleshooting",
       "Zoom",
       "Zoom.com"
-    ]
+    ],
+    "category": "platform",
+    "description": "Struggling to log in to Zoom? Forgot your password or locked out by two-factor authentication? This complete guide walks you through Zoom login issues, password resets, and 2FA recovery, step by step, with helpful tips from ContentHub.Guru.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1757098378390-64b6a9e4e2e8460e691fd4cd_zoom-logo-2022.jpeg?alt=media&token=655a424b-2e83-430b-a028-a6c34334ddde"
   },
   "https://contenthub.guru/page/microsoft-teams-office365-login-password-2fa-guide": {
     "url": "https://contenthub.guru/page/microsoft-teams-office365-login-password-2fa-guide",
@@ -30,7 +33,10 @@
       "Office 365 account recovery",
       "Microsoft Teams",
       "Microsoft"
-    ]
+    ],
+    "category": "platform",
+    "description": "Learn how to easily log in to Microsoft Teams and Office 365, troubleshoot login issues, reset your password, and enable two-step verification. This beginner-friendly guide from ContentHub.Guru helps you regain access quickly and securely.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1757098241078-images%20(5).png?alt=media&token=6b41118d-bbd1-4182-a72a-efcb0b80c060"
   },
   "https://contenthub.guru/page/dropbox-login-password-recovery-2fa-guide": {
     "url": "https://contenthub.guru/page/dropbox-login-password-recovery-2fa-guide",
@@ -46,7 +52,10 @@
       "Dropbox help guide",
       "Dropbox beginner tutorial",
       "Dropbox"
-    ]
+    ],
+    "category": "platform",
+    "description": "Learn how to log in to Dropbox, recover a forgotten password, and enable two-factor authentication (2FA) to keep your files safe. This comprehensive guide, brought to you by ContentHub.Guru, includes step-by-step instructions, FAQs, and security tips for beginners.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1757098100536-8650123307_d637e20bda_b.jpg?alt=media&token=7a766add-1a65-4dc1-af7a-e51cd563c97d"
   },
   "https://contenthub.guru/page/google-drive-workspace-login-password-2fa-guide": {
     "url": "https://contenthub.guru/page/google-drive-workspace-login-password-2fa-guide",
@@ -62,7 +71,10 @@
       "Google Workspace security",
       "Google Drive",
       "Google"
-    ]
+    ],
+    "category": "platform",
+    "description": "A complete beginner-friendly guide to Google Drive and Google Workspace login, password recovery, and two-factor authentication. Includes tips, FAQs, and step-by-step instructions for safe access.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1757097968683-images%20(19).jpg?alt=media&token=42897bad-e693-4289-a7b4-5c7312d067e2"
   },
   "https://contenthub.guru/page/stripe-login-account-security-guide": {
     "url": "https://contenthub.guru/page/stripe-login-account-security-guide",
@@ -78,7 +90,10 @@
       "Stripe password recovery",
       "Stripe beginner guide",
       "Stripe.com"
-    ]
+    ],
+    "category": "platform",
+    "description": "Learn how to securely log in to your Stripe account, reset your password, and set up two-step verification. This guide from ContentHub.Guru simplifies Stripe security for beginners and ensures your financial data stays safe.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1757097831880-images%20(4).png?alt=media&token=7e80d3e6-aef4-47b7-b9a2-2d092223bc3b"
   },
   "https://contenthub.guru/page/cash-app-login-2fa-guide": {
     "url": "https://contenthub.guru/page/cash-app-login-2fa-guide",
@@ -94,7 +109,10 @@
       "Cash App help guide",
       "Cash App",
       "CashApp"
-    ]
+    ],
+    "category": "platform",
+    "description": "Experiencing Cash App login issues or struggling with 2-step verification? Our detailed guide explains how to log in, reset your password, enable or bypass 2FA, and troubleshoot common problems—complete with tips, FAQ, and how-to instructions.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1757097678604-Cashapp.png?alt=media&token=065f0741-c79d-417d-b1d2-abed71e50198"
   },
   "https://contenthub.guru/page/venmo-account-recovery-2fa-login-guide": {
     "url": "https://contenthub.guru/page/venmo-account-recovery-2fa-login-guide",
@@ -110,7 +128,10 @@
       "Venmo security",
       "Venmo help guide",
       "Venmo"
-    ]
+    ],
+    "category": "platform",
+    "description": "Learn how to log in to Venmo, recover your account if you forget your password, and enable two-factor authentication (2FA) to protect your money. This beginner-friendly guide includes step-by-step instructions and FAQs.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1757097568717-Write-on_Video_icon.png?alt=media&token=b8fd3566-1f3e-4fcb-b7ab-254487d87ac3"
   },
   "https://contenthub.guru/page/paypal-login-password-recovery-2fa-guide": {
     "url": "https://contenthub.guru/page/paypal-login-password-recovery-2fa-guide",
@@ -127,7 +148,10 @@
       "PayPal beginner guide",
       "PayPal troubleshooting",
       "PayPal"
-    ]
+    ],
+    "category": "platform",
+    "description": "Learn how to access your PayPal account safely with our step-by-step guide. Discover login procedures, password recovery, and two-factor authentication (2FA) setup. Perfect for beginners and anyone who wants secure online payments.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1757097362154-images%20(3).png?alt=media&token=ad712268-8552-4860-9e88-b69b2d9032a2"
   },
   "https://contenthub.guru/page/xbox-microsoft-account-login-password-2fa-guide": {
     "url": "https://contenthub.guru/page/xbox-microsoft-account-login-password-2fa-guide",
@@ -144,7 +168,10 @@
       "2-step verification Xbox",
       "forgot Xbox password",
       "Xbox"
-    ]
+    ],
+    "category": "platform",
+    "description": "Struggling to log in to your Xbox or Microsoft Gaming account? Learn how to troubleshoot login issues, recover your password, bypass 2-step verification problems, and manage your account like a pro with this beginner-friendly guide from ContentHub.Guru.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1757097228392-images%20(2).png?alt=media&token=51ac7877-094f-491c-8530-53ae402939f3"
   },
   "https://contenthub.guru/page/epic-games-fortnite-account-recovery-2fa-guide": {
     "url": "https://contenthub.guru/page/epic-games-fortnite-account-recovery-2fa-guide",
@@ -159,7 +186,10 @@
       "how to login Epic Games",
       "Epic Games support",
       "Fortnite security tips"
-    ]
+    ],
+    "category": "platform",
+    "description": "Learn how to recover your Epic Games / Fortnite account, reset your password, and enable two-factor authentication (2FA). ContentHub.Guru’s beginner-friendly guide walks you through login help, security tips, and troubleshooting.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1757097007246-images%20(18).jpg?alt=media&token=bb129a50-9c2d-47f0-9d01-b810e98643b2"
   },
   "https://contenthub.guru/page/playstation-network-psn-login-password-reset-2fa": {
     "url": "https://contenthub.guru/page/playstation-network-psn-login-password-reset-2fa",
@@ -174,7 +204,10 @@
       "secure PSN account",
       "how to enable PSN 2FA",
       "contenthub.guru PSN guide"
-    ]
+    ],
+    "category": "platform",
+    "description": "Learn how to log in, reset your password, and enable two-factor authentication (2FA) on PlayStation Network (PSN). This beginner-friendly guide from ContentHub.Guru makes gaming account management simple and secure.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1757096889365-2370164546_ae53311b24_b.jpg?alt=media&token=77c7a62a-aac2-4cf3-8498-71f30eeddc6f"
   },
   "https://contenthub.guru/page/steam-login-issues-password-reset-2fa": {
     "url": "https://contenthub.guru/page/steam-login-issues-password-reset-2fa",
@@ -190,7 +223,10 @@
       "ContentHub.Guru Steam guide",
       "Steam account recovery",
       "Steam troubleshooting"
-    ]
+    ],
+    "category": "platform",
+    "description": "Struggling to log in to Steam? Learn how to reset your password, recover your account, and manage 2-step verification with this complete guide from ContentHub.Guru. Stay safe, stay secure, and never miss a gaming session again.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1757096741894-images%20(17).jpg?alt=media&token=09725f65-4b82-4e8b-9893-f342dc9d0e56"
   },
   "https://contenthub.guru/page/amazon-prime-video-amazon-account-login-password-2fa": {
     "url": "https://contenthub.guru/page/amazon-prime-video-amazon-account-login-password-2fa",
@@ -207,7 +243,10 @@
       "Amazon account security",
       "ContentHub.Guru Amazon guide",
       "Amazon"
-    ]
+    ],
+    "category": "platform",
+    "description": "Learn everything you need to know about Amazon Prime Video and Amazon Accounts: logging in, resetting your password, using 2-step verification, and managing your account securely. A beginner-friendly guide from ContentHub.Guru.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1757096638835-47997707396_351298756f_b.jpg?alt=media&token=c9f881e9-8877-462d-8906-f67fefa0a915"
   },
   "https://contenthub.guru/page/spotify-login-password-reset-2fa-guide": {
     "url": "https://contenthub.guru/page/spotify-login-password-reset-2fa-guide",
@@ -222,7 +261,10 @@
       "Spotify account security",
       "Spotify help guide",
       "Spotify"
-    ]
+    ],
+    "category": "platform",
+    "description": "Struggling to log into Spotify? This beginner-friendly guide from ContentHub.Guru walks you through Spotify login, password resets, account recovery, and enabling two-factor authentication (2FA) for maximum security.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1757096501593-Spotify_logo_3.png?alt=media&token=4f56c586-e047-4319-83a2-0a710bf4c585"
   },
   "https://contenthub.guru/page/netflix-login-password-reset-guide": {
     "url": "https://contenthub.guru/page/netflix-login-password-reset-guide",
@@ -238,7 +280,10 @@
       "Netflix login problems",
       "Netflix account recovery",
       "Netflix"
-    ]
+    ],
+    "category": "platform",
+    "description": "Struggling to log in to Netflix or keep your account connected? This beginner-friendly guide from ContentHub.Guru explains how to sign in, reset your password, navigate 2-step verification, and troubleshoot device sign-outs.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1757096317736-Logonfx.png?alt=media&token=026c0dc9-de57-49ac-9bbf-8a08ea5d146e"
   },
   "https://contenthub.guru/page/pinterest-login-password-reset-guide": {
     "url": "https://contenthub.guru/page/pinterest-login-password-reset-guide",
@@ -255,7 +300,10 @@
       "how to login Pinterest",
       "Pinterest beginner guide",
       "Pinterest"
-    ]
+    ],
+    "category": "platform",
+    "description": "Struggling to log in to Pinterest? Need to reset your password or set up 2-step verification? This beginner-friendly guide from ContentHub.Guru walks you through every step, with screenshots, tips, and troubleshooting advice.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1757096148937-pexels-brett-jordan-5426400-2048x1536.jpg?alt=media&token=e924c143-6ddc-4792-a277-438b274dfbdd"
   },
   "https://contenthub.guru/page/linkedin-login-password-2fa-guide": {
     "url": "https://contenthub.guru/page/linkedin-login-password-2fa-guide",
@@ -271,7 +319,10 @@
       "LinkedIn security",
       "LinkedIn two-step verification",
       "LinkedIn"
-    ]
+    ],
+    "category": "platform",
+    "description": "Learn everything about logging in to LinkedIn, recovering passwords, and setting up 2-step verification. This comprehensive guide from ContentHub.Guru makes account security easy for beginners and professionals alike.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1757096019578-LinkedIn-Logo.png?alt=media&token=38869255-ec6f-4486-83f4-6ec109e29001"
   },
   "https://contenthub.guru/page/snapchat-login-password-recovery-2fa-guide": {
     "url": "https://contenthub.guru/page/snapchat-login-password-recovery-2fa-guide",
@@ -287,7 +338,10 @@
       "Snapchat security",
       "Snapchat troubleshooting",
       "Snapchat"
-    ]
+    ],
+    "category": "platform",
+    "description": "Struggling to log into Snapchat? This comprehensive guide walks you through logging in, recovering your password, troubleshooting two-factor authentication (2FA), and tips for avoiding future issues—presented in a witty, easy-to-follow style by ContentHub.Guru.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1757095883099-images%20(1).png?alt=media&token=af88b345-5933-4218-937b-ae1c9ab9a97f"
   },
   "https://contenthub.guru/page/tiktok-account-recovery-password-reset-verification": {
     "url": "https://contenthub.guru/page/tiktok-account-recovery-password-reset-verification",
@@ -304,7 +358,10 @@
       "TikTok security",
       "TikTok account help",
       "TikTok"
-    ]
+    ],
+    "category": "platform",
+    "description": "Learn how to recover your TikTok account, reset your password, and verify your email or phone. Our guide includes step-by-step instructions, 2-step verification tips, and everything you need to stay safe online.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1757095750199-51416452062_9e604243db_b.jpg?alt=media&token=650aa9d6-8fb1-49f9-947e-7c0f56cda921"
   },
   "https://contenthub.guru/page/twitter-x-login-account-recovery-2step-guide": {
     "url": "https://contenthub.guru/page/twitter-x-login-account-recovery-2step-guide",
@@ -321,7 +378,10 @@
       "Twitter password reset",
       "X platform guide",
       "Twitter"
-    ]
+    ],
+    "category": "platform",
+    "description": "Learn how to log in to Twitter / X, recover your account if you forget your password, and enable two-step verification for maximum security. This beginner-friendly guide also covers platform overview, login tips, and troubleshooting.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1757095656827-images.png?alt=media&token=db9cd5d1-f8fd-4143-84e5-371389b5dece"
   },
   "https://contenthub.guru/page/instagram-password-recovery-2fa-guide": {
     "url": "https://contenthub.guru/page/instagram-password-recovery-2fa-guide",
@@ -337,7 +397,10 @@
       "Instagram two-step verification",
       "Instagram account recovery tips",
       "Instagram"
-    ]
+    ],
+    "category": "platform",
+    "description": "Learn how to log into Instagram, recover your password, protect your account with 2-step verification, and recover from hacks. A comprehensive guide from ContentHub.Guru with FAQs and how-tos.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1757095549923-images%20(16).jpg?alt=media&token=f6f9ee7b-760e-4d88-902c-b1a147b29b4b"
   },
   "https://contenthub.guru/page/facebook-meta-login-password-reset-2fa": {
     "url": "https://contenthub.guru/page/facebook-meta-login-password-reset-2fa",
@@ -354,7 +417,10 @@
       "Facebook two-step verification",
       "Facebook login help",
       "Facebook"
-    ]
+    ],
+    "category": "platform",
+    "description": "Struggling to log into Facebook or worried about hackers? Learn how to reset your password, set up two-factor authentication (2FA), recover hacked accounts, and navigate Meta’s login system safely with our comprehensive guide.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1757095403833-images%20(15).jpg?alt=media&token=cd14178e-c927-4256-9965-e34b3ec7ee1f"
   },
   "https://contenthub.guru/page/apple-icloud-apple-id-login-issues-2fa-recovery": {
     "url": "https://contenthub.guru/page/apple-icloud-apple-id-login-issues-2fa-recovery",
@@ -371,7 +437,10 @@
       "secure Apple ID",
       "iCloud account help",
       "iCloud"
-    ]
+    ],
+    "category": "platform",
+    "description": "Experiencing Apple ID login problems? Discover step-by-step guides for signing in, recovering accounts, using forgot password, enabling 2FA, and troubleshooting Apple iCloud issues.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1757095296711-images%20(14).jpg?alt=media&token=68b0be63-48ab-430a-b9a7-51c3b9127299"
   },
   "https://contenthub.guru/page/yahoo-mail-login-password-2-step-guide": {
     "url": "https://contenthub.guru/page/yahoo-mail-login-password-2-step-guide",
@@ -385,7 +454,10 @@
       "Yahoo email help",
       "Yahoo Mail tutorial",
       "contenthub.guru Yahoo Mail guide"
-    ]
+    ],
+    "category": "platform",
+    "description": "Yahoo Mail remains one of the most widely used email platforms in the world. This beginner-friendly guide covers how to log in, recover forgotten passwords, set up 2-step verification, and keep your account secure, all in a witty, easy-to-follow style.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1757095191137-Yahoo_default_logo.png?alt=media&token=10311f3c-e5dc-4975-a830-ee1b4794e306"
   },
   "https://contenthub.guru/page/outlook-hotmail-login-guide-2fa-recovery": {
     "url": "https://contenthub.guru/page/outlook-hotmail-login-guide-2fa-recovery",
@@ -403,7 +475,10 @@
       "Outlook security tips",
       "Outlook",
       "Hotmail"
-    ]
+    ],
+    "category": "platform",
+    "description": "Learn how to log in to your Outlook/Hotmail account, recover your password, and handle two-factor authentication (2FA). This beginner-friendly guide from ContentHub.Guru covers step-by-step instructions, common errors, and pro tips to keep your Microsoft account secure.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1757095074469-images%20(13).jpg?alt=media&token=86094ec5-8104-41b7-981a-6e5af6c3ec08"
   },
   "https://contenthub.guru/page/gmail-login-password-2step-guide": {
     "url": "https://contenthub.guru/page/gmail-login-password-2step-guide",
@@ -418,7 +493,10 @@
       "Gmail account recovery",
       "Gmail security tips",
       "Gmail"
-    ]
+    ],
+    "category": "platform",
+    "description": "Learn how to log in to Gmail, reset your password, and enable 2-step verification. This beginner-friendly guide from ContentHub.Guru makes Gmail access simple, secure, and stress-free.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1757094944389-download%20(8).jpg?alt=media&token=1b4b4c8e-da44-4d8f-8f37-a65ba9e25afa"
   },
   "https://contenthub.guru/page/kfc-famous-bowl-copycat-recipe": {
     "url": "https://contenthub.guru/page/kfc-famous-bowl-copycat-recipe",
@@ -434,7 +512,10 @@
       "KFC recipe at home",
       "best KFC bowl copycat",
       "KFC"
-    ]
+    ],
+    "category": "food",
+    "description": "Learn how to make the KFC Famous Bowl at home with this copycat recipe. Includes alternative ingredients, step-by-step instructions, FAQ, and expert tips to bring comfort food straight to your kitchen.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1757086050104-6348229942_1893f0d192_b.jpg?alt=media&token=df9a40e9-6b78-4537-9787-6e5f8e48bb86"
   },
   "https://contenthub.guru/page/taco-bell-copycat-quesadilla-creamy-jalapeno-sauce": {
     "url": "https://contenthub.guru/page/taco-bell-copycat-quesadilla-creamy-jalapeno-sauce",
@@ -448,7 +529,10 @@
       "fast food recipes",
       "spicy quesadilla recipe",
       "Quesadilla"
-    ]
+    ],
+    "category": "food",
+    "description": "Craving that cheesy, spicy quesadilla from Taco Bell? This copycat recipe, featuring creamy jalapeño sauce, lets you whip it up at home. We break down the ingredients, provide alternatives, and give step-by-step instructions to get it perfect every time.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1757085940227-435397761_76858b1135_b.jpg?alt=media&token=38c18792-cdbc-41a4-8fa2-e6347ccd90b3"
   },
   "https://contenthub.guru/page/buffalo-wild-wings-copycat-spicy-garlic-wings": {
     "url": "https://contenthub.guru/page/buffalo-wild-wings-copycat-spicy-garlic-wings",
@@ -463,7 +547,10 @@
       "chicken wing recipe",
       "spicy garlic chicken wings",
       "wings for game day"
-    ]
+    ],
+    "category": "food",
+    "description": "Learn how to make Buffalo Wild Wings–style spicy garlic wings at home! This beginner-friendly guide includes tips, alternative ingredients, a complete recipe, FAQs, and a how-to section so you can serve game-day wings that rival the pros.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1757085766238-images%20(12).jpg?alt=media&token=587a30d7-7147-40fc-a323-9cd3d1bb7191"
   },
   "https://contenthub.guru/page/kfc-copycat-fried-chicken-secret-recipe": {
     "url": "https://contenthub.guru/page/kfc-copycat-fried-chicken-secret-recipe",
@@ -478,7 +565,10 @@
       "how to make fried chicken",
       "easy fried chicken recipe",
       "best fried chicken at home"
-    ]
+    ],
+    "category": "food",
+    "description": "Learn how to make restaurant-style KFC fried chicken at home with our secret herbs and spices copycat recipe. Crispy, juicy, and bursting with flavor, plus alternative ingredients, FAQs, and step-by-step instructions from ContentHub.Guru.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1757085658954-5499645652_327a2eec3b_b.jpg?alt=media&token=c9c072f6-f1c9-4086-bb7c-335cf1d47249"
   },
   "https://contenthub.guru/page/homemade-starbucks-pumpkin-cream-cold-brew": {
     "url": "https://contenthub.guru/page/homemade-starbucks-pumpkin-cream-cold-brew",
@@ -493,7 +583,10 @@
       "pumpkin latte alternative",
       "fall coffee recipes",
       "Starbucks"
-    ]
+    ],
+    "category": "food",
+    "description": "Recreate the Starbucks Pumpkin Cream Cold Brew at home with this easy copycat recipe. Learn alternative ingredients, step-by-step instructions, and tips to make the ultimate fall coffee experience.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1757085509274-pexels-photo-5458398.jpeg?alt=media&token=6ecf7420-706e-4111-a4ed-69647bbc95b6"
   },
   "https://contenthub.guru/page/wendys-breakfast-baconator-copycat-recipe": {
     "url": "https://contenthub.guru/page/wendys-breakfast-baconator-copycat-recipe",
@@ -506,7 +599,10 @@
       "copycat Wendy’s breakfast",
       "breakfast sandwich recipe",
       "morning bacon ideas"
-    ]
+    ],
+    "category": "food",
+    "description": "Craving Wendy’s Breakfast Baconator? Learn how to make this copycat recipe at home with easy instructions, ingredient swaps, and tips from ContentHub.Guru to make your mornings epic.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1757085398883-images%20(11).jpg?alt=media&token=381a7531-fff6-4334-94f6-98f6a31d339e"
   },
   "https://contenthub.guru/page/mcdonalds-copycat-egg-mcmuffin": {
     "url": "https://contenthub.guru/page/mcdonalds-copycat-egg-mcmuffin",
@@ -519,7 +615,10 @@
       "quick breakfast ideas",
       "fast breakfast at home",
       "breakfast sandwich recipe"
-    ]
+    ],
+    "category": "food",
+    "description": "Learn how to make a McDonald’s Copycat Egg McMuffin at home in minutes. This beginner-friendly guide gives step-by-step instructions, ingredient alternatives, and tips to make your breakfast fast, fresh, and way cheaper than drive-thru.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1757085259817-images%20(10).jpg?alt=media&token=bcdc0aa4-ef1f-492f-b421-13adf3e74c76"
   },
   "https://contenthub.guru/page/ihop-copycat-buttermilk-pancakes": {
     "url": "https://contenthub.guru/page/ihop-copycat-buttermilk-pancakes",
@@ -534,7 +633,10 @@
       "pancake how-to",
       "pancake tips",
       "contenthub.guru recipes"
-    ]
+    ],
+    "category": "food",
+    "description": "Learn the secrets to IHOP-style fluffy buttermilk pancakes at home. This step-by-step guide from contenthub.guru includes alternative ingredients, pro tips, FAQs, and a how-to section for perfect breakfast bliss.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1757085139899-Foodiesfeed.com_pouring-honey-on-pancakes-with-walnuts.jpg?alt=media&token=3543728f-4c9a-45f7-864a-4935c85c02cd"
   },
   "https://contenthub.guru/page/homemade-big-mac-copycat-burger": {
     "url": "https://contenthub.guru/page/homemade-big-mac-copycat-burger",
@@ -548,7 +650,10 @@
       "homemade burgers",
       "copycat fast food recipes",
       "best burger recipe"
-    ]
+    ],
+    "category": "food",
+    "description": "Learn how to make a perfect Big Mac copycat burger at home, complete with the famous secret sauce, crisp lettuce, and double beef patties. This beginner-friendly guide includes alternative ingredients, step-by-step instructions, FAQs, and tips to customize it your way.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1757084993357-images%20(9).jpg?alt=media&token=b3393997-f1ad-490f-bc82-c90170a191f2"
   },
   "https://contenthub.guru/page/kfc-chicken-littles-copycat-sliders": {
     "url": "https://contenthub.guru/page/kfc-chicken-littles-copycat-sliders",
@@ -561,7 +666,10 @@
       "copycat KFC recipe",
       "easy chicken sandwich",
       "chicken slider how-to"
-    ]
+    ],
+    "category": "food",
+    "description": "Make KFC Chicken Littles copycat sliders at home! Crispy chicken, soft buns, pickles, and special sauce—plus alternatives, FAQs, and a step-by-step how-to guide.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1757084581563-5598242782_db5021f4f0_b.jpg?alt=media&token=c06f0ea0-1de6-413f-9934-7780376c5e0f"
   },
   "https://contenthub.guru/page/white-castle-copycat-sliders-mini-burgers": {
     "url": "https://contenthub.guru/page/white-castle-copycat-sliders-mini-burgers",
@@ -577,7 +685,10 @@
       "mini beef burgers",
       "easy burger recipe",
       "contenthub.guru recipes"
-    ]
+    ],
+    "category": "food",
+    "description": "Learn how to make White Castle copycat sliders at home! Our step-by-step guide from contenthub.guru includes alternative ingredients, tips for perfect mini burgers, and a foolproof recipe that’s small in size but huge in flavor.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1757084362977-pexels-photo-3566357.jpeg?alt=media&token=a02d7afb-06f4-453b-80fe-f009c409196d"
   },
   "https://contenthub.guru/page/taco-bell-cinnamon-twists-copycat-recipe": {
     "url": "https://contenthub.guru/page/taco-bell-cinnamon-twists-copycat-recipe",
@@ -589,7 +700,10 @@
       "Mexican snack recipes",
       "homemade Taco Bell snacks",
       "cinnamon sugar recipe"
-    ]
+    ],
+    "category": "food",
+    "description": "Learn how to make Taco Bell’s iconic Cinnamon Twists at home with this foolproof recipe. We break down the history, alternatives, and step-by-step instructions—so you can turn your kitchen into a snack laboratory.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1757084152749-Intorchiate.jpg?alt=media&token=436e8a93-ad93-40cd-a932-1c5c34b5a7ac"
   },
   "https://contenthub.guru/page/crumbl-cookie-copycat-recipe": {
     "url": "https://contenthub.guru/page/crumbl-cookie-copycat-recipe",
@@ -601,7 +715,10 @@
       "Crumbl TikTok dessert",
       "Crumbl chocolate chip recipe",
       "Crumbl cookie copycat"
-    ]
+    ],
+    "category": "food",
+    "description": "A witty, step-by-step guide to recreating Crumbl’s oversized, TikTok-famous cookies in your own kitchen. Complete with ingredient swaps, alternative baking methods, FAQs, a step-by-step how-to, and a recipe card, all in ContentHub.Guru’s signature entertaining-yet-informative style.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1757083864704-53341440909_b18025ceae_b.jpg?alt=media&token=ea9ceac3-3443-4254-b252-a7ed0be413ee"
   },
   "https://contenthub.guru/page/krispy-kreme-copycat-donuts-recipe": {
     "url": "https://contenthub.guru/page/krispy-kreme-copycat-donuts-recipe",
@@ -614,7 +731,10 @@
       "yeast-raised donuts",
       "donut glaze recipe",
       "contenthub guru recipes"
-    ]
+    ],
+    "category": "food",
+    "description": "Ever wondered how to make Krispy Kreme–style donuts at home? This ContentHub.Guru beginner’s guide dives into the history, the dough science, step-by-step instructions, alternatives for different diets, FAQs, and the ultimate copycat recipe—glazed until your kitchen smells like heaven itself.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1757083735610-208692428_8a433b5267.jpg?alt=media&token=340d06b4-a77a-49b7-839d-df8b7ba475b5"
   },
   "https://contenthub.guru/page/subway-copycat-chocolate-chip-cookies": {
     "url": "https://contenthub.guru/page/subway-copycat-chocolate-chip-cookies",
@@ -626,7 +746,10 @@
       "soft-baked chocolate chip cookies",
       "easy cookie recipe",
       "contenthub.guru baking"
-    ]
+    ],
+    "category": "food",
+    "description": "Ever wondered why Subway cookies taste like childhood nostalgia wrapped in gooey chocolate bliss? We’ve cracked the code. Here’s your witty, slightly irreverent guide to baking the most indulgent Subway Copycat Chocolate Chip Cookies—with alternatives, FAQs, and a ContentHub.Guru–style how-to.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1757083581687-images%20(8).jpg?alt=media&token=daa95a81-464d-4148-a692-ba5a18275d73"
   },
   "https://contenthub.guru/page/copycat-dominos-garlic-bread-pizza-hack": {
     "url": "https://contenthub.guru/page/copycat-dominos-garlic-bread-pizza-hack",
@@ -639,7 +762,10 @@
       "easy pizza recipe",
       "copycat Domino’s garlic bread",
       "Domino’s"
-    ]
+    ],
+    "category": "food",
+    "description": "Learn how to make a Domino’s-style garlic bread pizza hack at home with this playful, indulgent recipe. Includes alternatives, FAQs, and a step-by-step how-to guide—only on ContentHub.Guru.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1757083443795-Garlic_Fingers.jpg?alt=media&token=0f390987-eaed-4270-8694-498d02dcaac5"
   },
   "https://contenthub.guru/page/buffalo-chicken-flatbread-pizza-better-than-pizza-hut": {
     "url": "https://contenthub.guru/page/buffalo-chicken-flatbread-pizza-better-than-pizza-hut",
@@ -651,7 +777,10 @@
       "better than pizza hut",
       "homemade flatbread pizza",
       "spicy chicken pizza recipe"
-    ]
+    ],
+    "category": "food",
+    "description": "Say goodbye to sad takeout boxes. This beginner-friendly guide teaches you how to make Buffalo Chicken Flatbread Pizza that outshines Pizza Hut, complete with ingredient swaps, FAQs, and a foolproof recipe.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1757083307300-images%20(7).jpg?alt=media&token=2d39896e-8fca-4f65-9c3b-69d92ee93bd4"
   },
   "https://contenthub.guru/page/homemade-taco-bell-mexican-pizza-recipe": {
     "url": "https://contenthub.guru/page/homemade-taco-bell-mexican-pizza-recipe",
@@ -663,7 +792,10 @@
       "how to make Taco Bell Mexican Pizza",
       "Mexican Pizza at home",
       "Taco Bell copycat recipes"
-    ]
+    ],
+    "category": "food",
+    "description": "Recreate the legendary Taco Bell Mexican Pizza at home with this witty, easy-to-follow recipe. Crispy tortillas, seasoned beef, refried beans, and melty cheese—stacked like a late-night miracle. Includes recipe, how-to, and FAQs from contenthub.guru.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1757083176179-efa8d969-7b15-43d6-904f-4d935f9ead3f.avif?alt=media&token=bfa29d7a-a708-4eb8-8899-758972c0b943"
   },
   "https://contenthub.guru/page/pizza-hut-copycat-pan-pizza-recipe": {
     "url": "https://contenthub.guru/page/pizza-hut-copycat-pan-pizza-recipe",
@@ -676,7 +808,10 @@
       "copycat Pizza Hut crust",
       "best pizza dough recipe",
       "deep dish pizza at home"
-    ]
+    ],
+    "category": "food",
+    "description": "A step-by-step guide to making a Pizza Hut–style pan pizza in your own kitchen. Includes recipe, tips, FAQs, alternatives, and the inside scoop—ContentHub.Guru style.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1757082984895-14888970989_97fe5c2ee5_b.jpg?alt=media&token=e2c7f3df-68a7-464a-9c8d-d1175cbccbe1"
   },
   "https://contenthub.guru/page/world-in-motion-counting-life-one-second-at-a-time": {
     "url": "https://contenthub.guru/page/world-in-motion-counting-life-one-second-at-a-time",
@@ -688,7 +823,10 @@
       "world in motion counter",
       "global events tracker",
       "live data visualization"
-    ]
+    ],
+    "category": "general",
+    "description": "Every second, thousands of invisible events unfold around the globe: babies are born, cups of coffee are poured, WhatsApp messages buzz across the ether. ContentHub.Guru explores the art of turning these relentless statistics into stories—and what happens when we watch the world tick in real time.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756915465251-ChatGPT%20Image%20Sep%203%2C%202025%2C%2011_03_03%20AM.png?alt=media&token=03c63117-9e02-41a1-95fc-31d20cf37281"
   },
   "https://contenthub.guru/page/affordable-fashion-gen-z-sustainable-music": {
     "url": "https://contenthub.guru/page/affordable-fashion-gen-z-sustainable-music",
@@ -704,7 +842,10 @@
       "concert updates",
       "pop culture trends",
       "affordable style tips"
-    ]
+    ],
+    "category": "general",
+    "description": "Discover the top affordable fashion brands Gen Z loves, sustainable living tips for young adults, and the latest music updates. A lifestyle guide for staying stylish, eco-friendly, and culturally in-the-know.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756865035146-pexels-cottonbro-6636906.jpg?alt=media&token=cd503bb0-071c-4081-af7e-c960dba87af2"
   },
   "https://contenthub.guru/page/best-ai-tools-students-young-professionals": {
     "url": "https://contenthub.guru/page/best-ai-tools-students-young-professionals",
@@ -718,7 +859,10 @@
       "AI productivity apps",
       "study hacks for college",
       "student productivity tips"
-    ]
+    ],
+    "category": "general",
+    "description": "Explore the best AI tools, study apps, and productivity hacks for students and young professionals. Learn how to use ChatGPT for homework, streamline note-taking, and get more done in less time.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756864855080-pexels-andrew-15863103.jpg?alt=media&token=53ea0ccf-afae-41b4-94d4-9beb8e113aeb"
   },
   "https://contenthub.guru/page/gaming-esports-guide-mobile-roblox-fortnite-streaming": {
     "url": "https://contenthub.guru/page/gaming-esports-guide-mobile-roblox-fortnite-streaming",
@@ -734,7 +878,10 @@
       "beginner esports guide",
       "mobile gaming guide",
       "gaming content tips"
-    ]
+    ],
+    "category": "general",
+    "description": "Discover the best free-to-play mobile games, expert Roblox and Fortnite tips, and learn how to start streaming on Twitch or YouTube Gaming. A complete beginner-friendly guide from ContentHub.Guru.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756864678300-pexels-alscre-3977908.jpg?alt=media&token=9c90bc49-ce9f-4f73-87f7-d82c2ace3a6e"
   },
   "https://contenthub.guru/page/social-media-online-trends-2025": {
     "url": "https://contenthub.guru/page/social-media-online-trends-2025",
@@ -746,8 +893,14 @@
       "mental health apps",
       "online trends 2025",
       "content creation strategies",
-      "social media tips"
-    ]
+      "social media tips",
+      "TikTok growth hacks",
+      "Instagram Reels editing tips",
+      "YouTube growth 2025"
+    ],
+    "category": "general",
+    "description": "Discover the latest social media and online trends for 2025. Learn TikTok growth hacks, Instagram Reels editing tips, the best apps for networking and mental health, and strategies to grow your YouTube channel. Master digital trends with ContentHub.Guru.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756864515656-people-3175027_1280.jpg?alt=media&token=2d45bb3c-d079-43a6-a438-dab856fb9ac2"
   },
   "https://contenthub.guru/page/top-online-tools-apps-services-of-2025-navigating-government-results-with-sarkari-result": {
     "url": "https://contenthub.guru/page/top-online-tools-apps-services-of-2025-navigating-government-results-with-sarkari-result",
@@ -763,7 +916,10 @@
       "government job notifications 2025",
       "Sarkari Result tools",
       "Sarkari Result services"
-    ]
+    ],
+    "category": "general",
+    "description": "Explore the latest online tools, apps, and services of 2025 that are revolutionizing the way aspirants interact with government exams and results. From Sarkari Result's comprehensive platform to innovative digital solutions, discover how technology is enhancing the journey to securing a government job.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756864031425-pexels-rickyrecap-2100942.jpg?alt=media&token=881f851b-685b-40cf-9cf4-52b961a6ff95"
   },
   "https://contenthub.guru/page/top-online-tools-apps-services-2025-weather-utilities": {
     "url": "https://contenthub.guru/page/top-online-tools-apps-services-2025-weather-utilities",
@@ -775,7 +931,10 @@
       "utility apps 2025",
       "smart home weather integration",
       "weather forecasting services 2025"
-    ]
+    ],
+    "category": "general",
+    "description": "Discover the best weather and utility apps, websites, and services of 2025. From hyperlocal forecasts to smart home integrations, explore the tools that are shaping how we plan our days and manage our environments.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756863850578-5B8DXxchKrMjPFuKRUXgcE.jpeg?alt=media&token=42aa4580-b142-449d-ac04-1aa589e37fc4"
   },
   "https://contenthub.guru/page/top-sports-apps-2025": {
     "url": "https://contenthub.guru/page/top-sports-apps-2025",
@@ -791,7 +950,10 @@
       "football apps 2025",
       "basketball apps 2025",
       "sports news apps 2025"
-    ]
+    ],
+    "category": "general",
+    "description": "Explore the top sports apps and services of 2025, including Cricbuzz for cricket enthusiasts, Real Madrid's official app for football fans, and the NBA's latest offerings. Stay updated with live scores, match schedules, and exclusive content.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756863708256-aab58b56616e88ae3fdf5928de2600af-1920.jpg?alt=media&token=9d50cba0-2d23-4776-9794-a66146520eda"
   },
   "https://contenthub.guru/page/top-online-tools-apps-services-2025": {
     "url": "https://contenthub.guru/page/top-online-tools-apps-services-2025",
@@ -802,8 +964,14 @@
       "find restaurants near me",
       "hotel booking apps",
       "online services 2025",
-      "digital tools guide"
-    ]
+      "digital tools guide",
+      "Amazon shopping tips",
+      "Google Maps guide",
+      "Canva tips"
+    ],
+    "category": "general",
+    "description": "Explore the top online tools, apps, and services for 2025, including Amazon, Google Maps, restaurant finders, and Canva. This guide explains how to use each platform effectively, offers tips, and includes an FAQ and step-by-step how-to for beginners.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756863528987-pexels-anastasia-shuraeva-5481527.jpg?alt=media&token=307bddc8-f1f5-415c-b104-e0fc75ca5ff8"
   },
   "https://contenthub.guru/page/top-online-tools-apps-services-2025-search-translation": {
     "url": "https://contenthub.guru/page/top-online-tools-apps-services-2025-search-translation",
@@ -817,7 +985,10 @@
       "search engines 2025",
       "online services 2025",
       "ContentHub.Guru"
-    ]
+    ],
+    "category": "general",
+    "description": "Explore the best online tools, apps, and services for search and translation in 2025. Learn how platforms like Google, DeepL, and Translate are shaping the digital landscape, and find out which ones are worth your time.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756863354077-pexels-pixabay-40185.jpg?alt=media&token=1b7f2e51-e786-4139-bf83-ede928161484"
   },
   "https://contenthub.guru/page/top-online-tools-2025-whatsapp-web-gmail": {
     "url": "https://contenthub.guru/page/top-online-tools-2025-whatsapp-web-gmail",
@@ -831,7 +1002,10 @@
       "Gmail features 2025",
       "best messaging apps 2025",
       "email services 2025"
-    ]
+    ],
+    "category": "general",
+    "description": "Discover the latest advancements in WhatsApp Web and Gmail for 2025. Learn about new features, security enhancements, and tips to optimize your messaging and email experience.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756863221425-pexels-picjumbo-com-55570-210644.jpg?alt=media&token=f8d00a96-a9af-4429-83d0-37b94e37fa49"
   },
   "https://contenthub.guru/page/top-social-media-tools-2025": {
     "url": "https://contenthub.guru/page/top-social-media-tools-2025",
@@ -842,8 +1016,14 @@
       "Instagram growth 2025",
       "Pinterest strategies",
       "social media services 2025",
-      "online tools for creators"
-    ]
+      "online tools for creators",
+      "YouTube tips 2025",
+      "Facebook marketing 2025",
+      "Twitter tools 2025"
+    ],
+    "category": "general",
+    "description": "Discover the top social media tools, apps, and services of 2025. From YouTube to Pinterest, this guide by ContentHub.Guru helps beginners and pros alike navigate, create, and grow your online presence.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756863050383-pexels-tracy-le-blanc-67789-607812%20(1).jpg?alt=media&token=c4b6e32a-d696-4a90-a83c-53cd810f86ce"
   },
   "https://contenthub.guru/page/save-money-working-from-home": {
     "url": "https://contenthub.guru/page/save-money-working-from-home",
@@ -857,7 +1037,10 @@
       "how to save money remotely",
       "cut costs remote work",
       "freelance savings tips"
-    ]
+    ],
+    "category": "personal-development",
+    "description": "Discover practical, actionable ways to save money while working from home. Learn tips for energy bills, office setup, subscriptions, meals, and more—without sacrificing comfort or productivity.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756862382734-pexels-vlada-karpovich-4050351.jpg?alt=media&token=eddc601c-6d72-45ed-a1a0-f27280d73870"
   },
   "https://contenthub.guru/page/best-free-budget-apps-for-couples": {
     "url": "https://contenthub.guru/page/best-free-budget-apps-for-couples",
@@ -870,7 +1053,10 @@
       "how couples budget together",
       "money apps for relationships",
       "free financial tools"
-    ]
+    ],
+    "category": "general",
+    "description": "Discover the best free budget apps for couples that help track spending, split expenses, and reach financial goals together. Our guide includes step-by-step tips, FAQs, and recommendations from ContentHub.guru.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756862224142-pexels-karolina-grabowska-5882559.jpg?alt=media&token=d0a35ec0-b4db-4885-ab17-67ea52734dee"
   },
   "https://contenthub.guru/page/passive-income-beginners-2025": {
     "url": "https://contenthub.guru/page/passive-income-beginners-2025",
@@ -886,7 +1072,10 @@
       "side hustles 2025",
       "money tips beginners",
       "financial independence"
-    ]
+    ],
+    "category": "general",
+    "description": "Discover the best ways to generate passive income in 2025. This witty, beginner-friendly guide from ContentHub.Guru covers investment strategies, digital products, and creative side hustles designed to earn you money while you sleep.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756862027913-pexels-mainesdtm-3824139.jpg?alt=media&token=b27631ef-1fa0-40c0-ab53-7bb9ce1429ae"
   },
   "https://contenthub.guru/page/side-hustles-for-students-with-no-money": {
     "url": "https://contenthub.guru/page/side-hustles-for-students-with-no-money",
@@ -901,7 +1090,10 @@
       "student money-making ideas",
       "easy side hustles for college students",
       "make money without investment"
-    ]
+    ],
+    "category": "business",
+    "description": "Being a student doesn’t have to mean living paycheck to paycheck. Learn practical, low-cost side hustles for students with no money, plus tips, FAQs, and step-by-step guides to start earning today.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756861765100-pexels-kampus-7289719.jpg?alt=media&token=d77739b7-6dca-449a-b0c2-7d304c0f1b6c"
   },
   "https://contenthub.guru/page/tiktok-ad-examples-dropshipping": {
     "url": "https://contenthub.guru/page/tiktok-ad-examples-dropshipping",
@@ -915,7 +1107,10 @@
       "TikTok ad inspiration",
       "eCommerce TikTok ads",
       "TikTok ad best practices"
-    ]
+    ],
+    "category": "business_content",
+    "description": "Explore a curated selection of TikTok ad examples tailored for dropshipping businesses. This guide delves into successful campaigns, breaking down what made them effective and how you can apply these insights to your own ads. Whether you're new to TikTok advertising or looking to refine your strategy, this article provides actionable tips and inspiration to boost your dropshipping success.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756861415411-Catchy-TikTok-ads-examples.jpg?alt=media&token=9b769da6-59f3-4538-bcfe-f30a98b1e85b"
   },
   "https://contenthub.guru/page/how-to-write-product-descriptions-that-convert": {
     "url": "https://contenthub.guru/page/how-to-write-product-descriptions-that-convert",
@@ -928,7 +1123,10 @@
       "persuasive product copy",
       "product description examples",
       "how to write product descriptions"
-    ]
+    ],
+    "category": "guides",
+    "description": "Learn how to write product descriptions that actually convert visitors into customers. This guide from ContentHub.Guru breaks down persuasive copywriting, tips, examples, and step-by-step instructions for creating product pages that drive sales.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756861258275-pexels-pixabay-261662.jpg?alt=media&token=1903fdd7-d7c1-4304-8f1a-427ec645995f"
   },
   "https://contenthub.guru/page/low-competition-products-one-product-stores": {
     "url": "https://contenthub.guru/page/low-competition-products-one-product-stores",
@@ -944,7 +1142,10 @@
       "e-commerce strategy",
       "product research tools",
       "ContentHub.Guru tips"
-    ]
+    ],
+    "category": "business",
+    "description": "Discover the hidden world of low competition products for one-product stores. Learn how to identify profitable niches, launch effectively, and use platforms like ContentHub.Guru to dominate your market without getting lost in the crowd.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756861086881-pexels-angela-roma-7319055.jpg?alt=media&token=87f83100-353e-4904-8fa1-92e0fe4fc4a0"
   },
   "https://contenthub.guru/page/winning-products-to-sell-on-tiktok-2025": {
     "url": "https://contenthub.guru/page/winning-products-to-sell-on-tiktok-2025",
@@ -958,7 +1159,10 @@
       "TikTok dropshipping 2025",
       "TikTok shop winning products",
       "viral TikTok items"
-    ]
+    ],
+    "category": "business",
+    "description": "Discover the top trending products to sell on TikTok in 2025. From smart gadgets to aesthetic lifestyle goods, this ContentHub.Guru guide shows you how to find, market, and profit from the next viral product wave.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756860803948-pexels-marlon-alves-2016519-33715769.jpg?alt=media&token=de031f1d-0094-45e9-86eb-794452714e9c"
   },
   "https://contenthub.guru/page/quick-desk-stretches-for-neck-pain": {
     "url": "https://contenthub.guru/page/quick-desk-stretches-for-neck-pain",
@@ -974,7 +1178,10 @@
       "workplace stretches",
       "prevent tech neck",
       "ergonomic tips"
-    ]
+    ],
+    "category": "fitness",
+    "description": "Sitting at your desk too long? Try these quick, effective desk stretches to relieve neck pain, improve posture, and stay productive. A ContentHub.Guru guide for modern desk workers.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756860296548-pexels-gustavo-fring-4971630.jpg?alt=media&token=1dda99e8-acf4-4ae1-bb91-8b083f0ae5af"
   },
   "https://contenthub.guru/page/low-sugar-snack-ideas-for-adults": {
     "url": "https://contenthub.guru/page/low-sugar-snack-ideas-for-adults",
@@ -988,7 +1195,10 @@
       "healthy snacking tips",
       "sugar free snack options",
       "adult snacking"
-    ]
+    ],
+    "category": "health",
+    "description": "Looking for tasty low-sugar snack ideas for adults? This ContentHub.Guru guide explores smart snack swaps, easy recipes, and tips for keeping your energy up without the sugar crash.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756860193454-pexels-kyleroxas-2122278.jpg?alt=media&token=c729163d-7267-435e-9954-9037920044ba"
   },
   "https://contenthub.guru/page/what-to-eat-before-early-morning-workouts": {
     "url": "https://contenthub.guru/page/what-to-eat-before-early-morning-workouts",
@@ -1002,7 +1212,10 @@
       "early morning gym routine diet",
       "workout fuel guide",
       "pre workout meal ideas"
-    ]
+    ],
+    "category": "fitness",
+    "description": "Wondering what to eat before early morning workouts? This guide breaks down the best pre-workout meals, common mistakes, and science-backed tips—served with a dash of wit, ContentHub.Guru style.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756860033415-pexels-alexy-almond-3756520.jpg?alt=media&token=71f0cc89-1e6d-4376-9328-1936ba282909"
   },
   "https://contenthub.guru/page/easy-10-minute-workouts-at-home": {
     "url": "https://contenthub.guru/page/easy-10-minute-workouts-at-home",
@@ -1018,7 +1231,10 @@
       "no gym workout",
       "workout plan 10 minutes",
       "contenthub.guru workouts"
-    ]
+    ],
+    "category": "fitness",
+    "description": "Discover easy 10-minute workouts at home that actually work. From cardio bursts to strength training, this beginner-friendly guide (with FAQs & how-to) helps you stay fit without a gym.\nSlug: easy-10-minute-workouts-at-home",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756859881617-pexels-valeria-ushakova-603898-3094230.jpg?alt=media&token=16140be2-19db-4d90-888c-25277596d9c4"
   },
   "https://contenthub.guru/page/seo-tools-for-bloggers-on-a-budget": {
     "url": "https://contenthub.guru/page/seo-tools-for-bloggers-on-a-budget",
@@ -1032,7 +1248,10 @@
       "SEO tips for bloggers",
       "blog SEO strategy",
       "contenthub guru SEO"
-    ]
+    ],
+    "category": "writing_blogging",
+    "description": "Discover the best SEO tools for bloggers on a budget. From free keyword research platforms to affordable analytics, this guide from contenthub.guru shows you how to grow your blog without draining your savings.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756857873364-pexels-vlada-karpovich-4050351.jpg?alt=media&token=c839561a-4cb8-49fc-ba94-448f720024aa"
   },
   "https://contenthub.guru/page/affiliate-programs-for-beginners-2026": {
     "url": "https://contenthub.guru/page/affiliate-programs-for-beginners-2026",
@@ -1046,7 +1265,10 @@
       "affiliate networks for beginners",
       "affiliate marketing step by step",
       "ContentHub.Guru affiliate guide"
-    ]
+    ],
+    "category": "guides",
+    "description": "Looking to earn online in 2025? Affiliate programs are the easiest way for beginners to start making money without a product of their own. This witty, beginner-friendly guide explains what affiliate marketing is, how it works, the best programs to join, and tips to succeed.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756857611756-istockphoto-903112824-612x612.jpg?alt=media&token=65a1575d-b26e-4db6-a7c3-71bf6c67aff5"
   },
   "https://contenthub.guru/page/best-low-competition-niches-for-blogging": {
     "url": "https://contenthub.guru/page/best-low-competition-niches-for-blogging",
@@ -1060,7 +1282,10 @@
       "easy blog niches",
       "niche blogging guide",
       "low competition blog topics"
-    ]
+    ],
+    "category": "writing_blogging",
+    "description": "Looking to start a blog but tired of crowded topics? Discover the best low-competition niches for blogging in 2025. From micro-lifestyle ideas to hidden B2B gems, this beginner-friendly guide from ContentHub.Guru shows you how to find niches that rank, grow, and pay.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756857500636-pexels-cottonbro-3296547.jpg?alt=media&token=1e3064ce-fb3f-4653-934a-99cf4424ba90"
   },
   "https://contenthub.guru/page/affiliate-programs-for-beginners-2025": {
     "url": "https://contenthub.guru/page/affiliate-programs-for-beginners-2025",
@@ -1074,7 +1299,10 @@
       "passive income ideas",
       "affiliate marketing step by step",
       "affiliate networks for beginners"
-    ]
+    ],
+    "category": "guides",
+    "description": "New to affiliate marketing? Learn the best affiliate programs for beginners in 2025, how to start step by step, and the common mistakes to avoid. Perfect for creators, bloggers, and entrepreneurs.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756857272057-pexels-angela-roma-7319055.jpg?alt=media&token=fffb850b-c7c7-4e0c-ad1a-fe00e7f7ae8b"
   },
   "https://contenthub.guru/page/how-to-start-a-faceless-blog": {
     "url": "https://contenthub.guru/page/how-to-start-a-faceless-blog",
@@ -1090,7 +1318,10 @@
       "faceless brand",
       "blogging for beginners",
       "make money blogging anonymously"
-    ]
+    ],
+    "category": "writing_blogging",
+    "description": "Want to start a faceless blog but don’t know how? Learn why faceless blogging works, how to set one up, and how to monetize without ever showing your face. A witty beginner’s guide from ContentHub.Guru.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756857088273-pexels-noxx-m-2154829861-33656299.jpg?alt=media&token=8278a374-a271-45d4-9db1-ae8cec905a6f"
   },
   "https://contenthub.guru/page/domain-website-flipping-guide": {
     "url": "https://contenthub.guru/page/domain-website-flipping-guide",
@@ -1106,7 +1337,10 @@
       "how to flip websites",
       "domain flipping guide",
       "profitable domains"
-    ]
+    ],
+    "category": "guides",
+    "description": "Learn how to make money flipping domains and websites with this beginner-friendly guide. Discover tips, strategies, and step-by-step methods to buy, improve, and sell online properties for profit.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756856372375-pexels-cottonbro-6986455%20(1).jpg?alt=media&token=576bad00-305d-4e12-8979-0267a0c7bd8d"
   },
   "https://contenthub.guru/page/how-to-sell-online-courses-and-coaching-programs": {
     "url": "https://contenthub.guru/page/how-to-sell-online-courses-and-coaching-programs",
@@ -1122,7 +1356,10 @@
       "digital coaching guide",
       "online teaching business",
       "earn from expertise"
-    ]
+    ],
+    "category": "guides",
+    "description": "Learn how to create, market, and sell online courses or coaching programs in a way that’s authentic, engaging, and profitable. This guide from ContentHub.Guru covers strategies, platforms, FAQs, and step-by-step tips to launch your first digital course or coaching program successfully.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756856115617-pexels-karolina-grabowska-6214963.jpg?alt=media&token=0e8b286e-fc1b-4a47-ba85-8d11226b14da"
   },
   "https://contenthub.guru/page/how-to-make-money-with-print-on-demand": {
     "url": "https://contenthub.guru/page/how-to-make-money-with-print-on-demand",
@@ -1138,7 +1375,10 @@
       "POD tips for beginners",
       "make money online with POD",
       "online merchandise business"
-    ]
+    ],
+    "category": "guides",
+    "description": "Learn how to make money with print-on-demand in this beginner-friendly guide. Discover step-by-step strategies to launch, design, and sell products online using platforms like Contenthub.guru, Shopify, and Etsy.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756855990979-pexels-alexeydemidov-9314012.jpg?alt=media&token=a25a980c-354d-4414-8770-0fa0bbd875b9"
   },
   "https://contenthub.guru/page/how-to-start-dropshipping-with-no-money": {
     "url": "https://contenthub.guru/page/how-to-start-dropshipping-with-no-money",
@@ -1152,7 +1392,10 @@
       "contenthub.guru dropshipping guide",
       "low-cost dropshipping",
       "make money online no investment"
-    ]
+    ],
+    "category": "guides",
+    "description": "Learn how to start dropshipping with no money! This beginner-friendly guide from ContentHub.Guru covers step-by-step strategies, tips, and FAQs to launch your online business with zero upfront investment.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756855791196-pexels-nam-day-2153787144-32904016.jpg?alt=media&token=112544df-b3e5-4535-b2cd-dfa95a4ee577"
   },
   "https://contenthub.guru/page/how-to-make-money-selling-digital-products-online": {
     "url": "https://contenthub.guru/page/how-to-make-money-selling-digital-products-online",
@@ -1168,7 +1411,10 @@
       "selling courses online",
       "passive income digital products",
       "digital product marketing"
-    ]
+    ],
+    "category": "guides",
+    "description": "Learn how to make money selling digital products online with this beginner-friendly guide. Discover top strategies, product ideas, marketing tips, and step-by-step instructions to start generating online income today.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756855631371-pexels-goumbik-574071.jpg?alt=media&token=14a3e455-5f0c-40f4-913a-2167167e2536"
   },
   "https://contenthub.guru/page/build-money-making-website-from-scratch": {
     "url": "https://contenthub.guru/page/build-money-making-website-from-scratch",
@@ -1183,7 +1429,10 @@
       "make money online",
       "website building guide",
       "website setup tutorial"
-    ]
+    ],
+    "category": "guides",
+    "description": "Learn how to build a money-making website from scratch with this practical, beginner-friendly guide. Discover tools, strategies, monetization tips, and actionable steps to turn your ideas into revenue—all explained the ContentHub.Guru way.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756855406254-pexels-vlada-karpovich-4050387.jpg?alt=media&token=9c86ac74-ac7d-4d20-b4d2-c0f056d81f00"
   },
   "https://contenthub.guru/page/how-to-use-pinterest-to-make-money-online": {
     "url": "https://contenthub.guru/page/how-to-use-pinterest-to-make-money-online",
@@ -1198,7 +1447,10 @@
       "Pinterest side hustle",
       "Pinterest content strategy",
       "Pinterest traffic monetization"
-    ]
+    ],
+    "category": "social_media",
+    "description": "Learn how to turn Pinterest into a money-making powerhouse with strategies for affiliate marketing, digital products, and brand promotion. This beginner-friendly guide includes step-by-step instructions, pro tips, and FAQs to get you started today.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756855235988-pexels-vlada-karpovich-4050291.jpg?alt=media&token=66c5dc4f-cc71-41b2-b4ce-91c4b5443d8d"
   },
   "https://contenthub.guru/page/make-money-with-email-marketing": {
     "url": "https://contenthub.guru/page/make-money-with-email-marketing",
@@ -1212,7 +1464,10 @@
       "contenthub.guru email marketing",
       "email marketing tools",
       "passive income email"
-    ]
+    ],
+    "category": "guides",
+    "description": "Discover how to make money with email marketing. This guide from ContentHub.Guru covers strategies, tools, examples, and a step-by-step “how-to” to turn your emails into a revenue-generating machine.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756855077244-pexels-canvastudio-3194521.jpg?alt=media&token=82316eb7-e129-40b8-9885-5951bb9f1a61"
   },
   "https://contenthub.guru/page/best-affiliate-programs-2025": {
     "url": "https://contenthub.guru/page/best-affiliate-programs-2025",
@@ -1226,7 +1481,10 @@
       "affiliate networks",
       "how to start affiliate marketing",
       "contenthub.guru affiliate guide"
-    ]
+    ],
+    "category": "business_content",
+    "description": "Looking to earn passive income in 2025? Explore the best affiliate programs to join this year, including tips, strategies, and how to get started. Perfect for beginners and seasoned marketers.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756854631925-pexels-thatguycraig000-1670045.jpg?alt=media&token=7ab78efb-e604-4d04-8889-01954050a730"
   },
   "https://contenthub.guru/page/become-content-creator-earn-online": {
     "url": "https://contenthub.guru/page/become-content-creator-earn-online",
@@ -1242,7 +1500,10 @@
       "blogging",
       "YouTube monetization",
       "social media growth"
-    ]
+    ],
+    "category": "business_content",
+    "description": "Learn how to become a content creator and make money online. This beginner-friendly guide from ContentHub.guru covers choosing a niche, creating content, growing your audience, monetization strategies, and practical tips to succeed in the digital world.",
+    "image": "https://contenthub.guru/images/placeholder.png"
   },
   "https://contenthub.guru/page/how-to-start-podcast-monetize": {
     "url": "https://contenthub.guru/page/how-to-start-podcast-monetize",
@@ -1253,8 +1514,12 @@
       "beginner podcast guide",
       "grow podcast audience",
       "make money podcasting",
-      "podcast tips"
-    ]
+      "podcast tips",
+      "content creation"
+    ],
+    "category": "content_monetization",
+    "description": "Learn how to start a podcast, grow your audience, and monetize your show. This beginner-friendly guide from ContentHub.Guru covers equipment, planning, publishing, and turning listeners into income.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756854183190-pexels-george-milton-6953871.jpg?alt=media&token=a37bcd80-5571-4cf4-91b3-a26ff7080fa2"
   },
   "https://contenthub.guru/page/make-money-tiktok-instagram-reels": {
     "url": "https://contenthub.guru/page/make-money-tiktok-instagram-reels",
@@ -1270,7 +1535,10 @@
       "contenthub.guru guide",
       "how to monetize TikTok",
       "how to monetize Instagram Reels"
-    ]
+    ],
+    "category": "social_media",
+    "description": "Learn practical, beginner-friendly strategies to make money on TikTok and Instagram Reels. From monetization programs to brand partnerships, this guide from ContentHub.Guru breaks it all down step by step.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756853991190-pexels-anthonyshkraba-production-8791262.jpg?alt=media&token=383b4158-2881-42fc-b7fb-dd14fb070af4"
   },
   "https://contenthub.guru/page/youtube-money-no-face": {
     "url": "https://contenthub.guru/page/youtube-money-no-face",
@@ -1286,7 +1554,10 @@
       "anonymous YouTube channel",
       "voiceover YouTube",
       "animation YouTube"
-    ]
+    ],
+    "category": "social_media",
+    "description": "Discover how to make money on YouTube without ever appearing on camera. This in-depth guide from ContentHub.Guru covers strategies, content ideas, monetization methods, and tips to grow your channel anonymously.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756853764927-pexels-karolina-grabowska-4959786.jpg?alt=media&token=6756acfb-5b03-4f62-a872-b0b412ebbf50"
   },
   "https://contenthub.guru/page/how-to-make-money-blogging-2025": {
     "url": "https://contenthub.guru/page/how-to-make-money-blogging-2025",
@@ -1302,7 +1573,10 @@
       "passive income blogging",
       "blog monetization strategies",
       "ContentHub.Guru blogging guide"
-    ]
+    ],
+    "category": "writing_blogging",
+    "description": "Learn how to make money blogging in 2025 with proven strategies, monetization methods, and actionable tips. This beginner-friendly guide covers affiliate marketing, ad revenue, sponsored content, and more.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756853533388-pexels-andrew-2682452.jpg?alt=media&token=3dab1e44-f150-4079-9951-8fdc43b8d5f8"
   },
   "https://contenthub.guru/page/virtual-assistant-jobs-how-to-get-started": {
     "url": "https://contenthub.guru/page/virtual-assistant-jobs-how-to-get-started",
@@ -1318,7 +1592,10 @@
       "ContentHub.Guru virtual assistant tips",
       "virtual assistant platforms",
       "start VA career"
-    ]
+    ],
+    "category": "general",
+    "description": "Looking to become a virtual assistant? Learn how to get started, find jobs, and succeed in 2025. This beginner-friendly guide from ContentHub.Guru covers skills, platforms, pay rates, FAQs, and step-by-step how-to tips.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756853372594-pexels-vlada-karpovich-4050315.jpg?alt=media&token=326c942f-5baf-4b97-aa9f-bbabdeff61b2"
   },
   "https://contenthub.guru/page/work-from-home-full-time-income": {
     "url": "https://contenthub.guru/page/work-from-home-full-time-income",
@@ -1334,7 +1611,10 @@
       "freelance jobs",
       "productivity at home",
       "contenthub.guru"
-    ]
+    ],
+    "category": "general",
+    "description": "Learn how to work from home and earn a full-time income with practical tips, strategies, and real-world examples. Discover how to boost productivity, find the right opportunities, and make remote work truly pay.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756853164435-pexels-olly-3768158.jpg?alt=media&token=4392d599-fe62-4c4e-a03b-0647abac7fa1"
   },
   "https://contenthub.guru/page/best-high-income-skills-online-work": {
     "url": "https://contenthub.guru/page/best-high-income-skills-online-work",
@@ -1350,7 +1630,10 @@
       "how to make money online",
       "skills to learn for high income",
       "contenthub.guru skills guide"
-    ]
+    ],
+    "category": "general",
+    "description": "Discover the best high-income skills to learn for online work in 2025. From digital marketing to coding, this guide shows you how to earn money remotely and future-proof your career.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756853015597-pexels-vlada-karpovich-7903138.jpg?alt=media&token=ffe8127a-a0e8-4b6f-a9a2-03bb418ffaaf"
   },
   "https://contenthub.guru/page/top-freelance-platforms-to-make-money-online": {
     "url": "https://contenthub.guru/page/top-freelance-platforms-to-make-money-online",
@@ -1364,7 +1647,10 @@
       "earn money from home",
       "freelance opportunities",
       "top freelance sites"
-    ]
+    ],
+    "category": "general",
+    "description": "Explore the top freelance platforms to make money online in 2025. Learn which sites are best for writers, designers, coders, and more, plus tips, FAQs, and how to start earning today on ContentHub.Guru.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756852884026-pexels-judit-peter-281675-1766604.jpg?alt=media&token=cf8d1dc8-7d64-45c7-98b0-092cfcdf9bfb"
   },
   "https://contenthub.guru/page/start-freelancing-get-first-client": {
     "url": "https://contenthub.guru/page/start-freelancing-get-first-client",
@@ -1378,7 +1664,10 @@
       "how to freelance online",
       "ContentHub.Guru freelancing",
       "freelance portfolio tips"
-    ]
+    ],
+    "category": "guides",
+    "description": "Learn how to start freelancing, build a portfolio, and land your first client. This beginner-friendly guide from ContentHub.Guru gives actionable steps, tips, and strategies to kickstart your freelance career today.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756851806048-pexels-olly-3769021.jpg?alt=media&token=570b8a39-b943-4713-b3db-4a95e1f456c4"
   },
   "https://contenthub.guru/page/passive-income-online-ideas": {
     "url": "https://contenthub.guru/page/passive-income-online-ideas",
@@ -1394,7 +1683,10 @@
       "online business",
       "earn money while you sleep",
       "passive revenue ideas"
-    ]
+    ],
+    "category": "guides",
+    "description": "Discover passive income ideas that actually work online. Learn how to generate real revenue with digital products, affiliate marketing, content creation, and more. Step-by-step guide included.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756851548861-pexels-pixabay-163056.jpg?alt=media&token=2f9006ca-00e1-4401-b61b-545f5261dd54"
   },
   "https://contenthub.guru/page/how-to-make-money-online-without-investment": {
     "url": "https://contenthub.guru/page/how-to-make-money-online-without-investment",
@@ -1409,7 +1701,10 @@
       "remote work no capital",
       "online side hustle",
       "earn from home"
-    ]
+    ],
+    "category": "guides",
+    "description": "Learn how to make money online without any investment. This beginner-friendly guide from Contenthub.Guru covers freelancing, content creation, online surveys, and practical steps to start earning today. Includes FAQs and a step-by-step how-to.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756851332486-pexels-pixabay-163069.jpg?alt=media&token=eddaff33-522b-4253-8d45-97bc98c4a80b"
   },
   "https://contenthub.guru/page/20-legit-ways-to-make-money-from-home": {
     "url": "https://contenthub.guru/page/20-legit-ways-to-make-money-from-home",
@@ -1425,7 +1720,10 @@
       "how to make money at home",
       "home-based business ideas",
       "contenthub.guru"
-    ]
+    ],
+    "category": "guides",
+    "description": "Looking to make money from home? Explore 20 legit methods—from freelancing and tutoring to side hustles and online gigs. Our beginner-friendly guide includes a how-to and FAQs to help you start today.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756851091258-pexels-joshuamayo-5912322.jpg?alt=media&token=0bcca868-21a2-4702-b4ae-ead58cc743e1"
   },
   "https://contenthub.guru/page/best-side-hustles-online-no-experience": {
     "url": "https://contenthub.guru/page/best-side-hustles-online-no-experience",
@@ -1440,7 +1738,10 @@
       "online jobs for beginners",
       "work from home",
       "passive income side hustles"
-    ]
+    ],
+    "category": "personal-development",
+    "description": "Description: Looking for the best online side hustles with no experience? This guide breaks down beginner-friendly ways to make money online—plus ContentHub.Guru’s exclusive FAQ and step-by-step how-to for getting started.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756850899866-pexels-mikhail-nilov-6962993.jpg?alt=media&token=77df4626-11ae-4748-a425-c8bced1eac5b"
   },
   "https://contenthub.guru/page/how-to-make-money-online-beginners-guide-2025": {
     "url": "https://contenthub.guru/page/how-to-make-money-online-beginners-guide-2025",
@@ -1454,7 +1755,10 @@
       "side hustle ideas 2025",
       "digital products beginners",
       "online business guide"
-    ]
+    ],
+    "category": "guides",
+    "description": "Want to make money online in 2025? This beginner’s guide from ContentHub.Guru breaks down the real ways to earn, from freelancing to digital products, with practical steps, FAQs, and no fluff.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756850698354-smiling-young-man-filming-his-video-blog-episode-about-new-tech-devices-while-sitting-kitchen-table-with-laptop-showing-bunch-money-banknotes%20(1).jpg?alt=media&token=1587b650-0e97-4389-a5fd-6fbd250295da"
   },
   "https://contenthub.guru/page/personal-branding-future-of-content": {
     "url": "https://contenthub.guru/page/personal-branding-future-of-content",
@@ -1470,7 +1774,10 @@
       "influencer marketing",
       "content strategy",
       "online presence"
-    ]
+    ],
+    "category": "future_content",
+    "description": "Personal branding isn’t a trend—it’s the future of content. Learn why content tied to your unique voice drives influence, trust, and opportunities in today’s digital world, and how ContentHub.Guru helps you do it right.",
+    "image": "https://contenthub.guru/images/placeholder.png"
   },
   "https://contenthub.guru/page/creator-economy-2025": {
     "url": "https://contenthub.guru/page/creator-economy-2025",
@@ -1485,7 +1792,10 @@
       "creator platforms",
       "influencer economy",
       "digital content future"
-    ]
+    ],
+    "category": "future_content",
+    "description": "Explore the booming creator economy of 2025, where social media stars, independent creators, and AI-powered content collide. Learn how the digital landscape is changing, the tools shaping it, and why platforms like Contenthub.guru are empowering creators to thrive in this brave new world.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756686482343-istockphoto-2114984318-612x612.jpg?alt=media&token=8d01f481-d818-4868-9ce9-237186b1c7dd"
   },
   "https://contenthub.guru/page/web3-content-ownership-guide": {
     "url": "https://contenthub.guru/page/web3-content-ownership-guide",
@@ -1501,7 +1811,10 @@
       "Web3 for creators",
       "contenthub.guru Web3 guide",
       "future of content ownership"
-    ]
+    ],
+    "category": "future_content",
+    "description": "Web3 is not just a buzzword—it’s a revolution in how creators own, control, and profit from their content. Learn how blockchain, NFTs, and decentralized platforms could reshape the internet, and why contenthub.guru is helping creators stay ahead.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756686254694-istockphoto-1370016371-612x612.jpg?alt=media&token=4d9caa2b-3cb8-41ca-a2c7-b066dfe4b497"
   },
   "https://contenthub.guru/page/rise-of-virtual-influencers": {
     "url": "https://contenthub.guru/page/rise-of-virtual-influencers",
@@ -1517,7 +1830,10 @@
       "future of content creation",
       "digital fame",
       "ContentHub.Guru"
-    ]
+    ],
+    "category": "future_content",
+    "description": "Virtual influencers—AI-generated personalities with millions of followers—are taking over Instagram, TikTok, and brand campaigns. This article explores how they’re made, why they’re so popular, and what this digital fame revolution means for human creators.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756685982692-pexels-thisisengineering-3861969.jpg?alt=media&token=d6fb235d-83d9-4c9b-8aeb-0b3a204c21a9"
   },
   "https://contenthub.guru/page/ai-automation-content-creation": {
     "url": "https://contenthub.guru/page/ai-automation-content-creation",
@@ -1533,7 +1849,10 @@
       "AI social media tools",
       "future of content creation",
       "contenthub.guru AI"
-    ]
+    ],
+    "category": "business_content",
+    "description": "AI and automation are transforming content creation. Discover how artificial intelligence tools, algorithms, and automated workflows are reshaping blogs, social media, videos, and more. Learn practical tips for using AI while keeping creativity human.",
+    "image": "https://contenthub.guru/images/placeholder.png"
   },
   "https://contenthub.guru/page/customer-journey-mapping-with-content": {
     "url": "https://contenthub.guru/page/customer-journey-mapping-with-content",
@@ -1549,7 +1868,10 @@
       "buyer journey",
       "marketing strategy",
       "digital marketing"
-    ]
+    ],
+    "category": "business_content",
+    "description": "Learn how to map your customer journey using content, from discovery to advocacy. This beginner-friendly guide shows you how to plan content that guides, engages, and converts audiences—perfect for marketers, creators, and business owners on ContentHub.Guru.",
+    "image": "https://contenthub.guru/images/placeholder.png"
   },
   "https://contenthub.guru/page/employer-branding-through-content": {
     "url": "https://contenthub.guru/page/employer-branding-through-content",
@@ -1564,7 +1886,10 @@
       "talent acquisition content",
       "employee storytelling",
       "contenthub.guru"
-    ]
+    ],
+    "category": "business_content",
+    "description": "Employer branding through content is the secret weapon companies use to attract top talent. This guide explores how blogs, social media, videos, and employee stories can showcase your culture, mission, and values—helping you recruit, engage, and retain the best people.",
+    "image": "https://contenthub.guru/images/placeholder.png"
   },
   "https://contenthub.guru/page/whitepapers-case-studies-reports-guide": {
     "url": "https://contenthub.guru/page/whitepapers-case-studies-reports-guide",
@@ -1580,7 +1905,10 @@
       "ContentHub.Guru guide",
       "lead generation content",
       "research-based content"
-    ]
+    ],
+    "category": "business_content",
+    "description": "Learn how whitepapers, case studies, and reports can elevate your content strategy. This guide from ContentHub.Guru breaks down each type, why they work, and tips for creating compelling in-depth content.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756683738192-pexels-goumbik-590041.jpg?alt=media&token=88a054a0-8d3f-4ca5-a261-70308392986c"
   },
   "https://contenthub.guru/page/email-marketing-content-tips": {
     "url": "https://contenthub.guru/page/email-marketing-content-tips",
@@ -1595,7 +1923,10 @@
       "email marketing best practices",
       "ContentHub.guru email tips",
       "email content guide"
-    ]
+    ],
+    "category": "business_content",
+    "description": "Discover actionable email marketing content tips that help you write emails people actually read. Learn strategies from ContentHub.guru to craft subject lines, body copy, and CTAs that convert.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756683578666-pexels-walls-io-440716388-19387231.jpg?alt=media&token=3ba25258-bfc1-40ff-a348-ae9d3640b0a3"
   },
   "https://contenthub.guru/page/content-creation-vs-content-marketing-saas": {
     "url": "https://contenthub.guru/page/content-creation-vs-content-marketing-saas",
@@ -1610,7 +1941,10 @@
       "ContentHub.guru",
       "SaaS growth strategy",
       "SaaS marketing tips"
-    ]
+    ],
+    "category": "business_content",
+    "description": "SaaS companies often confuse content creation with content marketing. This guide breaks down the difference, shows how to combine both for maximum impact, and explains how ContentHub.guru can help SaaS brands streamline content strategy for growth.",
+    "image": "https://contenthub.guru/images/placeholder.png"
   },
   "https://contenthub.guru/page/b2b-content-creation-strategies-growth-months": {
     "url": "https://contenthub.guru/page/b2b-content-creation-strategies-growth-months",
@@ -1626,7 +1960,10 @@
       "content campaigns",
       "content creation tips",
       "B2B growth strategies"
-    ]
+    ],
+    "category": "advanced_strategy",
+    "description": "Discover actionable B2B content creation strategies designed to boost engagement and drive growth during your company’s most critical months. Learn how ContentHub.Guru can help you plan, create, and distribute content that converts.",
+    "image": "https://contenthub.guru/images/placeholder.png"
   },
   "https://contenthub.guru/page/tiktok-to-youtube-funnel-case-study": {
     "url": "https://contenthub.guru/page/tiktok-to-youtube-funnel-case-study",
@@ -1639,7 +1976,10 @@
       "social media funnel",
       "contenthub.Guru",
       "digital marketing case study"
-    ]
+    ],
+    "category": "tools_resources",
+    "description": "Discover the art of converting TikTok virality into YouTube growth with this comprehensive case study. Learn strategies, pitfalls to avoid, and how to build a content funnel that drives sustained engagement and revenue.",
+    "image": "https://contenthub.guru/images/placeholder.png"
   },
   "https://contenthub.guru/page/case-study-how-one-blog-made-5000-in-3-months": {
     "url": "https://contenthub.guru/page/case-study-how-one-blog-made-5000-in-3-months",
@@ -1655,7 +1995,10 @@
       "blogging tips",
       "content strategy case study",
       "online income from blogging"
-    ]
+    ],
+    "category": "tools_resources",
+    "description": "Discover how one blog used smart content creation and content marketing strategies to make $5,000 in three months. Learn actionable tips, mistakes to avoid, and how Contenthub.guru can help you replicate their success.",
+    "image": "https://contenthub.guru/images/placeholder.png"
   },
   "https://contenthub.guru/page/best-wordpress-plugins-for-bloggers": {
     "url": "https://contenthub.guru/page/best-wordpress-plugins-for-bloggers",
@@ -1669,7 +2012,10 @@
       "WordPress optimization",
       "must-have WordPress plugins",
       "blog productivity tools"
-    ]
+    ],
+    "category": "tools_resources",
+    "description": "Discover the top WordPress plugins every blogger should have in 2025. From SEO to social sharing, speed optimization, and engagement tools—ContentHub.Guru breaks down the plugins that actually make your life easier.",
+    "image": "https://contenthub.guru/images/placeholder.png"
   },
   "https://contenthub.guru/page/chatgpt-ai-tools-content-creation": {
     "url": "https://contenthub.guru/page/chatgpt-ai-tools-content-creation",
@@ -1684,7 +2030,10 @@
       "AI writing assistant",
       "automated content generation",
       "digital content tools"
-    ]
+    ],
+    "category": "tools_resources",
+    "description": "Explore the world of AI-powered content creation with ChatGPT and other tools. Learn how AI can generate ideas, write, design, and optimize content faster and smarter for creators and businesses alike.",
+    "image": "https://contenthub.guru/images/placeholder.png"
   },
   "https://contenthub.guru/page/canva-hacks-for-creators": {
     "url": "https://contenthub.guru/page/canva-hacks-for-creators",
@@ -1700,7 +2049,10 @@
       "Canva for social media",
       "Canva pro tips",
       "Canva design hacks"
-    ]
+    ],
+    "category": "tools_resources",
+    "description": "Discover the best Canva hacks for content creators. Learn hidden shortcuts, design tricks, and productivity tips to create stunning visuals in minutes—perfect for bloggers, social media pros, and anyone building a brand online.",
+    "image": "https://contenthub.guru/images/placeholder.png"
   },
   "https://contenthub.guru/page/top-free-paid-content-creation-tools": {
     "url": "https://contenthub.guru/page/top-free-paid-content-creation-tools",
@@ -1716,7 +2068,10 @@
       "video editing software",
       "graphic design tools",
       "content creation apps"
-    ]
+    ],
+    "category": "tools_resources",
+    "description": "Looking for the best content creation tools? Explore our curated list of free and paid software for writing, design, video, audio, and social media. Perfect for beginners and pros alike, this guide helps you create smarter, faster, and better content on ContentHub.guru.",
+    "image": "https://contenthub.guru/images/placeholder.png"
   },
   "https://contenthub.guru/page/data-driven-content-creation": {
     "url": "https://contenthub.guru/page/data-driven-content-creation",
@@ -1732,7 +2087,10 @@
       "content marketing strategy",
       "digital content creation",
       "optimize content with data"
-    ]
+    ],
+    "category": "advanced_strategy",
+    "description": "Learn how to use analytics, audience insights, and metrics to craft content that resonates. This beginner-friendly guide to data-driven content creation shows how numbers can boost engagement, drive traffic, and make your content strategy smarter.",
+    "image": "https://contenthub.guru/images/placeholder.png"
   },
   "https://contenthub.guru/page/repurposing-old-content-new-formats": {
     "url": "https://contenthub.guru/page/repurposing-old-content-new-formats",
@@ -1747,7 +2105,10 @@
       "content marketing tips",
       "contenthub.guru",
       "maximizing content value"
-    ]
+    ],
+    "category": "advanced_strategy",
+    "description": "Repurposing old content is one of the smartest strategies for content creators and marketers. Learn how to transform blog posts, videos, and social media updates into fresh, engaging formats to reach new audiences and maximize your impact.",
+    "image": "https://contenthub.guru/images/placeholder.png"
   },
   "https://contenthub.guru/page/role-of-storytelling-in-content": {
     "url": "https://contenthub.guru/page/role-of-storytelling-in-content",
@@ -1763,7 +2124,10 @@
       "engaging content",
       "content creation tips",
       "narrative marketing"
-    ]
+    ],
+    "category": "advanced_strategy",
+    "description": "Discover how storytelling transforms content from bland to brilliant. Learn why stories engage audiences, drive traffic, and build brands, plus tips to craft stories your readers will never forget—brought to you by ContentHub.Guru.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756681413708-pexels-roacunha-2531552.jpg?alt=media&token=d8d9a7b5-408e-404c-ad67-eb6a67f9a6cd"
   },
   "https://contenthub.guru/page/how-to-build-topic-clusters-seo": {
     "url": "https://contenthub.guru/page/how-to-build-topic-clusters-seo",
@@ -1779,7 +2143,10 @@
       "content marketing SEO",
       "SEO beginner guide",
       "topic cluster tutorial"
-    ]
+    ],
+    "category": "advanced_strategy",
+    "description": "Learn how to structure your website content with topic clusters to dominate SEO, improve internal linking, and satisfy both Google and your audience. This step-by-step guide from ContentHub.Guru shows you exactly how to plan, create, and interlink content for maximum impact.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756681106248-search-engine-optimization-4111000_1280%20(1).jpg?alt=media&token=ea966322-a784-48da-a94d-82eba81a4681"
   },
   "https://contenthub.guru/page/content-marketing-funnels-explained": {
     "url": "https://contenthub.guru/page/content-marketing-funnels-explained",
@@ -1795,7 +2162,10 @@
       "conversion strategies",
       "content marketing for beginners",
       "contenthub.guru"
-    ]
+    ],
+    "category": "advanced_strategy",
+    "description": "Discover how content marketing funnels guide your audience from curiosity to conversion. This beginner-friendly guide from ContentHub.Guru explains each stage, why it matters, and actionable strategies to build a funnel that actually works.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756680908531-content-marketing-4111003_1280.jpg?alt=media&token=1b2ceb0f-03d0-4ca0-8729-eebd9ee40843"
   },
   "https://contenthub.guru/page/creating-shareable-memes-viral-guide": {
     "url": "https://contenthub.guru/page/creating-shareable-memes-viral-guide",
@@ -1811,7 +2181,10 @@
       "meme engagement",
       "viral content ideas",
       "meme marketing strategy"
-    ]
+    ],
+    "category": "multimedia",
+    "description": "Learn how to create memes that capture attention, spark conversation, and go viral. This step-by-step guide from Contenthub.guru shows you the psychology, tools, and strategy behind shareable memes.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756679931539-train-track-2507499_1280.jpg?alt=media&token=622b420f-9b8d-4e34-9d19-2cd5d0337224"
   },
   "https://contenthub.guru/page/photography-stock-images-blogs": {
     "url": "https://contenthub.guru/page/photography-stock-images-blogs",
@@ -1827,7 +2200,10 @@
       "visual content for blogs",
       "blog SEO images",
       "engaging blog visuals"
-    ]
+    ],
+    "category": "multimedia",
+    "description": "Your blog is only as good as the images that accompany it. This guide explores photography and stock images for blogs, sharing tips to find, optimize, and use visuals that engage readers and enhance your content.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756679693227-pexels-fotios-photos-1092671.jpg?alt=media&token=4233ad51-021a-42e0-a387-62732780858e"
   },
   "https://contenthub.guru/page/podcast-content-creation-guide": {
     "url": "https://contenthub.guru/page/podcast-content-creation-guide",
@@ -1843,7 +2219,10 @@
       "contenthub guru podcast",
       "beginner podcast guide",
       "podcast content strategy"
-    ]
+    ],
+    "category": "multimedia",
+    "description": "Want to start a podcast but don’t know where to begin? This witty, beginner-friendly guide from ContentHub.Guru covers everything from planning and scripting to recording, editing, and growing your audience.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756679407417-pexels-mizunokozuki-13929964.jpg?alt=media&token=0f6171b9-3834-4b8f-8bc7-bc49109fdea4"
   },
   "https://contenthub.guru/page/best-tools-for-video-editing": {
     "url": "https://contenthub.guru/page/best-tools-for-video-editing",
@@ -1859,7 +2238,10 @@
       "best free video editors",
       "video editing for creators",
       "ContentHub.Guru video editing guide"
-    ]
+    ],
+    "category": "multimedia",
+    "description": "Looking for the best video editing tools in 2025? ContentHub.Guru reviews the top software for beginners, pros, and everyone in between—so you can edit smarter, faster, and better.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756678678752-pexels-ron-lach-8102677.jpg?alt=media&token=725d519c-33f0-4613-b3aa-798ea05c7bff"
   },
   "https://contenthub.guru/page/how-to-create-infographics-for-free": {
     "url": "https://contenthub.guru/page/how-to-create-infographics-for-free",
@@ -1873,7 +2255,10 @@
       "create infographics online",
       "content creation tools",
       "contenthub guru infographics"
-    ]
+    ],
+    "category": "multimedia",
+    "description": "Want to make infographics but don’t have a design degree or budget? This witty, beginner-friendly guide shows you how to create stunning infographics for free using tools, tips, and strategies from contenthub.guru.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756678546444-technology-7111798_1280.jpg?alt=media&token=7023156a-b428-4443-b5af-502ba3fdc0e5"
   },
   "https://contenthub.guru/page/how-much-do-content-creators-really-make": {
     "url": "https://contenthub.guru/page/how-much-do-content-creators-really-make",
@@ -1887,7 +2272,10 @@
       "TikTok money",
       "Instagram creator pay",
       "contenthub.guru"
-    ]
+    ],
+    "category": "content_monetization",
+    "description": "How much do content creators really make in 2025? From YouTubers to TikTok stars, this ContentHub.Guru deep dive reveals the surprising truth about creator income, revenue streams, and who’s actually cashing in.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756678114920-pexels-karolina-grabowska-5900255.jpg?alt=media&token=3c787453-d05e-4f15-8131-093e434ba6dd"
   },
   "https://contenthub.guru/page/creator-personal-brand-guide": {
     "url": "https://contenthub.guru/page/creator-personal-brand-guide",
@@ -1901,7 +2289,10 @@
       "personal brand strategy",
       "content creator brand building",
       "contenthub.guru personal brand guide"
-    ]
+    ],
+    "category": "content_monetization",
+    "description": "Learn how to build a personal brand as a creator that attracts the right audience and opportunities. This witty, beginner-friendly guide from ContentHub.guru covers strategy, storytelling, and real-world tips.",
+    "image": "https://contenthub.guru/images/placeholder.png"
   },
   "https://contenthub.guru/page/adsense-vs-affiliate-income": {
     "url": "https://contenthub.guru/page/adsense-vs-affiliate-income",
@@ -1917,7 +2308,10 @@
       "blog monetization strategies",
       "AdSense payout",
       "affiliate commission"
-    ]
+    ],
+    "category": "content_monetization",
+    "description": "Should you monetize with Google AdSense or affiliate marketing? This ContentHub.Guru guide breaks down the pros, cons, and real numbers of both, so creators can finally pick the income stream that works best.",
+    "image": "https://contenthub.guru/images/placeholder.png"
   },
   "https://contenthub.guru/page/sponsored-content-how-to-get-paid": {
     "url": "https://contenthub.guru/page/sponsored-content-how-to-get-paid",
@@ -1932,7 +2326,10 @@
       "earn money online with content",
       "brand partnerships",
       "content monetization"
-    ]
+    ],
+    "category": "content_monetization",
+    "description": "Learn how to get paid with sponsored content! This guide from contenthub.guru breaks down what sponsored content is, how to attract brands, negotiate deals, and keep your audience happy—all without losing your voice.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756677312771-istockphoto-1134608578-612x612.jpg?alt=media&token=68aaa0fd-7193-4796-bd18-b30fb42b5036"
   },
   "https://contenthub.guru/page/affiliate-marketing-for-content-creators": {
     "url": "https://contenthub.guru/page/affiliate-marketing-for-content-creators",
@@ -1948,7 +2345,10 @@
       "best affiliate networks",
       "contenthub.guru tips",
       "beginner affiliate marketing"
-    ]
+    ],
+    "category": "content_monetization",
+    "description": "Learn how content creators can make money with affiliate marketing without compromising authenticity. This guide from ContentHub.guru covers strategies, platforms, and tips to turn your blog, YouTube channel, or social media following into a profitable venture.",
+    "image": "https://contenthub.guru/images/placeholder.png"
   },
   "https://contenthub.guru/page/how-to-monetize-a-blog": {
     "url": "https://contenthub.guru/page/how-to-monetize-a-blog",
@@ -1964,7 +2364,10 @@
       "blog affiliate marketing",
       "blogging business model",
       "passive income blogging"
-    ]
+    ],
+    "category": "content_monetization",
+    "description": "Wondering how to make money blogging? This witty, beginner-friendly guide from ContentHub.Guru covers ad revenue, affiliate marketing, sponsorships, digital products, and more — everything you need to turn your blog into a business.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756658440724-digital-marketing-1725340_1280.jpg?alt=media&token=48d55705-068e-4230-91d8-79468f72a29a"
   },
   "https://contenthub.guru/page/google-helpful-content-update-creators-guide": {
     "url": "https://contenthub.guru/page/google-helpful-content-update-creators-guide",
@@ -1979,7 +2382,10 @@
       "Google ranking changes",
       "content marketing update",
       "contenthub guru"
-    ]
+    ],
+    "category": "seo_organic",
+    "description": "Google’s Helpful Content Update changes how content is ranked. Learn what it means for creators, how to stay visible, and why platforms like ContentHub.Guru are helping writers thrive in this new era.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756590313745-internet-search-engine-1519471_1280.jpg?alt=media&token=4e4ca65e-cd7d-4419-87be-ba3865b3fc4c"
   },
   "https://contenthub.guru/page/seo-myths-that-hurt-your-content": {
     "url": "https://contenthub.guru/page/seo-myths-that-hurt-your-content",
@@ -1995,7 +2401,10 @@
       "search engine myths",
       "bad SEO advice",
       "ContentHub Guru SEO tips"
-    ]
+    ],
+    "category": "seo_organic",
+    "description": "Think keyword stuffing boosts rankings? Or that SEO is all about backlinks? Wrong. Discover the most dangerous SEO myths that could be hurting your content—and learn what really works in 2025.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756658201824-structure-620304_1280.jpg?alt=media&token=77cf3e39-4f72-4906-b5a8-ffb7c0612cb1"
   },
   "https://contenthub.guru/page/best-free-paid-seo-tools-2025": {
     "url": "https://contenthub.guru/page/best-free-paid-seo-tools-2025",
@@ -2011,7 +2420,10 @@
       "Ahrefs vs SEMrush",
       "Google Search Console",
       "contenthub.guru SEO"
-    ]
+    ],
+    "category": "seo_organic",
+    "description": "Discover the best free and paid SEO tools in 2025 with ContentHub.guru. From keyword research to site audits, this guide reviews top tools like SEMrush, Ahrefs, Google Search Console, and more—so you can outsmart competitors and win search traffic.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756589847671-pexels-pixabay-270637.jpg?alt=media&token=d1aeeaa9-1feb-41a6-9d91-f851de4b526e"
   },
   "https://contenthub.guru/page/link-building-for-content-creators": {
     "url": "https://contenthub.guru/page/link-building-for-content-creators",
@@ -2027,7 +2439,10 @@
       "contenthub.guru link building",
       "content marketing backlinks",
       "creator SEO strategy"
-    ]
+    ],
+    "category": "seo_organic",
+    "description": "A witty, beginner-friendly guide to link building for content creators. Learn what link building is, why it matters, and how creators can build backlinks that grow authority, traffic, and community—brought to you by contenthub.guru.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756589199606-computer-6977449_1280.jpg?alt=media&token=d8349e1e-e996-4e4a-bd2c-16206d9e209a"
   },
   "https://contenthub.guru/page/on-page-seo-checklist": {
     "url": "https://contenthub.guru/page/on-page-seo-checklist",
@@ -2041,7 +2456,10 @@
       "contenthub.guru SEO tips",
       "SEO for beginners",
       "technical SEO vs on-page SEO"
-    ]
+    ],
+    "category": "seo_organic",
+    "description": "Discover ContentHub.guru’s ultimate On-Page SEO Checklist. Learn how to optimize titles, meta descriptions, headers, images, links, and more to rank higher on Google—without boring tech talk.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756589041026-search-engine-optimization-4111000_1280%20(1).jpg?alt=media&token=e7072737-de4a-4ca2-9681-5e2142b11fa4"
   },
   "https://contenthub.guru/page/keyword-research-for-content-creators": {
     "url": "https://contenthub.guru/page/keyword-research-for-content-creators",
@@ -2056,7 +2474,10 @@
       "blogging SEO",
       "keyword research guide",
       "contenthub.guru"
-    ]
+    ],
+    "category": "seo_organic",
+    "description": "Keyword research is the secret sauce behind content that gets found. Learn how creators can use keyword research to grow audiences, boost SEO, and make smarter content decisions—without sounding like a robot.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756588284587-pexels-kindelmedia-7688336.jpg?alt=media&token=fc958953-54be-426c-9fdc-e1f5818f47d0"
   },
   "https://contenthub.guru/page/the-secret-weapon-of-every-great-brand-why-social-media-content-calendars-actually-matter": {
     "url": "https://contenthub.guru/page/the-secret-weapon-of-every-great-brand-why-social-media-content-calendars-actually-matter",
@@ -2070,15 +2491,31 @@
       "contenthub.guru social media tools",
       "how to schedule posts",
       "content calendar strategy"
-    ]
+    ],
+    "category": "seo_organic",
+    "description": "Learn why social media content calendars are the backbone of successful online brands. This witty, beginner-friendly guide explains what they are, why they matter, and how contenthub.guru makes managing your calendar painless.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756587807000-create-craft-peaceful-work-preview.jpg?alt=media&token=9d23bcbe-b12b-42b5-9690-f75b33e0a576"
   },
   "https://contenthub.guru/page/repurposing-content-across-platforms": {
     "url": "https://contenthub.guru/page/repurposing-content-across-platforms",
     "title": "Repurposing Content Across Platforms: How to Multiply Your Reach Without Burning Out",
     "keywords": [
       "repurposing",
-      "repurpose"
-    ]
+      "repurpose",
+      "content",
+      "across",
+      "platforms",
+      "how",
+      "multiply",
+      "your",
+      "reach",
+      "without",
+      "burning",
+      "out"
+    ],
+    "category": "seo_organic",
+    "description": "Repurposing content across platforms lets creators stretch one idea into blogs, podcasts, videos, and social posts. Learn how to save time, expand reach, and master the art of content recycling with contenthub.guru’s beginner-friendly guide.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756572168096-people-3175027_1280.jpg?alt=media&token=3afb5b0a-2634-4587-9510-3d7a0874a035"
   },
   "https://contenthub.guru/page/facebook-linkedin-posting-strategies-a-beginner-to-pro-tips-guide-from-contenthubguru": {
     "url": "https://contenthub.guru/page/facebook-linkedin-posting-strategies-a-beginner-to-pro-tips-guide-from-contenthubguru",
@@ -2092,7 +2529,10 @@
       "social media marketing",
       "B2B social media",
       "contenthub.guru tips"
-    ]
+    ],
+    "category": "seo_organic",
+    "description": "Learn the best Facebook and LinkedIn posting strategies for 2025 with ContentHub.Guru. From timing and frequency to content types, discover how to grow engagement and reach your audience like a pro.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756565156076-pexels-kaboompics-6168.jpg?alt=media&token=3a42be26-3f6b-4776-91c3-cfc901f8c395"
   },
   "https://contenthub.guru/page/youtube-content-creation-guide-from-zero-to-viral": {
     "url": "https://contenthub.guru/page/youtube-content-creation-guide-from-zero-to-viral",
@@ -2108,7 +2548,10 @@
       "content creation guide",
       "YouTube SEO",
       "digital video marketing"
-    ]
+    ],
+    "category": "social_media",
+    "description": "Master YouTube content creation with this beginner-friendly guide from ContentHub.Guru. Learn how to plan, produce, and promote videos that engage, grow your audience, and maximize your impact.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756563160440-pexels-zulfugarkarimov-33440278.jpg?alt=media&token=365bcb07-8f13-46df-b964-673750bc606e"
   },
   "https://contenthub.guru/page/twitter-x-content-strategy-how-to-turn-280-characters-into-big-wins": {
     "url": "https://contenthub.guru/page/twitter-x-content-strategy-how-to-turn-280-characters-into-big-wins",
@@ -2124,7 +2567,10 @@
       "content strategy for X",
       "social media growth",
       "Twitter posting tips"
-    ]
+    ],
+    "category": "social_media",
+    "description": "Learn how to craft a Twitter/X content strategy that drives engagement, builds authority, and grows your audience. Our beginner-friendly guide from ContentHub.Guru shows practical tips, tools, and secrets for digital creators and brands.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756561315235-pexels-mati-19826630.jpg?alt=media&token=b398d3f2-4e73-4fbd-8044-93786baca082"
   },
   "https://contenthub.guru/page/content-creation-for-instagram-reels-tiktok-a-beginners-guide-to-going-viral-without-losing-your-mind": {
     "url": "https://contenthub.guru/page/content-creation-for-instagram-reels-tiktok-a-beginners-guide-to-going-viral-without-losing-your-mind",
@@ -2140,7 +2586,10 @@
       "short-form video content",
       "social media marketing",
       "video content creation"
-    ]
+    ],
+    "category": "general",
+    "description": "Learn how to create compelling Instagram Reels and TikTok videos that engage audiences, go viral, and grow your brand. This beginner-friendly guide from ContentHub.guru covers strategy, trends, and practical tips for creators of all levels.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756559711600-pexels-mart-production-7481976.jpg?alt=media&token=feb51dd5-31ab-4046-951a-8a1cce742637"
   },
   "https://contenthub.guru/page/ai-writing-tools-the-good-the-bad-and-the-surprisingly-witty": {
     "url": "https://contenthub.guru/page/ai-writing-tools-the-good-the-bad-and-the-surprisingly-witty",
@@ -2156,7 +2605,10 @@
       "AI copywriting",
       "AI-generated content",
       "AI content pros and cons"
-    ]
+    ],
+    "category": "general",
+    "description": "AI writing tools are transforming the way we create content—but they’re not perfect. Discover the pros, cons, and real-world impact of AI-powered writing, and learn how to use these tools responsibly without losing your human touch.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756559149981-ai-7977960_1280.jpg?alt=media&token=aafefea5-336e-4a7b-bbea-f7729e84b732"
   },
   "https://contenthub.guru/page/editing-proofreading-best-practices-how-to-make-your-content-shine-without-losing-your-mind": {
     "url": "https://contenthub.guru/page/editing-proofreading-best-practices-how-to-make-your-content-shine-without-losing-your-mind",
@@ -2172,7 +2624,10 @@
       "blog editing guide",
       "professional writing tips",
       "content polishing"
-    ]
+    ],
+    "category": "guides",
+    "description": "Learn expert editing and proofreading best practices to polish your writing, catch errors, and improve clarity. This guide offers actionable tips for writers, bloggers, and content creators who want content that reads like a pro wrote it.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756558685388-pexels-ron-lach-7968063.jpg?alt=media&token=cf7ffefd-0388-43bc-905f-598702adc288"
   },
   "https://contenthub.guru/page/blog-post-structures-that-keep-readers-hooked": {
     "url": "https://contenthub.guru/page/blog-post-structures-that-keep-readers-hooked",
@@ -2187,7 +2642,10 @@
       "blog writing for beginners",
       "content engagement strategies",
       "ContentHub.guru"
-    ]
+    ],
+    "category": "guides",
+    "description": "Learn how to structure blog posts that captivate, engage, and retain readers. Discover tips, formats, and storytelling techniques to make your blogs impossible to scroll past.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756558421158-pexels-cup-of-couple-6634117.jpg?alt=media&token=8a055c5e-fe75-4f28-9403-f86332638de6"
   },
   "https://contenthub.guru/page/how-to-write-viral-headlines-tips-tricks-examples": {
     "url": "https://contenthub.guru/page/how-to-write-viral-headlines-tips-tricks-examples",
@@ -2201,7 +2659,10 @@
       "attention-grabbing headlines",
       "writing headlines for social media",
       "blog headline formulas"
-    ]
+    ],
+    "category": "guides",
+    "description": "Learn how to write viral headlines that grab attention, boost clicks, and drive engagement. This guide from ContentHub.guru covers formulas, psychology, and real-world examples for beginners and pros.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756558168828-pexels-markus-winkler-1430818-18500633.jpg?alt=media&token=83f4f94e-2d5d-4801-85ae-7227502a9731"
   },
   "https://contenthub.guru/page/seo-copywriting-techniques-how-to-write-content-google-actually-loves-and-humans-enjoy": {
     "url": "https://contenthub.guru/page/seo-copywriting-techniques-how-to-write-content-google-actually-loves-and-humans-enjoy",
@@ -2217,7 +2678,10 @@
       "SEO content strategy",
       "writing for Google",
       "SEO best practices"
-    ]
+    ],
+    "category": "guides",
+    "description": "Learn the art of SEO copywriting with practical techniques that boost your Google rankings and keep readers engaged. This guide breaks down keyword research, on-page SEO, meta tags, readability, and more.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756557836150-pexels-pixabay-267401.jpg?alt=media&token=7bf02388-00b7-4663-838d-0b31c9e51fad"
   },
   "https://contenthub.guru/page/how-to-write-blog-posts-that-rank-a-beginners-guide-to-getting-seen": {
     "url": "https://contenthub.guru/page/how-to-write-blog-posts-that-rank-a-beginners-guide-to-getting-seen",
@@ -2232,7 +2696,10 @@
       "blog SEO guide",
       "rank blog posts",
       "create content that ranks"
-    ]
+    ],
+    "category": "guides",
+    "description": "Learn how to write blog posts that rank on Google without losing your personality. This guide walks you through SEO-friendly strategies, content structure, and practical tips to create posts people actually read—and search engines love.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756557623364-pexels-pixabay-262508.jpg?alt=media&token=3d601f54-a419-4849-b38b-e884fa39acc4"
   },
   "https://contenthub.guru/page/free-tools-for-beginners-the-internets-greatest-gift-shop": {
     "url": "https://contenthub.guru/page/free-tools-for-beginners-the-internets-greatest-gift-shop",
@@ -2247,7 +2714,10 @@
       "free apps for creators",
       "productivity tools free",
       "how to start content creation free"
-    ]
+    ],
+    "category": "general",
+    "description": "Looking for free tools to kickstart your creative journey? From design to writing to social media, here’s a witty, beginner-friendly guide to the best free tools you can start using today—without spending a dime.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756557335935-pexels-karolina-grabowska-5900255.jpg?alt=media&token=8739c568-39fe-42e3-a948-6463959f3400"
   },
   "https://contenthub.guru/page/how-to-pick-a-content-niche-without-driving-yourself-crazy": {
     "url": "https://contenthub.guru/page/how-to-pick-a-content-niche-without-driving-yourself-crazy",
@@ -2261,7 +2731,10 @@
       "social media niche",
       "YouTube niche",
       "beginner content creator tips"
-    ]
+    ],
+    "category": "general",
+    "description": "Struggling to pick a content niche? This witty beginner’s guide breaks down what a niche is, why it matters, and how to choose one you’ll actually stick with—without overthinking it.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756557025619-pexels-rdne-4910538.jpg?alt=media&token=04f2f751-7340-43ca-bd56-a0cce19cc679"
   },
   "https://contenthub.guru/page/the-content-creation-process-from-brainstorm-to-viral-hit": {
     "url": "https://contenthub.guru/page/the-content-creation-process-from-brainstorm-to-viral-hit",
@@ -2277,7 +2750,10 @@
       "content workflow",
       "digital content process",
       "marketing content guide"
-    ]
+    ],
+    "category": "general",
+    "description": "Content creation isn’t just writing a blog or filming a TikTok—it’s a four-stage process: idea, production, publishing, and promotion. This witty guide breaks it down so you can turn raw thoughts into polished content that actually gets seen.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756556525538-pexels-ron-lach-8368350.jpg?alt=media&token=db4fba36-f440-46a7-9793-5499ebacb37e"
   },
   "https://contenthub.guru/page/different-types-of-content-from-blogs-to-tiktoks-a-beginners-field-guide": {
     "url": "https://contenthub.guru/page/different-types-of-content-from-blogs-to-tiktoks-a-beginners-field-guide",
@@ -2293,7 +2769,10 @@
       "visual content",
       "content creation guide",
       "examples of content"
-    ]
+    ],
+    "category": "general",
+    "description": "Content comes in many flavors—blogs, videos, infographics, podcasts, and more. This witty beginner’s guide explores the different types of content, why they matter, and how to choose the right ones for your audience.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756705312307-pexels-shvets-production-7525183.jpg?alt=media&token=fe8a053d-682b-4d95-98a0-0291ef45a139"
   },
   "https://contenthub.guru/page/content-creation-vs-content-marketing-key-differences-explained": {
     "url": "https://contenthub.guru/page/content-creation-vs-content-marketing-key-differences-explained",
@@ -2306,7 +2785,10 @@
       "content marketing strategy",
       "digital content creation",
       "marketing vs creation"
-    ]
+    ],
+    "category": "general",
+    "description": "Content creation is making digital material—blogs, videos, podcasts—while content marketing is the strategy behind using that content to reach goals. Learn the difference, why it matters, and how to use both effectively.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756555571369-pexels-arina-krasnikova-6654126.jpg?alt=media&token=1c53f462-5284-4e87-9d9c-781f741707bd"
   },
   "https://contenthub.guru/page/what-is-content-creation-a-beginners-guide-that-wont-bore-you-to-tears": {
     "url": "https://contenthub.guru/page/what-is-content-creation-a-beginners-guide-that-wont-bore-you-to-tears",
@@ -2322,7 +2804,10 @@
       "social media content creation",
       "blogging for beginners",
       "content strategy basics"
-    ]
+    ],
+    "category": "general",
+    "description": "Content creation is more than writing blog posts or filming TikToks—it’s storytelling, strategy, and connection in the digital age. This beginner’s guide breaks down what content creation really means, why it matters, and how anyone can start today (without feeling overwhelmed).",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756553079732-pexels-cristian-rojas-8391344.jpg?alt=media&token=d13416ea-fc96-4267-bd76-dfa126358b2e"
   },
   "https://contenthub.guru/page/the-pets-of-katrina-remembering-the-animals-left-behind": {
     "url": "https://contenthub.guru/page/the-pets-of-katrina-remembering-the-animals-left-behind",
@@ -2338,7 +2823,10 @@
       "animal stories Katrina",
       "disaster rescue",
       "Katrina aftermath"
-    ]
+    ],
+    "category": "lifestyle",
+    "description": "Explore the untold stories of pets and animals affected by Hurricane Katrina. From heroic rescues to ongoing efforts for animal welfare, discover how these animals were left behind, saved, and remembered.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756485757524-hurricane-katrina-new-orleans-la-september-8-2005-stray-dogs-found-in-areas-452ca0-1024.jpg?alt=media&token=3e75353b-3ea1-4f5e-9594-54f737799b28"
   },
   "https://contenthub.guru/page/20-years-20-lessons-what-katrina-taught-the-world": {
     "url": "https://contenthub.guru/page/20-years-20-lessons-what-katrina-taught-the-world",
@@ -2359,7 +2847,10 @@
       "disaster recovery",
       "New Orleans history",
       "lessons from Katrina"
-    ]
+    ],
+    "category": "lifestyle",
+    "description": "Discover the 20 most important lessons learned from Hurricane Katrina, from disaster preparedness and urban planning to social inequality and community resilience. Learn how Katrina shaped policies and inspired global change.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756477697209-hurricane-katrina-new-orleans-la-september-8-2005-femas-usandr-teams-in-route-faa8fd-1024.jpg?alt=media&token=70a5c32c-e705-4d3a-93e0-4cd4fe4a945d"
   },
   "https://contenthub.guru/page/public-housing-gentrification-and-the-new-orleans-of-today": {
     "url": "https://contenthub.guru/page/public-housing-gentrification-and-the-new-orleans-of-today",
@@ -2374,7 +2865,10 @@
       "cultural preservation",
       "affordable housing",
       "city transformation"
-    ]
+    ],
+    "category": "news",
+    "description": "Explore how public housing and gentrification have reshaped New Orleans, impacting communities, culture, and the city’s identity in the years following Katrina.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756422761035-open-doors-hurricane-katrina-new-orleans-7ce803-1024.jpg?alt=media&token=bb753ea5-b21d-42a3-b271-2c01fb1ec328"
   },
   "https://contenthub.guru/page/how-mardi-gras-became-a-symbol-of-resilience-post-katrina": {
     "url": "https://contenthub.guru/page/how-mardi-gras-became-a-symbol-of-resilience-post-katrina",
@@ -2389,7 +2883,10 @@
       "community rebuilding",
       "Mardi Gras parades",
       "Louisiana festivals"
-    ]
+    ],
+    "category": "news",
+    "description": "Discover how Mardi Gras transformed into a symbol of hope and resilience for New Orleans after Hurricane Katrina, uniting communities and reviving culture.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756423032810-hurricane-katrina-new-orleans-la-2-26-06-new-orleans-mardi-gras-float-and-parade-2f403b-1024.jpg?alt=media&token=4eab4341-58df-4529-b4fd-692b0b2c7b82"
   },
   "https://contenthub.guru/page/the-children-of-katrina-growing-up-after-the-storm": {
     "url": "https://contenthub.guru/page/the-children-of-katrina-growing-up-after-the-storm",
@@ -2405,7 +2902,10 @@
       "Gulf Coast kids",
       "Life after Hurricane Katrina",
       "Katrina impact on children"
-    ]
+    ],
+    "category": "news",
+    "description": "Explore the lives of children who grew up in the aftermath of Hurricane Katrina. From disrupted education to resilience and hope, discover how the storm shaped a generation and their journey to recovery.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756420449896-images.jpg?alt=media&token=f6b9b885-4408-4e1f-9381-9452729fa613"
   },
   "https://contenthub.guru/page/20-years-later-where-are-the-survivors-of-katrina-now": {
     "url": "https://contenthub.guru/page/20-years-later-where-are-the-survivors-of-katrina-now",
@@ -2417,7 +2917,10 @@
       "Katrina survivors now",
       "New Orleans recovery",
       "Hurricane Katrina anniversary"
-    ]
+    ],
+    "category": "news",
+    "description": "Two decades after Hurricane Katrina, survivors are still navigating life’s challenges and rebuilding their communities. Discover where they are now and the stories of resilience that emerged from the storm.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756419901736-photo-1662372597168-09d57440a9e5.jpg?alt=media&token=8edd8084-53ed-4585-9b49-86bc855d7d4f"
   },
   "https://contenthub.guru/page/why-your-morning-routine-could-be-ruining-your-day": {
     "url": "https://contenthub.guru/page/why-your-morning-routine-could-be-ruining-your-day",
@@ -2433,7 +2936,10 @@
       "start your day right",
       "morning mistakes",
       "bad habits"
-    ]
+    ],
+    "category": "lifestyle",
+    "description": "Discover the hidden mistakes in your morning routine that might be sabotaging your productivity, mood, and health. Simple changes can transform your day.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756409831906-istockphoto-1284856826-612x612.jpg?alt=media&token=2d76ee74-a08d-4360-b457-53c4d30cfda3"
   },
   "https://contenthub.guru/page/what-happens-to-your-body-when-you-quit-soda-for-30-days": {
     "url": "https://contenthub.guru/page/what-happens-to-your-body-when-you-quit-soda-for-30-days",
@@ -2449,7 +2955,10 @@
       "healthier lifestyle",
       "sugar detox",
       "soda withdrawal"
-    ]
+    ],
+    "category": "health",
+    "description": "Discover the surprising benefits of quitting soda for 30 days—improved energy, better digestion, weight loss, and healthier skin. See what changes happen day by day.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756409791762-istockphoto-1044768344-612x612.jpg?alt=media&token=25299f86-cb6d-45fe-9b4e-2dc39bc1e2c2"
   },
   "https://contenthub.guru/page/best-5-minute-workouts-you-can-do-at-home-for-maximum-results": {
     "url": "https://contenthub.guru/page/best-5-minute-workouts-you-can-do-at-home-for-maximum-results",
@@ -2463,7 +2972,10 @@
       "fat-burning exercises",
       "time-saving workouts",
       "high-intensity interval training"
-    ]
+    ],
+    "category": "fitness",
+    "description": "Discover the top 5-minute workouts you can do at home to boost metabolism, burn calories, and improve fitness. No equipment needed—perfect for busy schedules.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756409719531-pexels-lara-stratiychuk-1606923648-27536858.jpg?alt=media&token=a1236c3d-99a0-449f-aa40-d5ae29b53fd3"
   },
   "https://contenthub.guru/page/foods-that-act-like-natural-ozempic-boost-weight-loss-naturally": {
     "url": "https://contenthub.guru/page/foods-that-act-like-natural-ozempic-boost-weight-loss-naturally",
@@ -2477,7 +2989,10 @@
       "healthy diet for weight loss",
       "sugar cravings",
       "foods that regulate insulin"
-    ]
+    ],
+    "category": "nutrition",
+    "description": "Discover the top natural foods that mimic Ozempic’s effects to help control appetite, regulate blood sugar, and support weight loss. Learn how to incorporate them into your diet effectively.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756714939672-pexels-cup-of-couple-6634111%20-%20Copy.jpg?alt=media&token=8f36903c-0222-4434-bd52-237a3096659d"
   },
   "https://contenthub.guru/page/why-walking-10-minutes-after-meals-melts-fat-faster": {
     "url": "https://contenthub.guru/page/why-walking-10-minutes-after-meals-melts-fat-faster",
@@ -2491,7 +3006,10 @@
       "easy fat-burning habits",
       "10-minute walk",
       "post-dinner walk"
-    ]
+    ],
+    "category": "nutrition",
+    "description": "Discover why a simple 10-minute walk after meals can help burn fat, improve digestion, and boost energy. Learn the science-backed benefits and easy tips to make it a daily habit.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756387339438-download%20(1).jpg?alt=media&token=83d18dfe-75be-4888-908f-eb5a7a9bb33d"
   },
   "https://contenthub.guru/page/Hero-of-Alexandria": {
     "url": "https://contenthub.guru/page/Hero-of-Alexandria",
@@ -2512,7 +3030,10 @@
       "Alexandria genius",
       "early engineering",
       "historical inventors"
-    ]
+    ],
+    "category": "education",
+    "description": "Discover the incredible inventions of Hero of Alexandria, the ancient engineer and mathematician who created the world’s first steam engine, automatic doors, vending machines, and mechanical puppets—centuries ahead of his time.",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756409668549-download.jpg?alt=media&token=8d5279ca-79d5-4ffd-87cb-7fea4768d841"
   },
   "https://contenthub.guru/page/10-signs-youre-eating-too-much-sugar-without-realizing-and-how-to-cut-back": {
     "url": "https://contenthub.guru/page/10-signs-youre-eating-too-much-sugar-without-realizing-and-how-to-cut-back",
@@ -2526,6 +3047,9 @@
       "sugar and health",
       "sugar addiction signs",
       "eating too much sugar side effects"
-    ]
+    ],
+    "category": "nutrition",
+    "description": "Are you eating too much sugar without noticing? Discover 10 hidden signs of sugar overload, how it affects your body, and practical tips to reduce your sugar intake for better health. how to reduce sugar intake,",
+    "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756409871441-download%20(1).jpg?alt=media&token=198ed070-23b3-4481-9f8e-7e0527a51705"
   }
 }

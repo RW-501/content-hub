@@ -329,7 +329,6 @@ let currentUser;
 const allowedEmails = ["1988lrp@gmail.com"];
 const allowedPhones = ["+19725977878","+12145527280"];
 
-document.addEventListener("DOMContentLoaded", () => {
   // Auth state
   onAuthStateChanged(auth, async (user) => {
             console.log("auth: ",auth);
@@ -345,7 +344,7 @@ document.addEventListener("DOMContentLoaded", () => {
       logoutUser();
     }
   });
-});
+
 
 
 // Logout

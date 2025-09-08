@@ -606,11 +606,12 @@ main article:hover { box-shadow: 0 6px 18px rgba(0,0,0,0.1); }
 
 /* ========== Table of Contents (TOC) ========== */
 #toc {
-  border: 1px solid #ddd;
-  padding: 0.5rem;
-  margin-bottom: 1rem;
-  background: #fafafa;
-  border-radius: 6px;
+    border: 1px solid #ddd;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    background: #fafafa;
+    border-radius: 6px;
+    border-top: 5px solid #19ba8a;
 }
 #toc h3 { display: flex; justify-content: space-between; align-items: center; margin: 0; padding: 1rem; }
 #toc-toggle {
@@ -927,7 +928,6 @@ background-color: transparent;
 
 
 #suggested-pages h2 {
-    color: #27b77a;
     border-right: 4px solid #19ba8a;
     padding-right: .5rem;
 

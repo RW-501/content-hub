@@ -888,7 +888,9 @@ ${scriptTag}
     border-left: 4px solid   ${articleData.styles.headerBorder || "#19ba8a"};
   border-right: 4px solid   ${articleData.styles.headerBorder || "#19ba8a"};
 }
-
+#toc {
+    border-top: 5px solid  ${articleData.styles.headerBorder || "#19ba8a"};
+}
 
 .howto-title {
     color:  ${articleData.styles.headerBorder || "#19ba8a"};

@@ -146,7 +146,7 @@ a.rel = 'noopener noreferrer';
 
 // Accessibility & metadata
 a.setAttribute('aria-label', title);
-if (description) a.setAttribute('data-summary ', description);
+if (description) a.setAttribute('data-summary', description);
 if (category) a.setAttribute('data-category', category);
 if (image) a.setAttribute('data-image', image);
 

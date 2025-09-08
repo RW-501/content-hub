@@ -147,6 +147,7 @@ async function linkifyKeywordsFromJSON(input, jsonUrl = 'https://contenthub.guru
 
             logToPopup("Replaced: " + keyword, "limegreen");
             console.log("Replaced: " + keyword);
+            console.log("URL: " + url);
 
             // Remaining text
             text = text.slice(match.index + match[0].length);

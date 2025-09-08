@@ -78,8 +78,8 @@ sitePages.forEach(page => {
   const title = page.title || '';
   let keywords = page.keywords || [];
 
-  // Filter out keywords containing "contenthub.guru" or "contenthub" (case-insensitive)
-  keywords = keywords.filter(k => !/contenthub(\.guru)?/i.test(k));
+ // Filter out any keyword that starts with 'contenthub' or 'contenthub.guru'
+keywords = keywords.filter(k => !/^contenthub(\.guru)?/i.test(k.trim()));
 
   if (url && !keywordMap[url]) {
     keywordMap[url] = {

@@ -107,7 +107,9 @@ function renderKeywordManager(map, search = '') {
 
   Object.entries(map).forEach(([url, data], index) => {
     const title = data.title || '';
-    const keywords = data.keywords || [];
+    let keywords = data.keywords || [];
+
+keywords = keywords.filter(k => !/^\s*contenthub(?:\.guru)?/i.test(k.trim()));
 
     // Filter by search
     const matchesSearch =

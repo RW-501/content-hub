@@ -892,12 +892,12 @@ display: block;
 }
 
 /* Tooltip title */
-.tooltips strong {
-  display: block;
-  margin-bottom: 6px;
-  font-size: 15px;
-  font-weight: 600;
-  color: #ffd369;
+.tooltips  strong {
+    font-size: 15px;
+    font-weight: 600;
+    color: #0cbc98;
+    display: block;
+    margin-bottom: 6px;
 }
 
 /* Tooltip image */

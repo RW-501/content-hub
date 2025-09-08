@@ -78,9 +78,9 @@ sitePages.forEach(page => {
   const title = page.title || '';
   let keywords = page.keywords || [];
 
- // Filter out any keyword that starts with 'contenthub' or 'contenthub.guru'
-keywords = keywords.filter(k => !/contenthub(?:\.guru)?/i.test(k));
-                                                        
+ // Remove any keyword that starts with "contenthub" or "contenthub.guru", case-insensitive
+keywords = keywords.filter(k => !/^\s*contenthub(?:\.guru)?/i.test(k.trim()));
+
   if (url && !keywordMap[url]) {
     keywordMap[url] = {
       url,
@@ -98,11 +98,6 @@ keywords = keywords.filter(k => !/contenthub(?:\.guru)?/i.test(k));
 
 
 
-function highlightMatch(text, search) {
-  if (!search) return text;
-  const regex = new RegExp(`(${search.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&')})`, 'gi');
-  return text.replace(regex, '<mark>$1</mark>');
-}
 
 function renderKeywordManager(map, search = '') {
   const container = document.getElementById('pagesList');
@@ -113,19 +108,19 @@ function renderKeywordManager(map, search = '') {
   Object.entries(map).forEach(([url, data], index) => {
     const title = data.title || '';
     const keywords = data.keywords || [];
-    const urls = data.urls || [url]; // Array of URLs, default to main URL
 
     // Filter by search
     const matchesSearch =
-      urls.some(u => u.toLowerCase().includes(searchLower)) ||
+      url.toLowerCase().includes(searchLower) ||
       title.toLowerCase().includes(searchLower) ||
       keywords.some(k => k.toLowerCase().includes(searchLower));
 
-    if (!matchesSearch) return;
+    if (!matchesSearch) return; // skip non-matching items
 
     const card = document.createElement('div');
     card.className = 'accordion-item';
 
+    // Determine outline color based on keywords
     const hasOneWordKeyWord = keywords.some(k => k.trim().split(/\s+/).length === 1);
     const outlineColor = hasOneWordKeyWord ? 'green' : 'orange';
     card.style.border = `2px solid ${outlineColor}`;
@@ -133,7 +128,7 @@ function renderKeywordManager(map, search = '') {
     card.innerHTML = `
       <h2 class="accordion-header" id="heading${index}">
         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse${index}" aria-expanded="false" aria-controls="collapse${index}">
-         #${index} - ${highlightMatch(url, search)}
+         #${index} - ${url}
         </button>
       </h2>
       <div id="collapse${index}" class="accordion-collapse collapse" aria-labelledby="heading${index}" data-bs-parent="#pagesList">
@@ -141,21 +136,9 @@ function renderKeywordManager(map, search = '') {
           <div class="mb-2">
             <label>Title:</label>
             <input type="text" class="form-control mb-2" id="titleInput${index}" value="${title}">
-            <div><small>Preview: ${highlightMatch(title, search)}</small></div>
           </div>
-
-          <!-- URLs List -->
-          <ul class="list-group mb-2" id="urlsList${index}">
-            ${urls.map(u => `<li class="list-group-item d-flex justify-content-between align-items-center">${highlightMatch(u, search)} <button class="btn btn-sm btn-danger btn-remove-url">Remove</button></li>`).join('')}
-          </ul>
-          <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="Add additional URL..." id="inputURL${index}">
-            <button class="btn btn-primary" id="addURLBtn${index}">Add URL</button>
-          </div>
-
-          <!-- Keywords List -->
           <ul class="list-group mb-2" id="keywordsList${index}">
-            ${keywords.map(k => `<li class="list-group-item d-flex justify-content-between align-items-center">${highlightMatch(k, search)} <button class="btn btn-sm btn-danger btn-remove">Remove</button></li>`).join('')}
+            ${keywords.map(k => `<li class="list-group-item d-flex justify-content-between align-items-center">${k} <button class="btn btn-sm btn-danger btn-remove">Remove</button></li>`).join('')}
           </ul>
           <div class="input-group mb-3">
             <input type="text" class="form-control" placeholder="Add keyword..." id="inputKeyword${index}">
@@ -164,61 +147,49 @@ function renderKeywordManager(map, search = '') {
         </div>
       </div>
     `;
-
     container.appendChild(card);
 
-    // Title input change
+    const input = document.getElementById(`inputKeyword${index}`);
+    const addBtn = document.getElementById(`addKeywordBtn${index}`);
     const titleInput = document.getElementById(`titleInput${index}`);
+
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        addBtn.focus();
+        addBtn.click();
+      }
+    });
+
+    addBtn.addEventListener('click', () => {
+      const value = input.value.trim();
+      if (!value) return;
+      keywords.push(value);
+      map[url].keywords = keywords;
+      renderKeywordManager(map, search); // pass search back
+      input.focus();
+    });
+
+    const removeBtns = card.querySelectorAll('.btn-remove');
+    removeBtns.forEach((btn, i) => {
+      btn.addEventListener('click', () => {
+        keywords.splice(i, 1);
+        map[url].keywords = keywords;
+        renderKeywordManager(map, search);
+        input.focus();
+      });
+    });
+
     titleInput.addEventListener('input', (e) => {
       map[url].title = e.target.value.trim();
     });
-
-    // Keywords handling
-    const inputKeyword = document.getElementById(`inputKeyword${index}`);
-    const addKeywordBtn = document.getElementById(`addKeywordBtn${index}`);
-    inputKeyword.addEventListener('keydown', e => { if(e.key==='Enter'){ e.preventDefault(); addKeywordBtn.click(); }});
-    addKeywordBtn.addEventListener('click', () => {
-      const val = inputKeyword.value.trim();
-      if(!val) return;
-      keywords.push(val);
-      map[url].keywords = keywords;
-      renderKeywordManager(map, search);
-      inputKeyword.focus();
-    });
-    const removeKeywordBtns = card.querySelectorAll('.btn-remove');
-    removeKeywordBtns.forEach((btn, i) => btn.addEventListener('click', () => {
-      keywords.splice(i,1);
-      map[url].keywords = keywords;
-      renderKeywordManager(map, search);
-      inputKeyword.focus();
-    }));
-
-    // URLs handling
-    const inputURL = document.getElementById(`inputURL${index}`);
-    const addURLBtn = document.getElementById(`addURLBtn${index}`);
-    inputURL.addEventListener('keydown', e => { if(e.key==='Enter'){ e.preventDefault(); addURLBtn.click(); }});
-    addURLBtn.addEventListener('click', () => {
-      const val = inputURL.value.trim();
-      if(!val) return;
-      urls.push(val);
-      map[url].urls = urls;
-      renderKeywordManager(map, search);
-      inputURL.focus();
-    });
-    const removeURLBtns = card.querySelectorAll('.btn-remove-url');
-    removeURLBtns.forEach((btn,i)=>btn.addEventListener('click', ()=>{
-      urls.splice(i,1);
-      map[url].urls = urls;
-      renderKeywordManager(map, search);
-      inputURL.focus();
-    }));
   });
 }
 
-// Search input handler
+// Example: Search input handler
 document.getElementById('searchInput').addEventListener('input', (e) => {
-  const searchValue = e.target.value.trim();
-  renderKeywordManager(keywordMap, searchValue);
+  const searchValue = e.target.value;
+  renderKeywordManager(keywordMap, searchValue); // keywordMap = your main data object
 });
 
 

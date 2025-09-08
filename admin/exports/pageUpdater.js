@@ -884,6 +884,18 @@ ${scriptTag}
     color: ${articleData.styles.headerText || "#222222"};
 }
 
+#in-article-blocks h2 {
+    border-left: 4px solid   ${articleData.styles.headerBorder || "#19ba8a"};
+}
+
+.howto-title {
+    color:  ${articleData.styles.headerBorder || "#19ba8a"};
+}
+.comments.form h2 {
+    border-left: 4px solid  ${articleData.styles.headerBorder || "#19ba8a"};
+}
+
+
 main {
 /* 🔹 CTA Button */
 .content-cta a {

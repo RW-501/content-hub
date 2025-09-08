@@ -35,7 +35,11 @@
   <button class="btn btn-success" id="saveKeywordsBtn">💾 Save All Changes</button>
 </div>
 
-  <div id="pagesList" class="accordion"></div>
+<div class="mb-3">
+  <input type="text" id="searchInput" class="form-control" placeholder="Search by URL, title, or keywords...">
+</div>
+
+<div id="pagesList" class="accordion"></div>
 </div>
 
 </main>
@@ -92,93 +96,106 @@ sitePages.forEach(page => {
   renderKeywordManager(keywordMap);
 }
 
-function renderKeywordManager(map) {
+
+
+function highlightMatch(text, search) {
+  if (!search) return text;
+  const regex = new RegExp(`(${search.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&')})`, 'gi');
+  return text.replace(regex, '<mark>$1</mark>');
+}
+
+function renderKeywordManager(map, search = '') {
   const container = document.getElementById('pagesList');
   container.innerHTML = '';
 
-Object.entries(map).forEach(([url, data], index) => {
-  const title = data.title || '';
-  const keywords = data.keywords || [];
+  const searchLower = search.toLowerCase();
 
-  const card = document.createElement('div');
-  card.className = 'accordion-item';
+  Object.entries(map).forEach(([url, data], index) => {
+    const title = data.title || '';
+    const keywords = data.keywords || [];
 
-    console.log("keywords: ",keywords)
+    // Filter by search
+    const matchesSearch =
+      url.toLowerCase().includes(searchLower) ||
+      title.toLowerCase().includes(searchLower) ||
+      keywords.some(k => k.toLowerCase().includes(searchLower));
 
-  // Determine outline color based on keywords
- const hasOneWordKeyWord = keywords.some(k => k.trim().split(/\s+/).length === 1);
-console.log("hasOneWordKeyWord: ", hasOneWordKeyWord);
+    if (!matchesSearch) return; // skip non-matching items
 
-const outlineColor = hasOneWordKeyWord ? 'green' : 'orange';
-card.style.border = `2px solid ${outlineColor}`;
+    const card = document.createElement('div');
+    card.className = 'accordion-item';
 
+    const hasOneWordKeyWord = keywords.some(k => k.trim().split(/\s+/).length === 1);
+    const outlineColor = hasOneWordKeyWord ? 'green' : 'orange';
+    card.style.border = `2px solid ${outlineColor}`;
 
-  card.innerHTML = `
-    <h2 class="accordion-header" id="heading${index}">
-      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse${index}" aria-expanded="false" aria-controls="collapse${index}">
-       #${index} - ${url}
-      </button>
-    </h2>
-    <div id="collapse${index}" class="accordion-collapse collapse" aria-labelledby="heading${index}" data-bs-parent="#pagesList">
-      <div class="accordion-body">
-        <div class="mb-2">
-          <label>Title:</label>
-          <input type="text" class="form-control mb-2" id="titleInput${index}" value="${title}">
-        </div>
-        <ul class="list-group mb-2" id="keywordsList${index}">
-          ${keywords.map(k => `<li class="list-group-item d-flex justify-content-between align-items-center">${k} <button class="btn btn-sm btn-danger btn-remove">Remove</button></li>`).join('')}
-        </ul>
-        <div class="input-group mb-3">
-          <input type="text" class="form-control" placeholder="Add keyword..." id="inputKeyword${index}">
-          <button class="btn btn-primary" id="addKeywordBtn${index}">Add</button>
+    card.innerHTML = `
+      <h2 class="accordion-header" id="heading${index}">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse${index}" aria-expanded="false" aria-controls="collapse${index}">
+         #${index} - ${highlightMatch(url, search)}
+        </button>
+      </h2>
+      <div id="collapse${index}" class="accordion-collapse collapse" aria-labelledby="heading${index}" data-bs-parent="#pagesList">
+        <div class="accordion-body">
+          <div class="mb-2">
+            <label>Title:</label>
+            <input type="text" class="form-control mb-2" id="titleInput${index}" value="${title}">
+            <div><small>Preview: ${highlightMatch(title, search)}</small></div>
+          </div>
+          <ul class="list-group mb-2" id="keywordsList${index}">
+            ${keywords.map(k => `<li class="list-group-item d-flex justify-content-between align-items-center">${highlightMatch(k, search)} <button class="btn btn-sm btn-danger btn-remove">Remove</button></li>`).join('')}
+          </ul>
+          <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="Add keyword..." id="inputKeyword${index}">
+            <button class="btn btn-primary" id="addKeywordBtn${index}">Add</button>
+          </div>
         </div>
       </div>
-    </div>
-  `;
-  container.appendChild(card);
-
+    `;
+    container.appendChild(card);
 
     const input = document.getElementById(`inputKeyword${index}`);
     const addBtn = document.getElementById(`addKeywordBtn${index}`);
     const titleInput = document.getElementById(`titleInput${index}`);
 
-    // Press Enter in keyword input -> click add button
     input.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
         e.preventDefault();
-        addBtn.focus(); // focus on button
+        addBtn.focus();
         addBtn.click();
       }
     });
 
-    // Add keyword event
     addBtn.addEventListener('click', () => {
       const value = input.value.trim();
       if (!value) return;
-
       keywords.push(value);
-      map[url].keywords = keywords; // save changes
-      renderKeywordManager(map);
-      input.focus(); // keep focus in input after re-render
+      map[url].keywords = keywords;
+      renderKeywordManager(map, search);
+      input.focus();
     });
 
-    // Remove keyword event
     const removeBtns = card.querySelectorAll('.btn-remove');
     removeBtns.forEach((btn, i) => {
       btn.addEventListener('click', () => {
         keywords.splice(i, 1);
         map[url].keywords = keywords;
-        renderKeywordManager(map);
-        input.focus(); // focus back on input
+        renderKeywordManager(map, search);
+        input.focus();
       });
     });
 
-    // Title input change
     titleInput.addEventListener('input', (e) => {
       map[url].title = e.target.value.trim();
     });
   });
 }
+
+// Search input handler
+document.getElementById('searchInput').addEventListener('input', (e) => {
+  const searchValue = e.target.value.trim();
+  renderKeywordManager(keywordMap, searchValue);
+});
 
 
 document.getElementById('saveKeywordsBtn').addEventListener('click', async () => {

@@ -400,7 +400,7 @@ function linkifyContentHub(html) {
 
 
   // Load existing image when editing
-function renderBlockHTML(b) {
+async function renderBlockHTML(b) {
   switch (b.type) {
     case "heading":
       return `<h${b.level || 2} class="content-heading heading-${b.level || 2}">
@@ -409,7 +409,7 @@ function renderBlockHTML(b) {
     
     case "paragraph":
       return `<div class="content-paragraph prose max-w-none">
-                ${checkContent(b.html || "")}
+                ${await checkContent(b.html || "")}
               </div>`;
 
     case "image":
@@ -491,11 +491,23 @@ function calculateReadingTime(text) {
   return time;
 }
 
+async function generateBlocksHTML(blocks, position) {
+  let html = '';
+  for (let i = 0; i < blocks.length; i++) {
+    const b = blocks[i];
+    if (b.position === position || (position === "in-article" && !b.position)) {
+      const blockHTML = await renderBlockHTML(b);
+      html += `<div id="block-${position}-${i}" class="block block-${b.type}">${blockHTML}</div>`;
+    }
+  }
+  return html;
+}
+
 
 // Update UI
 export async function updatePage(articleData, location) {
 
-currentURL = "https://contenthub.guru/"+articleData.slug;
+currentURL = "https://contenthub.guru/" + articleData.slug;
 
 console.log("currentURL: ",currentURL);
 
@@ -524,38 +536,19 @@ if (ratingCount < 10) {
 }
   
   // Prepare containers with block HTML
-const topBlocksHTML = articleData.blocks
-  .filter(b => b.position === "top")
-  .map((b, i) => `<div id="block-top-${i}" class="block block-${b.type}">${renderBlockHTML(b)}</div>`)
-  .join("");
+  const topBlocksHTML = await generateBlocksHTML(articleData.blocks, "top");
+  const leftBlocksHTML = await generateBlocksHTML(articleData.blocks, "left");
+  const rightBlocksHTML = await generateBlocksHTML(articleData.blocks, "right");
+  const inArticleBlocksHTML_Clean = await generateBlocksHTML(articleData.blocks, "in-article");
+  const bottomBlocksHTML = await generateBlocksHTML(articleData.blocks, "bottom");
 
-const leftBlocksHTML = articleData.blocks
-  .filter(b => b.position === "left")
-  .map((b, i) => `<div id="block-left-${i}" class="block block-${b.type}">${renderBlockHTML(b)}</div>`)
-  .join("");
-
-const rightBlocksHTML = articleData.blocks
-  .filter(b => b.position === "right")
-  .map((b, i) => `<div id="block-right-${i}" class="block block-${b.type}">${renderBlockHTML(b)}</div>`)
-  .join("");
-
-const inArticleBlocksHTML_Clean = articleData.blocks
-  .filter(b => b.position === "in-article" || !b.position)
-  .map((b, i) => `<div id="block-article-${i}" class="block block-${b.type}">${renderBlockHTML(b)}</div>`)
-  .join("");
-
-const bottomBlocksHTML = articleData.blocks
-  .filter(b => b.position === "bottom")
-  .map((b, i) => `<div id="block-bottom-${i}" class="block block-${b.type}">${renderBlockHTML(b)}</div>`)
-  .join("");
-
-const articleBody = [
-  topBlocksHTML,
-  leftBlocksHTML,
-  rightBlocksHTML,
-  inArticleBlocksHTML_Clean,
-  bottomBlocksHTML
-].join(" ");
+  const articleBody = [
+    topBlocksHTML,
+    leftBlocksHTML,
+    rightBlocksHTML,
+    inArticleBlocksHTML_Clean,
+    bottomBlocksHTML
+  ].join(" ");
 
 const readTime = calculateReadingTime(articleBody);
 

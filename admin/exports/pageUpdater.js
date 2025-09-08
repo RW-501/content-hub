@@ -944,7 +944,7 @@ button:hover {
 /* 🔹 Horizontal Rule */
 hr {
   border: none;
-  border-top: 1px solid ${articleData.styles.hrColor || "#16a34a"};
+  border-top: 1px solid ${articleData.styles.hrColor || "#16a34a"}  !important;
 }
 }
 

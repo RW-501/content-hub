@@ -93,10 +93,11 @@ sitePages.forEach(page => {
     existing.category = category || existing.category;
     existing.description = description || existing.description;
     existing.image = image || existing.image;
+    existing.imakeywordsge = image || existing.keywords;
 
     // Merge new keywords with existing ones, avoiding duplicates
     const combinedKeywords = [...new Set([...(existing.keywords || []), ...keywords])];
-    existing.keywords = combinedKeywords;
+    //existing.keywords = combinedKeywords;
   } else {
     // Add new entry
     keywordMap[url] = {

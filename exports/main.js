@@ -1207,6 +1207,20 @@ function showTooltip(el, html) {
   tooltip.style.left = `${window.scrollX + rect.left}px`;
 }
 
+
+
+async function fetchPreviewData(url) {
+  // Find the link with this URL
+  const a = document.querySelector(`a.linked[href="${url}"]`);
+  if (!a) return {};
+  return {
+    title: a.title,
+    summary: a.dataset.summary || 'No summary available.',
+    image: a.dataset.image || null
+  };
+}
+
+
 document.querySelectorAll('a.linked').forEach(a => {
   let tooltipTimeout;
 

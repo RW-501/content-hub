@@ -89,6 +89,13 @@ body {
     border-left: 4px solid #19ba8a;
     padding-left: .5rem;
 }
+
+main {
+hr {
+  border: none;
+  border-top: 1px solid #16a34a;
+}
+}
 /* ==========================================
    PARAGRAPHS
 ========================================== */

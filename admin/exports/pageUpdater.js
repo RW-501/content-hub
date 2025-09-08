@@ -904,7 +904,7 @@ ${scriptTag}
     border-left: 4px solid  ${articleData.styles.headerBorder || "#19ba8a"};
     padding-left: .5rem;
 }
-    
+
 main {
 /* 🔹 CTA Button */
 .content-cta a {
@@ -944,7 +944,7 @@ button:hover {
 /* 🔹 Horizontal Rule */
 hr {
   border: none;
-  border-top: 1px solid ${articleData.styles.hrColor || "#d1d5db"};
+  border-top: 1px solid ${articleData.styles.hrColor || "#16a34a"};
 }
 }
 

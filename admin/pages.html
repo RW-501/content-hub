@@ -968,8 +968,49 @@ window.shareOnTwitter = shareOnTwitter;
 window.shareOnLinkedIn = shareOnLinkedIn;
 window.shareOnFacebook = shareOnFacebook;
 
+
+
+
+
+
+
+
+
+
+
+
+
 async function updatePageBtn(siteId, slug, category) {
   try {
+
+    
+
+// Function to generate a random hex color
+function getRandomColor() {
+  const letters = "0123456789ABCDEF";
+  let color = "#";
+  for (let i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
+}
+
+// Base style (with your keys)
+const baseStyle = {
+  hrColor: "#19ba8a",
+  headerBorder: "#19ba8a",
+};
+
+
+    // Generate up to 10 random style variations
+const styles = Array.from({ length: 10 }, () => {
+  const randomColor = getRandomColor();
+  return Object.fromEntries(
+    Object.entries(baseStyle).map(([key]) => [key, randomColor])
+  );
+});
+console.log("style: ",styles);
+
     // 🔽 Get 4 lowest viewed pages (same category optional)
     let suggested = [];
     let sq;
@@ -1007,7 +1048,8 @@ sSnap.forEach((docSnap) => {
       suggested,
       publishedCount: increment(1),
       status: "published",
-      updatedAt: serverTimestamp()
+      updatedAt: serverTimestamp(),
+      styles: styles,
     };
 
     // ✅ Update Firestore

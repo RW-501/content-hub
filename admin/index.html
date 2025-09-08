@@ -749,32 +749,6 @@ content = content.replace(
 
 
 
-// Function to generate a random hex color
-function getRandomColor() {
-  const letters = "0123456789ABCDEF";
-  let color = "#";
-  for (let i = 0; i < 6; i++) {
-    color += letters[Math.floor(Math.random() * 16)];
-  }
-  return color;
-}
-
-// Base style (with your keys)
-const baseStyle = {
-  hrColor: "#19ba8a",
-  headerBorder: "#19ba8a",
-};
-
-// Generate up to 10 random style variations
-const styles = Array.from({ length: 10 }, () => {
-  const randomColor = getRandomColor();
-  return Object.fromEntries(
-    Object.entries(baseStyle).map(([key]) => [key, randomColor])
-  );
-});
-
-console.log("style: ",styles);
-
 // Create Page button
 document.getElementById("createBtn").addEventListener("click", async () => {
   // Gather input values

@@ -392,8 +392,6 @@ function renderFAQs(html) {
 
   html = html.replace(faqRegex, (match, q, a) => {
     hasFAQ = true;
-    q = linkifyContentHub(q.trim());
-    a = linkifyContentHub(a.trim());
     return `<details class="faq-item"><summary>${q}</summary><div class="faq-answer">${a}</div></details>`;
   });
 
@@ -434,6 +432,7 @@ function generateFAQSchema(html) {
 // Step 3: Linkify mentions of ContentHub
 function linkifyContentHub(html) {
   if (!html) return "";
+  
   const regex = /\bcontent\s*hub(?:\.guru)?\b/gi;
   return html.replace(regex, match => `<a href="https://contenthub.guru" target="_blank" title="Content Hub" rel="noopener noreferrer">${match}</a>`);
 }

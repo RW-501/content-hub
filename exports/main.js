@@ -1114,15 +1114,52 @@ async function logVisitor(data) {
 
 // 🔹 Get visitor IP & location
 async function getVisitorLocation() {
+  // First, check localStorage
+  const cached = localStorage.getItem("visitorInfo");
+  if (cached) {
+    return JSON.parse(cached); // ✅ Return cached data
+  }
+
   try {
+    // ⚠️ This will fail due to CORS unless you use a proxy or CORS-friendly API
     const res = await fetch("https://ipapi.co/json/");
+    if (!res.ok) throw new Error(`Request failed: ${res.status}`);
+    
     const data = await res.json();
-    //console.log("Visitor info:", data);
-    await logVisitor(data);
+
+    // Save to localStorage for later use
+    localStorage.setItem("visitorInfo", JSON.stringify(data));
+
+    return data;
   } catch (err) {
     console.error("Error fetching visitor info:", err);
+    return null;
   }
 }
+
+/*
+async function getVisitorLocation() {
+  const cached = localStorage.getItem("visitorInfo");
+  if (cached) return JSON.parse(cached);
+
+  try {
+    const res = await fetch("https://www.cloudflare.com/cdn-cgi/trace");
+    if (!res.ok) throw new Error(`Request failed: ${res.status}`);
+
+    const text = await res.text();
+    const ipMatch = text.match(/ip=(.*)/);
+    const ip = ipMatch ? ipMatch[1].trim() : null;
+
+    const data = { ip };
+    localStorage.setItem("visitorInfo", JSON.stringify(data));
+    return data;
+  } catch (err) {
+    console.error("Error fetching visitor info:", err);
+    return null;
+  }
+}
+
+*/
 
 // 🔹 Run on page load
 document.addEventListener("DOMContentLoaded", async () => {

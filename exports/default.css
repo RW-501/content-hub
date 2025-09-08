@@ -85,6 +85,7 @@ body {
 
 #in-article-blocks h2 {
     border-left: 4px solid #19ba8a;
+    padding-left: .5rem;
 }
 /* ==========================================
    PARAGRAPHS
@@ -238,7 +239,9 @@ body {
     font-size: 1.5rem;
     margin-bottom: 1rem;
     color: #27b77a;
-    text-decoration: underline;
+    border-right: 4px solid #19ba8a;
+    width: fit-content;
+    padding-right: .5rem;
 }
 
 .howto-steps ol {

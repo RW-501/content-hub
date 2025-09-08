@@ -886,7 +886,9 @@ ${scriptTag}
 
 #in-article-blocks h2 {
     border-left: 4px solid   ${articleData.styles.headerBorder || "#19ba8a"};
+  border-right: 4px solid   ${articleData.styles.headerBorder || "#19ba8a"};
 }
+
 
 .howto-title {
     color:  ${articleData.styles.headerBorder || "#19ba8a"};

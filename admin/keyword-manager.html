@@ -76,6 +76,8 @@ async function init() {
 sitePages.forEach(page => {
   const url = page.url || page.slug;
   const title = page.title || '';
+  const category = page.category || '';
+  const image = page.image || '';
   let keywords = page.keywords || [];
 
  // Remove any keyword that starts with "contenthub" or "contenthub.guru", case-insensitive
@@ -85,9 +87,11 @@ keywords = keywords.filter(k => !/^\s*contenthub(?:\.guru)?/i.test(k.trim()));
     keywordMap[url] = {
       url,
       title,
-      keywords
+      keywords,
+      category,
+      image
     };
-      console.log("updated: ",url)
+      console.log("updated: ",url,"category:  ",category);
 
   }
 });

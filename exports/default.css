@@ -295,8 +295,14 @@ figure { margin: 0; }
 }
 
 @media (min-width: 768px) {
-.breadcrumb-wrapper  {
-background-color: #007bff;
+.breadcrumb-wrapper {
+    width: 100%;
+    display: flex !important;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between  !important;
+    align-items: center;
+    align-content: center;
 }
 }
 

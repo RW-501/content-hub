@@ -357,10 +357,10 @@ figure { margin: 0; }
 }
 
 .breadcrumb li a {
-  color: #007bff;
-  text-decoration: none;
-  text-transform: capitalize;
-  transition: color 0.2s ease;
+    color: #000000;
+    text-decoration: none;
+    text-transform: capitalize;
+    transition: color 0.2s ease;
 }
 
 .breadcrumb li a:hover { color: #fff; text-decoration: underline; }

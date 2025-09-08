@@ -798,6 +798,15 @@ display: block;
           width: fit-content;
     }
 }
+.google-auto-placed {
+
+    margin: auto;
+    width: min-content;
+
+    div {
+          width: fit-content;
+    }
+}
 
 .content-paragraph {
   padding: 1rem;   /* adds space on all sides */

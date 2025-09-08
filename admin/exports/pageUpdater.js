@@ -111,13 +111,13 @@ async function linkifyKeywordsFromJSON(input, jsonUrl = 'https://contenthub.guru
 
     function linkifyTextNode(textNode) {
       const parent = textNode.parentElement;
+      if (!parent) return;
 
-      // Skip links to contenthub.guru
-      if (parent?.tagName === 'A' && /contenthub\.guru/i.test(parent.href)) return;
+      // Skip if inside A, H1, H2, H3+
+      if (/^(A|H[1-6])$/i.test(parent.tagName)) return;
 
       let text = textNode.nodeValue;
       let replaced = false;
-
       const fragment = document.createDocumentFragment();
 
       while (text.length) {
@@ -130,12 +130,10 @@ async function linkifyKeywordsFromJSON(input, jsonUrl = 'https://contenthub.guru
             matched = true;
             replaced = true;
 
-            // Text before match
             if (match.index > 0) {
               fragment.appendChild(document.createTextNode(text.slice(0, match.index)));
             }
 
-            // Create link
             const a = document.createElement('a');
             a.className = 'linked';
             a.href = url;
@@ -148,9 +146,8 @@ async function linkifyKeywordsFromJSON(input, jsonUrl = 'https://contenthub.guru
             logToPopup("Replaced: " + keyword+ ": URL: " + url, "limegreen");
             console.log("Replaced: " + keyword+ ": URL: " + url);
 
-            // Remaining text
             text = text.slice(match.index + match[0].length);
-            break; // process one match at a time
+            break; // only process one match at a time
           }
         }
 
@@ -163,25 +160,30 @@ async function linkifyKeywordsFromJSON(input, jsonUrl = 'https://contenthub.guru
       if (replaced) textNode.replaceWith(fragment);
     }
 
+    // Walk DOM recursively
     function walk(node) {
-      if (node.nodeType === Node.TEXT_NODE && node.nodeValue.trim()) {
+      if (node.nodeType === Node.TEXT_NODE) {
         linkifyTextNode(node);
-      } else if (node.nodeType === Node.ELEMENT_NODE && !['SCRIPT', 'STYLE', 'A'].includes(node.tagName)) {
-        [...node.childNodes].forEach(walk);
+      } else if (node.nodeType === Node.ELEMENT_NODE) {
+        // Skip entire headers and links themselves
+        if (!/^(A|H[1-6])$/i.test(node.tagName)) {
+          node.childNodes.forEach(walk);
+        }
       }
     }
 
     walk(container);
 
-    return typeof input === 'string' ? container.innerHTML : container;
-
+    return container.innerHTML;
   } catch (err) {
-    console.error('linkifyKeywordsFromJSON error:', err);
-    return typeof input === 'string' ? input : input.outerHTML;
+    console.error("linkifyKeywordsFromJSON error:", err);
+    return input;
   }
 }
 
+
             console.log("Loading...");
+
 
             
 let HowTo_Bool = false;

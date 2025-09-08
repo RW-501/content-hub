@@ -257,10 +257,47 @@ function generateHowToSchema(html) {
 }
 
 
+
+
+function cleanHTML(inputHTML) {
+  if (!inputHTML) return "";
+
+  // Create a container to manipulate DOM
+  const container = document.createElement('div');
+  container.innerHTML = inputHTML;
+
+  let firstH1Found = false;
+
+  function walk(node) {
+    if (node.nodeType === Node.ELEMENT_NODE) {
+      // Convert H1 to H2 if not the first
+      if (node.tagName === 'H1') {
+        if (!firstH1Found) {
+          firstH1Found = true; // keep the first H1
+        } else {
+          const h2 = document.createElement('h2');
+          h2.innerHTML = node.innerHTML;
+          node.replaceWith(h2);
+          node = h2; // continue walking the new node
+        }
+      }
+
+      // Recurse through child nodes
+      node.childNodes.forEach(walk);
+    }
+  }
+
+  walk(container);
+
+  return container.innerHTML;
+}
+
 async function checkContent(html) {
   if (!html) return "";
 
   console.log("checkContent...");
+
+ html = cleanHTML(html);
 
   // Linkify contenthub mentions
   html = linkifyContentHub(html);
@@ -293,6 +330,9 @@ async function checkContent(html) {
     console.log("HowTo schema injected!");
     HowTo_Bool = true;
   }
+
+
+
 
   return html;
 }
@@ -907,6 +947,8 @@ hr {
 </header>
 
 <div class="header-bottom">
+
+
   <nav aria-label="Breadcrumb" class="breadcrumb-wrapper">
     <ol class="breadcrumb">
       <li><a title="Content Hub Home Page" href="https://contenthub.guru">Content Hub</a></li>
@@ -923,13 +965,14 @@ hr {
         </a>
       </li>
     </ol>
-  </nav>
 
 <p><strong>Read Time:</strong> <span id="readTime">${articleData.readTime || "5"} mins</span></p>
 
   <p>
     <a href="#commentForm" title="${articleData.title} Comments" id="navCommentBtn">Comments</a>
   </p>
+    </nav>
+
 </div>
 
 

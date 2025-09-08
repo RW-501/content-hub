@@ -803,6 +803,8 @@ display: block;
     max-width: 100%;       /* Ensure it never exceeds parent */
     margin: 0 auto;        /* Center horizontally if smaller than container */
     overflow: hidden;      /* Hide anything that overflows */
+        width: fit-content;
+
 }
 
 /* Target the inner div Google sometimes injects */

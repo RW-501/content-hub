@@ -332,6 +332,10 @@ const allowedPhones = ["+19725977878","+12145527280"];
 document.addEventListener("DOMContentLoaded", () => {
   // Auth state
   onAuthStateChanged(auth, async (user) => {
+            console.log("auth: ",auth);
+    console.log("allowedEmails: ",allowedEmails);
+    console.log("user.email: ",user.email);
+    
     if (user && (allowedEmails.includes(user.email) || allowedPhones.includes(user.phoneNumber))) {
       currentUser = user;
           console.log("User ID: ",currentUser);
@@ -343,6 +347,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
+
 // Logout
 function logoutUser() {
   signOut(auth);
@@ -353,46 +358,39 @@ function logoutUser() {
 }
 document.getElementById("logoutBtn").addEventListener("click", logoutUser);
 
-// Google Login
+const provider = new GoogleAuthProvider();
+
+
 document.getElementById("googleLogin").addEventListener("click", async () => {
   try {
-    const result = await signInWithPopup(auth, new GoogleAuthProvider());
+    const result = await signInWithPopup(auth, provider);
+        console.log("result: ",result);
+    console.log("allowedEmails: ",allowedEmails);
+    console.log("result.user.email: ",result.user.email);
+
     if (!allowedEmails.includes(result.user.email)) return logoutUser();
     currentUser = result.user;
-              
     console.log("Click, User ID: ",currentUser);
 
     await showAdminPanel(currentUser);
   } catch (err) {
-    if (err.code === "auth/popup-closed-by-user") {
-      console.log("User closed the popup.");
-        await signInWithRedirect(auth, new GoogleAuthProvider());
-
+    if (err.code === "auth/popup-blocked" || err.code === "auth/popup-closed-by-user") {
+      console.log("Popup blocked or closed, using redirect instead...");
+      await signInWithRedirect(auth, provider);
     } else {
-      alert(err.message);
+      console.error("Google login error:", err);
     }
   }
 });
 
-
-// Handle redirect result (AFTER redirect)
-getRedirectResult(auth)
-  .then((result) => {
-    if (result?.user) {
-      if (!allowedEmails.includes(result.user.email)) {
-        return logoutUser();
-      }
-      currentUser = result.user;
-      showAdminPanel(result.user);
-    }
-  })
-  .catch((err) => {
-    if (err.code === "auth/redirect-cancelled-by-user") {
-      console.log("User cancelled login.");
-    } else if (err.code !== "auth/no-auth-event") {
-      console.error("Redirect error:", err.message);
-    }
-  });
+// On load, handle redirect result
+getRedirectResult(auth).then((result) => {
+  if (result?.user) {
+    if (!allowedEmails.includes(result.user.email)) return logoutUser();
+    currentUser = result.user;
+    showAdminPanel(result.user);
+  }
+});
 
 // Phone login
 let recaptchaVerifier;

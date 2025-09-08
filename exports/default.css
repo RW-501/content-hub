@@ -856,10 +856,7 @@ display: block;
 #link-tooltip {
   position: absolute;
 
-  z-index: 1070;
-  max-width: 320px;
-
-
+background-color: transparent;
   pointer-events: none;
 }
 

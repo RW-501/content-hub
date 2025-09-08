@@ -819,3 +819,9 @@ display: block;
   max-width: 150ch; /* keeps line length readable */
   margin: 0 auto;  /* centers content on page */
 }
+
+
+.linked {
+    color: hsl(147.23deg 100% 50%);
+    font-weight: bolder;
+}

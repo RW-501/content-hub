@@ -796,23 +796,41 @@ display: block;
 
 }
 
-.adsbygoogle {
-    margin: auto;
-    width: min-content;
-
-    div {
-          width: fit-content;
-    }
-}
+/* Container for AdSense ads */
+.adsbygoogle,
 .google-auto-placed {
-
-    margin: auto;
-    width: min-content;
-
-    div {
-          width: fit-content;
-    }
+    display: block;
+    max-width: 100%;       /* Ensure it never exceeds parent */
+    margin: 0 auto;        /* Center horizontally if smaller than container */
+    overflow: hidden;      /* Hide anything that overflows */
 }
+
+/* Target the inner div Google sometimes injects */
+.adsbygoogle > div,
+.google-auto-placed > div {
+    max-width: 100%;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Make iframes responsive and contained */
+.adsbygoogle iframe,
+.google-auto-placed iframe {
+    max-width: 100%;
+    width: 100%;
+    height: auto;          /* Maintain aspect ratio */
+    display: block;
+    border: 0;
+}
+
+/* Optional: for a specific parent content div */
+#mys-content .adsbygoogle,
+#mys-content .google-auto-placed {
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+}
+
 
 .content-paragraph {
   padding: 1rem;   /* adds space on all sides */

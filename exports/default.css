@@ -294,8 +294,8 @@ figure { margin: 0; }
     flex-direction: column;
 }
 
-@media (max-width: 768px) {
-.header-bottom {
+@media (min-width: 768px) {
+.breadcrumb-wrapper  {
 background-color: #007bff;
 }
 }

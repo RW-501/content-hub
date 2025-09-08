@@ -352,14 +352,19 @@ function logoutUser() {
 document.getElementById("logoutBtn").addEventListener("click", logoutUser);
 
 // Google Login
+
 document.getElementById("googleLogin").addEventListener("click", async () => {
-  try {
-    const result = await signInWithPopup(auth, new GoogleAuthProvider());
+  await signInWithRedirect(auth, new GoogleAuthProvider());
+});
+
+// On page load, check redirect result
+getRedirectResult(auth).then((result) => {
+  if (result?.user) {
     if (!allowedEmails.includes(result.user.email)) return logoutUser();
     currentUser = result.user;
-    await showAdminPanel(currentUser);
-  } catch (err) { alert(err.message); }
-});
+    showAdminPanel(result.user);
+  }
+}).catch((err) => console.error(err));
 
 // Phone login
 let recaptchaVerifier;

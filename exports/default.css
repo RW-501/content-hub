@@ -875,6 +875,8 @@ background-color: #a2a5a9;
     line-break: auto;
     font-size: .875rem;
     word-wrap: break-word;
+    border-radius: 25px;
+    padding: 1rem;
 
     background-color: #3f547a;
   img {

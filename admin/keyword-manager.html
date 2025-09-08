@@ -79,8 +79,8 @@ sitePages.forEach(page => {
   let keywords = page.keywords || [];
 
  // Filter out any keyword that starts with 'contenthub' or 'contenthub.guru'
-keywords = keywords.filter(k => !/^contenthub(\.guru)?/i.test(k.trim()));
-
+keywords = keywords.filter(k => !/contenthub(?:\.guru)?/i.test(k));
+                                                        
   if (url && !keywordMap[url]) {
     keywordMap[url] = {
       url,

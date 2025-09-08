@@ -267,7 +267,7 @@ async function checkContent(html) {
   // Await the async linkifyKeywordsFromJSON
   html = await linkifyKeywordsFromJSON(html);
 
-  console.log(html);
+// console.log(html);
 
   // Render FAQ blocks
   html = renderFAQs(html);

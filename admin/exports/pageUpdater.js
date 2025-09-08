@@ -98,10 +98,11 @@ async function linkifyKeywordsFromJSON(input, jsonUrl = 'https://contenthub.guru
       if (url === currentURL) continue;
       const title = data.title || '';
       const category = data.category || '';
+      const description = data.description || '';
       const image = data.image || "https://contenthub.guru/images/placeholder.png";
       (data.keywords || []).forEach(keyword => {
         if (/contenthub\.guru/i.test(keyword)) return; // skip ContentHub
-        entries.push({ keyword, url, title, category, image  });
+        entries.push({ keyword, url, title, category, image, description  });
       });
     }
 
@@ -125,7 +126,7 @@ async function linkifyKeywordsFromJSON(input, jsonUrl = 'https://contenthub.guru
       while (text.length) {
         let matched = false;
 
-        for (const { keyword, url, title, category, image } of entries) {
+        for (const { keyword, url, title, category, image, description } of entries) {
           const regex = new RegExp(`\\b${keyword.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&")}\\b`, 'i');
           const match = regex.exec(text);
           if (match) {
@@ -145,6 +146,7 @@ a.rel = 'noopener noreferrer';
 
 // Accessibility & metadata
 a.setAttribute('aria-label', title);
+if (description) a.setAttribute('data-summary ', description);
 if (category) a.setAttribute('data-category', category);
 if (image) a.setAttribute('data-image', image);
 

@@ -307,6 +307,7 @@ import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstati
 import { updatePage } from "https://contenthub.guru/admin/exports/pageUpdater.js";
 import { showToast } from "https://contenthub.guru/exports/showToast.js";
 
+
 // Firebase config
 const firebaseConfig = {
   apiKey: "AIzaSyBXZcSYdspfi2jBipwUFeNmKZgU02ksg8c",
@@ -322,190 +323,79 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 const storage = getStorage(app);
-let currentUser = null;
+let currentUser;
 
-// ✅ Whitelist (never expose these in client-only apps — best in server rules)
+// Allowed emails/phones
 const allowedEmails = ["1988lrp@gmail.com"];
-const allowedPhones = ["+19725977878", "+12145527280"];
+const allowedPhones = ["+19725977878","+12145527280"];
 
-// 🔐 Utility: Check if user is allowed
-function isAuthorized(user) {
-  return (
-    (user?.email && allowedEmails.includes(user.email)) ||
-    (user?.phoneNumber && allowedPhones.includes(user.phoneNumber))
-  );
-}
+document.addEventListener("DOMContentLoaded", () => {
+  // Auth state
+  onAuthStateChanged(auth, async (user) => {
+    if (user && (allowedEmails.includes(user.email) || allowedPhones.includes(user.phoneNumber))) {
+      currentUser = user;
+      await showAdminPanel(user);
+    } else if (user) {
+      logoutUser();
+    }
+  });
+});
 
-// 🖼️ Toggle UI
-function toggleUI(isLoggedIn) {
-  document.getElementById("auth-section").classList.toggle("hidden", isLoggedIn);
-  document.getElementById("admin-panel").classList.toggle("hidden", !isLoggedIn);
-  document.getElementById("logoutBtn").classList.toggle("hidden", !isLoggedIn);
-}
-
-// 🔒 Logout
-async function logoutUser() {
-  try {
-localStorage.clear();
-sessionStorage.clear();
-indexedDB.deleteDatabase('firebaseLocalStorageDb');
-await auth.signOut();
-currentUser = null;
-toggleUI(false);
-console.log("[Auth] Full browser reset complete");
-
-  } catch (err) {
-    console.error("Logout error:", err);
-  }
+// Logout
+function logoutUser() {
+  signOut(auth);
   currentUser = null;
-  localStorage.removeItem("contenthubUser"); // 🔑 clear local session
-  toggleUI(false);
+  document.getElementById("auth-section").classList.remove("hidden");
+  document.getElementById("admin-panel").classList.add("hidden");
+  document.getElementById("logoutBtn").classList.add("hidden");
 }
-
-// 🚪 Logout button
 document.getElementById("logoutBtn").addEventListener("click", logoutUser);
 
-// ✅ Persist session in browser (LOCAL = survives tabs/refresh until logout)
-// 🔑 Set Firebase Auth persistence
-await setPersistence(auth, browserLocalPersistence)
-  .then(() => console.log("[Auth] Persistence set"))
-  .catch(err => console.error("[Auth] Persistence error:", err));
-
-// 👀 Firebase Auth state listener
-onAuthStateChanged(auth, async (user) => {
-  console.log("[AuthStateChanged] User:", user);
-  if (user) {
-    if (!isAuthorized(user)) {
-      console.warn("[AuthStateChanged] Unauthorized user, logging out");
-      return logoutUser();
-    }
-    currentUser = user;
-    console.log("[AuthStateChanged] Authorized user:", user.uid);
-    await showAdminPanel(user);
-    toggleUI(true);
-  } else {
-    console.log("[AuthStateChanged] No user signed in");
-    logoutUser();
-  }
-});
-
-// 🔄 Handle redirect result (if using redirect login)
-getRedirectResult(auth)
-  .then(async (result) => {
-    if (result?.user) {
-      console.log("[RedirectResult] User returned:", result.user);
-
-      if (!isAuthorized(result.user)) {
-        console.warn("[RedirectResult] Unauthorized user:", result.user.email || result.user.phoneNumber);
-        return logoutUser();
-      }
-
-      currentUser = result.user;
-      console.log("[RedirectResult] Authorized user, UID:", currentUser.uid);
-
-      await showAdminPanel(currentUser);
-      toggleUI(true);
-    } else {
-      console.log("[RedirectResult] No user returned (likely first page load)");
-    }
-  })
-  .catch((err) => {
-    console.error("[RedirectResult] Error:", err);
-    alert("Login error: " + err.message);
-  });
-
-// 🔑 Google login with popup
-const loginBtn = document.getElementById("googleLogin");
-loginBtn.addEventListener("click", async () => {
-  loginBtn.disabled = true;
-  console.log("[GoogleLogin] Button clicked (popup)");
-
+// Google Login
+document.getElementById("googleLogin").addEventListener("click", async () => {
   try {
-    const provider = new GoogleAuthProvider();
-    const result = await signInWithPopup(auth, provider);
-    console.log("[GoogleLogin] User logged in via popup:", result.user);
-
-    if (!isAuthorized(result.user)) return logoutUser();
-
+    const result = await signInWithPopup(auth, new GoogleAuthProvider());
+    if (!allowedEmails.includes(result.user.email)) return logoutUser();
     currentUser = result.user;
     await showAdminPanel(currentUser);
-    toggleUI(true);
-
-  } catch (err) {
-    // Handle specific Firebase Auth popup errors
-    if (err.code === "auth/popup-closed-by-user") {
-      console.warn("[GoogleLogin] Popup was closed before completing login.");
-    } else if (err.code === "auth/cancelled-popup-request") {
-      console.warn("[GoogleLogin] Previous popup request cancelled.");
-    } else {
-      console.error("[GoogleLogin] Popup login error:", err);
-      alert("Google login failed: " + err.message);
-    }
-  } finally {
-    loginBtn.disabled = false;
-  }
+  } catch (err) { alert(err.message); }
 });
 
-
-// 📱 Phone login
+// Phone login
 let recaptchaVerifier;
 document.addEventListener("DOMContentLoaded", () => {
   recaptchaVerifier = new RecaptchaVerifier("recaptcha-container", { size: "invisible" }, auth);
   recaptchaVerifier.render();
-
-  // 🔄 Restore UI immediately if localStorage shows logged in
-  const cachedUser = localStorage.getItem("contenthubUser");
-  if (cachedUser) {
-    try {
-      const parsed = JSON.parse(cachedUser);
-      toggleUI(true); // Show admin panel fast
-      document.getElementById("admin-panel").querySelector(".user-info").textContent =
-        parsed.email || parsed.phone || parsed.uid;
-    } catch {}
-  }
 });
 
-// Send SMS code
 document.getElementById("sendCode").addEventListener("click", async () => {
   let phone = document.getElementById("phoneInput").value.trim();
   if (!phone.startsWith("+")) phone = "+1" + phone;
-
-  if (!allowedPhones.includes(phone)) {
-    return alert("Unauthorized phone number.");
-  }
-
+  if (!allowedPhones.includes(phone)) return alert("Unauthorized phone number.");
   try {
     const confirmationResult = await signInWithPhoneNumber(auth, phone, recaptchaVerifier);
     window.confirmationResult = confirmationResult;
     document.getElementById("codeSection").classList.remove("hidden");
-  } catch (err) {
-    alert("Failed to send code: " + err.message);
-  }
+  } catch (err) { alert(err.message); }
 });
 
-// Verify SMS code
 document.getElementById("verifyBtn").addEventListener("click", async () => {
   try {
-    const code = document.getElementById("verifyCode").value.trim();
-    const result = await window.confirmationResult.confirm(code);
-    const user = result.user;
-
-    if (!isAuthorized(user)) return logoutUser();
+    const user = (await window.confirmationResult.confirm(document.getElementById("verifyCode").value.trim())).user;
+    if (!allowedPhones.includes(user.phoneNumber)) return logoutUser();
     currentUser = user;
     await showAdminPanel(user);
-    toggleUI(true);
-  } catch {
-    alert("Invalid verification code.");
-  }
+  } catch { alert("Invalid code."); }
 });
-
 
 // Show admin panel
 async function showAdminPanel(user) {
   document.getElementById("auth-section").classList.add("hidden");
   document.getElementById("admin-panel").classList.remove("hidden");
   document.getElementById("logoutBtn").classList.remove("hidden");
+  await loadDashboard(true);
 }
+
 
 const imageInput = document.getElementById("imageInput");
 const imageDropZone = document.getElementById("imageDropZone");

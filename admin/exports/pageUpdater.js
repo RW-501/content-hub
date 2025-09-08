@@ -900,6 +900,11 @@ ${scriptTag}
 }
 
 
+#suggested-pages h2 {
+    border-left: 4px solid  ${articleData.styles.headerBorder || "#19ba8a"};
+    padding-left: .5rem;
+}
+    
 main {
 /* 🔹 CTA Button */
 .content-cta a {

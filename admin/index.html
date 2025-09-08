@@ -1325,7 +1325,8 @@ async function updateStaticPageData() {
       const d = doc.data();
       return {
         id: doc.id,
-        title: d.name || d.title || "Untitled Site",
+        title: d.title || "Untitled Site",
+        description: d.description || "",
         url: `https://contenthub.guru/page/${d.slug || "N/A"}`,
         domain: d.domain || "N/A",
         slug: d.slug || "N/A",
@@ -1404,6 +1405,7 @@ async function updateStaticPageData() {
   }
 }
 
+updateStaticPageData();
 
 </script>
 </body>

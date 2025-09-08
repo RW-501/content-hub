@@ -69,10 +69,10 @@ async function fetchJSON(url) {
 }
 
 async function init() {
-   keywordMap = await fetchJSON('https://contenthub.guru/internal-Links.json') || {};
-  const sitePages = await fetchJSON('https://contenthub.guru/sitePages.json') || [];
+// Fetch JSON data
+keywordMap = await fetchJSON('https://contenthub.guru/internal-Links.json') || {};
+const sitePages = await fetchJSON('https://contenthub.guru/sitePages.json') || [];
 
-  // Fill in missing pages from sitePages
 sitePages.forEach(page => {
   const url = page.url || page.slug;
   const title = page.title || '';
@@ -81,10 +81,24 @@ sitePages.forEach(page => {
   const image = page.image || '';
   let keywords = page.keywords || [];
 
- // Remove any keyword that starts with "contenthub" or "contenthub.guru", case-insensitive
-keywords = keywords.filter(k => !/^\s*contenthub(?:\.guru)?/i.test(k.trim()));
+  // Remove any keyword that starts with "contenthub" or "contenthub.guru", case-insensitive
+  keywords = keywords.filter(k => !/^\s*contenthub(?:\.guru)?/i.test(k.trim()));
 
-  if (url && !keywordMap[url]) {
+  if (!url) return; // skip if no URL
+
+  if (keywordMap[url]) {
+    // Update existing entry while keeping its keywords
+    const existing = keywordMap[url];
+    existing.title = title || existing.title;
+    existing.category = category || existing.category;
+    existing.description = description || existing.description;
+    existing.image = image || existing.image;
+
+    // Merge new keywords with existing ones, avoiding duplicates
+    const combinedKeywords = [...new Set([...(existing.keywords || []), ...keywords])];
+    existing.keywords = combinedKeywords;
+  } else {
+    // Add new entry
     keywordMap[url] = {
       url,
       title,
@@ -93,10 +107,11 @@ keywords = keywords.filter(k => !/^\s*contenthub(?:\.guru)?/i.test(k.trim()));
       image,
       description
     };
-      console.log("updated: ",url,"category:  ",category);
-
   }
+
+  console.log("Updated/added:", url, "Category:", category);
 });
+
 
 
   renderKeywordManager(keywordMap);

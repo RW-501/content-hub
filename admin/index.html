@@ -355,12 +355,26 @@ function logoutUser() {
 document.getElementById("logoutBtn").addEventListener("click", logoutUser);
 
 // Google Login
-
 document.getElementById("googleLogin").addEventListener("click", async () => {
-      console.log("googleLogin");
+  try {
+    const result = await signInWithPopup(auth, new GoogleAuthProvider());
+    if (!allowedEmails.includes(result.user.email)) return logoutUser();
+    currentUser = result.user;
+              
+    console.log("Click, User ID: ",currentUser);
 
-  await signInWithRedirect(auth, new GoogleAuthProvider());
+    await showAdminPanel(currentUser);
+  } catch (err) {
+    if (err.code === "auth/popup-closed-by-user") {
+      console.log("User closed the popup.");
+        await signInWithRedirect(auth, new GoogleAuthProvider());
+
+    } else {
+      alert(err.message);
+    }
+  }
 });
+
 
 // Handle redirect result (AFTER redirect)
 getRedirectResult(auth)

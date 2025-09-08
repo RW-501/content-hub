@@ -355,7 +355,7 @@ document.getElementById("googleLogin").addEventListener("click", async () => {
     if (!allowedEmails.includes(result.user.email)) return logoutUser();
     currentUser = result.user;
     console.log("User ID: ",currentUser);
-    
+
     await showAdminPanel(currentUser);
   } catch (err) { alert(err.message); }
 });
@@ -803,7 +803,7 @@ let sortState = { field: 'title', asc: true };
 
 async function loadDashboard(autoPing = false) {
   console.log("autoPing  ", autoPing);
-  console.log("Loading...  ");
+  console.log("loadDashboard Loading...  ");
 
   const dashboardContent = document.getElementById("dashboardContent");
   if (!dashboardContent) return;

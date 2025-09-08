@@ -209,10 +209,10 @@ body {
 }
 
 .faq-answer {
-  max-height: 40px !important;
-  overflow: hidden;
-  transition: max-height 0.3s ease, padding 0.3s ease;
-  padding: 0 16px;
+    min-height: max-content;
+    overflow: hidden;
+    transition: max-height 0.3s ease, padding 0.3s ease;
+    padding: 0 16px;
 }
 
 .faq-item.open .faq-answer {

@@ -357,40 +357,63 @@ function logoutUser() {
   document.getElementById("logoutBtn").classList.add("hidden");
 }
 document.getElementById("logoutBtn").addEventListener("click", logoutUser);
-
 const provider = new GoogleAuthProvider();
 
-
+// Google login (popup first, fallback to redirect)
 document.getElementById("googleLogin").addEventListener("click", async () => {
+  console.log("Google login clicked");
   try {
     const result = await signInWithPopup(auth, provider);
-        console.log("result: ",result);
-    console.log("allowedEmails: ",allowedEmails);
-    console.log("result.user.email: ",result.user.email);
+    console.log("Popup result:", result);
+    console.log("Allowed emails:", allowedEmails);
+    console.log("User email:", result.user.email);
 
-    if (!allowedEmails.includes(result.user.email)) return logoutUser();
+    if (!allowedEmails.includes(result.user.email)) {
+      console.log("Email not allowed, logging out user...");
+      return logoutUser();
+    }
+
     currentUser = result.user;
-    console.log("Click, User ID: ",currentUser);
+    console.log("Click login, User object:", currentUser);
 
     await showAdminPanel(currentUser);
   } catch (err) {
+    console.error("Popup error:", err);
+
     if (err.code === "auth/popup-blocked" || err.code === "auth/popup-closed-by-user") {
-      console.log("Popup blocked or closed, using redirect instead...");
-      await signInWithRedirect(auth, provider);
+      console.log("Popup blocked or closed, falling back to redirect...");
+      try {
+        await signInWithRedirect(auth, provider);
+      } catch (redirectErr) {
+        console.error("Redirect login error:", redirectErr);
+      }
     } else {
-      console.error("Google login error:", err);
+      console.error("Unhandled Google login error:", err);
     }
   }
 });
 
-// On load, handle redirect result
-getRedirectResult(auth).then((result) => {
-  if (result?.user) {
-    if (!allowedEmails.includes(result.user.email)) return logoutUser();
-    currentUser = result.user;
-    showAdminPanel(result.user);
-  }
-});
+// On page load, handle redirect result
+getRedirectResult(auth)
+  .then((result) => {
+    if (result?.user) {
+      console.log("Redirect result user:", result.user);
+      if (!allowedEmails.includes(result.user.email)) {
+        console.log("Email not allowed from redirect, logging out...");
+        return logoutUser();
+      }
+
+      currentUser = result.user;
+      console.log("Redirect login, User object:", currentUser);
+      showAdminPanel(currentUser);
+    } else {
+      console.log("No redirect result user found");
+    }
+  })
+  .catch((err) => {
+    console.error("Error handling redirect result:", err);
+  });
+
 
 // Phone login
 let recaptchaVerifier;

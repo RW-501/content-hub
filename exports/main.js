@@ -1239,8 +1239,8 @@ document.querySelectorAll('a.linked').forEach(a => {
       const content = `
         <div class="tooltip" style="max-width:250px;">
           <strong>${data.title || a.title}</strong><br>
-          <p style="margin:0;">${data.summary || 'No summary available.'}</p>
           ${data.image ? `<img src="${data.image}" style="max-width:100%;margin-top:5px;">` : ''}
+          <p style="margin:0;">${data.summary || 'No summary available.'}</p>
         </div>
       `;
       showTooltip(a, content); // Implement your floating tooltip

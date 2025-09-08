@@ -536,6 +536,8 @@ window.location.href = "https://contenthub.guru/admin/linker.html";
 
 
 async function getFeaturedArticles() {
+    updateStaticPageData();
+
   const featured = [];
   const categories = new Set();
 
@@ -1309,7 +1311,6 @@ async function updateOutdatedPages() {
     "color: red; font-weight: bold;"
   );
 
-  updateStaticPageData();
 
 }
 

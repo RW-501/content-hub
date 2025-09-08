@@ -268,7 +268,7 @@ async function checkContent(html) {
   // Await the async linkifyKeywordsFromJSON
   html = await linkifyKeywordsFromJSON(html);
 
- console.log("HTML:  ",html);
+// console.log("HTML:  ",html);
 
   // Render FAQ blocks
   html = renderFAQs(html);
@@ -395,7 +395,7 @@ function generateFAQSchema(html) {
 function linkifyContentHub(html) {
   if (!html) return "";
   const regex = /\bcontent\s*hub(?:\.guru)?\b/gi;
-  return html.replace(regex, match => `<a href="https://contenthub.guru" target="_blank" rel="noopener noreferrer">${match}</a>`);
+  return html.replace(regex, match => `<a href="https://contenthub.guru" target="_blank" title="Content Hub" rel="noopener noreferrer">${match}</a>`);
 }
 
 

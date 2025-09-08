@@ -48,6 +48,21 @@
   loadAdminHeader('admin-header');
 </script>
 
+<main>
+  <div id="auth-section">
+    <h3>Login</h3>
+    <button id="googleLogin">Login with Google</button>
+    <div style="margin-top:10px;">
+      <input id="phoneInput" placeholder="Enter phone" />
+      <button id="sendCode">Send Code</button>
+    </div>
+    <div id="codeSection" class="hidden">
+      <input id="verifyCode" placeholder="Enter code" />
+      <button id="verifyBtn">Verify</button>
+    </div>
+    <div id="recaptcha-container"></div>
+  </div>
+
 <main class="container my-5" id="main-content">
 
   <!-- Header -->
@@ -189,6 +204,87 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 const storage = getStorage(app);
+
+
+
+
+
+
+
+let currentUser;
+
+// Allowed emails/phones
+const allowedEmails = ["1988lrp@gmail.com"];
+const allowedPhones = ["+19725977878","+12145527280"];
+
+document.addEventListener("DOMContentLoaded", () => {
+  // Auth state
+  onAuthStateChanged(auth, async (user) => {
+    if (user && (allowedEmails.includes(user.email) || allowedPhones.includes(user.phoneNumber))) {
+      currentUser = user;
+      await showAdminPanel(user);
+    } else if (user) {
+      logoutUser();
+    }
+  });
+});
+
+// Logout
+function logoutUser() {
+  signOut(auth);
+  currentUser = null;
+  document.getElementById("auth-section").classList.remove("hidden");
+  document.getElementById("admin-panel").classList.add("hidden");
+  document.getElementById("logoutBtn").classList.add("hidden");
+}
+document.getElementById("logoutBtn").addEventListener("click", logoutUser);
+
+// Google Login
+document.getElementById("googleLogin").addEventListener("click", async () => {
+  try {
+    const result = await signInWithPopup(auth, new GoogleAuthProvider());
+    if (!allowedEmails.includes(result.user.email)) return logoutUser();
+    currentUser = result.user;
+    await showAdminPanel(currentUser);
+  } catch (err) { alert(err.message); }
+});
+
+// Phone login
+let recaptchaVerifier;
+document.addEventListener("DOMContentLoaded", () => {
+  recaptchaVerifier = new RecaptchaVerifier("recaptcha-container", { size: "invisible" }, auth);
+  recaptchaVerifier.render();
+});
+
+document.getElementById("sendCode").addEventListener("click", async () => {
+  let phone = document.getElementById("phoneInput").value.trim();
+  if (!phone.startsWith("+")) phone = "+1" + phone;
+  if (!allowedPhones.includes(phone)) return alert("Unauthorized phone number.");
+  try {
+    const confirmationResult = await signInWithPhoneNumber(auth, phone, recaptchaVerifier);
+    window.confirmationResult = confirmationResult;
+    document.getElementById("codeSection").classList.remove("hidden");
+  } catch (err) { alert(err.message); }
+});
+
+document.getElementById("verifyBtn").addEventListener("click", async () => {
+  try {
+    const user = (await window.confirmationResult.confirm(document.getElementById("verifyCode").value.trim())).user;
+    if (!allowedPhones.includes(user.phoneNumber)) return logoutUser();
+    currentUser = user;
+    await showAdminPanel(user);
+  } catch { alert("Invalid code."); }
+});
+
+// Show admin panel
+async function showAdminPanel(user) {
+  document.getElementById("auth-section").classList.add("hidden");
+  document.getElementById("main-content").classList.remove("hidden");
+  document.getElementById("logoutBtn").classList.remove("hidden");
+   loadPagesFromDB();
+}
+
+
 
 
 // Fetch pages from Firestore and populate table
@@ -881,10 +977,6 @@ document.getElementById("exportJSON").addEventListener("click", () => {
 });
 
 
-// Call this after your page loads
-document.addEventListener('DOMContentLoaded', () => {
-  loadPagesFromDB();
-});
 
 
         </script>

@@ -928,7 +928,7 @@ background-color: transparent;
 
 
 #suggested-pages h2 {
-    border-right: 4px solid #19ba8a;
-    padding-right: .5rem;
+    border-left: 4px solid #19ba8a;
+    padding-left: .5rem;
 
 }

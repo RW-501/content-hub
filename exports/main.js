@@ -1207,7 +1207,12 @@ function showTooltip(el, html) {
   tooltip.style.left = `${window.scrollX + rect.left}px`;
 }
 
+function hideTooltip(){
+  let tooltip = document.getElementById('link-tooltip');
+  tooltip.style.display = 'none';
 
+
+}
 
 async function fetchPreviewData(url) {
   // Find the link with this URL

@@ -97,9 +97,11 @@ async function linkifyKeywordsFromJSON(input, jsonUrl = 'https://contenthub.guru
     for (const [url, data] of Object.entries(keywordMap)) {
       if (url === currentURL) continue;
       const title = data.title || '';
+      const category = data.category || '';
+      const image = data.image || "https://contenthub.guru/images/placeholder.png";
       (data.keywords || []).forEach(keyword => {
         if (/contenthub\.guru/i.test(keyword)) return; // skip ContentHub
-        entries.push({ keyword, url, title });
+        entries.push({ keyword, url, title, category, image  });
       });
     }
 
@@ -123,7 +125,7 @@ async function linkifyKeywordsFromJSON(input, jsonUrl = 'https://contenthub.guru
       while (text.length) {
         let matched = false;
 
-        for (const { keyword, url, title } of entries) {
+        for (const { keyword, url, title, category, image } of entries) {
           const regex = new RegExp(`\\b${keyword.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&")}\\b`, 'i');
           const match = regex.exec(text);
           if (match) {
@@ -134,14 +136,22 @@ async function linkifyKeywordsFromJSON(input, jsonUrl = 'https://contenthub.guru
               fragment.appendChild(document.createTextNode(text.slice(0, match.index)));
             }
 
-            const a = document.createElement('a');
-            a.className = 'linked';
-            a.href = url;
-            a.title = title;
-            a.target = '_blank';
-            a.rel = 'noopener noreferrer';
-            a.textContent = match[0];
-            fragment.appendChild(a);
+const a = document.createElement('a');
+a.className = 'linked';
+a.href = url;
+a.title = title;
+a.target = '_blank';
+a.rel = 'noopener noreferrer';
+
+// Accessibility & metadata
+a.setAttribute('aria-label', title);
+if (category) a.setAttribute('data-category', category);
+if (image) a.setAttribute('data-image', image);
+
+// Text content
+a.textContent = match[0];
+fragment.appendChild(a);
+
 
             logToPopup("Replaced: " + keyword+ ": URL: " + url, "limegreen");
             console.log("Replaced: " + keyword+ ": URL: " + url);

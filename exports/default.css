@@ -926,3 +926,9 @@ background-color: transparent;
 }
 
 
+#suggested-pages h2 {
+    color: #27b77a;
+    border-right: 4px solid #19ba8a;
+    padding-right: .5rem;
+
+}

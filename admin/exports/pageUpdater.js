@@ -1169,8 +1169,8 @@ hr {
   </div>
 </div>
 
-<section id="suggested-pages" class="suggested">
-  <h2>Suggested for You</h2>
+<section id="suggested-pages" >
+  <h2 class="suggested">Suggested for You</h2>
   <div id="suggested-container" class="suggested-grid">${suggestedHTML}</div>
 </section>
 

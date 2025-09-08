@@ -1178,6 +1178,35 @@ document.getElementById('scrollUpBtn').addEventListener('click', () => {
 });
 
 
+
+
+// Call this once when your page loads
+const tooltip = document.createElement('div');
+tooltip.id = 'link-tooltip';
+tooltip.style.position = 'absolute';
+tooltip.style.background = 'rgba(0,0,0,0.85)';
+tooltip.style.color = '#fff';
+tooltip.style.padding = '8px 12px';
+tooltip.style.borderRadius = '6px';
+tooltip.style.fontSize = '14px';
+tooltip.style.pointerEvents = 'none';
+tooltip.style.zIndex = 1000;
+tooltip.style.display = 'none';
+tooltip.style.maxWidth = '300px';
+tooltip.style.boxShadow = '0 2px 8px rgba(0,0,0,0.3)';
+document.body.appendChild(tooltip);
+
+
+function showTooltip(el, html) {
+  tooltip.innerHTML = html;
+  tooltip.style.display = 'block';
+
+  // Position the tooltip relative to the element
+  const rect = el.getBoundingClientRect();
+  tooltip.style.top = `${window.scrollY + rect.bottom + 5}px`; // 5px below
+  tooltip.style.left = `${window.scrollX + rect.left}px`;
+}
+
 document.querySelectorAll('a.linked').forEach(a => {
   let tooltipTimeout;
 

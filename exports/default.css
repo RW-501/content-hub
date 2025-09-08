@@ -825,3 +825,14 @@ display: block;
     color: hsl(147.23deg 100% 50%);
     font-weight: bolder;
 }
+
+.link-tooltip {
+background-color: #a2a5a9;
+
+}
+.tooltip {
+background-color: #9ca5b4;
+  img {
+background-color: #00bfa5;
+  }
+}

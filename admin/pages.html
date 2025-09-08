@@ -354,6 +354,8 @@ document.getElementById("googleLogin").addEventListener("click", async () => {
     const result = await signInWithPopup(auth, new GoogleAuthProvider());
     if (!allowedEmails.includes(result.user.email)) return logoutUser();
     currentUser = result.user;
+    console.log("User ID: ",currentUser);
+    
     await showAdminPanel(currentUser);
   } catch (err) { alert(err.message); }
 });

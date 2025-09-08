@@ -79,8 +79,10 @@ body {
 .heading-5 { font-size: 1.25rem; }
 .heading-6 { font-size: 1rem; }
 
-.h3, h3, .h4, h4 {
-    text-indent: 1rem;
+
+#in-article-blocks h3, #in-article-blocks .h3 {
+      text-indent: 1rem;
+
 }
 
 #in-article-blocks h2 {

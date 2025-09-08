@@ -1171,7 +1171,7 @@ function TextEditor(root, { value = "", compact = false, pageId = "default" } = 
   // --- Editable toggle ---
   const toggleEdit = root.querySelector("#toggleEdit");
   toggleEdit.addEventListener("change", () => {
-    area.contentEditable = toggleEdit.checked;
+    area.draggable = toggleEdit.checked;
   });
 
   // --- Insert $[AD] on click ---

@@ -872,7 +872,7 @@ ${scriptTag}
 
 /* 🔹 Header */
 .site-header {
-  background: linear-gradient(135deg, ${articleData.styles.headerBg || "#ffffff"}, ${articleData.styles.headerBorder || "#e6e6ea"});
+  background: linear-gradient(180deg, ${articleData.styles.headerBg || "#ffffff"}, ${articleData.styles.headerBorder || "#e6e6ea"});
   color: ${articleData.styles.headerText || "#222222"};
   padding: 3rem 0;
   text-align: center;

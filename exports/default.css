@@ -873,7 +873,6 @@ display: block;
   position: absolute;
 
 background-color: transparent;
-  pointer-events: none;
 }
 
 #link-tooltip.show {

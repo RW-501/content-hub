@@ -13,6 +13,49 @@ function logToPopup(message, color = "#ccc") {
   }
 }
 
+function cleanVars() {
+  const globalsToReset = [
+    "usedLinks",
+    "linkCount",
+    "includedHTML",
+    "FAQ_Bool",
+    "HowTo_Bool",
+    "adCount",
+    "videoCount",
+    "imgCount",
+    "currentURL"
+  ];
+
+  globalsToReset.forEach(name => {
+    if (typeof window[name] !== "undefined") {
+      switch (name) {
+        case "usedLinks":
+          window[name].clear(); // Keep the Set reference
+          break;
+        case "linkCount":
+        case "adCount":
+        case "videoCount":
+        case "imgCount":
+          window[name] = 0;
+          break;
+        case "FAQ_Bool":
+        case "HowTo_Bool":
+          window[name] = false;
+          break;
+        case "includedHTML":
+        case "currentURL":
+          window[name] = '';
+          break;
+        default:
+          window[name] = null; // fallback
+      }
+    }
+  });
+
+  console.log("All content-related variables reset.");
+}
+
+
 function getVideo(videoUrl) {
   if (!videoUrl) return "";
 
@@ -486,6 +529,7 @@ async function checkContent(html) {
 
   // Await the async linkifyKeywordsFromJSON
   html = await linkifyKeywordsFromJSON(html);
+
 
 // console.log("HTML:  ",html);
 
@@ -1465,6 +1509,8 @@ const GITHUB_TOKEN = part_1 + part_2 + part_3 + part_4;
     if (!resp.ok) throw new Error((await resp.json()).message);
     showToast("info", "Page Updated successfully!");
     console.log("Page updated successfully!");
+
+    cleanVars();
 
 // 200 seconds = 200 * 1000 milliseconds
 setTimeout(() => {

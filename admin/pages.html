@@ -422,7 +422,7 @@ function formatVersion(n) {
 
 /* ---- network ---- */
 async function pingSite(domain) {
-  if (!domain) return { online: false, version: null };
+  if (!domain) return { online: false, version: null, faq: null, howTo: null, links: 0, ads: 0, images: 0, videos: 0 };
 
   const url = domain.startsWith("http") ? domain : `https://contenthub.guru/page/${domain}`;
   if (checkedDomains.hasOwnProperty(url)) return checkedDomains[url];
@@ -434,32 +434,38 @@ async function pingSite(domain) {
     let version = null;
     let faq = null;
     let howTo = null;
+    let links = 0, ads = 0, images = 0, videos = 0;
 
     if (isOnline) {
       const html = await resp.text();
       const parser = new DOMParser();
       const doc = parser.parseFromString(html, "text/html");
-      const meta = doc.querySelector('meta[name="version"]');
-      const faq_meta = doc.querySelector('meta[name="faq"]');
-      const howTo_meta = doc.querySelector('meta[name="howTo"]');
 
-      if (meta) {
-        version = extractVersion(meta.getAttribute("content"));
-      }
-if (faq_meta) {
-  faq = faq_meta.getAttribute("content") === "true";
-  
-}
-  if (howTo_meta) {
-        howTo = extractVersion(howTo_meta.getAttribute("content"));
-      }
+      // Extract meta info
+      const metaVersion = doc.querySelector('meta[name="version"]');
+      const metaFAQ = doc.querySelector('meta[name="faq"]');
+      const metaHowTo = doc.querySelector('meta[name="howTo"]');
+      const metaLinks = doc.querySelector('meta[name="linkCount"]');
+      const metaAds = doc.querySelector('meta[name="adCount"]');
+      const metaImages = doc.querySelector('meta[name="imageCount"]');
+      const metaVideos = doc.querySelector('meta[name="videoCount"]');
+
+      if (metaVersion) version = extractVersion(metaVersion.getAttribute("content"));
+      if (metaFAQ) faq = metaFAQ.getAttribute("content") === "true";
+      if (metaHowTo) howTo = extractVersion(metaHowTo.getAttribute("content"));
+
+      // Get counts, fallback to 0
+      links = metaLinks ? parseInt(metaLinks.getAttribute("content")) || 0 : 0;
+      ads = metaAds ? parseInt(metaAds.getAttribute("content")) || 0 : 0;
+      images = metaImages ? parseInt(metaImages.getAttribute("content")) || 0 : 0;
+      videos = metaVideos ? parseInt(metaVideos.getAttribute("content")) || 0 : 0;
     }
 
-    const result = { online: isOnline, version, faq, howTo };
+    const result = { online: isOnline, version, faq, howTo, links, ads, images, videos };
     checkedDomains[url] = result;
     return result;
   } catch {
-    const result = { online: false, version: null, faq: null, howTo: null };
+    const result = { online: false, version: null, faq: null, howTo: null, links: 0, ads: 0, images: 0, videos: 0 };
     checkedDomains[url] = result;
     return result;
   }
@@ -473,12 +479,17 @@ async function fetchAllPages(pages) {
     //  console.log("pages:", pages);
 
   for (const p of pages) {
-    const { online, version, faq, howTo } = await pingSite(p.slug);
+    const { online, version, faq, howTo, links, ads, images, videos } = await pingSite(p.slug);
     versions[p.siteId] = version;
     p.online = online;
     p.version = version;
     p.faq = faq;
     p.howTo = howTo;
+    p.links = links ?? 0;
+p.ads = ads ?? 0;
+p.images = images ?? 0;
+p.videos = videos ?? 0;
+
   }
 }
 
@@ -495,10 +506,22 @@ function renderPageStatus(p, latestVersion) {
   const faqEl = document.getElementById(`faq-${p.siteId}`);
   const howToEl = document.getElementById(`howTo-${p.siteId}`);
 
+  const linkCountEl = document.getElementById(`linkCount-${siteId}`);
+  const adCountEl = document.getElementById(`adCount-${siteId}`);
+  const imgCountEl = document.getElementById(`imgCount-${siteId}`);
+  const videoCountEl = document.getElementById(`videoCount-${siteId}`);
+
+
   if (!statusEl) return;
 
 if (faqEl) faqEl.textContent = p.faq ? "✅ FAQ Available" : "❌ No FAQ";
 if (howToEl) howToEl.textContent = p.howTo ? "✅ HowTo Available" : "❌ No HowTo";
+
+  if (linkCountEl) linkCountEl.textContent = p.links ?? 0;
+  if (adCountEl) adCountEl.textContent = p.ads ?? 0;
+  if (imgCountEl) imgCountEl.textContent = p.images ?? 0;
+  if (videoCountEl) videoCountEl.textContent = p.videos ?? 0;
+
 
   if (!p.online) {
     statusEl.textContent = "❌ Offline";
@@ -868,7 +891,6 @@ function renderDashboard(pages) {
         <th class="sortable" data-field="title">Domain</th>
         <th class="sortable" data-field="category">Category</th>
         <th>Status</th>
-        <th>Version</th>
         <th class="sortable" data-field="views">Views</th>
         <th>Actions</th>
       </tr>
@@ -888,9 +910,31 @@ function renderDashboard(pages) {
         <div id="category-${p.id}" class="category">${p.category || ''}</div>
         <div id="faq-${p.id}" class="faq_status">FAQ</div>
         <div id="howTo-${p.id}" class="howTo_status">howTo</div>
+
+
+<!-- Live status counters -->
+<div class="content-counts" aria-label="Content counts on this page">
+  <div class="count-item">
+    <span class="count-label">Links:</span>
+    <span id="linkCount-${p.id}" class="count-value">${p.linkCount || 0}</span>
+  </div>
+  <div class="count-item">
+    <span class="count-label">Ads:</span>
+    <span id="adCount-${p.id}" class="count-value">${p.adCount || 0}</span>
+  </div>
+  <div class="count-item">
+    <span class="count-label">Images:</span>
+    <span id="imgCount-${p.id}" class="count-value">${p.imgCount || 0}</span>
+  </div>
+  <div class="count-item">
+    <span class="count-label">Videos:</span>
+    <span id="videoCount-${p.id}" class="count-value">${p.videoCount || 0}</span>
+  </div>
+</div>
       </td>
-      <td><div id="status-${p.id}" class="status-offline">❌ Offline</div></td>
-      <td><div id="version-${p.id}" class="version">version</div></td>
+      <td><div id="status-${p.id}" class="status-offline">❌ Offline</div>
+        <hr>
+      <div id="version-${p.id}" class="version">version</div></td>
       <td>${p.views || 0}</td>
       <td>
         <div class="action-buttons">

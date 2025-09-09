@@ -561,12 +561,36 @@ function renderDashboard(pages) {
           <button onclick="window.open('https://contenthub.guru/admin/editor?id=${p.id}', '_blank')">Edit</button>
           <button class="remove-btn" onclick="removePage('${p.id}','${p.slug}')">Remove</button>
         </div>
-        <div class="share-buttons">
-          <button onclick="shareOnTwitter('${pageUrl}', '${shareText}')">🐦</button>
-          <button onclick="shareOnLinkedIn('${pageUrl}', '${shareText}')">💼</button>
-          <button onclick="shareOnFacebook('${pageUrl}')">📘</button>
-          <button onclick="shareOnAll('${pageUrl}', '${shareText}')">🌍</button>
-        </div>
+   <div class="share-buttons" role="group" aria-label="Share this page">
+  <button 
+    onclick="shareOnTwitter('${pageUrl}', '${shareText}')" 
+    aria-label="Share on Twitter" 
+    data-platform="twitter">
+    🐦
+  </button>
+
+  <button 
+    onclick="shareOnLinkedIn('${pageUrl}', '${shareText}')" 
+    aria-label="Share on LinkedIn" 
+    data-platform="linkedin">
+    💼
+  </button>
+
+  <button 
+    onclick="shareOnFacebook('${pageUrl}')" 
+    aria-label="Share on Facebook" 
+    data-platform="facebook">
+    📘
+  </button>
+
+  <button 
+    onclick="shareOnAll('${pageUrl}', '${shareText}')" 
+    aria-label="Share on multiple platforms" 
+    data-platform="all">
+    🌍
+  </button>
+</div>
+
       </td>
     </tr>`;
   }

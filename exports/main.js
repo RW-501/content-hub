@@ -1386,54 +1386,77 @@ function attachShareableText() {
     el.style.cursor = 'pointer';
     el.classList.add('highlight');
 
-
-
-    el.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const text = el.innerText;
+el.addEventListener('click', (e) => {
+  e.stopPropagation();
+  let text = el.innerText; // current sentence
   el.classList.add('active');
 
+  tooltip.innerHTML = `
+    <div class="share-text-el">
+      <strong>Share this text:</strong>
+      <p id="share-text-p">"${text}" <button id="add-more-btn">More</button></p>
+      <div class="share-btns">
+        <button id="share-text-btn">Share as Text</button>
+        <button id="share-card-btn">Share as Image</button>
+      </div>
+    </div>
+  `;
 
+  tooltip.style.display = 'block';
+  const rect = el.getBoundingClientRect();
+  tooltip.style.top = `${window.scrollY + rect.bottom + 5}px`;
+  tooltip.style.left = `${window.scrollX + rect.left}px`;
 
-      tooltip.innerHTML = `
-<div class="share-text-el">
-  <strong>Share this text:</strong>
-  <p>"${text}"</p>
-  <div class="share-btns">
-    <button id="share-text-btn">Share as Text</button>
-    <button id="share-card-btn">Share as Image</button>
-  </div>
-</div>
+  // Plain text share
+  document.getElementById('share-text-btn').onclick = () => {
+    navigator.clipboard.writeText(text);
+    showToast("info","Text copied! Share anywhere.");
+    el.classList.remove('active');
+  };
 
-      `;
-      tooltip.style.display = 'block';
-      const rect = el.getBoundingClientRect();
-      tooltip.style.top = `${window.scrollY + rect.bottom + 5}px`;
-      tooltip.style.left = `${window.scrollX + rect.left}px`;
+  // Image card share
+  document.getElementById('share-card-btn').onclick = () => {
+    createShareCard(text);
+    el.classList.remove('active');
+  };
 
-      // Plain text share
-      document.getElementById('share-text-btn').onclick = () => {
-        console.log('Sharing text:', text);
-        navigator.clipboard.writeText(text);
-        showToast("info","Text copied! Share anywhere.");
-        el.classList.remove('active');
+  // Handle "More" button
+  const addMoreBtn = document.getElementById('add-more-btn');
+  if (addMoreBtn) {
+    addMoreBtn.onclick = () => {
+      const parentP = el.closest('p'); // find the containing paragraph
+      if (!parentP) return;
 
-      };
+      // Split paragraph into sentences
+      const sentences = parentP.innerText.match(/[^.!?]+[.!?]/g) || [];
+      const currentIndex = sentences.findIndex(s => s.trim() === text.trim());
 
-      // Image card share
-      document.getElementById('share-card-btn').onclick = () => {
-        createShareCard(text);
-        el.classList.remove('active');
-      };
-
-      // Also remove if mouse leaves the element while pressed
+      // If there’s another sentence, append it
+      if (currentIndex >= 0 && currentIndex < sentences.length - 1) {
+        text += " " + sentences[currentIndex + 1].trim();
+        document.getElementById('share-text-p').innerHTML = `"${text}" <button id="add-more-btn">More</button>`;
+        
+        // Re-bind button for further clicks
+        document.getElementById('add-more-btn').onclick = addMoreBtn.onclick;
+      } else {
+        // No more sentences in paragraph — disable button
+        addMoreBtn.disabled = true;
+        addMoreBtn.innerText = "No more";
+      }
+    };
+          // Also remove if mouse leaves the element while pressed
 document.addEventListener('mouseleave', () => {
   el.classList.remove('active');
 });
     document.addEventListener('scroll', () => {
   el.classList.remove('active');
   });
-    });
+  
+  }
+});
+
+
+    
   });
 
   // Hide tooltip when clicking outside

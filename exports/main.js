@@ -1226,7 +1226,7 @@ function showTooltip(el, data) {
       goToLink(url);
     }
     if (e.target.id === 'tooltip-close') {
-      hideTooltip();
+      hideTooltip(); console.log("close clicked");
     }
   };
 }
@@ -1256,7 +1256,7 @@ function attachTooltips() {
     span.addEventListener('mouseleave', () => {
       clearTimeout(tooltipTimeout);
       setTimeout(() => {
-        if (!isHoveringTooltip) hideTooltip();
+        if (!isHoveringTooltip) console.log("close"); // hideTooltip();
       }, 2000);
     });
   });
@@ -1268,6 +1268,7 @@ function hideTooltip() {
 }
 
 function goToLink(url) {
+  console.log("open: ", url);
   window.open(url, "_blank");
 }
 

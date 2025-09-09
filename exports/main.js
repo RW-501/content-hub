@@ -1203,26 +1203,33 @@ function showTooltip(el, data) {
   tooltip.style.top = `${window.scrollY + rect.bottom + 5}px`;
   tooltip.style.left = `${window.scrollX + rect.left}px`;
 
+
+
   // Bind after injection
-  document.getElementById("tooltip-title").onclick = () => {
+  document.getElementById("tooltip-title").onclick = (e) => {
+      e.stopPropagation(); // ✅ important
     console.log("Title clicked");
     goToLink(data.url);
   };
 
-  document.getElementById("tooltip-img").onclick = () => {
+  document.getElementById("tooltip-img").onclick = (e) => {
+      e.stopPropagation(); // ✅ important
     console.log("Image clicked");
     goToLink(data.url);
   };
 
-  document.getElementById("tooltip-go").onclick = (e) => {
-    console.log("Go button clicked:", e.target.dataset.url);
-    goToLink(e.target.dataset.url);
-  };
+document.getElementById("tooltip-go").onclick = (e) => {
+  e.stopPropagation(); // ✅ important
+  console.log("Go button clicked:", e.target.dataset.url);
+  goToLink(e.target.dataset.url);
+};
 
-  document.getElementById("tooltip-close").onclick = () => {
-    console.log("Close button clicked");
-    hideTooltip();
-  };
+document.getElementById("tooltip-close").onclick = (e) => {
+  e.stopPropagation(); // ✅ important
+  console.log("Close button clicked");
+  hideTooltip();
+};
+
 }
 
 

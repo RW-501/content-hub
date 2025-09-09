@@ -391,7 +391,7 @@ function addAds(html) {
   if (totalSections === 0) return html; // nothing to do
 
   // Decide placement: every other section
-  const insertEvery = 2; 
+  const insertEvery = 4; 
 
   // Use DOM parsing so we don’t break HTML
   const parser = new DOMParser();

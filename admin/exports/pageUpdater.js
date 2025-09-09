@@ -188,8 +188,8 @@ span.id = spanId;
 includedHTML += `
   <div class="included-item">
   <a href="#${spanId}" title="Jump to keyword in article" aria-label="Jump to keyword ${keyword}">
-      ${keyword || "Keyword"}
-    </a> → 
+  ${keyword ? keyword.charAt(0).toUpperCase() + keyword.slice(1) : "Keyword"}
+      </a> → 
     <a href="${url || '#'}" 
        target="_blank" 
        title="${title || url || 'Link'}" 

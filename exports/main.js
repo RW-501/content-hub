@@ -1212,6 +1212,10 @@ function showTooltip(el, html) {
 }
 
 
+function hideTooltip(){
+    tooltip.style.display = 'none';
+
+}
 
 function attachTooltips() {
   const tooltip = document.getElementById('link-tooltip');

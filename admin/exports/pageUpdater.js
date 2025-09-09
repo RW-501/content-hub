@@ -106,7 +106,10 @@ async function linkifyKeywordsFromJSON(input, jsonUrl = 'https://contenthub.guru
 
     const entries = [];
     for (const [url, data] of Object.entries(keywordMap)) {
-      if (url === currentURL) continue;
+      if (url === currentURL) {
+                    console.log("skip currentURL: " + currentURL + ": URL: " + url);
+                     continue;
+      }
       const title = data.title || '';
       const category = data.category || '';
       const description = data.description || '';

@@ -658,7 +658,7 @@ schemaJSON = {
   "headline": articleData.title,
   "name": articleData.title, // ✅ Added for Google: reviewed item name
   "image": articleData.image,
-  "timeRequired": articleData.readTime || "PT" + readTime + "M",
+  "timeRequired": "PT" + readTime + "M",
   "datePublished": new Date().toISOString(),
   "dateModified": articleData.updatedAt || new Date().toISOString(),
   "author": articleData.author || { "@type": "Organization", "name": "ContentHub" },

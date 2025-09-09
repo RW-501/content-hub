@@ -1177,7 +1177,7 @@ document.getElementById('scrollUpBtn').addEventListener('click', () => {
   });
 });
 
-
+const tooltip = document.getElementById('link-tooltip');
 /*
 
 // Call this once when your page loads

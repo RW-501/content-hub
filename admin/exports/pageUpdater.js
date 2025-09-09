@@ -824,30 +824,43 @@ const Content = `
     {"@type": "ListItem", "position": 3, "name": "${articleData.title}", "item": "https://contenthub.guru/page/${articleData.slug}"}
   ]
 }
-</script>
+<\/script>
 
     <!-- Structured Data: Article + FAQ -->
-  <script type="application/ld+json">
-  {
-    "@context":"https://schema.org",
-    "@type":"Article",
-    "headline":"${articleData.title}",
-    "description":"${articleData.description}",
-    "timeRequired": "PT${readTime}M",
-    "image":["${articleData.image}"],
-    "author":{"@type":"Organization","name":"ContentHub"},
-    "publisher":{"@type":"Organization","name":"ContentHub","logo":{"@type":"ImageObject","url":"${articleData.image}"}},
-    "datePublished":"${articleData.publishedAt}",
-    "dateModified":"${articleData.updatedAt}",
-    "mainEntityOfPage":{"@type":"WebPage","@id":"https://contenthub.guru/page/${articleData.slug}"  },
-"aggregateRating": {
-  "@type": "AggregateRating",
-  "ratingValue": "${averageRating.toFixed(1)}",
-  "ratingCount": "${ratingCount}"
-}
-
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "${articleData.title}",
+  "description": "${articleData.description}",
+  "timeRequired": "PT${readTime}M",
+  "image": ["${articleData.image}"],
+  "author": {
+    "@type": "Organization",
+    "name": "ContentHub"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "ContentHub",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "${articleData.image}"
+    }
+  },
+  "datePublished": "${articleData.publishedAt}",
+  "dateModified": "${articleData.updatedAt}",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://contenthub.guru/page/${articleData.slug}"
+  },
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "${averageRating.toFixed(1)}",
+    "ratingCount": "${ratingCount}"
   }
-  <\/script>
+}
+<\/script>
+
 
 <meta name="google-adsense-account" content="${articleData.adsense}">
 

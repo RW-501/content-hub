@@ -943,20 +943,22 @@ background-color: transparent;
 
 }
 
-#included-pages {
-  margin-top: 2rem;
-  padding: 1rem;
-  background: #f9f9f9;
-  border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-  font-family: Arial, sans-serif;
+
+
+
+
+#included-pages h2 {
+    border-left: 4px solid #19ba8a;
+    padding-left: .5rem;
+
 }
 
-#included-pages h2.included {
-  font-size: 1.3rem;
-  margin-bottom: 0.8rem;
-  color: #333;
+#included-pages {
+    margin: 2rem 0;
+
 }
+
+
 
 #included-container {
   display: flex;

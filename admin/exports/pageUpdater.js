@@ -956,7 +956,7 @@ ${scriptTag}
     border-left: 4px solid  ${articleData.styles.headerBorder || "#19ba8a"};
 }
 
-
+#included-pages h2,
 #suggested-pages h2 {
     border-left: 4px solid  ${articleData.styles.headerBorder || "#19ba8a"};
     padding-left: .5rem;

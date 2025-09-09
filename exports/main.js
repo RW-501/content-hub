@@ -1283,7 +1283,7 @@ function createShareCard(text) {
   // Load background image
   const img = new Image();
   img.crossOrigin = "anonymous"; // allow cross-origin images if hosted elsewhere
-  img.src = 'https://contenthub.guru/images/share-background.jpg'; // your Content Hub background
+  img.src = 'https://contenthub.guru/images/share-background.png'; // your Content Hub background
 
   img.onload = () => {
     // Draw background

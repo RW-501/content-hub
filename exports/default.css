@@ -881,6 +881,9 @@ background-color: transparent;
   opacity: 1;
   transform: translateY(0);
 }
+
+
+
 /* Tooltip container */
 .tooltips {
   position: absolute;
@@ -905,8 +908,7 @@ background-color: transparent;
 
   transition: opacity 0.2s ease, transform 0.2s ease;
   transform: translateY(6px);
-  opacity: 1; /* default hidden, show with JS */
-  pointer-events: none; /* avoids blocking */
+
 }
 
 /* Tooltip title */

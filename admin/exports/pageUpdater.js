@@ -623,64 +623,6 @@ const adCode = `
 // Replace $[AD] placeholders in your content
 const inArticleBlocksHTML = inArticleBlocksHTML_Clean.replace(/\$\[AD\]/g, adCode);
 
-  // Schema generation
-  let schemaJSON;
-  switch (articleData.schemaType) {
-    case "FAQ":
-      schemaJSON = {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": articleData.faq?.map(f => ({
-          "@type": "Question",
-          "name": f.q,
-          "acceptedAnswer": { "@type": "Answer", "text": f.a }
-        })) || []
-      };
-      break;
-    case "HowTo":
-      schemaJSON = {
-        "@context": "https://schema.org",
-        "@type": "HowTo",
-        "name": articleData.title,
-        "description": articleData.description,
-        "step": articleData.howto?.map((s, i) => ({
-          "@type": "HowToStep",
-          "position": i + 1,
-          "name": s.stepTitle,
-          "text": s.stepDescription
-        })) || []
-      };
-      break;
-    default: // Article
-    /*
-schemaJSON = {
-  "@context": "https://schema.org",
-  "@type": "Article",
-  "headline": articleData.title,
-  "name": articleData.title, // ✅ Added for Google: reviewed item name
-  "image": articleData.image,
-  "timeRequired": "PT" + readTime + "M",
-  "datePublished": articleData.updatedAt,
-  "dateModified": articleData.updatedAt || new Date().toISOString(),
-  "author": articleData.author || { "@type": "Organization", "name": "ContentHub" },
-  "publisher": { 
-    "@type": "Organization", 
-    "name": "ContentHub" 
-  },
-  "description": articleData.description,
-  "articleBody": articleData.body || "",
-  "aggregateRating": {
-    "@type": "AggregateRating",
-    "ratingValue": averageRating.toFixed(1),
-    "ratingCount": ratingCount
-  }
-};
-*/
-
-
-      break;
-  }
-
 
     const pageURL = `https://contenthub.guru/page/${encodeURIComponent(articleData.slug)}`;
     const pageTitle = `${articleData.title}`;
@@ -882,8 +824,6 @@ const Content = `
   gtag('config', '${articleData.gTag}');
 <\/script>
 
-<!-- Schema & Metadata -->
-<script type="application/ld+json">${JSON.stringify(schemaJSON)}<\/script>
 
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"><\/script>
 

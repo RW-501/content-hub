@@ -1178,29 +1178,6 @@ document.getElementById('scrollUpBtn').addEventListener('click', () => {
 });
 
 const tooltip = document.getElementById('link-tooltip');
-/*
-
-// Call this once when your page loads
-const tooltip = document.createElement('div');
-tooltip.id = 'link-tooltip';
-tooltip.style.position = 'absolute';
-tooltip.style.background = 'transparent';
-tooltip.style.pointerEvents = 'none';
-tooltip.style.zIndex = 1000;
-tooltip.style.display = 'none';
-tooltip.style.maxWidth = '300px';
-
-tooltip.style.background = 'rgba(0,0,0,0.85)';
-tooltip.style.color = '#fff';
-tooltip.style.padding = '8px 12px';
-tooltip.style.borderRadius = '6px';
-tooltip.style.fontSize = '14px';
-
-tooltip.style.boxShadow = '0 2px 8px rgba(0,0,0,0.3)';
-
-document.body.appendChild(tooltip);
-
-*/
 
 
 function showTooltip(el, data) {
@@ -1225,25 +1202,25 @@ function showTooltip(el, data) {
   tooltip.style.left = `${window.scrollX + rect.left}px`;
 
   // Bind after injection
-  document.getElementById("tooltip-title")?.addEventListener("click", () => {
+  document.getElementById("tooltip-title").onclick = () => {
     console.log("Title clicked");
     goToLink(data.url);
-  });
+  };
 
-  document.getElementById("tooltip-img")?.addEventListener("click", () => {
+  document.getElementById("tooltip-img").onclick = () => {
     console.log("Image clicked");
     goToLink(data.url);
-  });
+  };
 
-  document.getElementById("tooltip-go")?.addEventListener("click", (e) => {
+  document.getElementById("tooltip-go").onclick = (e) => {
     console.log("Go button clicked:", e.target.dataset.url);
     goToLink(e.target.dataset.url);
-  });
+  };
 
-  document.getElementById("tooltip-close")?.addEventListener("click", () => {
+  document.getElementById("tooltip-close").onclick = () => {
     console.log("Close button clicked");
     hideTooltip();
-  });
+  };
 }
 
 

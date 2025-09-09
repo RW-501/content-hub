@@ -195,7 +195,7 @@ includedHTML += `
        title="${title || url || 'Link'}" 
        aria-label="Link to ${title || url || 'Link'}">
        ${title || url || 'Link'}
-    </a>
+    </a> (<span class="category-label">${category || ''}</span>)
   </div>`;
 
             // ✅ mark as used

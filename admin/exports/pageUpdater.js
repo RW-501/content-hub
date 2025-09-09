@@ -85,9 +85,20 @@ function formatCategory(category) {
 }
 
 
-let currentURL ;
 
-async function linkifyKeywordsFromJSON(input, jsonUrl = 'https://contenthub.guru/internal-Links.json') {
+
+
+let currentURL;
+const usedLinks = new Set(); // ✅ track keyword+url combos
+let linkCount;
+let includedHTML;
+
+/**
+ * @param {HTMLElement|string} input - The HTML string or container element
+ * @param {string} jsonUrl - Path to internal links JSON
+ * @param {number|null} maxLinks - (optional) Maximum number of links allowed per page. Null = unlimited
+ */
+async function linkifyKeywordsFromJSON(input, jsonUrl = 'https://contenthub.guru/internal-Links.json', maxLinks = null) {
   try {
     const res = await fetch(jsonUrl);
     if (!res.ok) throw new Error(`Failed to fetch ${jsonUrl}`);
@@ -102,7 +113,7 @@ async function linkifyKeywordsFromJSON(input, jsonUrl = 'https://contenthub.guru
       const image = data.image || "https://contenthub.guru/images/placeholder.png";
       (data.keywords || []).forEach(keyword => {
         if (/contenthub\.guru/i.test(keyword)) return; // skip ContentHub
-        entries.push({ keyword, url, title, category, image, description  });
+        entries.push({ keyword, url, title, category, image, description });
       });
     }
 
@@ -112,7 +123,11 @@ async function linkifyKeywordsFromJSON(input, jsonUrl = 'https://contenthub.guru
       ? Object.assign(document.createElement('div'), { innerHTML: input })
       : input;
 
+     linkCount = 0; // ✅ track number of inserted links
+
     function linkifyTextNode(textNode) {
+      if (maxLinks !== null && linkCount >= maxLinks) return; // ✅ stop if limit reached
+
       const parent = textNode.parentElement;
       if (!parent) return;
 
@@ -127,6 +142,13 @@ async function linkifyKeywordsFromJSON(input, jsonUrl = 'https://contenthub.guru
         let matched = false;
 
         for (const { keyword, url, title, category, image, description } of entries) {
+          if (maxLinks !== null && linkCount >= maxLinks) break; // ✅ break loop if limit reached
+
+          const key = `${keyword}::${url}`; // unique identifier
+
+          // ✅ skip if already used
+          if (usedLinks.has(key)) continue;
+
           const regex = new RegExp(`\\b${keyword.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&")}\\b`, 'i');
           const match = regex.exec(text);
           if (match) {
@@ -137,26 +159,42 @@ async function linkifyKeywordsFromJSON(input, jsonUrl = 'https://contenthub.guru
               fragment.appendChild(document.createTextNode(text.slice(0, match.index)));
             }
 
-const a = document.createElement('a');
-a.className = 'linked';
-a.href = url;
-a.title = title;
-a.target = '_blank';
-a.rel = 'noopener noreferrer';
+                        // ✅ in-body clickable span calling a function
+            const span = document.createElement('span');
+            span.className = 'linked';
+            span.style.cursor = 'pointer';
+           // span.onclick = () => goToLink(url);
 
-// Accessibility & metadata
-a.setAttribute('aria-label', title);
-if (description) a.setAttribute('data-summary', description);
-if (category) a.setAttribute('data-category', category);
-if (image) a.setAttribute('data-image', image);
+            // Accessibility & metadata
+            span.setAttribute('aria-label', title);
+            if (description) span.setAttribute('data-summary', description);
+            if (category) span.setAttribute('data-category', category);
+            if (image) span.setAttribute('data-image', image);
+            if (url) span.setAttribute('data-url', url);
 
-// Text content
-a.textContent = match[0];
-fragment.appendChild(a);
+            // Text content
+            span.textContent = match[0];
+            fragment.appendChild(span);
+
+            // ✅ mark as used
+            usedLinks.add(key);
+            linkCount++; // ✅ increase counter
+
+           // ✅ add to includedHTML
+includedHTML += `
+  <div class="included-item">
+    ${keyword}: → 
+    <a href="${url}" 
+       target="_blank" 
+       title="${title}" 
+       aria-label="Link to ${title}">
+       ${title}
+    </a>
+  </div>`;
 
 
-            logToPopup("Replaced: " + keyword+ ": URL: " + url, "limegreen");
-            console.log("Replaced: " + keyword+ ": URL: " + url);
+            logToPopup("Replaced: " + keyword + ": URL: " + url, "limegreen");
+            console.log("Replaced: " + keyword + ": URL: " + url);
 
             text = text.slice(match.index + match[0].length);
             break; // only process one match at a time
@@ -174,10 +212,11 @@ fragment.appendChild(a);
 
     // Walk DOM recursively
     function walk(node) {
+      if (maxLinks !== null && linkCount >= maxLinks) return; // ✅ stop walking if limit reached
+
       if (node.nodeType === Node.TEXT_NODE) {
         linkifyTextNode(node);
       } else if (node.nodeType === Node.ELEMENT_NODE) {
-        // Skip entire headers and links themselves
         if (!/^(A|H[1-6])$/i.test(node.tagName)) {
           node.childNodes.forEach(walk);
         }
@@ -194,6 +233,12 @@ fragment.appendChild(a);
 }
 
 
+/*
+
+linkifyKeywordsFromJSON(articleHTML, 'internal-Links.json', 5); // limit to 5 links
+linkifyKeywordsFromJSON(articleHTML, 'internal-Links.json');   // unlimited
+
+*/
             console.log("Loading...");
 
 
@@ -695,6 +740,7 @@ const Content = `
 <meta name="category" content="${formatCategory(articleData.category)}">
 <meta name="lang" content="en">
 <meta name="adCount" content="${adCount}">
+<meta name="linkCount" content="${linkCount}">
 
 <meta name="imageCount" content="${imgCount}">
 <meta name="videoCount" content="${videoCount}">
@@ -1183,6 +1229,10 @@ hr {
   <div id="suggested-container" class="suggested-grid">${suggestedHTML}</div>
 </section>
 
+<section id="included-pages" >
+  <h2 class="included">Pages Included:</h2>
+  <div id="included-container" class="included-grid">${includedHTML}</div>
+</section>
 
 </main>
 

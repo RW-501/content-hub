@@ -1210,45 +1210,46 @@ function showTooltip(el, html) {
 function hideTooltip(){
   let tooltip = document.getElementById('link-tooltip');
   tooltip.style.display = 'none';
-
-
-}
-
-async function fetchPreviewData(url) {
-  // Find the link with this URL
-  const a = document.querySelector(`a.linked[href="${url}"]`);
-  if (!a) return {};
-  return {
-    title: a.title,
-    summary: a.dataset.summary || 'No summary available.',
-    image: a.dataset.image || null
-  };
 }
 
 
-document.querySelectorAll('a.linked').forEach(a => {
-  let tooltipTimeout;
+// Move goToLink outside
+function goToLink(url) {
+  window.open(url, "_blank");
+}
+window.goToLink = goToLink;
 
-  a.addEventListener('mouseenter', async () => {
-    // Small delay to avoid too many requests when moving the mouse
-    tooltipTimeout = setTimeout(async () => {
-      // Fetch preview info (JSON or summary)
-      const data = await fetchPreviewData(a.href);
+// Attach tooltips to all linked spans after the page updates
+function attachTooltips() {
+  document.querySelectorAll('.linked').forEach(a => {
+    let tooltipTimeout;
 
-      // You can build a tooltip HTML
-      const content = `
-        <div class="tooltips" style="max-width:250px;">
-          <strong>${data.title || a.title}</strong><br>
-          ${data.image ? `<img src="${data.image}" style="max-width:100%;margin-top:5px;">` : ''}
-          <p style="margin:0;">${data.summary || 'No summary available.'}</p>
-        </div>
-      `;
-      showTooltip(a, content); // Implement your floating tooltip
-    }, 300); // 300ms delay
+    a.addEventListener('mouseenter', async () => {
+      tooltipTimeout = setTimeout(async () => {
+        const data = {
+          title: a.title,
+          summary: a.dataset.summary || 'No summary available.',
+          image: a.dataset.image || null,
+          url: a.dataset.url || a.href
+        };
+
+        const content = `
+          <div class="tooltips" style="max-width:250px;">
+            <strong onclick="goToLink('${data.url}')">${data.title}</strong><br>
+            ${data.image ? `<img onclick="goToLink('${data.url}')" src="${data.image}" style="max-width:100%;margin-top:5px;">` : ''}
+            <p style="margin:0;">${data.summary}</p>
+            <button class='linked-btn' onclick="goToLink('${data.url}')">Go</button>
+          </div>
+        `;
+        showTooltip(a, content);
+      }, 300);
+    });
+
+    a.addEventListener('mouseleave', () => {
+      clearTimeout(tooltipTimeout);
+      hideTooltip();
+    });
   });
+}
 
-  a.addEventListener('mouseleave', () => {
-    clearTimeout(tooltipTimeout);
-    hideTooltip(); // Implement a function to hide the tooltip
-  });
-});
+attachTooltips();

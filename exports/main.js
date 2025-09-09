@@ -1178,7 +1178,7 @@ document.getElementById('scrollUpBtn').addEventListener('click', () => {
 });
 
 
-
+/*
 
 // Call this once when your page loads
 const tooltip = document.createElement('div');
@@ -1189,7 +1189,7 @@ tooltip.style.pointerEvents = 'none';
 tooltip.style.zIndex = 1000;
 tooltip.style.display = 'none';
 tooltip.style.maxWidth = '300px';
-/*
+
 tooltip.style.background = 'rgba(0,0,0,0.85)';
 tooltip.style.color = '#fff';
 tooltip.style.padding = '8px 12px';
@@ -1197,8 +1197,10 @@ tooltip.style.borderRadius = '6px';
 tooltip.style.fontSize = '14px';
 
 tooltip.style.boxShadow = '0 2px 8px rgba(0,0,0,0.3)';
-*/
+
 document.body.appendChild(tooltip);
+
+*/
 
 
 function showTooltip(el, data) {
@@ -1286,3 +1288,114 @@ function goToLink(url) {
 }
 
 attachTooltips();
+
+
+
+
+function createShareCard(text) {
+  // Create a canvas element
+  const canvas = document.createElement('canvas');
+  canvas.width = 800;
+  canvas.height = 450; // 16:9 ratio
+  const ctx = canvas.getContext('2d');
+
+  // Load background image
+  const img = new Image();
+  img.crossOrigin = "anonymous"; // allow cross-origin images if hosted elsewhere
+  img.src = 'https://contenthub.guru/images/share-background.jpg'; // your Content Hub background
+
+  img.onload = () => {
+    // Draw background
+    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+    // Draw text
+    ctx.fillStyle = '#fff';
+    ctx.font = 'bold 28px Arial';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+
+    wrapText(ctx, text, canvas.width/2, canvas.height/2, canvas.width - 60, 36);
+
+    // Open in new tab as image
+    const dataUrl = canvas.toDataURL('image/png');
+    const win = window.open();
+    win.document.write(`<img src="${dataUrl}" style="max-width:100%;">`);
+  };
+}
+
+// Helper to wrap text nicely on canvas
+function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
+  const words = text.split(' ');
+  let line = '';
+  let lines = [];
+  for (let n = 0; n < words.length; n++) {
+    const testLine = line + words[n] + ' ';
+    const metrics = ctx.measureText(testLine);
+    if (metrics.width > maxWidth && n > 0) {
+      lines.push(line);
+      line = words[n] + ' ';
+    } else {
+      line = testLine;
+    }
+  }
+  lines.push(line);
+  lines.forEach((lineText, i) => {
+    ctx.fillText(lineText.trim(), x, y + (i - lines.length/2 + 0.5)*lineHeight);
+  });
+}
+
+function attachShareableText() {
+  /*
+  const tooltip = document.createElement('div');
+  tooltip.id = 'share-tooltip';
+  tooltip.style.position = 'absolute';
+  tooltip.style.background = 'rgba(0,0,0,0.85)';
+  tooltip.style.color = '#fff';
+  tooltip.style.padding = '8px 12px';
+  tooltip.style.borderRadius = '6px';
+  sharetooltip.style.fontSize = '14px';
+  sharetooltip.style.display = 'none';
+  sharetooltip.style.zIndex = 1000;
+  tooltip.appendChild(sharetooltip);
+*/
+
+  document.querySelectorAll('.share').forEach(el => {
+    el.style.cursor = 'pointer';
+    el.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const text = el.innerText;
+
+      tooltip.innerHTML = `
+        <div>
+          <strong>Share this text:</strong>
+          <p style="margin:5px 0;">"${text}"</p>
+          <button id="share-text">Share as Text</button>
+          <button id="share-card">Share as Image</button>
+        </div>
+      `;
+      tooltip.style.display = 'block';
+      const rect = el.getBoundingClientRect();
+      tooltip.style.top = `${window.scrollY + rect.bottom + 5}px`;
+      tooltip.style.left = `${window.scrollX + rect.left}px`;
+
+      // Plain text share
+      document.getElementById('share-text').onclick = () => {
+        console.log('Sharing text:', text);
+        navigator.clipboard.writeText(text);
+        alert("Text copied! Share anywhere.");
+      };
+
+      // Image card share
+      document.getElementById('share-card').onclick = () => {
+        createShareCard(text);
+      };
+    });
+  });
+
+  // Hide tooltip when clicking outside
+  document.addEventListener('click', () => {
+    tooltip.style.display = 'none';
+  });
+}
+
+attachShareableText() 

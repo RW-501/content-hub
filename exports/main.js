@@ -1202,7 +1202,6 @@ document.body.appendChild(tooltip);
 
 
 function showTooltip(el, data) {
-  const tooltip = document.getElementById('link-tooltip');
   tooltip.style.pointerEvents = 'auto'; // ✅ allow clicks again
   console.log("showTooltip called with data:", data);
 
@@ -1246,7 +1245,6 @@ function showTooltip(el, data) {
 
 
 function attachTooltips() {
-  const tooltip = document.getElementById('link-tooltip');
   let tooltipTimeout;
   let isHoveringTooltip = false;
 
@@ -1277,7 +1275,6 @@ function attachTooltips() {
 }
 
 function hideTooltip() {
-  const tooltip = document.getElementById('link-tooltip');
   tooltip.style.display = 'none';
   tooltip.style.pointerEvents = 'none'; // ✅ disable when hidden so it doesn’t block stuff
 }

@@ -163,10 +163,12 @@ async function linkifyKeywordsFromJSON(input, jsonUrl = 'https://contenthub.guru
             }
 
                         // ✅ in-body clickable span calling a function
-            const span = document.createElement('span');
-            span.className = 'linked';
-            span.style.cursor = 'pointer';
-           // span.onclick = () => goToLink(url);
+const spanId = `link-${linkCount}`; // unique id for this keyword
+const span = document.createElement('span');
+span.className = 'linked';
+span.style.cursor = 'pointer';
+span.id = spanId;
+
 
             // Accessibility & metadata
             span.setAttribute('aria-label', title);
@@ -180,14 +182,14 @@ async function linkifyKeywordsFromJSON(input, jsonUrl = 'https://contenthub.guru
             span.textContent = match[0];
             fragment.appendChild(span);
 
-            // ✅ mark as used
-            usedLinks.add(key);
-            linkCount++; // ✅ increase counter
+
 
            // ✅ add to includedHTML
 includedHTML += `
   <div class="included-item">
-    ${keyword || "Keyword"}: → 
+  <a href="#${spanId}" title="Jump to keyword in article" aria-label="Jump to keyword ${keyword}">
+      ${keyword || "Keyword"}
+    </a> → 
     <a href="${url || '#'}" 
        target="_blank" 
        title="${title || url || 'Link'}" 
@@ -196,7 +198,9 @@ includedHTML += `
     </a>
   </div>`;
 
-
+            // ✅ mark as used
+            usedLinks.add(key);
+            linkCount++; // ✅ increase counter
 
             logToPopup("Replaced: " + keyword + ": URL: " + url, "limegreen");
             console.log("Replaced: " + keyword + ": URL: " + url);

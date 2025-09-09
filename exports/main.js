@@ -1229,10 +1229,8 @@ function attachTooltips() {
 
   // Make tooltip hoverable
   tooltip.addEventListener('mouseenter', () => { isHoveringTooltip = true; });
-  tooltip.addEventListener('mouseleave', () => {
-    isHoveringTooltip = false;
-    hideTooltip();
-  });
+
+  
 
   document.querySelectorAll('.linked').forEach(span => {
     span.addEventListener('mouseenter', () => {
@@ -1263,7 +1261,7 @@ function attachTooltips() {
       }, 300);
     });
 
-    span.addEventListener('mouseleave', () => {
+    tooltip.addEventListener('mouseleave', () => {
       clearTimeout(tooltipTimeout);
       setTimeout(() => {
         if (!isHoveringTooltip) hideTooltip();

@@ -1281,23 +1281,24 @@ attachTooltips();
 
 
 
-function createShareCard(text) {
-  // Create a canvas element
+function createShareCard(text, eventTarget) {
+  const shareContainer = document.getElementById('share-container');
+  shareContainer.innerHTML = ''; // clear previous
+
+  // Create canvas
   const canvas = document.createElement('canvas');
   canvas.width = 800;
-  canvas.height = 450; // 16:9 ratio
+  canvas.height = 450;
   const ctx = canvas.getContext('2d');
 
-  // Load background image
+  // Load background
   const img = new Image();
-  img.crossOrigin = "anonymous"; // allow cross-origin images if hosted elsewhere
-  img.src = 'https://contenthub.guru/images/share-background.png'; // your Content Hub background
+  img.crossOrigin = "anonymous";
+  img.src = 'https://contenthub.guru/images/share-background.png';
 
   img.onload = () => {
-    // Draw background
     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
-    // Draw text
     ctx.fillStyle = '#fff';
     ctx.font = 'bold 28px Arial';
     ctx.textAlign = 'center';
@@ -1305,12 +1306,55 @@ function createShareCard(text) {
 
     wrapText(ctx, text, canvas.width/2, canvas.height/2, canvas.width - 60, 36);
 
-    // Open in new tab as image
+    // Convert to data URL
     const dataUrl = canvas.toDataURL('image/png');
-    const win = window.open();
-    win.document.write(`<img src="${dataUrl}" style="max-width:100%;">`);
+
+    // Build share UI
+    shareContainer.innerHTML = `
+      <div class="share-card" style="
+        background:#222; 
+        padding:12px; 
+        border-radius:12px; 
+        display:flex; 
+        flex-direction:column; 
+        align-items:center; 
+        max-width:320px;">
+        <img src="${dataUrl}" style="width:100%; border-radius:8px; margin-bottom:10px;" />
+        <div class="share-buttons" style="display:flex; gap:8px;">
+          <button id="share-twitter">Twitter</button>
+          <button id="share-facebook">Facebook</button>
+          <button id="share-copy">Copy Link</button>
+        </div>
+      </div>
+    `;
+
+    // Position near the element clicked
+    const rect = eventTarget.getBoundingClientRect();
+    shareContainer.style.top = `${window.scrollY + rect.bottom + 5}px`;
+    shareContainer.style.left = `${window.scrollX + rect.left}px`;
+    shareContainer.style.display = 'block';
+
+    // Share actions
+    document.getElementById('share-twitter').onclick = () => {
+      window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`, '_blank');
+    };
+    document.getElementById('share-facebook').onclick = () => {
+      window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(dataUrl)}`, '_blank');
+    };
+    document.getElementById('share-copy').onclick = () => {
+      navigator.clipboard.writeText(dataUrl);
+      alert('Image URL copied!');
+    };
   };
 }
+
+
+
+// Hide on click outside
+document.addEventListener('click', () => {
+  document.getElementById('share-container').style.display = 'none';
+});
+
 
 // Helper to wrap text nicely on canvas
 function wrapText(ctx, text, x, y, maxWidth, lineHeight) {

@@ -942,3 +942,46 @@ background-color: transparent;
     padding-left: .5rem;
 
 }
+
+#included-pages {
+  margin-top: 2rem;
+  padding: 1rem;
+  background: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  font-family: Arial, sans-serif;
+}
+
+#included-pages h2.included {
+  font-size: 1.3rem;
+  margin-bottom: 0.8rem;
+  color: #333;
+}
+
+#included-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.included-item {
+  padding: 0.4rem 0.6rem;
+  background: #fff;
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.included-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.included-item a {
+  color: #0073e6;
+  text-decoration: none;
+}
+
+.included-item a:hover {
+  text-decoration: underline;
+}

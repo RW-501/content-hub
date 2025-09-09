@@ -187,14 +187,15 @@ async function linkifyKeywordsFromJSON(input, jsonUrl = 'https://contenthub.guru
            // ✅ add to includedHTML
 includedHTML += `
   <div class="included-item">
-    ${keyword}: → 
-    <a href="${url}" 
+    ${keyword || "Keyword"}: → 
+    <a href="${url || '#'}" 
        target="_blank" 
-       title="${title}" 
-       aria-label="Link to ${title}">
-       ${title}
+       title="${title || url || 'Link'}" 
+       aria-label="Link to ${title || url || 'Link'}">
+       ${title || url || 'Link'}
     </a>
   </div>`;
+
 
 
             logToPopup("Replaced: " + keyword + ": URL: " + url, "limegreen");

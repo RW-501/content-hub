@@ -1127,6 +1127,8 @@ async function getVisitorLocation() {
     
     const data = await res.json();
 
+    logVisitor(data);
+
     // Save to localStorage for later use
     localStorage.setItem("visitorInfo", JSON.stringify(data));
 
@@ -1160,6 +1162,8 @@ async function getVisitorLocation() {
 }
 
 */
+
+
 // 🔹 Run on page load
 document.addEventListener("DOMContentLoaded", async () => {
   await getVisitorLocation();
@@ -1184,7 +1188,6 @@ function showTooltip(el, data) {
   const tooltip = document.getElementById('link-tooltip');
 
   tooltip.style.pointerEvents = 'auto'; // ✅ allow clicks again
-  console.log("Ready showTooltip called with data:", data);
 
   tooltip.innerHTML = `
     <div class="tooltips" style="max-width:250px;">
@@ -1208,25 +1211,21 @@ function showTooltip(el, data) {
   // Bind after injection
   document.getElementById("tooltip-title").onclick = (e) => {
       e.stopPropagation(); // ✅ important
-    console.log("Title clicked");
     goToLink(data.url);
   };
 
   document.getElementById("tooltip-img").onclick = (e) => {
       e.stopPropagation(); // ✅ important
-    console.log("Image clicked");
     goToLink(data.url);
   };
 
 document.getElementById("tooltip-go").onclick = (e) => {
   e.stopPropagation(); // ✅ important
-  console.log("Go button clicked:", e.target.dataset.url);
   goToLink(e.target.dataset.url);
 };
 
 document.getElementById("tooltip-close").onclick = (e) => {
   e.stopPropagation(); // ✅ important
-  console.log("Close button clicked");
   hideTooltip();
 };
 
@@ -1337,25 +1336,20 @@ function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
 function attachShareableText() {
   const tooltip = document.getElementById('link-tooltip');
 
-  /*
-  const tooltip = document.createElement('div');
-  tooltip.id = 'share-tooltip';
-  tooltip.style.position = 'absolute';
-  tooltip.style.background = 'rgba(0,0,0,0.85)';
-  tooltip.style.color = '#fff';
-  tooltip.style.padding = '8px 12px';
-  tooltip.style.borderRadius = '6px';
-  sharetooltip.style.fontSize = '14px';
-  sharetooltip.style.display = 'none';
-  sharetooltip.style.zIndex = 1000;
-  tooltip.appendChild(sharetooltip);
-*/
+
 
   document.querySelectorAll('.share').forEach(el => {
     el.style.cursor = 'pointer';
+    el.classList.add('highlight');
+
+
+
     el.addEventListener('click', (e) => {
       e.stopPropagation();
       const text = el.innerText;
+  el.classList.add('active');
+
+
 
       tooltip.innerHTML = `
 <div class="share-text-el">
@@ -1377,18 +1371,32 @@ function attachShareableText() {
       document.getElementById('share-text-btn').onclick = () => {
         console.log('Sharing text:', text);
         navigator.clipboard.writeText(text);
-        alert("Text copied! Share anywhere.");
+        showToast("info","Text copied! Share anywhere.");
+        el.classList.remove('active');
+
       };
 
       // Image card share
       document.getElementById('share-card-btn').onclick = () => {
         createShareCard(text);
+        el.classList.remove('active');
       };
+
+      // Also remove if mouse leaves the element while pressed
+document.addEventListener('mouseleave', () => {
+  el.classList.remove('active');
+});
+    document.addEventListener('scroll', () => {
+  el.classList.remove('active');
+  });
     });
   });
 
   // Hide tooltip when clicking outside
   document.addEventListener('click', () => {
+    tooltip.style.display = 'none';
+  });
+    document.addEventListener('scroll', () => {
     tooltip.style.display = 'none';
   });
 }

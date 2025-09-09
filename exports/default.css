@@ -1043,3 +1043,28 @@ background-color: transparent;
   transform: translateY(0);
   background: #5dabff; /* primary blue */
 }
+
+
+/* Cool highlight with hover + active effect */
+.highlight {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: linear-gradient(120deg, #ffe066, #ff6b6b);
+  color: #000;
+  transition: all 0.2s ease;
+  box-shadow: 0 0 0 rgba(255, 107, 107, 0); /* no shadow initially */
+  cursor: pointer;
+}
+
+/* Hover state: glow and lift */
+.highlight:hover {
+  box-shadow: 0 4px 15px rgba(255, 107, 107, 0.6);
+  transform: translateY(-2px) scale(1.02);
+}
+
+/* Active state: pressed down effect */
+.highlight:active {
+  transform: translateY(1px) scale(0.98);
+  box-shadow: 0 2px 6px rgba(255, 107, 107, 0.4);
+}

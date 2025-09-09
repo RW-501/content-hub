@@ -1220,53 +1220,50 @@ function attachTooltips() {
 
   // Make tooltip hoverable
   tooltip.addEventListener('mouseenter', () => { isHoveringTooltip = true; });
+  tooltip.addEventListener('mouseleave', () => {
+    isHoveringTooltip = false;
+    hideTooltip();
+  });
 
-  
+  // Use event delegation for buttons inside tooltip
+  tooltip.addEventListener('click', (e) => {
+    if (e.target.matches('#tooltip-go')) {
+      const url = e.target.dataset.url;
+      goToLink(url);
+    } else if (e.target.matches('#tooltip-close')) {
+      hideTooltip();
+    }
+  });
 
   document.querySelectorAll('.linked').forEach(span => {
     span.addEventListener('mouseenter', () => {
       clearTimeout(tooltipTimeout);
       tooltipTimeout = setTimeout(() => {
         const data = {
-          title: span.dataset.title || "",
+          title: span.dataset.title || span.textContent || "No title",
           summary: span.dataset.summary || 'No summary available.',
           image: span.dataset.image || null,
-          url: span.dataset.url || span.href
+          url: span.dataset.url || '#'
         };
 
-function hideTooltip() {
-  const tooltip = document.getElementById('link-tooltip');
-  tooltip.style.display = 'none';
-}
-window.hideTooltip = hideTooltip;
-
-function goToLink(url) {
-  window.open(url, "_blank");
-}
-window.goToLink = goToLink;
-        // Build tooltip content dynamically
-                const content = `
+        const content = `
           <div class="tooltips" style="max-width:250px;">
             <strong onclick="goToLink('${data.url}')">${data.title}</strong><br>
             ${data.image ? `<img onclick="goToLink('${data.url}')" src="${data.image}" style="max-width:100%;margin-top:5px;">` : ''}
             <p style="margin:0;">${data.summary}</p>
-            <button id="tooltip-go" class="linked-btn">Go</button>
+            <button id="tooltip-go" class="linked-btn" data-url="${data.url}">Go</button>
             <button id="tooltip-close" class="linked-btn-close">Close</button>
           </div>
         `;
         showTooltip(span, content);
-
-        // Attach event listeners dynamically
-        document.getElementById('tooltip-go').onclick = () => goToLink(data.url);
-        document.getElementById('tooltip-close').onclick = hideTooltip;
       }, 300);
     });
 
-    tooltip.addEventListener('mouseleave', () => {
+    span.addEventListener('mouseleave', () => {
       clearTimeout(tooltipTimeout);
       setTimeout(() => {
         if (!isHoveringTooltip) hideTooltip();
-      }, 5000);
+      }, 300); // shorter delay to hide if mouse leaves
     });
   });
 }

@@ -745,7 +745,7 @@ async function generateBlocksHTML(blocks, position) {
 // Update UI
 export async function updatePage(articleData, location) {
 
-currentURL = "https://contenthub.guru/" + articleData.slug;
+currentURL = "https://contenthub.guru/page/" + articleData.slug;
 
 console.log("currentURL: ",currentURL);
 

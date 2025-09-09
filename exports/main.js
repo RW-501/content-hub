@@ -1237,7 +1237,8 @@ function attachTooltips() {
   tooltip.addEventListener('mouseleave', () => { isHoveringTooltip = false; });
 
   document.querySelectorAll('.linked').forEach(span => {
-    span.addEventListener('mouseenter', () => {
+    span.addEventListener('mouseenter', (e) => {
+            e.stopPropagation();
       clearTimeout(tooltipTimeout);
       tooltipTimeout = setTimeout(() => {
         const data = {

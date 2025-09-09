@@ -1205,7 +1205,7 @@ document.body.appendChild(tooltip);
 
 function showTooltip(el, data) {
   tooltip.style.pointerEvents = 'auto'; // ✅ allow clicks again
-  console.log("showTooltip called with data:", data);
+  console.log("Ready showTooltip called with data:", data);
 
   tooltip.innerHTML = `
     <div class="tooltips" style="max-width:250px;">

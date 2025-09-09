@@ -312,7 +312,7 @@ figure { margin: 0; }
     align-items: center;
     margin-top: auto;
     margin-bottom: 0;
-    padding: 0 1rem;
+    padding: 0;
     flex-direction: column;
 }
 
@@ -336,6 +336,9 @@ figure { margin: 0; }
     flex-wrap: wrap;
     justify-content: space-evenly;
     align-items: center;
+      
+    background-color: #969696 !important;
+
 }
 
 #readTime { font-size: 0.95rem; opacity: 0.8; margin: auto; font-weight: bolder; }

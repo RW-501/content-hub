@@ -1400,7 +1400,6 @@ hr {
 
 </main>
 
-<div id='link-tooltip' syle='display:none'></div>
 
 <footer class="site-footer" role="contentinfo" style="text-align:center; padding:20px; background:#1f2937; color:#f3f4f6; font-family:Arial, sans-serif;">
   <p>
@@ -1459,6 +1458,10 @@ hr {
 
 <!-- Scroll to Top -->
 <div id="scrollUpBtn"><i class="fas fa-arrow-up"></i></div>
+
+<div id='link-tooltip' style="display:none; position:absolute; z-index:1000;"></div>
+
+<div id="share-container" style="display:none; position:absolute; z-index:1000;"></div>
 
 
   <!-- 🔹 Hidden meta info for debugging / internal use -->

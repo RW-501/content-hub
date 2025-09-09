@@ -1239,7 +1239,7 @@ function attachTooltips() {
       clearTimeout(tooltipTimeout);
       tooltipTimeout = setTimeout(() => {
         const data = {
-          title: span.title,
+          title: span.dataset.title || "",
           summary: span.dataset.summary || 'No summary available.',
           image: span.dataset.image || null,
           url: span.dataset.url || span.href

@@ -832,6 +832,7 @@ const Content = `
   "@context": "https://schema.org",
   "@type": "Article",
   "headline": "${articleData.title}",
+  "name": "${articleData.title}", 
   "description": "${articleData.description}",
   "timeRequired": "PT${readTime}M",
   "image": ["${articleData.image}"],
@@ -860,6 +861,7 @@ const Content = `
   }
 }
 <\/script>
+
 
 
 <meta name="google-adsense-account" content="${articleData.adsense}">

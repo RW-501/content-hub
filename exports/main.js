@@ -1349,12 +1349,15 @@ function attachShareableText() {
       const text = el.innerText;
 
       tooltip.innerHTML = `
-        <div>
-          <strong>Share this text:</strong>
-          <p style="margin:5px 0;">"${text}"</p>
-          <button id="share-text">Share as Text</button>
-          <button id="share-card">Share as Image</button>
-        </div>
+<div class="share-text-el">
+  <strong>Share this text:</strong>
+  <p>"${text}"</p>
+  <div class="share-btns">
+    <button id="share-text-btn">Share as Text</button>
+    <button id="share-card-btn">Share as Image</button>
+  </div>
+</div>
+
       `;
       tooltip.style.display = 'block';
       const rect = el.getBoundingClientRect();
@@ -1362,14 +1365,14 @@ function attachShareableText() {
       tooltip.style.left = `${window.scrollX + rect.left}px`;
 
       // Plain text share
-      document.getElementById('share-text').onclick = () => {
+      document.getElementById('share-text-btn').onclick = () => {
         console.log('Sharing text:', text);
         navigator.clipboard.writeText(text);
         alert("Text copied! Share anywhere.");
       };
 
       // Image card share
-      document.getElementById('share-card').onclick = () => {
+      document.getElementById('share-card-btn').onclick = () => {
         createShareCard(text);
       };
     });

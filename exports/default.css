@@ -986,3 +986,54 @@ background-color: transparent;
 .included-item a:hover {
   text-decoration: underline;
 }
+
+
+.share-text-el {
+  max-width: 300px;
+  background: #1e1e1e; /* dark tooltip background */
+  color: #fff;
+  padding: 16px;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.share-text-el strong {
+  display: block;
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+
+.share-text-el p {
+  margin: 0 0 12px 0;
+  word-break: break-word;
+}
+
+.share-btns {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.share-btns button {
+  background: #5dabff; /* primary blue */
+  border: none;
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.share-btns button:hover {
+  background: #5dabff; /* primary blue */
+  transform: translateY(-1px);
+}
+
+.share-btns button:active {
+  transform: translateY(0);
+  background: #5dabff; /* primary blue */
+}

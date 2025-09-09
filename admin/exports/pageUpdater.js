@@ -793,8 +793,6 @@ const readTime = calculateReadingTime(articleBody);
 
 // Your ad code as a string
 const adCode = `
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2001518155292747"
-     crossorigin="anonymous"></script>
 <ins class="adsbygoogle"
      style="display:block; text-align:center;"
      data-ad-layout="in-article"
@@ -1013,6 +1011,8 @@ const Content = `
 
 
 <meta name="google-adsense-account" content="${articleData.adsense}">
+
+
 
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${articleData.adsense}"
      crossorigin="anonymous"></script>

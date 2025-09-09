@@ -1200,8 +1200,10 @@ tooltip.style.boxShadow = '0 2px 8px rgba(0,0,0,0.3)';
 */
 document.body.appendChild(tooltip);
 
-function showTooltip(el, data) {
+function showTooltip(el, data) { 
   const tooltip = document.getElementById('link-tooltip');
+
+  console.log("showTooltip called with data:", data);
 
   tooltip.innerHTML = `
     <div class="tooltips" style="max-width:250px;">
@@ -1219,17 +1221,22 @@ function showTooltip(el, data) {
   tooltip.style.top = `${window.scrollY + rect.bottom + 5}px`;
   tooltip.style.left = `${window.scrollX + rect.left}px`;
 
-  // Delegate button clicks
+  // Debug: log every click inside tooltip
   tooltip.onclick = (e) => {
+    console.log("Tooltip clicked:", e.target);
+
     if (e.target.id === 'tooltip-go') {
       const url = e.target.dataset.url;
+      console.log("Go button clicked, url:", url);
       goToLink(url);
     }
     if (e.target.id === 'tooltip-close') {
-      hideTooltip(); console.log("close clicked");
+      console.log("Close button clicked");
+      hideTooltip();
     }
   };
 }
+
 
 function attachTooltips() {
   const tooltip = document.getElementById('link-tooltip');

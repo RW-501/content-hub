@@ -1223,6 +1223,7 @@ window.goToLink = goToLink;
 function attachTooltips() {
   document.querySelectorAll('.linked').forEach(a => {
     let tooltipTimeout;
+    let isHoveringTooltip = false;
 
     a.addEventListener('mouseenter', async () => {
       tooltipTimeout = setTimeout(async () => {
@@ -1242,12 +1243,24 @@ function attachTooltips() {
           </div>
         `;
         showTooltip(a, content);
+
+        const tooltipEl = document.getElementById('link-tooltip');
+
+        // Keep tooltip visible if hovering tooltip
+        tooltipEl.addEventListener('mouseenter', () => { isHoveringTooltip = true; });
+        tooltipEl.addEventListener('mouseleave', () => {
+          isHoveringTooltip = false;
+          hideTooltip();
+        });
+
       }, 300);
     });
 
     a.addEventListener('mouseleave', () => {
       clearTimeout(tooltipTimeout);
-      hideTooltip();
+      // Only hide if mouse is NOT on tooltip
+      const tooltipEl = document.getElementById('link-tooltip');
+      if (!isHoveringTooltip) hideTooltip();
     });
   });
 }

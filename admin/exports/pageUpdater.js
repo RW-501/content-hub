@@ -798,11 +798,6 @@ const Content = `
   "mainEntityOfPage": {
     "@type": "WebPage",
     "@id": "https://contenthub.guru/page/${articleData.slug}"
-  },
-  "aggregateRating": {
-    "@type": "AggregateRating",
-    "ratingValue": "${averageRating.toFixed(1)}",
-    "ratingCount": "${ratingCount}"
   }
 }
 <\/script>

@@ -1191,8 +1191,10 @@ function showTooltip(el, data) {
       <strong id="tooltip-title" style="cursor:pointer;">${data.title}</strong><br>
       ${data.image ? `<img id="tooltip-img" src="${data.image}" style="max-width:100%;margin-top:5px;cursor:pointer;">` : ''}
       <p style="margin:0;">${data.summary}</p>
+        <div class="tooltip-btns">
       <button id="tooltip-go" class="linked-btn" data-url="${data.url}">Go</button>
       <button id="tooltip-close" class="linked-btn-close">Close</button>
+      </div>
     </div>
   `;
   tooltip.style.display = 'block';

@@ -1209,13 +1209,6 @@ hr {
       ${bottomBlocksHTML}
 
 <div id="feedback-area">
-  <div class="feedback">
-    <p>Was this page helpful?</p>
-    <button id="yesBtn">Yes</button>
-    <button id="noBtn">No</button>
-  </div>
-  <p id="feedbackMsg"></p>
-  
   <!-- Rating display -->
   <div id="rating-display">
     <span id="rating-stars">⭐⭐⭐⭐⭐</span>
@@ -1224,6 +1217,13 @@ hr {
     <span hidden id="helpfulCount">${articleData.helpfulCount}</span>
     <span hidden id="notHelpfulCount">${articleData.notHelpfulCount}</span>
   </div>
+
+  <div class="feedback">
+    <p>Was this page helpful?</p>
+    <button id="yesBtn">Yes</button>
+    <button id="noBtn">No</button>
+  </div>
+  <p id="feedbackMsg"></p>
 </div>
 
 

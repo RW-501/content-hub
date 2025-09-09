@@ -1265,7 +1265,7 @@ function attachTooltips() {
 
     });
 
-    span.addEventListener('mouseleave', () => {
+    tooltip.addEventListener('mouseleave', () => {
       clearTimeout(tooltipTimeout);
       setTimeout(() => {
         if (!isHoveringTooltip) hideTooltip();

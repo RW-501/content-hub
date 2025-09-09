@@ -1184,6 +1184,9 @@ document.getElementById('scrollUpBtn').addEventListener('click', () => {
 const tooltip = document.createElement('div');
 tooltip.id = 'link-tooltip';
 tooltip.style.position = 'absolute';
+tooltip.style.background = 'transparent';
+
+/*
 tooltip.style.background = 'rgba(0,0,0,0.85)';
 tooltip.style.color = '#fff';
 tooltip.style.padding = '8px 12px';
@@ -1194,6 +1197,7 @@ tooltip.style.zIndex = 1000;
 tooltip.style.display = 'none';
 tooltip.style.maxWidth = '300px';
 tooltip.style.boxShadow = '0 2px 8px rgba(0,0,0,0.3)';
+*/
 document.body.appendChild(tooltip);
 
 

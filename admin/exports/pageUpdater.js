@@ -703,7 +703,7 @@ if (Array.isArray(articleData.suggested)) {
         <img src="${page.image || 'https://contenthub.guru/images/placeholder.png'}" alt="${page.title}">
         <div class="suggested-content">
           <a href="https://contenthub.guru/page/${page.slug}"><h3>${page.title}</h3></a>
-          <p>Reading Time: ${readTime} min</p>
+          <p>Reading Time: ${articleData.readTime} min</p>
           <p>${(page.description || "").slice(0, 100)}...</p>
           <a href="https://contenthub.guru/page/${page.slug}"> Read More →</a>
         </div>
@@ -836,7 +836,7 @@ const Content = `
   "headline": "${articleData.title}",
   "name": "${articleData.title}", 
   "description": "${articleData.description}",
-  "timeRequired": "PT${readTime}M",
+  "timeRequired": "PT${articleData.readTime}M",
   "image": ["${articleData.image}"],
   "author": {
     "@type": "Organization",

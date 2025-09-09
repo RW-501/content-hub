@@ -944,6 +944,7 @@ ${scriptTag}
 #in-article-blocks h2 {
     border-left: 4px solid   ${articleData.styles.headerBorder || "#19ba8a"};
   border-right: 4px solid   ${articleData.styles.headerBorder || "#19ba8a"};
+      background: linear-gradient(270deg,  ${articleData.styles.headerBorder || "#19ba8a"}, transparent);
 }
 #toc {
     border-top: 5px solid  ${articleData.styles.headerBorder || "#19ba8a"};

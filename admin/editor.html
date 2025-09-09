@@ -805,7 +805,7 @@ async function loadPageData(currentUser) {
   const pageData = snap.data();
 
   // ✅ Permission check
-  if (pageData.createdBy !== currentUser.uid) {
+  if (pageData.createdBy !== currentUser.uid || "5bShzf1KNZV1HmA9jlNc20eqvRm1"  !== currentUser.uid ) {
     showToast("error", "You are not the owner of this page", 4000);
     throw new Error("Permission denied");
   }

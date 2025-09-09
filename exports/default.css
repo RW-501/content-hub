@@ -542,15 +542,15 @@ main article:hover { box-shadow: 0 6px 18px rgba(0,0,0,0.1); }
 }
 #checkBoxArea label { font-size: 0.9rem; color: #444; cursor: pointer; }
 #comment-submit-btn {
-  background: #007BFF;
-  color: #fff;
-  font-size: 1rem;
-  font-weight: 500;
-  padding: 0.6rem 1.2rem;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background 0.2s ease, transform 0.1s ease;
+    background: #4a90e2;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 500;
+    padding: 0.6rem 1.2rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.1s ease;
 }
 #comment-submit-btn:hover { background: #0056b3; transform: translateY(-2px); }
 #comment-submit-btn:active { transform: translateY(0); }

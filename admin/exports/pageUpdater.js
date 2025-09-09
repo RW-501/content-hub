@@ -304,6 +304,22 @@ function cleanHTML(inputHTML) {
   return container.innerHTML;
 }
 
+let adCount = 0, videoCount = 0, imgCount = 0;
+
+function checkCounts(html) {
+  if (typeof html !== "string") return { adCount: 0, videoCount: 0, imgCount: 0 };
+
+  const adMatches = html.match(/\$\[AD\]/g);
+  const videoMatches = html.match(/<video\b[^>]*>/gi);
+  const imgMatches = html.match(/<img\b[^>]*>/gi);
+
+  return {
+    adCount: adMatches ? adMatches.length : 0,
+    videoCount: videoMatches ? videoMatches.length : 0,
+    imgCount: imgMatches ? imgMatches.length : 0
+  };
+}
+
 async function checkContent(html) {
   if (!html) return "";
 
@@ -324,6 +340,12 @@ async function checkContent(html) {
 
   // Render How To blocks
   html = renderHowTo(html);
+
+let { adCount, videoCount, imgCount } = checkCounts(html);
+
+console.log("Ads:", adCount);       // 2
+console.log("Videos:", videoCount); // 1
+console.log("Images:", imgCount);   // 2
 
   // Generate FAQ schema
   const faqSchema = generateFAQSchema(html);
@@ -672,8 +694,10 @@ const Content = `
 <meta name="howTo" content="${HowTo_Bool ? 'true' : 'false'}">
 <meta name="category" content="${formatCategory(articleData.category)}">
 <meta name="lang" content="en">
+<meta name="adCount" content="${adCount}">
 
-<meta name="imageCount" content="1">
+<meta name="imageCount" content="${imgCount}">
+<meta name="videoCount" content="${videoCount}">
 <meta name="pageType" content="Article">
 
 <meta name="keywords" content="${articleData.keywords?.join(', ') || ''}">

@@ -1244,6 +1244,7 @@ function attachTooltips() {
             ${data.image ? `<img onclick="goToLink('${data.url}')" src="${data.image}" style="max-width:100%;margin-top:5px;">` : ''}
             <p style="margin:0;">${data.summary}</p>
             <button class='linked-btn' onclick="goToLink('${data.url}')">Go</button>
+            <button class='linked-btn-close' onclick="hideTooltip()">Close</button>
           </div>
         `;
         showTooltip(a, content);
@@ -1259,14 +1260,16 @@ function attachTooltips() {
 
       }, 300);
     });
-
+/*
     a.addEventListener('mouseleave', () => {
       clearTimeout(tooltipTimeout);
       // Only hide if mouse is NOT on tooltip
       const tooltipEl = document.getElementById('link-tooltip');
       if (!isHoveringTooltip) hideTooltip();
     });
+    */
   });
+  
 }
 
 attachTooltips();

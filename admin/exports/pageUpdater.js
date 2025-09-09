@@ -656,6 +656,7 @@ schemaJSON = {
   "@context": "https://schema.org",
   "@type": "Article",
   "headline": articleData.title,
+  "name": articleData.title, // ✅ Added for Google: reviewed item name
   "image": articleData.image,
   "timeRequired": articleData.readTime || "PT" + readTime + "M",
   "datePublished": articleData.datePublished || new Date().toISOString(),
@@ -673,6 +674,7 @@ schemaJSON = {
     "ratingCount": ratingCount
   }
 };
+
 
 
       break;

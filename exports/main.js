@@ -1199,16 +1199,14 @@ tooltip.style.maxWidth = '300px';
 tooltip.style.boxShadow = '0 2px 8px rgba(0,0,0,0.3)';
 */
 document.body.appendChild(tooltip);
-
-function showTooltip(el, data) { 
+function showTooltip(el, data) {
   const tooltip = document.getElementById('link-tooltip');
-
   console.log("showTooltip called with data:", data);
 
   tooltip.innerHTML = `
     <div class="tooltips" style="max-width:250px;">
-      <strong style="cursor:pointer;" onclick="goToLink('${data.url}')">${data.title}</strong><br>
-      ${data.image ? `<img src="${data.image}" style="max-width:100%;margin-top:5px;cursor:pointer;" onclick="goToLink('${data.url}')">` : ''}
+      <strong id="tooltip-title" style="cursor:pointer;">${data.title}</strong><br>
+      ${data.image ? `<img id="tooltip-img" src="${data.image}" style="max-width:100%;margin-top:5px;cursor:pointer;">` : ''}
       <p style="margin:0;">${data.summary}</p>
       <button id="tooltip-go" class="linked-btn" data-url="${data.url}">Go</button>
       <button id="tooltip-close" class="linked-btn-close">Close</button>
@@ -1216,25 +1214,30 @@ function showTooltip(el, data) {
   `;
   tooltip.style.display = 'block';
 
-  // Position the tooltip relative to the element
   const rect = el.getBoundingClientRect();
   tooltip.style.top = `${window.scrollY + rect.bottom + 5}px`;
   tooltip.style.left = `${window.scrollX + rect.left}px`;
 
-  // Debug: log every click inside tooltip
-  tooltip.onclick = (e) => {
-    console.log("Tooltip clicked:", e.target);
+  // Bind after injection
+  document.getElementById("tooltip-title")?.addEventListener("click", () => {
+    console.log("Title clicked");
+    goToLink(data.url);
+  });
 
-    if (e.target.id === 'tooltip-go') {
-      const url = e.target.dataset.url;
-      console.log("Go button clicked, url:", url);
-      goToLink(url);
-    }
-    if (e.target.id === 'tooltip-close') {
-      console.log("Close button clicked");
-      hideTooltip();
-    }
-  };
+  document.getElementById("tooltip-img")?.addEventListener("click", () => {
+    console.log("Image clicked");
+    goToLink(data.url);
+  });
+
+  document.getElementById("tooltip-go")?.addEventListener("click", (e) => {
+    console.log("Go button clicked:", e.target.dataset.url);
+    goToLink(e.target.dataset.url);
+  });
+
+  document.getElementById("tooltip-close")?.addEventListener("click", () => {
+    console.log("Close button clicked");
+    hideTooltip();
+  });
 }
 
 

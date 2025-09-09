@@ -1267,7 +1267,7 @@ function attachTooltips() {
       clearTimeout(tooltipTimeout);
       setTimeout(() => {
         if (!isHoveringTooltip) hideTooltip();
-      }, 50);
+      }, 5000);
     });
   });
 }

@@ -91,7 +91,7 @@ function formatCategory(category) {
 let currentURL;
 const usedLinks = new Set(); // ✅ track keyword+url combos
 let linkCount;
-let includedHTML;
+let includedHTML = '';
 
 /**
  * @param {HTMLElement|string} input - The HTML string or container element

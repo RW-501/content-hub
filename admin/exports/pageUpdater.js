@@ -460,7 +460,7 @@ function createShareClass(input, minLength = 20, maxSharesPerParagraph = 2) {
       node.replaceWith(fragment);
 
     } else if (node.nodeType === Node.ELEMENT_NODE) {
-      if (!/^(H2|H3)$/i.test(node.tagName)) {
+      if (!/^(H2|H3|strong|span)$/i.test(node.tagName)) {
         node.childNodes.forEach(wrapTextNodes);
       }
     }

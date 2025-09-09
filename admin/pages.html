@@ -706,14 +706,31 @@ sSnap.forEach((docSnap) => {
   });
 });
 
+const linkCountEl = document.getElementById(`linkCount-${p.siteId}`);
+const adCountEl = document.getElementById(`adCount-${p.siteId}`);
+const imgCountEl = document.getElementById(`imgCount-${p.siteId}`);
+const videoCountEl = document.getElementById(`videoCount-${p.siteId}`);
 
-    const updateData = {
-      suggested,
-      publishedCount: increment(1),
-      status: "published",
-      updatedAt: serverTimestamp(),
-      styles: styles,
-    };
+// Extract values safely
+const linkCount = linkCountEl ? parseInt(linkCountEl.textContent.trim(), 10) || 0 : 0;
+const adCount = adCountEl ? parseInt(adCountEl.textContent.trim(), 10) || 0 : 0;
+const imgCount = imgCountEl ? parseInt(imgCountEl.textContent.trim(), 10) || 0 : 0;
+const videoCount = videoCountEl ? parseInt(videoCountEl.textContent.trim(), 10) || 0 : 0;
+
+const updateData = {
+  suggested,
+  publishedCount: increment(1),
+  status: "published",
+  updatedAt: serverTimestamp(),
+  styles: styles,
+
+  // ✅ Add counts
+  linkCount: linkCount,
+  adCount: adCount,
+  imgCount: imgCount,
+  videoCount: videoCount,
+};
+
 
     // ✅ Update Firestore
     await setDoc(doc(db, "pages", siteId), updateData, { merge: true });

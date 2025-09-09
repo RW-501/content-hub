@@ -374,6 +374,39 @@ function checkCounts(html) {
   };
 }
 
+
+
+function addAds(html) {
+  if (!html) return html;
+
+  // Count <hr> and <h2>
+  const hrMatches = html.match(/<hr\s*\/?>/gi) || [];
+  const h2Matches = html.match(/<h2\b[^>]*>/gi) || [];
+  const totalSections = hrMatches.length + h2Matches.length;
+
+  if (totalSections === 0) return html; // nothing to do
+
+  // Decide placement: every other section
+  const insertEvery = 2; 
+
+  // Use DOM parsing so we don’t break HTML
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(html, "text/html");
+
+  let sectionCount = 0;
+
+  // Walk through nodes where ads can be inserted
+  doc.querySelectorAll("hr, h2").forEach((el, index) => {
+    sectionCount++;
+    if (sectionCount % insertEvery === 0) {
+      const adNode = doc.createTextNode(" $[AD] ");
+      el.parentNode.insertBefore(adNode, el.nextSibling);
+    }
+  });
+
+  return doc.body.innerHTML;
+}
+
 async function checkContent(html) {
   if (!html) return "";
 
@@ -400,6 +433,12 @@ let { adCount, videoCount, imgCount } = checkCounts(html);
 console.log("Ads:", adCount);       // 2
 console.log("Videos:", videoCount); // 1
 console.log("Images:", imgCount);   // 2
+
+if(adCount == 0){
+
+html = addAds(html);
+
+}
 
   // Generate FAQ schema
   const faqSchema = generateFAQSchema(html);

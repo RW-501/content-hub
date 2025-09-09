@@ -174,6 +174,7 @@ async function linkifyKeywordsFromJSON(input, jsonUrl = 'https://contenthub.guru
             if (category) span.setAttribute('data-category', category);
             if (image) span.setAttribute('data-image', image);
             if (url) span.setAttribute('data-url', url);
+            if (title) span.setAttribute('data-url', title);
 
             // Text content
             span.textContent = match[0];

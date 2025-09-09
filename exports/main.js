@@ -1209,6 +1209,16 @@ function showTooltip(el, html) {
   const rect = el.getBoundingClientRect();
   tooltip.style.top = `${window.scrollY + rect.bottom + 5}px`; // 5px below
   tooltip.style.left = `${window.scrollX + rect.left}px`;
+
+    // Use event delegation for buttons inside tooltip
+  tooltip.addEventListener('click', (e) => {
+    if (e.target.matches('#tooltip-go')) {
+      const url = e.target.dataset.url;
+      goToLink(url);
+    } else if (e.target.matches('#tooltip-close')) {
+      hideTooltip();
+    }
+  });
 }
 
 
@@ -1226,18 +1236,9 @@ function attachTooltips() {
   tooltip.addEventListener('mouseenter', () => { isHoveringTooltip = true; });
   tooltip.addEventListener('mouseleave', () => {
     isHoveringTooltip = false;
-    hideTooltip();
   });
 
-  // Use event delegation for buttons inside tooltip
-  tooltip.addEventListener('click', (e) => {
-    if (e.target.matches('#tooltip-go')) {
-      const url = e.target.dataset.url;
-      goToLink(url);
-    } else if (e.target.matches('#tooltip-close')) {
-      hideTooltip();
-    }
-  });
+
 
   document.querySelectorAll('.linked').forEach(span => {
     span.addEventListener('mouseenter', () => {
@@ -1261,13 +1262,14 @@ function attachTooltips() {
         `;
         showTooltip(span, content);
       }, 300);
+
     });
 
     span.addEventListener('mouseleave', () => {
       clearTimeout(tooltipTimeout);
       setTimeout(() => {
         if (!isHoveringTooltip) hideTooltip();
-      }, 300); // shorter delay to hide if mouse leaves
+      }, 2000); // shorter delay to hide if mouse leaves
     });
   });
 }

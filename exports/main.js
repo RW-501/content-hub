@@ -1233,14 +1233,13 @@ function attachTooltips() {
   let tooltipTimeout;
   let isHoveringTooltip = false;
 
-  tooltip.addEventListener('mouseenter', () => { isHoveringTooltip = true; });
-  tooltip.addEventListener('mouseleave', () => { isHoveringTooltip = false; });
-
+   
   document.querySelectorAll('.linked').forEach(span => {
-    span.addEventListener('mouseenter', (e) => {
+    span.addEventListener('click', (e) => {
+          span.style.cursor = 'pointer';
+
             e.stopPropagation();
-      clearTimeout(tooltipTimeout);
-      tooltipTimeout = setTimeout(() => {
+
         const data = {
           title: span.dataset.title || span.textContent || "No title",
           summary: span.dataset.summary || "No summary available.",
@@ -1248,7 +1247,7 @@ function attachTooltips() {
           url: span.dataset.url || "#"
         };
         showTooltip(span, data);
-      }, 300);
+
     });
 
     span.addEventListener('mouseleave', () => {

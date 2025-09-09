@@ -88,6 +88,8 @@ body {
 #in-article-blocks h2 {
     border-left: 4px solid #19ba8a;
     padding-left: .5rem;
+    width: fit-content;
+    padding-right: .5rem;
 }
 
 main {
@@ -837,11 +839,10 @@ display: block;
 }
 
 /* Make iframes responsive and contained */
-.adsbygoogle iframe,
-.google-auto-placed iframe {
+.adsbygoogle iframe, .google-auto-placed iframe {
     max-width: 100%;
-    width: 100%;
-    height: auto;          /* Maintain aspect ratio */
+    width: 100% !important;
+    height: auto;
     display: block;
     border: 0;
 }

@@ -1068,7 +1068,15 @@ background-color: transparent;
       background: linear-gradient(120deg, #ffe066, #ff6b6b);
   color: #000;
     border-radius: 6px;
-    
+
   transform: translateY(1px) scale(0.98);
   box-shadow: 0 2px 6px rgba(255, 107, 107, 0.4);
+}
+
+.sentence-span {
+    color: #76baff;
+}
+
+.next-sentence {
+color: slategrey;
 }

@@ -706,10 +706,10 @@ sSnap.forEach((docSnap) => {
   });
 });
 
-const linkCountEl = document.getElementById(`linkCount-${p.siteId}`);
-const adCountEl = document.getElementById(`adCount-${p.siteId}`);
-const imgCountEl = document.getElementById(`imgCount-${p.siteId}`);
-const videoCountEl = document.getElementById(`videoCount-${p.siteId}`);
+const linkCountEl = document.getElementById(`linkCount-${siteId}`);
+const adCountEl = document.getElementById(`adCount-${siteId}`);
+const imgCountEl = document.getElementById(`imgCount-${siteId}`);
+const videoCountEl = document.getElementById(`videoCount-${siteId}`);
 
 // Extract values safely
 const linkCount = linkCountEl ? parseInt(linkCountEl.textContent.trim(), 10) || 0 : 0;

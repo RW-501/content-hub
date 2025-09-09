@@ -659,7 +659,7 @@ schemaJSON = {
   "name": articleData.title, // ✅ Added for Google: reviewed item name
   "image": articleData.image,
   "timeRequired": articleData.readTime || "PT" + readTime + "M",
-  "datePublished": articleData.datePublished || new Date().toISOString(),
+  "datePublished": new Date().toISOString(),
   "dateModified": articleData.updatedAt || new Date().toISOString(),
   "author": articleData.author || { "@type": "Organization", "name": "ContentHub" },
   "publisher": { 
@@ -810,7 +810,7 @@ const Content = `
   <meta name="twitter:creator" content="@Contenthub_Guru">
 
   <!-- Additional Article Schema/SEO Hints -->
-<meta property="article:published_time" content="${articleData.datePublished || new Date().toISOString()}">
+<meta property="article:published_time" content="${new Date().toISOString()}">
 <meta property="article:modified_time" content="${articleData.updatedAt || new Date().toISOString()}">
 <meta property="article:section" content="${formatCategory(articleData.category)}">
 <meta property="article:tag" content="${articleData.keywords?.join(', ') || ''}">
@@ -850,7 +850,7 @@ const Content = `
       "url": "${articleData.image}"
     }
   },
-  "datePublished": "${articleData.publishedAt}",
+  "datePublished": "${new Date().toISOString()}",
   "dateModified": "${articleData.updatedAt}",
   "mainEntityOfPage": {
     "@type": "WebPage",

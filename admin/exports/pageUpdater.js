@@ -802,6 +802,25 @@ const Content = `
 }
 <\/script>
 
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "ContentHub",
+  "operatingSystem": "Web",
+  "applicationCategory": "SEO Tool",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "${averageRating.toFixed(1)}",
+    "ratingCount": "${ratingCount}"
+  }
+}
+<\/script>
 
 
 <meta name="google-adsense-account" content="${articleData.adsense}">

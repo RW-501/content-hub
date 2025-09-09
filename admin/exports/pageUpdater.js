@@ -652,24 +652,32 @@ const inArticleBlocksHTML = inArticleBlocksHTML_Clean.replace(/\$\[AD\]/g, adCod
       };
       break;
     default: // Article
-      schemaJSON = {
-        "@context": "https://schema.org",
-        "@type": "Article",
-        "headline": articleData.title,
-        "image": articleData.image,
-        "timeRequired":  articleData.readTime || "PT"+readTime+"M",
-        "datePublished": articleData.datePublished || new Date().toISOString(),
-        "dateModified": articleData.updatedAt || new Date().toISOString(),
-        "author": articleData.author || { "@type": "Organization", "name": "ContentHub" },
-        "publisher": { "@type": "Organization", "name": "ContentHub" },
-        "description": articleData.description,
-        "articleBody": articleData.body || "",
-          "aggregateRating": {
+schemaJSON = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": articleData.title,
+  "image": articleData.image,
+  "timeRequired": articleData.readTime || "PT" + readTime + "M",
+  "datePublished": articleData.datePublished || new Date().toISOString(),
+  "dateModified": articleData.updatedAt || new Date().toISOString(),
+  "author": articleData.author || { "@type": "Organization", "name": "ContentHub" },
+  "publisher": { 
+    "@type": "Organization", 
+    "name": "ContentHub" 
+  },
+  "description": articleData.description,
+  "articleBody": articleData.body || "",
+  "aggregateRating": {
     "@type": "AggregateRating",
+    "itemReviewed": {
+      "@type": "Article",
+      "headline": articleData.title
+    },
     "ratingValue": averageRating.toFixed(1),
     "ratingCount": ratingCount
-      }
-      };
+  }
+};
+
       break;
   }
 
@@ -835,11 +843,16 @@ const Content = `
     "datePublished":"${articleData.publishedAt}",
     "dateModified":"${articleData.updatedAt}",
     "mainEntityOfPage":{"@type":"WebPage","@id":"https://contenthub.guru/page/${articleData.slug}"  },
-  "aggregateRating": {
-    "@type": "AggregateRating",
-    "ratingValue": "${averageRating.toFixed(1)}",
-    "ratingCount": "${ratingCount}"
-  }
+"aggregateRating": {
+  "@type": "AggregateRating",
+  "itemReviewed": {
+    "@type": "Article",
+    "headline": "${articleData.title}"
+  },
+  "ratingValue": "${averageRating.toFixed(1)}",
+  "ratingCount": "${ratingCount}"
+}
+
   }
   <\/script>
 

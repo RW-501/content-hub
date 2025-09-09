@@ -652,6 +652,7 @@ const inArticleBlocksHTML = inArticleBlocksHTML_Clean.replace(/\$\[AD\]/g, adCod
       };
       break;
     default: // Article
+    /*
 schemaJSON = {
   "@context": "https://schema.org",
   "@type": "Article",
@@ -659,7 +660,7 @@ schemaJSON = {
   "name": articleData.title, // ✅ Added for Google: reviewed item name
   "image": articleData.image,
   "timeRequired": "PT" + readTime + "M",
-  "datePublished": new Date().toISOString(),
+  "datePublished": articleData.updatedAt,
   "dateModified": articleData.updatedAt || new Date().toISOString(),
   "author": articleData.author || { "@type": "Organization", "name": "ContentHub" },
   "publisher": { 
@@ -674,7 +675,7 @@ schemaJSON = {
     "ratingCount": ratingCount
   }
 };
-
+*/
 
 
       break;
@@ -850,7 +851,7 @@ const Content = `
       "url": "${articleData.image}"
     }
   },
-  "datePublished": "${new Date().toISOString()}",
+  "datePublished":  "${articleData.updatedAt}",
   "dateModified": "${articleData.updatedAt}",
   "mainEntityOfPage": {
     "@type": "WebPage",

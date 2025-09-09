@@ -1211,16 +1211,7 @@ function showTooltip(el, html) {
   tooltip.style.left = `${window.scrollX + rect.left}px`;
 }
 
-function hideTooltip() {
-  const tooltip = document.getElementById('link-tooltip');
-  tooltip.style.display = 'none';
-}
-window.hideTooltip = hideTooltip;
 
-function goToLink(url) {
-  window.open(url, "_blank");
-}
-window.goToLink = goToLink;
 
 function attachTooltips() {
   const tooltip = document.getElementById('link-tooltip');
@@ -1243,6 +1234,16 @@ function attachTooltips() {
           url: span.dataset.url || span.href
         };
 
+function hideTooltip() {
+  const tooltip = document.getElementById('link-tooltip');
+  tooltip.style.display = 'none';
+}
+window.hideTooltip = hideTooltip;
+
+function goToLink(url) {
+  window.open(url, "_blank");
+}
+window.goToLink = goToLink;
         // Build tooltip content dynamically
                 const content = `
           <div class="tooltips" style="max-width:250px;">

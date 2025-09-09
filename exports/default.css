@@ -509,10 +509,6 @@ main article:hover { box-shadow: 0 6px 18px rgba(0,0,0,0.1); }
 .comments.form {
   margin: 2rem auto;
   padding: 1.5rem;
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-  font-family: "Inter", system-ui, sans-serif;
 }
 .comments.form h2 {
     font-size: 1.6rem;

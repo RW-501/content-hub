@@ -1292,6 +1292,8 @@ hr {
 
 </main>
 
+<div id='link-tooltip' syle='display:none'></div>
+
 <footer class="site-footer" role="contentinfo" style="text-align:center; padding:20px; background:#1f2937; color:#f3f4f6; font-family:Arial, sans-serif;">
   <p>
     Copyright © ${new Date().getFullYear()} | 

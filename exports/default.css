@@ -46,8 +46,8 @@ body {
   font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   color: #1f2937;
   line-height: 1.6;
-  margin: 0;
-  padding: 0;
+  margin: 0 !important;
+  padding: 0 !important;
   background: linear-gradient(to right, #e0f7fa, #f1f8e9);
 }
 

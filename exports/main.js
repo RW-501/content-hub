@@ -1211,66 +1211,65 @@ function showTooltip(el, html) {
   tooltip.style.left = `${window.scrollX + rect.left}px`;
 }
 
-function hideTooltip(){
-  let tooltip = document.getElementById('link-tooltip');
+function hideTooltip() {
+  const tooltip = document.getElementById('link-tooltip');
   tooltip.style.display = 'none';
 }
+window.hideTooltip = hideTooltip;
 
-
-// Move goToLink outside
 function goToLink(url) {
   window.open(url, "_blank");
 }
 window.goToLink = goToLink;
 
-// Attach tooltips to all linked spans after the page updates
 function attachTooltips() {
-  document.querySelectorAll('.linked').forEach(a => {
-    let tooltipTimeout;
-    let isHoveringTooltip = false;
+  const tooltip = document.getElementById('link-tooltip');
+  let tooltipTimeout;
+  let isHoveringTooltip = false;
 
-    a.addEventListener('mouseenter', async () => {
-      tooltipTimeout = setTimeout(async () => {
+  // Make tooltip hoverable
+  tooltip.addEventListener('mouseenter', () => { isHoveringTooltip = true; });
+  tooltip.addEventListener('mouseleave', () => {
+    isHoveringTooltip = false;
+    hideTooltip();
+  });
+
+  document.querySelectorAll('.linked').forEach(span => {
+    span.addEventListener('mouseenter', () => {
+      clearTimeout(tooltipTimeout);
+      tooltipTimeout = setTimeout(() => {
         const data = {
-          title: a.title,
-          summary: a.dataset.summary || 'No summary available.',
-          image: a.dataset.image || null,
-          category: a.dataset.category || null,
-          url: a.dataset.url || a.href
+          title: span.title,
+          summary: span.dataset.summary || 'No summary available.',
+          image: span.dataset.image || null,
+          url: span.dataset.url || span.href
         };
 
-        const content = `
+        // Build tooltip content dynamically
+                const content = `
           <div class="tooltips" style="max-width:250px;">
             <strong onclick="goToLink('${data.url}')">${data.title}</strong><br>
             ${data.image ? `<img onclick="goToLink('${data.url}')" src="${data.image}" style="max-width:100%;margin-top:5px;">` : ''}
             <p style="margin:0;">${data.summary}</p>
-            <button class='linked-btn' onclick="goToLink('${data.url}')">Go</button>
-            <button class='linked-btn-close' onclick="hideTooltip()">Close</button>
+            <button id="tooltip-go" class="linked-btn">Go</button>
+            <button id="tooltip-close" class="linked-btn-close">Close</button>
           </div>
         `;
-        showTooltip(a, content);
+        showTooltip(span, content);
 
-        const tooltipEl = document.getElementById('link-tooltip');
-
-        // Keep tooltip visible if hovering tooltip
-        tooltipEl.addEventListener('mouseenter', () => { isHoveringTooltip = true; });
-        tooltipEl.addEventListener('mouseleave', () => {
-          isHoveringTooltip = false;
-          hideTooltip();
-        });
-
+        // Attach event listeners dynamically
+        document.getElementById('tooltip-go').onclick = () => goToLink(data.url);
+        document.getElementById('tooltip-close').onclick = hideTooltip;
       }, 300);
     });
-/*
-    a.addEventListener('mouseleave', () => {
+
+    span.addEventListener('mouseleave', () => {
       clearTimeout(tooltipTimeout);
-      // Only hide if mouse is NOT on tooltip
-      const tooltipEl = document.getElementById('link-tooltip');
-      if (!isHoveringTooltip) hideTooltip();
+      setTimeout(() => {
+        if (!isHoveringTooltip) hideTooltip();
+      }, 50);
     });
-    */
   });
-  
 }
 
 attachTooltips();

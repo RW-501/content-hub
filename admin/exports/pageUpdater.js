@@ -414,12 +414,74 @@ function addAds(html) {
   return doc.body.innerHTML;
 }
 
+/**
+ * Wraps best shareable sentences in a "share" class.
+ * Skips H2/H3, short sentences, and selects sentences with quotes or Tip/Note/Warning.
+ * @param {string|HTMLElement} input - HTML string or element
+ * @param {number} minLength - Minimum length of sentence to consider
+ * @param {number} maxSharesPerParagraph - Limit of shareable sentences per paragraph
+ * @returns {string|HTMLElement} - Updated HTML with share classes
+ */
+function createShareClass(input, minLength = 20, maxSharesPerParagraph = 2) {
+  const container = typeof input === "string"
+    ? Object.assign(document.createElement("div"), { innerHTML: input })
+    : input;
+
+  function wrapTextNodes(node) {
+    if (node.nodeType === Node.TEXT_NODE) {
+      const text = node.textContent.trim();
+      if (!text) return;
+
+      const sentences = text.match(/[^.!?]+[.!?]+/g) || [text];
+      let sharesAdded = 0;
+      const fragment = document.createDocumentFragment();
+
+      sentences.forEach(sentence => {
+        const trimmed = sentence.trim();
+
+        // Skip short sentences
+        if (trimmed.length < minLength) {
+          fragment.appendChild(document.createTextNode(trimmed + " "));
+          return;
+        }
+
+        // Determine if this sentence is “shareable”
+        const hasQuotes = /["“”‘’']/.test(trimmed);
+        const hasKeyword = /^(Tip|Note|Warning)/i.test(trimmed);
+
+        if (sharesAdded < maxSharesPerParagraph && (hasQuotes || hasKeyword || sharesAdded === 0)) {
+          const span = document.createElement("span");
+          span.className = "share";
+          span.textContent = trimmed + " ";
+          fragment.appendChild(span);
+          sharesAdded++;
+        } else {
+          fragment.appendChild(document.createTextNode(trimmed + " "));
+        }
+      });
+
+      node.replaceWith(fragment);
+
+    } else if (node.nodeType === Node.ELEMENT_NODE) {
+      if (!/^(H2|H3)$/i.test(node.tagName)) {
+        node.childNodes.forEach(wrapTextNodes);
+      }
+    }
+  }
+
+  wrapTextNodes(container);
+  return typeof input === "string" ? container.innerHTML : container;
+}
+
+
 async function checkContent(html) {
   if (!html) return "";
 
   console.log("checkContent...");
 
  html = cleanHTML(html);
+
+ html = createShareClass(html, 20, 2);
 
   // Linkify contenthub mentions
   html = linkifyContentHub(html);
@@ -444,8 +506,12 @@ console.log("Images:", imgCount);   // 2
 if(adCount == 0){
 
 html = addAds(html);
+let { adCount, videoCount, imgCount } = checkCounts(html);
 
+    logToPopup("Added "+adCount+" ads", "limegreen");
+    console.log("Added "+adCount+" ads");
 }
+
 
   // Generate FAQ schema
   const faqSchema = generateFAQSchema(html);

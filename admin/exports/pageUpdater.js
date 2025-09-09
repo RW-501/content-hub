@@ -669,14 +669,11 @@ schemaJSON = {
   "articleBody": articleData.body || "",
   "aggregateRating": {
     "@type": "AggregateRating",
-    "itemReviewed": {
-      "@type": "Article",
-      "headline": articleData.title
-    },
     "ratingValue": averageRating.toFixed(1),
     "ratingCount": ratingCount
   }
 };
+
 
       break;
   }
@@ -845,10 +842,6 @@ const Content = `
     "mainEntityOfPage":{"@type":"WebPage","@id":"https://contenthub.guru/page/${articleData.slug}"  },
 "aggregateRating": {
   "@type": "AggregateRating",
-  "itemReviewed": {
-    "@type": "Article",
-    "headline": "${articleData.title}"
-  },
   "ratingValue": "${averageRating.toFixed(1)}",
   "ratingCount": "${ratingCount}"
 }

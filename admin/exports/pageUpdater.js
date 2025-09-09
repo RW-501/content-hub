@@ -405,9 +405,6 @@ function addAds(html) {
     if (sectionCount % insertEvery === 0) {
       const adNode = doc.createTextNode(" $[AD] ");
       el.parentNode.insertBefore(adNode, el.nextSibling);
-      
-      logToPopup("Ad injected!", "blue");
-
     }
   });
 
@@ -468,6 +465,7 @@ function createShareClass(input, minLength = 20, maxSharesPerParagraph = 2) {
       }
     }
   }
+      console.log("Shares injected!");
 
   wrapTextNodes(container);
   return typeof input === "string" ? container.innerHTML : container;
@@ -498,11 +496,11 @@ async function checkContent(html) {
   html = renderHowTo(html);
 
 let { adCount, videoCount, imgCount } = checkCounts(html);
-
+/*
 console.log("Ads:", adCount);       // 2
 console.log("Videos:", videoCount); // 1
 console.log("Images:", imgCount);   // 2
-
+*/
 if(adCount == 0){
 
 html = addAds(html);

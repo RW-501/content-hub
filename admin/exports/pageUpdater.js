@@ -81,8 +81,12 @@ function getVideo(videoUrl) {
 
 function formatCategory(category) {
   if (!category) return "";
-  return category.replace(/[_-]+/g, " ").trim();
+  return category
+    .replace(/[_-]+/g, " ")       // replace underscores and hyphens with spaces
+    .trim()                       // remove leading/trailing spaces
+    .replace(/\b\w/g, (char) => char.toUpperCase()); // capitalize first letter of each word
 }
+
 
 
 
@@ -195,7 +199,7 @@ includedHTML += `
        title="${title || url || 'Link'}" 
        aria-label="Link to ${title || url || 'Link'}">
        ${title || url || 'Link'}
-    </a> (<span class="category-label">${category || ''}</span>)
+    </a> (<span class="category-label">${formatCategory(category) || ''}</span>)
   </div>`;
 
             // ✅ mark as used

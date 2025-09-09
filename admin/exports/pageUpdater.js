@@ -176,7 +176,7 @@ span.id = spanId;
             if (category) span.setAttribute('data-category', category);
             if (image) span.setAttribute('data-image', image);
             if (url) span.setAttribute('data-url', url);
-            if (title) span.setAttribute('data-url', title);
+            if (title) span.setAttribute('data-title', title);
 
             // Text content
             span.textContent = match[0];

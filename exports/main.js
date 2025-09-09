@@ -1235,6 +1235,7 @@ function attachTooltips() {
           title: a.title,
           summary: a.dataset.summary || 'No summary available.',
           image: a.dataset.image || null,
+          category: a.dataset.category || null,
           url: a.dataset.url || a.href
         };
 

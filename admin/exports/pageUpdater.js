@@ -401,6 +401,9 @@ function addAds(html) {
     if (sectionCount % insertEvery === 0) {
       const adNode = doc.createTextNode(" $[AD] ");
       el.parentNode.insertBefore(adNode, el.nextSibling);
+      
+      logToPopup("Ad injected!", "blue");
+
     }
   });
 

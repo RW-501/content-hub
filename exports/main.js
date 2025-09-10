@@ -1470,7 +1470,7 @@ function removeAllActive() {
   allShares.forEach(span => span.removeAttribute('data-sentence-index'));
 
   // Reset _sentences for all paragraphs to force re-wrapping if needed
-  const allParagraphs = document.querySelectorAll('p, h1, h2, h3, h4, h5, h6, div');
+  const allParagraphs = document.querySelectorAll('p, h1, h2, h3, h4, h5, h6, div, span');
   allParagraphs.forEach(el => {
     if (el._sentences) el._sentences = null;
   });

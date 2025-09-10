@@ -1379,6 +1379,20 @@ function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
 }
 
 
+function wrapSentences(parentP) {
+  const rawText = parentP.innerText;
+  const sentences = rawText.match(/[^.!?]+[.!?]/g) || [];
+
+  parentP.innerHTML = sentences
+    .map((s, i) => `<span class="share" data-sentence-index="${i}" style="cursor:pointer;">${s.trim()} </span>`)
+    .join("");
+
+  // Store sentences on the element for safe access
+  parentP._sentences = sentences;
+
+  return sentences;
+}
+
 
 function attachShareableText() {
   const tooltip = document.getElementById('link-tooltip');
@@ -1394,12 +1408,19 @@ document.querySelectorAll('.share').forEach(el => {
     if (!parentP) return;
 
     // Split into sentences
-    const sentences = parentP.innerText.match(/[^.!?]+[.!?]/g) || [];
+   // const sentences = parentP.innerText.match(/[^.!?]+[.!?]/g) || [];
+    // Use stored sentences if available
+let sentences = parentP._sentences || wrapSentences(parentP);
+
     let currentIndex = sentences.findIndex(s => s.trim() === text.trim());
     let nextText = (currentIndex >= 0 && currentIndex < sentences.length - 1) 
       ? sentences[currentIndex + 1].trim() 
       : null;
 
+        // Highlight clicked sentence
+  parentP.querySelectorAll('.active').forEach(span => span.classList.remove('active'));
+  el.classList.add('active');
+  
     // Build tooltip
     tooltip.innerHTML = `
       <div class="share-text-el">

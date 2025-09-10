@@ -1080,3 +1080,18 @@ color: slategrey;
   color: slategrey;
   cursor: pointer;
 }
+
+.badge {
+  display: inline-block;
+  padding: 0.2em 0.6em;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #fff;
+  background-color: #6c757d; /* default gray */
+  border-radius: 0.25rem;
+  vertical-align: middle;
+}
+
+.category-badge {
+  background-color: #007bff; /* change per category if desired */
+}

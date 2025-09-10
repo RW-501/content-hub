@@ -269,7 +269,8 @@ if (match && text.includes(match[0])) {
         </a> → 
         <a href="${url || '#'}" target="_blank" title="${title || url || 'Link'}" aria-label="Link to ${title || url || 'Link'}">
           ${title || url || 'Link'}
-        </a> (<span class="category-label">${formatCategory(category) || ''}</span>)
+        </a> <span class="badge category-badge">${formatCategory(category) || ''}</span>
+
       </div>`;
 
     // ✅ mark as used

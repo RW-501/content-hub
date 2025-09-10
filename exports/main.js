@@ -1426,7 +1426,7 @@ document.querySelectorAll('.share').forEach(el => {
         }
 
 // Make sure sentences are wrapped
-let sentences = parentP._sentences || wrapSentences(parentP);
+let sentences = wrapSentences(parentP);
 
 // Find the index of the sentence
 let currentIndex = sentences.findIndex(s => s.trim() === text.trim());
@@ -1519,7 +1519,7 @@ sentenceElement.classList.add('active');
   // Hide tooltip when clicking outside
   document.addEventListener('click', () => {
     tooltip.style.display = 'none';
-    removeAllActive();
+   // removeAllActive();
   });
 
   });

@@ -1206,6 +1206,8 @@ tooltip.style.display = "block"; // make sure it’s rendered first
 
 // Center it on screen
   tooltip.style.top = `10%`;
+  tooltip.style.left = `0`;
+  tooltip.style.right = `0`;
 
   // Optional: allow centering using CSS grid style if needed
   tooltip.style.margin = "auto";

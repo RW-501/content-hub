@@ -1501,9 +1501,20 @@ document.querySelectorAll('.share').forEach(el => {
 // Make sure sentences are wrapped
 let sentences = parentP._sentences || wrapSentences(parentP);
 
-// Find the index of the sentence
-let currentIndex = sentences.findIndex(s => s.trim() === text.trim());
+// Normalize text for comparison
+function normalizeText(t) {
+  return t.replace(/\s+/g, ' ').trim();
+}
 
+const normalizedText = normalizeText(text);
+
+// Find the index of the sentence
+let currentIndex = sentences.findIndex(s => normalizeText(s) === normalizedText);
+
+// If not found exactly, try a loose match (contains)
+if (currentIndex === -1) {
+  currentIndex = sentences.findIndex(s => normalizeText(s).includes(normalizedText));
+}
 
 // Get the <span> element that contains this sentence
 let sentenceElement = null;
@@ -1516,31 +1527,32 @@ let nextText = (currentIndex >= 0 && currentIndex < sentences.length - 1)
   ? sentences[currentIndex + 1].trim() 
   : null;
 
+// Activate the current span
 if (sentenceElement) {
-  
-    if (sentenceElement.classList.contains('active')) {
+  if (sentenceElement.classList.contains('active')) {
     removeAllActive();
   }
   sentenceElement.classList.add('active');
-}else{
+} else {
   sentenceElement = el;
 }
 
-    // Build tooltip
-    tooltip.innerHTML = `
-      <div class="share-text-el">
-        <strong>Share this text:</strong>
-        <p id="share-text-p">
-          "${text}" 
-          ${nextText ? `<span id="add-more-btn">${nextText}</span>` : ""}
-        </p>
-        <div class="share-btns">
-          <button id="share-text-btn">Share as Text</button>
-          <button id="share-card-btn">Share as Image</button>
-          <button id="close-share-btn">Close</button>
-        </div>
-      </div>
-    `;
+// Build tooltip
+tooltip.innerHTML = `
+  <div class="share-text-el">
+    <strong>Share this text:</strong>
+    <p id="share-text-p">
+      "${text}" 
+      ${nextText ? `<span id="add-more-btn">${nextText}</span>` : ""}
+    </p>
+    <div class="share-btns">
+      <button id="share-text-btn">Share as Text</button>
+      <button id="share-card-btn">Share as Image</button>
+      <button id="close-share-btn">Close</button>
+    </div>
+  </div>
+`;
+
 
 // Center the tooltip on the screen
 const tooltipWidth = tooltip.offsetWidth;

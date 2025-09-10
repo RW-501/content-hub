@@ -1400,10 +1400,11 @@ function wrapSentences(element) {
   return sentences;
 }
 
-function removeAllActive(parentP) {
-  parentP.querySelectorAll('span .share .active').forEach(span => {
-    span.classList.remove('active');
-  });
+function removeAllActive() {
+    const  ContentArea = document.getElementById(' main-Content-Area');
+ContentArea.querySelectorAll('span.share.active').forEach(span => {
+  span.classList.remove('active');
+});
 }
 
 
@@ -1464,13 +1465,13 @@ sentenceElement.classList.add('active');
     document.getElementById('share-text-btn').onclick = () => {
       navigator.clipboard.writeText(text);
       showToast("info","Text copied! Share anywhere.");
-removeAllActive(parentP);
+removeAllActive();
     };
 
     // Image card share
     document.getElementById('share-card-btn').onclick = () => {
       createShareCard(text);
-removeAllActive(parentP);
+removeAllActive();
     };
 
     // Handle "More" button (if available)
@@ -1510,12 +1511,12 @@ sentenceElement.classList.add('active');
   // Cleanup on mouse leave / scroll
       //document.addEventListener('mouseleave', () => el.classList.remove('active'));
       document.addEventListener('scroll', () => el.classList.remove('active'));
-      removeAllActive(parentP);
+      removeAllActive();
     });
   // Hide tooltip when clicking outside
   document.addEventListener('click', () => {
     tooltip.style.display = 'none';
-    removeAllActive(parentP);
+    removeAllActive();
   });
 
   });

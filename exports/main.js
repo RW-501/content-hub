@@ -1417,7 +1417,7 @@ document.querySelectorAll('.share').forEach(el => {
 */
 
 // Make sure sentences are wrapped
-let sentences = parentP.innerText.match(/[^.!?]+[.!?]/g)  || wrapSentences(parentP);
+let sentences = parentP._sentences || wrapSentences(parentP);
 
 // Find the index of the sentence
 let currentIndex = sentences.findIndex(s => s.trim() === text.trim());

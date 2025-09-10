@@ -458,7 +458,7 @@ function addAds(html) {
   const hrMatches = html.match(/<hr\s*\/?>/gi) || [];
   const h2Matches = html.match(/<h2\b[^>]*>/gi) || [];
   const h3Matches = html.match(/<h3\b[^>]*>/gi) || [];
-  
+
   const totalSections = hrMatches.length + h2Matches.length + h3Matches.length;
 
   if (totalSections === 0) return html; // nothing to do
@@ -605,7 +605,6 @@ let { adCount, videoCount, imgCount } = checkCounts(html);
   }
 
 
-includedHTML = '';
 
   return html;
 }

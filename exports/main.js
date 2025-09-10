@@ -1567,8 +1567,9 @@ sentenceElement.classList.add('active');
 
   // Cleanup on mouse leave / scroll
       //document.addEventListener('mouseleave', () => el.classList.remove('active'));
-      document.addEventListener('scroll', () => el.classList.remove('active'));
-      removeAllActive();
+      document.addEventListener('scroll', () => 
+      removeAllActive());
+     
     });
   // Hide tooltip when clicking outside
   document.addEventListener('click', () => {

@@ -232,7 +232,6 @@ span.className = 'linked';
 span.style.cursor = 'pointer';
 span.id = spanId;
 
-const match = regex.exec(text);
 
 // ✅ Secondary safeguard: only replace if keyword really exists in this node
 if (match && text.includes(match[0])) {

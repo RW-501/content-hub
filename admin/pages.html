@@ -850,6 +850,8 @@ window.removePage = removePage;
 
 
 
+let stopUpdating = false;          // global flag
+let updateDelay = 8000;            // default delay in ms
 
 function createStatusPopup() {
   let popup = document.getElementById("update-status-popup");
@@ -867,22 +869,34 @@ function createStatusPopup() {
   popup.style.fontFamily = "monospace";
   popup.style.fontSize = "13px";
   popup.style.padding = "10px";
-  popup.style.maxHeight = "250px";
+  popup.style.maxHeight = "300px";
   popup.style.overflowY = "auto";
   popup.style.boxShadow = "0 2px 8px rgba(0,0,0,0.5)";
   popup.style.borderBottom = "2px solid #444";
   popup.innerHTML = `
     <div style="display:flex; justify-content:space-between; align-items:center; font-weight:bold; margin-bottom:5px;">
       <span>🔄 Page Update Status</span>
-      <button id="close-popup-btn" style="
-        background:#444; 
-        color:#fff; 
-        border:none; 
-        border-radius:3px; 
-        padding:2px 6px; 
-        cursor:pointer;
-        font-size:12px;
-      ">❌</button>
+      <div>
+        <input id="update-speed" type="number" value="8000" style="width:60px; font-size:12px;">ms
+        <button id="stop-popup-btn" style="
+          background:#e74c3c; 
+          color:#fff; 
+          border:none; 
+          border-radius:3px; 
+          padding:2px 6px; 
+          cursor:pointer;
+          font-size:12px;
+        ">⏹ Stop</button>
+        <button id="close-popup-btn" style="
+          background:#444; 
+          color:#fff; 
+          border:none; 
+          border-radius:3px; 
+          padding:2px 6px; 
+          cursor:pointer;
+          font-size:12px;
+        ">❌</button>
+      </div>
     </div>
     <div id="status-progress">Progress: 0%</div>
     <div id="status-timer">⏰ Waiting...</div>
@@ -897,8 +911,25 @@ function createStatusPopup() {
     popup.remove();
   });
 
+  // Attach stop button
+  document.getElementById("stop-popup-btn").addEventListener("click", () => {
+    stopUpdating = true;
+    logToPopup("⏹ Update stopped by user.", "red");
+  });
+
+  // Attach speed input
+  const speedInput = document.getElementById("update-speed");
+  speedInput.addEventListener("change", () => {
+    const val = parseInt(speedInput.value);
+    if (!isNaN(val) && val > 0) {
+      updateDelay = val;
+      logToPopup(`⚡ Update speed changed to ${updateDelay}ms`, "dodgerblue");
+    }
+  });
+
   return popup;
 }
+
 
 function updatePopupProgress(current, total, updated, skipped, errors, elapsed) {
   const percent = ((current / total) * 100).toFixed(0);
@@ -991,6 +1022,7 @@ async function scrollAndClick(page) {
 }
 
 async function updateOutdatedPages() {
+    stopUpdating = false; // reset
   const popup = createStatusPopup();
 
   const updateButtons = document.querySelectorAll(".updatePageBTN");
@@ -1043,7 +1075,7 @@ async function updateOutdatedPages() {
         errorCount++;
         logToPopup(`${progressText} ❌ Error updating "${page.title}"`, "red");
       }
-      await new Promise(r => setTimeout(r, 8000));
+      await new Promise(r => setTimeout(r, updateDelay));
     } else {
       skippedCount++;
       logToPopup(`${progressText} ⏭️ Skipped (Up to date): "${page.title}"`, "gray");

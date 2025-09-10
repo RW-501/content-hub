@@ -167,7 +167,23 @@ async function linkifyKeywordsFromJSON(input, jsonUrl = 'https://contenthub.guru
       });
     }
 
-    entries.sort((a, b) => b.keyword.length - a.keyword.length);
+    // ✅ Get plain text of input for keyword scanning
+const plainHTML = typeof input === 'string' ? input : input.innerHTML;
+
+// ✅ Filter out keywords not present in the content
+const filteredEntries = entries.filter(({ keyword }) => {
+  const regex = new RegExp(`\\b${keyword.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&")}\\b`, "i");
+  return regex.test(plainHTML);
+});
+
+if (filteredEntries.length === 0) {
+  console.log("No keywords found in this HTML. Skipping linkify.");
+  return typeof input === 'string' ? input : input.innerHTML;
+}
+
+// ✅ Sort filtered keywords by length (longest first)
+filteredEntries.sort((a, b) => b.keyword.length - a.keyword.length);
+
 
     const container = typeof input === 'string'
       ? Object.assign(document.createElement('div'), { innerHTML: input })
@@ -191,7 +207,7 @@ async function linkifyKeywordsFromJSON(input, jsonUrl = 'https://contenthub.guru
       while (text.length) {
         let matched = false;
 
-        for (const { keyword, url, title, category, image, description } of entries) {
+        for (const { keyword, url, title, category, image, description } of filteredEntries) {
           if (maxLinks !== null && linkCount >= maxLinks) break; // ✅ break loop if limit reached
 
           const key = `${keyword}::${url}`; // unique identifier
@@ -216,44 +232,57 @@ span.className = 'linked';
 span.style.cursor = 'pointer';
 span.id = spanId;
 
+const match = regex.exec(text);
 
-            // Accessibility & metadata
-            span.setAttribute('aria-label', title);
-            if (description) span.setAttribute('data-summary', description);
-            if (category) span.setAttribute('data-category', category);
-            if (image) span.setAttribute('data-image', image);
-            if (url) span.setAttribute('data-url', url);
-            if (title) span.setAttribute('data-title', title);
+// ✅ Secondary safeguard: only replace if keyword really exists in this node
+if (match && text.includes(match[0])) {
+    matched = true;
+    replaced = true;
 
-            // Text content
-            span.textContent = match[0];
-            fragment.appendChild(span);
+    if (match.index > 0) {
+        fragment.appendChild(document.createTextNode(text.slice(0, match.index)));
+    }
 
+    // ✅ in-body clickable span calling a function
+    const spanId = `link-${linkCount}`;
+    const span = document.createElement('span');
+    span.className = 'linked';
+    span.style.cursor = 'pointer';
+    span.id = spanId;
 
+    // Accessibility & metadata
+    span.setAttribute('aria-label', title);
+    if (description) span.setAttribute('data-summary', description);
+    if (category) span.setAttribute('data-category', category);
+    if (image) span.setAttribute('data-image', image);
+    if (url) span.setAttribute('data-url', url);
+    if (title) span.setAttribute('data-title', title);
 
-           // ✅ add to includedHTML
-includedHTML += `
-  <div class="included-item">
-  <a href="#${spanId}" title="Jump to keyword in article" aria-label="Jump to keyword ${keyword}">
-  ${keyword ? keyword.charAt(0).toUpperCase() + keyword.slice(1) : "Keyword"}
-      </a> → 
-    <a href="${url || '#'}" 
-       target="_blank" 
-       title="${title || url || 'Link'}" 
-       aria-label="Link to ${title || url || 'Link'}">
-       ${title || url || 'Link'}
-    </a> (<span class="category-label">${formatCategory(category) || ''}</span>)
-  </div>`;
+    span.textContent = match[0];
+    fragment.appendChild(span);
 
-            // ✅ mark as used
-            usedLinks.add(key);
-            linkCount++; // ✅ increase counter
+    // ✅ add to includedHTML
+    includedHTML += `
+      <div class="included-item">
+        <a href="#${spanId}" title="Jump to keyword in article" aria-label="Jump to keyword ${keyword}">
+          ${keyword ? keyword.charAt(0).toUpperCase() + keyword.slice(1) : "Keyword"}
+        </a> → 
+        <a href="${url || '#'}" target="_blank" title="${title || url || 'Link'}" aria-label="Link to ${title || url || 'Link'}">
+          ${title || url || 'Link'}
+        </a> (<span class="category-label">${formatCategory(category) || ''}</span>)
+      </div>`;
 
-            logToPopup("Replaced: " + keyword + ": URL: " + url, "limegreen");
-            console.log("Replaced: " + keyword + ": URL: " + url);
+    // ✅ mark as used
+    usedLinks.add(key);
+    linkCount++;
 
-            text = text.slice(match.index + match[0].length);
-            break; // only process one match at a time
+    logToPopup("Replaced: " + keyword + ": URL: " + url, "limegreen");
+    console.log("Replaced: " + keyword + ": URL: " + url);
+
+    text = text.slice(match.index + match[0].length);
+    break;
+}
+
           }
         }
 

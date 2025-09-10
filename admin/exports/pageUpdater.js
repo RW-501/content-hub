@@ -1507,6 +1507,7 @@ hr {
 </html>
 `;
 
+console.log("includedHTML:", includedHTML);       // 2
 
 
 // Randomized or complex approach

@@ -1382,8 +1382,11 @@ function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
   });
 }
 
+let parentP = '';
 
-function wrapSentences(parentP) {
+function wrapSentences(element) {
+  parentP = element;
+
   const rawText = parentP.innerText;
   const sentences = rawText.match(/[^.!?]+[.!?]/g) || [];
 

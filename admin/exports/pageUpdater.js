@@ -139,6 +139,7 @@ let currentURL;
 const usedLinks = new Set(); // ✅ track keyword+url combos
 let linkCount;
 let includedHTML = '';
+let includedHTML2 = '';
 
 /**
  * @param {HTMLElement|string} input - The HTML string or container element
@@ -270,6 +271,8 @@ if (match && text.includes(match[0])) {
           ${title || url || 'Link'}
         </a> <span class="badge category-badge">${formatCategory(category) || ''}</span>
       </div>`;
+
+      includedHTML2 = includedHTML;
 
     // ✅ mark as used
     usedLinks.add(key);
@@ -412,7 +415,7 @@ function cleanHTML(inputHTML) {
   function walk(node) {
     if (node.nodeType === Node.ELEMENT_NODE) {
       // Convert H1 to H2 if not the first
-      if (node.tagName === 'H1') {
+      if (node.tagName === 'H1' || node.tagName === 'h1') {
         if (!firstH1Found) {
           firstH1Found = true; // keep the first H1
         } else {
@@ -473,7 +476,7 @@ function addAds(html) {
   let sectionCount = 0;
 
   // Walk through nodes where ads can be inserted
-  doc.querySelectorAll("hr, h2").forEach((el, index) => {
+  doc.querySelectorAll("hr, h2, h3").forEach((el, index) => {
     sectionCount++;
     if (sectionCount % insertEvery === 0) {
       const adNode = doc.createTextNode(" $[AD] ");
@@ -492,7 +495,7 @@ function addAds(html) {
  * @param {number} maxSharesPerParagraph - Limit of shareable sentences per paragraph
  * @returns {string|HTMLElement} - Updated HTML with share classes
  */
-function createShareClass(input, minLength = 20, maxSharesPerParagraph = 2) {
+function createShareClass(input, minLength = 20, maxSharesPerParagraph = 4) {
   const container = typeof input === "string"
     ? Object.assign(document.createElement("div"), { innerHTML: input })
     : input;
@@ -1425,7 +1428,7 @@ hr {
 
 <section id="included-pages" >
   <h2 class="included">Pages Included:</h2>
-  <div id="included-container" class="included-grid">${includedHTML}</div>
+  <div id="included-container" class="included-grid">${includedHTML} 2 ${includedHTML2}</div>
 </section>
 
 </main>
@@ -1507,7 +1510,8 @@ hr {
 </html>
 `;
 
-console.log("includedHTML:", includedHTML);       // 2
+console.log("includedHTML:   ", includedHTML);       // 2
+console.log("includedHTML2:   ", includedHTML2);       // 2
 
 
 // Randomized or complex approach

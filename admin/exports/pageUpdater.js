@@ -568,8 +568,9 @@ async function checkContent(html) {
   html = renderHowTo(html);
 
 let { adCount, videoCount, imgCount } = checkCounts(html);
-/*
 console.log("Ads:", adCount);       // 2
+
+/*
 console.log("Videos:", videoCount); // 1
 console.log("Images:", imgCount);   // 2
 */

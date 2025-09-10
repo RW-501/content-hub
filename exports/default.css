@@ -447,8 +447,7 @@ main article:hover { box-shadow: 0 6px 18px rgba(0,0,0,0.1); }
     justify-content: center;
     gap: 15px;
 }
-.share-buttons button,
-.share-buttons a {
+.share-buttons button, .share-buttons a {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -457,7 +456,7 @@ main article:hover { box-shadow: 0 6px 18px rgba(0,0,0,0.1); }
     border-radius: 50%;
     text-decoration: none;
     color: white;
-    font-size: 20px;
+    font-size: 9px;
     transition: transform 0.3s ease;
 }
 .share-buttons button:hover,

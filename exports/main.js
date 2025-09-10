@@ -1291,14 +1291,13 @@ attachTooltips();
 function createShareCard(text) {
   const shareContainer = document.getElementById('share-container');
   shareContainer.innerHTML = ''; // clear previous
+  shareContainer.style.display = 'none';
 
-  // Create canvas
   const canvas = document.createElement('canvas');
   canvas.width = 800;
   canvas.height = 450;
   const ctx = canvas.getContext('2d');
 
-  // Load background
   const img = new Image();
   img.crossOrigin = "anonymous";
   img.src = 'https://contenthub.guru/images/share-background.png';
@@ -1310,13 +1309,10 @@ function createShareCard(text) {
     ctx.font = 'bold 28px Arial';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-
     wrapText(ctx, text, canvas.width/2, canvas.height/2, canvas.width - 60, 36);
 
-    // Convert to data URL
     const dataUrl = canvas.toDataURL('image/png');
 
-    // Build share UI
     shareContainer.innerHTML = `
       <div class="share-card" style="
         background:#222; 
@@ -1336,23 +1332,32 @@ function createShareCard(text) {
       </div>
     `;
 
-    // Position near the element clicked
-// Center the shareContainer on the screen
-shareContainer.style.top = `${window.scrollY + (window.innerHeight - shareContainer.offsetHeight) / 2}px`;
-shareContainer.style.left = `${window.scrollX + (window.innerWidth - shareContainer.offsetWidth) / 2}px`;
-shareContainer.style.display = 'block';
+    shareContainer.style.top = `${window.scrollY + (window.innerHeight - shareContainer.offsetHeight) / 2}px`;
+    shareContainer.style.left = `${window.scrollX + (window.innerWidth - shareContainer.offsetWidth) / 2}px`;
+    shareContainer.style.display = 'block';
 
- document.getElementById('close-share-container-btn').onclick = () => {
-  document.getElementById('share-container').style.display = 'none';
+    // Close button
+    document.getElementById('close-share-container-btn').addEventListener('click', () => {
+      shareContainer.style.display = 'none';
+    }, { once: true });
+/*
+// upload canvas to Firebase storage
+canvas.toBlob(blob => {
+  const ref = storage.ref().child(`shares/${Date.now()}.png`);
+  ref.put(blob).then(snapshot => {
+    snapshot.ref.getDownloadURL().then(url => {
+      window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`, '_blank');
+    });
+  });
+});
 
-    };
-
+*/
     // Share actions
     document.getElementById('share-twitter').onclick = () => {
       window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`, '_blank');
     };
     document.getElementById('share-facebook').onclick = () => {
-      window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(dataUrl)}`, '_blank');
+      alert('Facebook cannot share images via data URLs. Upload image to server first.');
     };
     document.getElementById('share-copy').onclick = () => {
       navigator.clipboard.writeText(dataUrl);

@@ -1410,7 +1410,7 @@ document.querySelectorAll('.share').forEach(el => {
     // Split into sentences
    // const sentences = parentP.innerText.match(/[^.!?]+[.!?]/g) || [];
     // Use stored sentences if available
-let sentences = parentP._sentences || wrapSentences(parentP);
+let sentences = parentP.innerText.match(/[^.!?]+[.!?]/g) || wrapSentences(parentP);
 
     let currentIndex = sentences.findIndex(s => s.trim() === text.trim());
     let nextText = (currentIndex >= 0 && currentIndex < sentences.length - 1) 
@@ -1420,7 +1420,7 @@ let sentences = parentP._sentences || wrapSentences(parentP);
         // Highlight clicked sentence
   parentP.querySelectorAll('.active').forEach(span => span.classList.remove('active'));
   el.classList.add('active');
-  
+
     // Build tooltip
     tooltip.innerHTML = `
       <div class="share-text-el">

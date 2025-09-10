@@ -1457,7 +1457,7 @@ sentenceElement.classList.add('active');
     `;
 
     tooltip.style.display = 'block';
-    const rect = el.getBoundingClientRect();
+    const rect = sentenceElement.getBoundingClientRect();
     tooltip.style.top = `${window.scrollY + rect.bottom + 5}px`;
     tooltip.style.left = `${window.scrollX + rect.left}px`;
 

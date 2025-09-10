@@ -1355,6 +1355,7 @@ document.addEventListener('click', () => {
   document.getElementById('share-container').style.display = 'none';
 });
 
+
 // Helper to wrap text nicely on canvas
 function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
   const words = text.split(' ');
@@ -1376,123 +1377,103 @@ function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
   });
 }
 
-// Wrap sentences in a paragraph with spans
-function wrapSentences(parentP) {
-  const rawText = parentP.innerText;
-  const sentences = rawText.match(/[^.!?]+[.!?]/g) || [];
-
-  parentP.innerHTML = sentences
-    .map((s, i) => `<span class="share" data-sentence-index="${i}" style="cursor:pointer;">${s.trim()} </span>`)
-    .join("");
-
-  // Store sentences on the element for safe access
-  parentP._sentences = sentences;
-
-  return sentences;
-}
 
 
 function attachShareableText() {
   const tooltip = document.getElementById('link-tooltip');
+document.querySelectorAll('.share').forEach(el => {
+  el.style.cursor = 'pointer';
 
-  document.querySelectorAll('.share').forEach(el => {
-    el.style.cursor = 'pointer';
+  el.addEventListener('click', (e) => {
+    e.stopPropagation();
+    let text = el.innerText; // current sentence
+    el.classList.add('active');
 
-    el.addEventListener('click', (e) => {
-      e.stopPropagation();
+    const parentP = el.closest('p');
+    if (!parentP) return;
 
-      const parentP = el.closest('p');
-      if (!parentP) return;
+    // Split into sentences
+    const sentences = parentP.innerText.match(/[^.!?]+[.!?]/g) || [];
+    let currentIndex = sentences.findIndex(s => s.trim() === text.trim());
+    let nextText = (currentIndex >= 0 && currentIndex < sentences.length - 1) 
+      ? sentences[currentIndex + 1].trim() 
+      : null;
 
-      // Ensure sentences are wrapped
-// Use stored sentences if available
-let sentences = parentP._sentences || wrapSentences(parentP);
+    // Build tooltip
+    tooltip.innerHTML = `
+      <div class="share-text-el">
+        <strong>Share this text:</strong>
+        <p id="share-text-p">
+          "${text}" 
+          ${nextText ? `<span id="add-more-btn">${nextText}</span>` : ""}
+        </p>
+        <div class="share-btns">
+          <button id="share-text-btn">Share as Text</button>
+          <button id="share-card-btn">Share as Image</button>
+        </div>
+      </div>
+    `;
 
+    tooltip.style.display = 'block';
+    const rect = el.getBoundingClientRect();
+    tooltip.style.top = `${window.scrollY + rect.bottom + 5}px`;
+    tooltip.style.left = `${window.scrollX + rect.left}px`;
 
-      let currentIndex = parseInt(el.dataset.sentenceIndex, 10);
-      let text = sentences[currentIndex];
+    // Plain text share
+    document.getElementById('share-text-btn').onclick = () => {
+      navigator.clipboard.writeText(text);
+      showToast("info","Text copied! Share anywhere.");
+      el.classList.remove('active');
+    };
 
-      // Highlight clicked sentence
-      parentP.querySelectorAll('.active').forEach(span => span.classList.remove('active'));
-      el.classList.add('active');
+    // Image card share
+    document.getElementById('share-card-btn').onclick = () => {
+      createShareCard(text);
+      el.classList.remove('active');
+    };
 
-      let nextText = currentIndex < sentences.length - 1 ? sentences[currentIndex + 1].trim() : null;
-
-      // Build tooltip
-      function updateTooltip() {
-        tooltip.innerHTML = `
-          <div class="share-text-el">
-            <strong>Share this text:</strong>
-            <p id="share-text-p">
-              "${text}" ${nextText ? `<span id="add-more-btn">${nextText}</span>` : ""}
-            </p>
-            <div class="share-btns">
-              <button id="share-text-btn">Share as Text</button>
-              <button id="share-card-btn">Share as Image</button>
-            </div>
-          </div>
-        `;
-
-        tooltip.style.display = 'block';
-        const rect = el.getBoundingClientRect();
-        tooltip.style.top = `${window.scrollY + rect.bottom + 5}px`;
-        tooltip.style.left = `${window.scrollX + rect.left}px`;
-
-        // Plain text share
-        document.getElementById('share-text-btn').onclick = () => {
-          navigator.clipboard.writeText(text);
-          showToast("info", "Text copied! Share anywhere.");
-          parentP.querySelectorAll('.active').forEach(span => span.classList.remove('active'));
-        };
-
-        // Image card share
-        document.getElementById('share-card-btn').onclick = () => {
-          createShareCard(text);
-          parentP.querySelectorAll('.active').forEach(span => span.classList.remove('active'));
-        };
-
-        // "More" button
-        const addMoreBtn = document.getElementById('add-more-btn');
-        if (addMoreBtn) {
-          addMoreBtn.onclick = (e) => {
+    // Handle "More" button (if available)
+    const addMoreBtn = document.getElementById('add-more-btn');
+    if (addMoreBtn) {
+      addMoreBtn.onclick = (e) => {
             e.stopPropagation();
-            if (currentIndex < sentences.length - 1) {
-              currentIndex++;
-              text += " " + sentences[currentIndex].trim();
+        if (currentIndex < sentences.length - 1) {
+          currentIndex++;
+          text += " " + sentences[currentIndex].trim();
 
-              // Update highlight
-              parentP.querySelectorAll('.active').forEach(span => span.classList.remove('active'));
-              parentP.querySelector(`[data-sentence-index="${currentIndex}"]`)?.classList.add('active');
+          // Compute the following next sentence
+          nextText = (currentIndex < sentences.length - 1) 
+            ? sentences[currentIndex + 1].trim() 
+            : null;
 
-              nextText = currentIndex < sentences.length - 1 ? sentences[currentIndex + 1].trim() : null;
-              updateTooltip(); // Recursively update tooltip content
-            }
-          };
+          // Update tooltip
+          document.getElementById('share-text-p').innerHTML = `"${text}" ${
+            nextText ? `<span id="add-more-btn">${nextText}</span>` : ""
+          }`;
+
+          // Re-bind button if more text remains
+          if (nextText) {
+            document.getElementById('add-more-btn').onclick = addMoreBtn.onclick;
+          }
         }
-      }
+      };
+    }
 
-      updateTooltip();
+  // Cleanup on mouse leave / scroll
+      //document.addEventListener('mouseleave', () => el.classList.remove('active'));
+      document.addEventListener('scroll', () => el.classList.remove('active'));
     });
   });
 
-  // Hide tooltip on click outside
-  document.addEventListener('click', (e) => {
-    if (!tooltip.contains(e.target)) {
-      tooltip.style.display = 'none';
-      document.querySelectorAll('.share.active').forEach(span => span.classList.remove('active'));
-    }
-  });
 
-  // Hide tooltip on scroll with debounce
-  let scrollTimeout;
-  document.addEventListener('scroll', () => {
-    clearTimeout(scrollTimeout);
-    scrollTimeout = setTimeout(() => {
-      tooltip.style.display = 'none';
-      document.querySelectorAll('.share.active').forEach(span => span.classList.remove('active'));
-    }, 150);
+
+  // Hide tooltip when clicking outside
+  document.addEventListener('click', () => {
+    tooltip.style.display = 'none';
+  });
+    document.addEventListener('scroll', () => {
+    tooltip.style.display = 'none';
   });
 }
 
-// Initialize
-attachShareableText();
+attachShareableText() 

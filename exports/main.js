@@ -1461,10 +1461,16 @@ function wrapSentences(parentP) {
 
 
 function removeAllActive() {
-    const  ContentArea = document.getElementById('main-Content-Area');
-ContentArea.querySelectorAll('span.share.active').forEach(span => {
-  span.classList.remove('active');
-});
+  // Select all spans with class "share" inside the document
+  const allShares = document.querySelectorAll('span.share');
+
+  allShares.forEach(span => {
+    // Remove the active class if it exists
+    span.classList.remove('active');
+
+    // Remove the data-sentence-index attribute
+    span.removeAttribute('data-sentence-index');
+  });
 }
 
 
@@ -1476,6 +1482,11 @@ document.querySelectorAll('.share').forEach(el => {
   el.addEventListener('click', (e) => {
     e.stopPropagation();
     let text = el.innerText; // current sentence
+
+
+  if (el.classList.contains('active')) {
+    removeAllActive();
+  }
     el.classList.add('active');
 
     const parentP = el.closest('p');

@@ -1202,10 +1202,15 @@ function showTooltip(el, data) {
   `;
 // Center the tooltip on the screen
 tooltip.style.position = "fixed";
-tooltip.style.top = "50%";
-tooltip.style.left = "50%";
-tooltip.style.transform = "translate(-50%, -50%)"; // centers perfectly
-tooltip.style.display = "block";
+tooltip.style.display = "block"; // make sure it’s rendered first
+
+requestAnimationFrame(() => {
+  const tooltipWidth = tooltip.offsetWidth;
+  const tooltipHeight = tooltip.offsetHeight;
+
+  tooltip.style.top = `${(window.innerHeight - tooltipHeight) / 2}px`;
+  tooltip.style.left = `${(window.innerWidth - tooltipWidth) / 2}px`;
+});
 
 
 

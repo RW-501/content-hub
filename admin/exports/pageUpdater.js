@@ -1428,7 +1428,7 @@ hr {
 
 <section id="included-pages" >
   <h2 class="included">Pages Included:</h2>
-  <div id="included-container" class="included-grid">${includedHTML} 2 ${includedHTML2}</div>
+  <div id="included-container" class="included-grid">${includedHTML2}</div>
 </section>
 
 </main>
@@ -1509,10 +1509,10 @@ hr {
 </body>
 </html>
 `;
-
+/*
 console.log("includedHTML:   ", includedHTML);       // 2
 console.log("includedHTML2:   ", includedHTML2);       // 2
-
+*/
 
 // Randomized or complex approach
 const parts = ['p', 'h', 'g'];

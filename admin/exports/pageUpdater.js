@@ -561,7 +561,7 @@ async function checkContent(html) {
 
  html = cleanHTML(html);
 
- html = createShareClass(html, 20, 2);
+// html = createShareClass(html, 20, 2);
 
   // Linkify contenthub mentions
   html = linkifyContentHub(html);

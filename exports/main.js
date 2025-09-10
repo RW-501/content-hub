@@ -1408,31 +1408,12 @@ document.querySelectorAll('.share').forEach(el => {
     if (!parentP) return;
 
     // Split into sentences
-   // const sentences = parentP.innerText.match(/[^.!?]+[.!?]/g) || [];
-
-   // Make sure sentences are wrapped
-let sentences = parentP._sentences || wrapSentences(parentP);
-
-// Find the index of the sentence
-let currentIndex = sentences.findIndex(s => s.trim() === text.trim());
-
-// Get the <span> element that contains this sentence
-let sentenceElement = null;
-if (currentIndex >= 0) {
-  sentenceElement = parentP.querySelector(`span.share[data-sentence-index="${currentIndex}"]`);
-}
-
-// Get the next sentence text
-let nextText = (currentIndex >= 0 && currentIndex < sentences.length - 1) 
-  ? sentences[currentIndex + 1].trim() 
-  : null;
-
-console.log(sentenceElement, nextText);
-
-
-        // Highlight clicked sentence
-//  parentP.querySelectorAll('.active').forEach(span => span.classList.add('active'));
-  sentenceElement.classList.add('active');
+    const sentences = parentP.innerText.match(/[^.!?]+[.!?]/g) || [];
+    
+    let currentIndex = sentences.findIndex(s => s.trim() === text.trim());
+    let nextText = (currentIndex >= 0 && currentIndex < sentences.length - 1) 
+      ? sentences[currentIndex + 1].trim() 
+      : null;
 
     // Build tooltip
     tooltip.innerHTML = `

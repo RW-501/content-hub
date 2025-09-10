@@ -1398,6 +1398,19 @@ function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
 }
 
 
+function wrapSentences(parentP) {
+  const rawText = parentP.innerText;
+  const sentences = rawText.match(/[^.!?]+[.!?]/g) || [];
+
+  // Replace innerHTML with sentence spans
+  parentP.innerHTML = sentences
+    .map((s, i) => `<span class="share" data-sentence-index="${i}" style="cursor:pointer;">${s.trim()} </span>`)
+    .join("");
+
+  return sentences;
+}
+
+
 function attachShareableText() {
   const tooltip = document.getElementById('link-tooltip');
 document.querySelectorAll('.share').forEach(el => {
@@ -1451,6 +1464,60 @@ document.querySelectorAll('.share').forEach(el => {
       el.classList.remove('active');
     };
 
+    el.addEventListener("click", (e) => {
+  e.stopPropagation();
+
+  const parentP = el.closest("p");
+  if (!parentP) return;
+
+  // Ensure sentences are wrapped
+  let sentences;
+  if (!parentP.querySelector("[data-sentence-index]")) {
+    sentences = wrapSentences(parentP);
+  } else {
+    sentences = Array.from(parentP.querySelectorAll("[data-sentence-index]"))
+                     .map(span => span.innerText.trim());
+  }
+
+  currentIndex = parseInt(el.dataset.sentenceIndex, 10);
+  let text = sentences[currentIndex];
+
+  el.classList.add("active");
+
+  // … your tooltip code …
+
+  // Add more button
+  const addMoreBtn = document.getElementById("add-more-btn");
+  if (addMoreBtn) {
+    addMoreBtn.onclick = () => {
+      if (currentIndex < sentences.length - 1) {
+        currentIndex++;
+        text += " " + sentences[currentIndex].trim();
+
+        // highlight the next sentence
+        const nextSentenceEl = parentP.querySelector(
+          `[data-sentence-index="${currentIndex}"]`
+        );
+        if (nextSentenceEl) nextSentenceEl.classList.add("active");
+
+        const nextText =
+          currentIndex < sentences.length - 1
+            ? sentences[currentIndex + 1].trim()
+            : null;
+
+        document.getElementById("share-text-p").innerHTML = `"${text}" ${
+          nextText ? `<span id="add-more-btn">${nextText}</span>` : ""
+        }`;
+
+        if (nextText) {
+          document.getElementById("add-more-btn").onclick = addMoreBtn.onclick;
+        }
+      }
+    };
+  }
+});
+/*
+
     // Handle "More" button (if available)
 const addMoreBtn = document.getElementById('add-more-btn');
 if (addMoreBtn) {
@@ -1478,15 +1545,19 @@ if (addMoreBtn) {
       document.getElementById("share-text-p").innerHTML = `"${text}" ${
         nextText ? `<span id="add-more-btn">${nextText}</span>` : ""
       }`;
+      
 
       // Re-bind button if more text remains
       if (nextText) {
         document.getElementById("add-more-btn").onclick = addMoreBtn.onclick;
       }
-    }
-  };
-}
+  }
+   
+    };
 
+  
+}
+*/
 
   // Cleanup on mouse leave / scroll
       //document.addEventListener('mouseleave', () => el.classList.remove('active'));

@@ -1415,20 +1415,7 @@ document.querySelectorAll('.share').forEach(el => {
 
   el.classList.add("active");
 
-    // Build tooltip
-    tooltip.innerHTML = `
-      <div class="share-text-el">
-        <strong>Share this text:</strong>
-        <p id="share-text-p">
-          "${text}" 
-          ${nextText ? `<span id="add-more-btn">${nextText}</span>` : ""}
-        </p>
-        <div class="share-btns">
-          <button id="share-text-btn">Share as Text</button>
-          <button id="share-card-btn">Share as Image</button>
-        </div>
-      </div>
-    `;
+
   // Add more button
   const addMoreBtn = document.getElementById("add-more-btn");
   if (addMoreBtn) {
@@ -1448,6 +1435,21 @@ document.querySelectorAll('.share').forEach(el => {
             ? sentences[currentIndex + 1].trim()
             : null;
 
+                // Build tooltip
+    tooltip.innerHTML = `
+      <div class="share-text-el">
+        <strong>Share this text:</strong>
+        <p id="share-text-p">
+          "${text}" 
+          ${nextText ? `<span id="add-more-btn">${nextText}</span>` : ""}
+        </p>
+        <div class="share-btns">
+          <button id="share-text-btn">Share as Text</button>
+          <button id="share-card-btn">Share as Image</button>
+        </div>
+      </div>
+    `;
+    
         document.getElementById("share-text-p").innerHTML = `"${text}" ${
           nextText ? `<span id="add-more-btn">${nextText}</span>` : ""
         }`;

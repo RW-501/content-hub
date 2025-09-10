@@ -1205,19 +1205,13 @@ tooltip.style.position = "fixed";
 tooltip.style.display = "block"; // make sure it’s rendered first
 
 // Center it on screen
-requestAnimationFrame(() => {
-  const tooltipWidth = tooltip.offsetWidth;
-  const tooltipHeight = tooltip.offsetHeight;
-
-  tooltip.style.top = `${(window.innerHeight - tooltipHeight) / 2}px`;
-  tooltip.style.left = `${(window.innerWidth - tooltipWidth) / 2}px`;
+  tooltip.style.top = `10%`;
 
   // Optional: allow centering using CSS grid style if needed
   tooltip.style.margin = "auto";
-  tooltip.style.right = "0";
-  tooltip.style.bottom = "0";
+
   tooltip.style.placeItems = "center"; // optional, mainly for display:grid
-});
+
 
 
   // Bind after injection

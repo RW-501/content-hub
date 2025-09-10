@@ -1381,6 +1381,7 @@ function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
     ctx.fillText(lineText.trim(), x, y + (i - lines.length/2 + 0.5)*lineHeight);
   });
 }
+
 function splitSentencesWithMinLength(text, minLength = 4) {
   let parts = text.match(/[^.!?]+[.!?]/g) || [];
   let sentences = [];
@@ -1406,14 +1407,17 @@ function wrapSentences(parentP) {
   function processNode(node) {
     if (node.nodeType === Node.TEXT_NODE) {
       const sentences = splitSentencesWithMinLength(node.textContent, 4);
-
       const frag = document.createDocumentFragment();
+
       sentences.forEach(s => {
         const span = document.createElement("span");
         span.className = "share";
         span.dataset.sentenceIndex = sentenceIndex++;
         span.style.cursor = "pointer";
-        span.textContent = s.trim() + " ";
+
+        // Use innerHTML so embedded markup survives
+        span.innerHTML = s.trim() + " ";
+
         frag.appendChild(span);
         collectedSentences.push(s.trim());
       });
@@ -1421,11 +1425,14 @@ function wrapSentences(parentP) {
       return frag;
     } else if (node.nodeType === Node.ELEMENT_NODE) {
       const clone = node.cloneNode(false);
+
       node.childNodes.forEach(child => {
         clone.appendChild(processNode(child));
       });
+
       return clone;
     }
+
     return node.cloneNode(true);
   }
 
@@ -1437,7 +1444,6 @@ function wrapSentences(parentP) {
   parentP.innerHTML = "";
   parentP.appendChild(newContent);
 
-  // Store sentences for later lookups
   parentP._sentences = collectedSentences;
 
   return collectedSentences;

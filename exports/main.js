@@ -1377,6 +1377,7 @@ function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
   });
 }
 
+
 function wrapSentences(parentP) {
   const rawText = parentP.innerText;
   const sentences = rawText.match(/[^.!?]+[.!?]/g) || [];
@@ -1389,17 +1390,18 @@ function wrapSentences(parentP) {
   return sentences;
 }
 
-
 function attachShareableText() {
   const tooltip = document.getElementById('link-tooltip');
 document.querySelectorAll('.share').forEach(el => {
   el.style.cursor = 'pointer';
 
-  el.addEventListener("click", (e) => {
-  e.stopPropagation();
+  el.addEventListener('click', (e) => {
+    e.stopPropagation();
 
-  const parentP = el.closest("p");
-  if (!parentP) return;
+    el.classList.add('active');
+
+    const parentP = el.closest('p');
+    if (!parentP) return;
 
   // Ensure sentences are wrapped
   let sentences;
@@ -1415,69 +1417,6 @@ document.querySelectorAll('.share').forEach(el => {
 
   el.classList.add("active");
 
-
-  // Add more button
-  const addMoreBtn = document.getElementById("add-more-btn");
-  if (addMoreBtn) {
-    addMoreBtn.onclick = () => {
-      if (currentIndex < sentences.length - 1) {
-        currentIndex++;
-        text += " " + sentences[currentIndex].trim();
-
-        // highlight the next sentence
-        const nextSentenceEl = parentP.querySelector(
-          `[data-sentence-index="${currentIndex}"]`
-        );
-        if (nextSentenceEl) nextSentenceEl.classList.add("active");
-
-        const nextText =
-          currentIndex < sentences.length - 1
-            ? sentences[currentIndex + 1].trim()
-            : null;
-
-                // Build tooltip
-    tooltip.innerHTML = `
-      <div class="share-text-el">
-        <strong>Share this text:</strong>
-        <p id="share-text-p">
-          "${text}" 
-          ${nextText ? `<span id="add-more-btn">${nextText}</span>` : ""}
-        </p>
-        <div class="share-btns">
-          <button id="share-text-btn">Share as Text</button>
-          <button id="share-card-btn">Share as Image</button>
-        </div>
-      </div>
-    `;
-    
-        document.getElementById("share-text-p").innerHTML = `"${text}" ${
-          nextText ? `<span id="add-more-btn">${nextText}</span>` : ""
-        }`;
-
-        if (nextText) {
-          document.getElementById("add-more-btn").onclick = addMoreBtn.onclick;
-        }
-      }
-    };
-  }
-    // Cleanup on mouse leave / scroll
-      //document.addEventListener('mouseleave', () => el.classList.remove('active'));
-      document.addEventListener('scroll', () => el.classList.remove('active'));
-});
-
-
-/*
-  el.addEventListener('click', (e) => {
-    e.stopPropagation();
-    let text = el.innerText; // current sentence
-    el.classList.add('active');
-
-    const parentP = el.closest('p');
-    if (!parentP) return;
-
-    // Split into sentences
-    const sentences = parentP.innerText.match(/[^.!?]+[.!?]/g) || [];
-    let currentIndex = sentences.findIndex(s => s.trim() === text.trim());
     let nextText = (currentIndex >= 0 && currentIndex < sentences.length - 1) 
       ? sentences[currentIndex + 1].trim() 
       : null;
@@ -1524,10 +1463,18 @@ document.querySelectorAll('.share').forEach(el => {
           currentIndex++;
           text += " " + sentences[currentIndex].trim();
 
-          // Compute the following next sentence
-          nextText = (currentIndex < sentences.length - 1) 
-            ? sentences[currentIndex + 1].trim() 
+  // highlight the next sentence
+        const nextSentenceEl = parentP.querySelector(
+          `[data-sentence-index="${currentIndex}"]`
+        );
+        if (nextSentenceEl) nextSentenceEl.classList.add("active");
+
+         nextText =
+          currentIndex < sentences.length - 1
+            ? sentences[currentIndex + 1].trim()
             : null;
+
+
 
           // Update tooltip
           document.getElementById('share-text-p').innerHTML = `"${text}" ${
@@ -1538,21 +1485,14 @@ document.querySelectorAll('.share').forEach(el => {
           if (nextText) {
             document.getElementById('add-more-btn').onclick = addMoreBtn.onclick;
           }
-            
         }
-          
       };
-      
     }
-
 
   // Cleanup on mouse leave / scroll
       //document.addEventListener('mouseleave', () => el.classList.remove('active'));
       document.addEventListener('scroll', () => el.classList.remove('active'));
     });
-    */
-
-
   });
 
 

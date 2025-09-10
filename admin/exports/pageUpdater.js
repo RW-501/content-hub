@@ -457,7 +457,9 @@ function addAds(html) {
   // Count <hr> and <h2>
   const hrMatches = html.match(/<hr\s*\/?>/gi) || [];
   const h2Matches = html.match(/<h2\b[^>]*>/gi) || [];
-  const totalSections = hrMatches.length + h2Matches.length;
+  const h3Matches = html.match(/<h3\b[^>]*>/gi) || [];
+  
+  const totalSections = hrMatches.length + h2Matches.length + h3Matches.length;
 
   if (totalSections === 0) return html; // nothing to do
 

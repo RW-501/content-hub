@@ -9,27 +9,27 @@ Disallow: /auth/
 Disallow: /api/
 Disallow: /checkout/
 Disallow: /private/
-Crawl-delay: 5
+Crawl-delay: 1
 Sitemap: https://contenthub.guru/sitemap.xml
 
 # OpenAI
 User-agent: GPTBot
-Allow: /site/
+Allow: /page/
 Disallow: /admin/ /account/ /auth/ /api/ /checkout/ /private/
 
 # Anthropic
 User-agent: ClaudeBot
-Allow: /site/
+Allow: /page/
 Disallow: /admin/ /account/ /auth/ /api/ /checkout/ /private/
 
 # Perplexity
 User-agent: PerplexityBot
-Allow: /site/
+Allow: /page/
 Disallow: /admin/ /account/ /auth/ /api/ /checkout/ /private/
 
 # Common Crawl
 User-agent: CCBot
-Allow: /site/
+Allow: /page/
 Disallow: /admin/ /account/ /auth/ /api/ /checkout/ /private/
 
 # Google / Apple training extensions

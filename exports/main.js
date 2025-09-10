@@ -1461,18 +1461,20 @@ function wrapSentences(parentP) {
 
 
 function removeAllActive() {
-  // Select all spans with class "share" inside the document
+  // Remove 'active' class from all spans
+  const activeSpans = document.querySelectorAll('span.share.active');
+  activeSpans.forEach(span => span.classList.remove('active'));
+
+  // Remove data-sentence-index from all spans
   const allShares = document.querySelectorAll('span.share');
+  allShares.forEach(span => span.removeAttribute('data-sentence-index'));
 
-  allShares.forEach(span => {
-    // Remove the active class if it exists
-    span.classList.remove('active');
-
-    // Remove the data-sentence-index attribute
-    span.removeAttribute('data-sentence-index');
+  // Reset _sentences for all paragraphs to force re-wrapping if needed
+  const allParagraphs = document.querySelectorAll('p, h1, h2, h3, h4, h5, h6, div');
+  allParagraphs.forEach(el => {
+    if (el._sentences) el._sentences = null;
   });
 }
-
 
 function attachShareableText() {
   const tooltip = document.getElementById('link-tooltip');

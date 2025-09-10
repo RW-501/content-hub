@@ -1281,7 +1281,7 @@ attachTooltips();
 
 
 
-function createShareCard(text, eventTarget) {
+function createShareCard(text) {
   const shareContainer = document.getElementById('share-container');
   shareContainer.innerHTML = ''; // clear previous
 
@@ -1329,10 +1329,11 @@ function createShareCard(text, eventTarget) {
     `;
 
     // Position near the element clicked
-    const rect = eventTarget.getBoundingClientRect();
-    shareContainer.style.top = `${window.scrollY + rect.bottom + 5}px`;
-    shareContainer.style.left = `${window.scrollX + rect.left}px`;
-    shareContainer.style.display = 'block';
+// Center the shareContainer on the screen
+shareContainer.style.top = `${window.scrollY + (window.innerHeight - shareContainer.offsetHeight) / 2}px`;
+shareContainer.style.left = `${window.scrollX + (window.innerWidth - shareContainer.offsetWidth) / 2}px`;
+shareContainer.style.display = 'block';
+
 
     // Share actions
     document.getElementById('share-twitter').onclick = () => {

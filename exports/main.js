@@ -1200,12 +1200,14 @@ function showTooltip(el, data) {
       </div>
     </div>
   `;
-  tooltip.style.display = 'block';
+// Center the tooltip on the screen
+const tooltipWidth = tooltip.offsetWidth;
+const tooltipHeight = tooltip.offsetHeight;
 
-  const rect = el.getBoundingClientRect();
-  tooltip.style.top = `${window.scrollY + rect.bottom + 5}px`;
-  tooltip.style.left = `${window.scrollX + rect.left}px`;
-
+tooltip.style.position = "fixed"; // use fixed so it stays centered on scroll
+tooltip.style.top = `${(window.innerHeight - tooltipHeight) / 2}px`;
+tooltip.style.left = `${(window.innerWidth - tooltipWidth) / 2}px`;
+tooltip.style.display = "block";
 
 
   // Bind after injection
@@ -1329,6 +1331,7 @@ function createShareCard(text) {
           <button id="share-twitter">Twitter</button>
           <button id="share-facebook">Facebook</button>
           <button id="share-copy">Copy Link</button>
+          <button id="close-share-container-btn">Close</button>
         </div>
       </div>
     `;
@@ -1339,6 +1342,10 @@ shareContainer.style.top = `${window.scrollY + (window.innerHeight - shareContai
 shareContainer.style.left = `${window.scrollX + (window.innerWidth - shareContainer.offsetWidth) / 2}px`;
 shareContainer.style.display = 'block';
 
+ document.getElementById('close-share-container-btn').onclick = () => {
+  document.getElementById('share-container').style.display = 'none';
+
+    };
 
     // Share actions
     document.getElementById('share-twitter').onclick = () => {
@@ -1353,7 +1360,6 @@ shareContainer.style.display = 'block';
     };
   };
 }
-
 
 
 // Hide on click outside
@@ -1509,14 +1515,25 @@ if (sentenceElement) {
         <div class="share-btns">
           <button id="share-text-btn">Share as Text</button>
           <button id="share-card-btn">Share as Image</button>
+          <button id="close-share-btn">Close</button>
         </div>
       </div>
     `;
 
-    tooltip.style.display = 'block';
-    const rect = sentenceElement.getBoundingClientRect();
-    tooltip.style.top = `${window.scrollY + rect.bottom + 5}px`;
-    tooltip.style.left = `${window.scrollX + rect.left}px`;
+// Center the tooltip on the screen
+const tooltipWidth = tooltip.offsetWidth;
+const tooltipHeight = tooltip.offsetHeight;
+
+tooltip.style.position = "fixed"; // use fixed so it stays centered on scroll
+tooltip.style.top = `${(window.innerHeight - tooltipHeight) / 2}px`;
+tooltip.style.left = `${(window.innerWidth - tooltipWidth) / 2}px`;
+tooltip.style.display = "block";
+
+    
+    document.getElementById('close-share-btn').onclick = () => {
+    tooltip.style.display = 'none';
+removeAllActive();
+    };
 
     // Plain text share
     document.getElementById('share-text-btn').onclick = () => {
@@ -1565,10 +1582,7 @@ sentenceElement.classList.add('active');
       };
     }
 
-  // Cleanup on mouse leave / scroll
-      //document.addEventListener('mouseleave', () => el.classList.remove('active'));
-      document.addEventListener('scroll', () => 
-      removeAllActive());
+
      
     });
   // Hide tooltip when clicking outside
@@ -1582,9 +1596,6 @@ sentenceElement.classList.add('active');
 
 
 
-    document.addEventListener('scroll', () => {
-    tooltip.style.display = 'none';
-  });
 }
 
 attachShareableText() 

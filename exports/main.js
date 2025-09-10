@@ -1591,11 +1591,21 @@ removeAllActive();
           currentIndex++;
           text += " " + sentences[currentIndex].trim();
 
-          // Get the <span> element that contains this sentence
+
+
+
+  // Find the index of the sentence
+//let currentIndex = sentences.findIndex(s => normalizeText(s) === normalizedText);
+
+// If not found exactly, try a loose match (contains)
+if (currentIndex === -1) {
+  currentIndex = sentences.findIndex(s => normalizeText(s).includes(normalizedText));
+}
+
 if (currentIndex >= 0) {
   sentenceElement = parentP.querySelector(`span.share[data-sentence-index="${currentIndex}"]`);
 }
-          // Compute the following next sentence
+
 // Get the next sentence text
 let nextText = (currentIndex >= 0 && currentIndex < sentences.length - 1) 
   ? sentences[currentIndex + 1].trim() 

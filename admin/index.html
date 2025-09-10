@@ -579,6 +579,14 @@ async function getFeaturedArticles() {
   return featured;
 }
 
+function formatCategory(category) {
+  if (!category) return "";
+  return category
+    .replace(/[_-]+/g, " ")       // replace underscores and hyphens with spaces
+    .trim()                       // remove leading/trailing spaces
+    .replace(/\b\w/g, (char) => char.toUpperCase()); // capitalize first letter of each word
+}
+
 
 
 function generateFeaturedHTML(featuredArticles) {
@@ -609,6 +617,11 @@ if (ratingCount < 10) {
   if (averageRating < 1) averageRating = 1;
   if (averageRating > 5) averageRating = 5;
 }
+
+
+const formatted = formatCategory(page.category) || '';
+const categoryUrl = `https://contenthub.guru/category/?c=${encodeURIComponent(page.category)}`;
+
     HTML += `
       <article class="featured-card" itemscope itemtype="https://schema.org/Article">
         <figure>
@@ -620,7 +633,12 @@ if (ratingCount < 10) {
           <h3 id="title-${page.id}" itemprop="headline">
             <a href="${pageUrl}" title="${page.title}" itemprop="mainEntityOfPage">${page.title}</a>
           </h3>
-          ${page.readTime ? `<p><span aria-label="Estimated reading time">${page.readTime} min read</span></p>` : ""}
+<div class="featured-meta">
+  ${page.readTime ? `<span class="read-time" aria-label="Estimated reading time">${page.readTime} min read</span>` : ""}
+  <a href="${categoryUrl}" class="category-link" aria-label="View articles in ${formatted} category" title="View articles in ${formatted} category">
+    <span class="badge category-badge">${formatted}</span>
+  </a>
+</div>
           <p itemprop="description">${description}...</p>
           <a href="${pageUrl}" aria-label="Read more about ${page.title}" itemprop="url">Read More →</a>
         </div>

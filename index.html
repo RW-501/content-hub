@@ -253,6 +253,26 @@
     margin: 0;
 }
 
+.featured-meta {
+  display: flex;
+  align-items: center;    /* vertically center read time & badge */
+  gap: 10px;              /* spacing between read time and category */
+  margin-bottom: 8px;     /* optional spacing below */
+}
+
+.read-time {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.category-badge {
+  background-color: #007bff; /* example color */
+  color: #fff;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  text-decoration: none;
+}
 
   @media(max-width:600px){ .login-btn, .admin-btn { margin:0.5rem 0 0 0; } footer { justify-content:center; gap:0.5rem; } }
 </style>
@@ -1627,29 +1647,7 @@
       </article>
     </div>
 
-        <!-- Schema.org JSON-LD for SEO -->
-        <script type="application/ld+json">
-        {
-          "@context": "https://schema.org",
-          "@type": "Article",
-          "headline": "The Secret Weapon of Every Great Brand: Why Social Media Content Calendars Actually Matter",
-          "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756587807000-create-craft-peaceful-work-preview.jpg?alt=media&token=9d23bcbe-b12b-42b5-9690-f75b33e0a576",
-          "url": "https://contenthub.guru/page/the-secret-weapon-of-every-great-brand-why-social-media-content-calendars-actually-matter",
-          "description": "Learn why social media content calendars are the backbone of successful online brands. This witty, beginner-friendly guide explains what they are, why they matt",
-          "genre": "seo_organic",
-          "timeRequired": "PT6M",
-          "mainEntityOfPage": {
-            "@type": "WebPage",
-            "@id": "https://contenthub.guru/page/the-secret-weapon-of-every-great-brand-why-social-media-content-calendars-actually-matter"
-          },
-            "aggregateRating": {
-    "@type": "AggregateRating",
-    "ratingValue": "4.5",
-    "ratingCount": "2628"
-  }
-        }
-        </script>
-
+       
    
     
   </section>
@@ -1910,16 +1908,30 @@ function renderSites(){
     card.setAttribute("tabindex","0");
    // console.log("date.image: ",data.image);
     
-    card.innerHTML=`
-      <div class="views">${data.views || 0} views</div>
-      <h3>${data.title}</h3>
-      <p><img src="${data.image||'https://contenthub.guru/images/placeholder.png'}" alt="preview" width="300" height="200"></p>
-      <p>Category: ${formatCategory(data.category)}</p>
-      <p hidden>Domain: ${data.domain}</p>
-      <p hidden>Slug: ${data.slug}</p>
-      <p>Published: ${data.publishedCount || 0}</p>
-      <div class="tags">${(data.tags||[]).map(tag=>`<span class="tag">${tag}</span>`).join('')}</div>
-    `;
+  card.innerHTML = `
+  <div class="featured-card">
+    <figure>
+      <img src="${data.image || 'https://contenthub.guru/images/placeholder.png'}" 
+           alt="preview" 
+           style="width:100%; height:auto; border-radius:8px;">
+    </figure>
+    <div class="featured-content">
+      <div class="meta" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+        <span class="category-badge" style="
+          background-color:#007bff; 
+          color:#fff; 
+          padding:3px 8px; 
+          border-radius:12px; 
+          font-size:0.8rem;
+        ">${formatCategory(data.category)}</span>
+        <span class="views" style="font-size:0.8rem; color:#666;">${data.views || 0} views</span>
+      </div>
+      <h3 style="margin:0 0 8px 0; font-size:1.2rem;">${data.title}</h3>
+      <p style="margin:0 0 8px 0; color:#444;">Published: ${data.publishedCount || 0}</p>
+    </div>
+  </div>
+`;
+
     card.addEventListener("click",()=>{window.location.href=`https://contenthub.guru/page/${data.slug}`});
     sitesList.appendChild(card);
   });

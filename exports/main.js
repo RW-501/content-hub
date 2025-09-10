@@ -1185,27 +1185,47 @@ const tooltip = document.getElementById('link-tooltip');
 
 
 function showTooltip(el, data) {
-  const tooltip = document.getElementById('link-tooltip');
+const tooltip = document.getElementById("link-tooltip");
 
-  tooltip.style.pointerEvents = 'auto'; // ✅ allow clicks again
+// keep a reference to the clicked element
+const triggerEl = el; 
 
-  tooltip.innerHTML = `
-    <div class="tooltips" style="max-width:250px;">
-      <strong id="tooltip-title" style="cursor:pointer;">${data.title}</strong><br>
-      ${data.image ? `<img id="tooltip-img" src="${data.image}" style="max-width:100%;margin-top:5px;cursor:pointer;">` : ''}
-      <p style="margin:0;">${data.summary}</p>
-        <div class="tooltip-btns">
+tooltip.style.pointerEvents = "auto";
+
+tooltip.innerHTML = `
+  <div class="tooltips" style="max-width:250px;">
+    <strong id="tooltip-title" style="cursor:pointer;">${data.title}</strong><br>
+    ${
+      data.image
+        ? `<img id="tooltip-img" src="${data.image}" style="max-width:100%;margin-top:5px;cursor:pointer;">`
+        : ""
+    }
+    <p style="margin:0;">${data.summary}</p>
+    <div class="tooltip-btns">
       <button id="tooltip-go" class="linked-btn" data-url="${data.url}">Go</button>
       <button id="tooltip-close" class="linked-btn-close">Close</button>
-      </div>
     </div>
-  `;
-  tooltip.style.display = 'block';
+  </div>
+`;
 
-  const rect = el.getBoundingClientRect();
+tooltip.style.display = "block";
+
+// function to position tooltip
+const positionTooltip = () => {
+  if (!triggerEl) return;
+  const rect = triggerEl.getBoundingClientRect();
   tooltip.style.top = `${window.scrollY + rect.bottom + 5}px`;
   tooltip.style.left = `${window.scrollX + rect.left}px`;
+};
 
+// if image exists, wait for it to load before positioning
+const img = tooltip.querySelector("#tooltip-img");
+if (img) {
+  img.onload = positionTooltip;
+  img.onerror = positionTooltip; // fallback if image fails
+} else {
+  positionTooltip(); // no image, position immediately
+}
 
 
   // Bind after injection

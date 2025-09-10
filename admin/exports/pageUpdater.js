@@ -574,7 +574,7 @@ let { adCount, videoCount, imgCount } = checkCounts(html);
   }
 
 
-
+includedHTML = '';
 
   return html;
 }

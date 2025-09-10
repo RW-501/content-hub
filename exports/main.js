@@ -1494,6 +1494,8 @@ let nextText = (currentIndex >= 0 && currentIndex < sentences.length - 1)
 
 if (sentenceElement) {
   sentenceElement.classList.add('active');
+}else{
+  sentenceElement = el;
 }
 
     // Build tooltip

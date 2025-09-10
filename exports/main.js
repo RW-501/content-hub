@@ -1486,7 +1486,9 @@ let nextText = (currentIndex >= 0 && currentIndex < sentences.length - 1)
   ? sentences[currentIndex + 1].trim() 
   : null;
 
-sentenceElement.classList.add('active');
+if (sentenceElement) {
+  sentenceElement.classList.add('active');
+}
 
     // Build tooltip
     tooltip.innerHTML = `

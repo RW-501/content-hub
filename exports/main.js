@@ -1514,10 +1514,11 @@ let nextText = (currentIndex >= 0 && currentIndex < sentences.length - 1)
   ? sentences[currentIndex + 1].trim() 
   : null;
 
+if (sentenceElement) {
+  
     if (sentenceElement.classList.contains('active')) {
     removeAllActive();
   }
-if (sentenceElement) {
   sentenceElement.classList.add('active');
 }else{
   sentenceElement = el;

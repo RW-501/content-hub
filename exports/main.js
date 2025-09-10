@@ -1382,13 +1382,33 @@ function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
   });
 }
 
-let parentP = '';
+function splitSentencesWithMinLength(rawText, minLength = 4) {
+  let parts = rawText.match(/[^.!?]+[.!?]/g) || [];
+  let sentences = [];
 
-function wrapSentences(element) {
-  parentP = element;
+  for (let i = 0; i < parts.length; i++) {
+    let current = parts[i].trim();
 
-  const rawText = parentP.innerText;
-  const sentences = rawText.match(/[^.!?]+[.!?]/g) || [];
+    // If too short, merge with the next one
+    if (current.length < minLength && i < parts.length - 1) {
+      current += " " + parts[i + 1].trim();
+      i++; // skip next since we merged it
+    }
+
+    sentences.push(current);
+  }
+
+  return sentences;
+}
+
+
+
+function wrapSentences(parentP) {
+
+// Example usage
+const rawText = parentP.innerHTML;
+const sentences = splitSentencesWithMinLength(rawText, 4);
+
 
   parentP.innerHTML = sentences
     .map((s, i) => `<span class="share" data-sentence-index="${i}" style="cursor:pointer;">${s.trim()} </span>`)

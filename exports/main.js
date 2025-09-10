@@ -1401,6 +1401,7 @@ function splitSentencesWithMinLength(text, minLength = 4) {
 
 function wrapSentences(parentP) {
   let sentenceIndex = 0;
+  let collectedSentences = [];
 
   function processNode(node) {
     if (node.nodeType === Node.TEXT_NODE) {
@@ -1412,8 +1413,9 @@ function wrapSentences(parentP) {
         span.className = "share";
         span.dataset.sentenceIndex = sentenceIndex++;
         span.style.cursor = "pointer";
-        span.innerHTML = s.trim() + " ";
+        span.textContent = s.trim() + " ";
         frag.appendChild(span);
+        collectedSentences.push(s.trim());
       });
 
       return frag;
@@ -1434,6 +1436,11 @@ function wrapSentences(parentP) {
 
   parentP.innerHTML = "";
   parentP.appendChild(newContent);
+
+  // Store sentences for later lookups
+  parentP._sentences = collectedSentences;
+
+  return collectedSentences;
 }
 
 function removeAllActive() {
@@ -1462,10 +1469,11 @@ document.querySelectorAll('.share').forEach(el => {
         }
 
 // Make sure sentences are wrapped
-let sentences = wrapSentences(parentP);
+let sentences = parentP._sentences || wrapSentences(parentP);
 
 // Find the index of the sentence
 let currentIndex = sentences.findIndex(s => s.trim() === text.trim());
+
 
 // Get the <span> element that contains this sentence
 let sentenceElement = null;

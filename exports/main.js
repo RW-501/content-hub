@@ -1574,7 +1574,6 @@ removeAllActive();
           text += " " + sentences[currentIndex].trim();
 
           // Get the <span> element that contains this sentence
-let sentenceElement = null;
 if (currentIndex >= 0) {
   sentenceElement = parentP.querySelector(`span.share[data-sentence-index="${currentIndex}"]`);
 }

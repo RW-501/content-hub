@@ -1394,256 +1394,107 @@ function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
 }
 
 
+/**
+ * Sentence Sharing Module
+ * Features: wrap sentences, show tooltip, share as text or image, add-more support
+ */
 
-function splitSentencesWithMinLength(text, minLength = 4) {
-  // Capture sentences, keep punctuation, include last fragment even if no punctuation
-  let parts = text.match(/[^.!?]+[.!?]|[^.!?]+$/g) || [];
-  let sentences = [];
-
-  for (let i = 0; i < parts.length; i++) {
-    let current = parts[i].trim();
-
-    if (current.length < minLength && i < parts.length - 1) {
-      current += " " + parts[i + 1].trim();
-      i++;
-    }
-
-    sentences.push(current);
-  }
-
-  return sentences;
+// --------------------- Text Utilities ---------------------
+function splitSentences(text) {
+  return text.match(/[^.!?]+[.!?]?/g) || [];
 }
-
-function wrapSentences(parentP) {
-  let sentenceIndex = 0;
-  let collectedSentences = [];
-
-  function processNode(node) {
-    if (node.nodeType === Node.TEXT_NODE) {
-      const sentences = splitSentencesWithMinLength(node.textContent, 4);
-      const frag = document.createDocumentFragment();
-
-      sentences.forEach(s => {
-        const span = document.createElement("span");
-        span.className = "share";
-        span.dataset.sentenceIndex = sentenceIndex++;
-        span.style.cursor = "pointer";
-
-        // Preserve text safely
-        span.textContent = s.trim() + " ";
-
-        frag.appendChild(span);
-        collectedSentences.push(s.trim());
-      });
-
-      return frag;
-    } else if (node.nodeType === Node.ELEMENT_NODE) {
-      const clone = node.cloneNode(false);
-      node.childNodes.forEach(child => {
-        clone.appendChild(processNode(child));
-      });
-      return clone;
-    }
-
-    return node.cloneNode(true);
-  }
-
-  const newContent = document.createDocumentFragment();
-  parentP.childNodes.forEach(node => {
-    newContent.appendChild(processNode(node));
-  });
-
-  parentP.innerHTML = "";
-  parentP.appendChild(newContent);
-
-  parentP._sentences = collectedSentences;
-
-  return collectedSentences;
-}
-
-
-
-
-
-function removeAllActive() {
-  // Remove 'active' class from all spans
-  const activeSpans = document.querySelectorAll('span.share.active');
-  activeSpans.forEach(span => span.classList.remove('active'));
-
-  // Remove data-sentence-index from all spans
-  const allShares = document.querySelectorAll('span.share');
-  allShares.forEach(span => span.removeAttribute('data-sentence-index'));
-
-  // Reset _sentences for all paragraphs to force re-wrapping if needed
-  const allParagraphs = document.querySelectorAll('p, h1, h2, h3, h4, h5, h6, div, span');
-  allParagraphs.forEach(el => {
-    if (el._sentences) el._sentences = null;
-  });
-}
-
-function attachShareableText() {
-  const tooltip = document.getElementById('link-tooltip');
-document.querySelectorAll('.share').forEach(el => {
-  el.style.cursor = 'pointer';
-
-  el.addEventListener('click', (e) => {
-    e.stopPropagation();
-    let text = el.innerText; // current sentence
-
-
-  if (el.classList.contains('active')) {
-    removeAllActive();
-  }
-    el.classList.add('active');
-
-    const parentP = el.closest('p');
-    if (!parentP){
-
-      console.log("Returned");
-      return;
-        }
-
-// Make sure sentences are wrapped
-let sentences = parentP._sentences || wrapSentences(parentP);
-
-// Normalize text for comparison
 function normalizeText(t) {
-  return t.replace(/\s+/g, ' ').trim();
+  return t.replace(/\s+/g, " ").trim();
 }
 
-const normalizedText = normalizeText(text);
+// --------------------- Wrapping ---------------------
+function wrapSentences(el, minLength = 20) {
+  const sentences = splitSentences(el.textContent).map(s => s.trim()).filter(Boolean);
+  el.innerHTML = "";
 
-// Find the index of the sentence
-let currentIndex = sentences.findIndex(s => normalizeText(s) === normalizedText);
+  sentences.forEach((s, i) => {
+    const span = document.createElement("span");
+    span.className = "share";
+    span.dataset.index = i;
+    span.textContent = s + " ";
+    el.appendChild(span);
+  });
 
-// If not found exactly, try a loose match (contains)
-if (currentIndex === -1) {
-  currentIndex = sentences.findIndex(s => normalizeText(s).includes(normalizedText));
+  el._sentences = sentences.filter(s => s.length >= minLength);
+  return el._sentences;
 }
 
-// Get the <span> element that contains this sentence
-let sentenceElement = null;
-if (currentIndex >= 0) {
-  sentenceElement = parentP.querySelector(`span.share[data-sentence-index="${currentIndex}"]`);
-}
-
-// Get the next sentence text
-let nextText = (currentIndex >= 0 && currentIndex < sentences.length - 1) 
-  ? sentences[currentIndex + 1].trim() 
-  : null;
-
-// Activate the current span
-if (sentenceElement) {
-  if (sentenceElement.classList.contains('active')) {
-    removeAllActive();
-  }
-  sentenceElement.classList.add('active');
-} else {
-  sentenceElement = el;
-}
-
-// Build tooltip
-tooltip.innerHTML = `
-  <div class="share-text-el">
-    <strong>Share this text:</strong>
-    <p id="share-text-p">
-      "${text}" 
-      ${nextText ? `<span id="add-more-btn">${nextText}</span>` : ""}
-    </p>
-    <div class="share-btns">
-      <button id="share-text-btn">Share as Text</button>
-      <button id="share-card-btn">Share as Image</button>
-      <button id="close-share-btn">Close</button>
+// --------------------- Tooltip ---------------------
+function initTooltip() {
+  const tooltip = document.createElement("div");
+  tooltip.id = "share-tooltip";
+  tooltip.style.display = "none";
+  tooltip.innerHTML = `
+    <div class="share-text-el">
+      <strong>Share this text:</strong>
+      <p id="share-text-p"></p>
+      <div class="share-btns">
+        <button data-action="text">Share as Text</button>
+        <button data-action="image">Share as Image</button>
+        <button data-action="close">Close</button>
+      </div>
     </div>
-  </div>
-`;
+  `;
+  document.body.appendChild(tooltip);
+}
+ initTooltip();
 
+// Center tooltip on screen
+function positionTooltip(el) {
+  const { offsetWidth:w, offsetHeight:h } = el;
+  el.style.position = "fixed";
+  el.style.top = `${(window.innerHeight - h) / 2}px`;
+  el.style.left = `${(window.innerWidth - w) / 2}px`;
+}
 
-// Center the tooltip on the screen
-const tooltipWidth = tooltip.offsetWidth;
-const tooltipHeight = tooltip.offsetHeight;
+// --------------------- Tooltip Display Logic ---------------------
+function showTooltip(p, index = 0) {
+  let currentIndex = index;
 
-tooltip.style.position = "fixed"; // use fixed so it stays centered on scroll
-tooltip.style.top = `${(window.innerHeight - tooltipHeight) / 2}px`;
-tooltip.style.left = `${(window.innerWidth - tooltipWidth) / 2}px`;
-tooltip.style.display = "block";
+  function update() {
+    const text = p._sentences.slice(0, currentIndex + 1).join(" ");
+    const next = currentIndex < p._sentences.length - 1
+      ? `<span id="add-more">+ Next</span>` : "";
+    tooltip.querySelector("#share-text-p").innerHTML = `"${text}" ${next}`;
+    positionTooltip(tooltip);
+    tooltip.style.display = "block";
+    return text;
+  }
 
-    
-    document.getElementById('close-share-btn').onclick = () => {
-    tooltip.style.display = 'none';
-removeAllActive();
-    };
+  let text = update();
 
-    // Plain text share
-    document.getElementById('share-text-btn').onclick = () => {
+  tooltip.onclick = e => {
+    const action = e.target.dataset.action;
+    if (action === "close") tooltip.style.display = "none";
+    if (action === "text") {
       navigator.clipboard.writeText(text);
-      showToast("info","Text copied! Share anywhere.");
-removeAllActive();
-    };
-
-    // Image card share
-    document.getElementById('share-card-btn').onclick = () => {
-      createShareCard(text);
-removeAllActive();
-    };
-
-    // Handle "More" button (if available)
-    const addMoreBtn = document.getElementById('add-more-btn');
-    if (addMoreBtn) {
-      addMoreBtn.onclick = (e) => {
-            e.stopPropagation();
-        if (currentIndex < sentences.length - 1) {
-          currentIndex++;
-          text += " " + sentences[currentIndex].trim();
-
-
-
-
-  // Find the index of the sentence
-//let currentIndex = sentences.findIndex(s => normalizeText(s) === normalizedText);
-
-// If not found exactly, try a loose match (contains)
-if (currentIndex === -1) {
-  currentIndex = sentences.findIndex(s => normalizeText(s).includes(normalizedText));
-}
-
-if (currentIndex >= 0) {
-  sentenceElement = parentP.querySelector(`span.share[data-sentence-index="${currentIndex}"]`);
-}
-
-// Get the next sentence text
-let nextText = (currentIndex >= 0 && currentIndex < sentences.length - 1) 
-  ? sentences[currentIndex + 1].trim() 
-  : null;
-
-          // Update tooltip
-          document.getElementById('share-text-p').innerHTML = `"${text}" ${
-            nextText ? `<span id="add-more-btn">${nextText}</span>` : ""
-          }`;
-sentenceElement.classList.add('active');
-
-          // Re-bind button if more text remains
-          if (nextText) {
-            document.getElementById('add-more-btn').onclick = addMoreBtn.onclick;
-          }
-        }
-      };
+      showToast("info", "Text copied! Share anywhere.");
+      tooltip.style.display = "none";
     }
-
-
-     
-    });
-  // Hide tooltip when clicking outside
-  document.addEventListener('click', () => {
-    //tooltip.style.display = 'none';
-   // removeAllActive();
-  });
-
-  });
-
-
-
-
+    if (action === "image") {
+      createShareCard(text);
+      tooltip.style.display = "none";
+    }
+    if (e.target.id === "add-more") {
+      currentIndex++;
+      text = update();
+    }
+  };
 }
 
-attachShareableText() 
+// --------------------- Delegated Event Listener ---------------------
+document.addEventListener("click", e => {
+  const shareEl = e.target.closest(".share");
+  if (!shareEl) return;
+
+  const parentP = shareEl.closest("p");
+  if (!parentP._sentences) wrapSentences(parentP);
+
+  const index = +shareEl.dataset.index;
+  showTooltip(parentP, index);
+});

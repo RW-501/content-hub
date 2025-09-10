@@ -2016,6 +2016,8 @@ async function loadSites(){
     // Shuffle data for variety
     sitesData = shuffleArray(data);
 
+    console.log("https://contenthub.guru/page/",data.slug);
+
     // Render filters + sites
     renderTagFilters();
     renderSites();

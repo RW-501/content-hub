@@ -1446,7 +1446,7 @@ document.querySelectorAll('.share').forEach(el => {
 
           // Update tooltip
           document.getElementById('share-text-p').innerHTML = `"${text}" ${
-            nextText ? `<button id="add-more-btn">${nextText}</button>` : ""
+            nextText ? `<span id="add-more-btn">${nextText}</span>` : ""
           }`;
 
           // Re-bind button if more text remains

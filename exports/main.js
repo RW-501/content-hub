@@ -1432,31 +1432,41 @@ document.querySelectorAll('.share').forEach(el => {
     };
 
     // Handle "More" button (if available)
-    const addMoreBtn = document.getElementById('add-more-btn');
-    if (addMoreBtn) {
-      addMoreBtn.onclick = (e) => {
-            e.stopPropagation();
-        if (currentIndex < sentences.length - 1) {
-          currentIndex++;
-          text += " " + sentences[currentIndex].trim();
+const addMoreBtn = document.getElementById('add-more-btn');
+if (addMoreBtn) {
+  addMoreBtn.onclick = (e) => {
+    e.stopPropagation();
+    if (currentIndex < sentences.length - 1) {
+      currentIndex++;
+      text += " " + sentences[currentIndex].trim();
 
-          // Compute the following next sentence
-          nextText = (currentIndex < sentences.length - 1) 
-            ? sentences[currentIndex + 1].trim() 
-            : null;
+      // Highlight the next sentence in the article
+      const nextSentenceEl = document.querySelector(
+        `[data-sentence-index="${currentIndex}"]`
+      );
+      if (nextSentenceEl) {
+        nextSentenceEl.classList.add("active");
+      }
 
-          // Update tooltip
-          document.getElementById('share-text-p').innerHTML = `"${text}" ${
-            nextText ? `<span id="add-more-btn">${nextText}</span>` : ""
-          }`;
+      // Compute the following sentence (to preview in tooltip)
+      const nextText =
+        currentIndex < sentences.length - 1
+          ? sentences[currentIndex + 1].trim()
+          : null;
 
-          // Re-bind button if more text remains
-          if (nextText) {
-            document.getElementById('add-more-btn').onclick = addMoreBtn.onclick;
-          }
-        }
-      };
+      // Update tooltip
+      document.getElementById("share-text-p").innerHTML = `"${text}" ${
+        nextText ? `<span id="add-more-btn">${nextText}</span>` : ""
+      }`;
+
+      // Re-bind button if more text remains
+      if (nextText) {
+        document.getElementById("add-more-btn").onclick = addMoreBtn.onclick;
+      }
     }
+  };
+}
+
 
   // Cleanup on mouse leave / scroll
       //document.addEventListener('mouseleave', () => el.classList.remove('active'));

@@ -1404,7 +1404,7 @@ document.querySelectorAll('.share').forEach(el => {
         <strong>Share this text:</strong>
         <p id="share-text-p">
           "${text}" 
-          ${nextText ? `<button id="add-more-btn">${nextText}</button>` : ""}
+          ${nextText ? `<span id="add-more-btn">${nextText}</span>` : ""}
         </p>
         <div class="share-btns">
           <button id="share-text-btn">Share as Text</button>
@@ -1434,7 +1434,8 @@ document.querySelectorAll('.share').forEach(el => {
     // Handle "More" button (if available)
     const addMoreBtn = document.getElementById('add-more-btn');
     if (addMoreBtn) {
-      addMoreBtn.onclick = () => {
+      addMoreBtn.onclick = (e) => {
+            e.stopPropagation();
         if (currentIndex < sentences.length - 1) {
           currentIndex++;
           text += " " + sentences[currentIndex].trim();

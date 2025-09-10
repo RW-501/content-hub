@@ -1401,7 +1401,7 @@ function wrapSentences(element) {
 }
 
 function removeAllActive() {
-    const  ContentArea = document.getElementById(' main-Content-Area');
+    const  ContentArea = document.getElementById('main-Content-Area');
 ContentArea.querySelectorAll('span.share.active').forEach(span => {
   span.classList.remove('active');
 });

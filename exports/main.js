@@ -1388,8 +1388,11 @@ function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
   });
 }
 
+
+
 function splitSentencesWithMinLength(text, minLength = 4) {
-  let parts = text.match(/[^.!?]+[.!?]/g) || [];
+  // Capture sentences, keep punctuation, include last fragment even if no punctuation
+  let parts = text.match(/[^.!?]+[.!?]|[^.!?]+$/g) || [];
   let sentences = [];
 
   for (let i = 0; i < parts.length; i++) {
@@ -1421,8 +1424,8 @@ function wrapSentences(parentP) {
         span.dataset.sentenceIndex = sentenceIndex++;
         span.style.cursor = "pointer";
 
-        // Use innerHTML so embedded markup survives
-        span.innerHTML = s.trim() + " ";
+        // Preserve text safely
+        span.textContent = s.trim() + " ";
 
         frag.appendChild(span);
         collectedSentences.push(s.trim());
@@ -1431,11 +1434,9 @@ function wrapSentences(parentP) {
       return frag;
     } else if (node.nodeType === Node.ELEMENT_NODE) {
       const clone = node.cloneNode(false);
-
       node.childNodes.forEach(child => {
         clone.appendChild(processNode(child));
       });
-
       return clone;
     }
 
@@ -1454,6 +1455,10 @@ function wrapSentences(parentP) {
 
   return collectedSentences;
 }
+
+
+
+
 
 function removeAllActive() {
     const  ContentArea = document.getElementById('main-Content-Area');

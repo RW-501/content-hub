@@ -1381,18 +1381,16 @@ function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
     ctx.fillText(lineText.trim(), x, y + (i - lines.length/2 + 0.5)*lineHeight);
   });
 }
-
-function splitSentencesWithMinLength(rawText, minLength = 4) {
-  let parts = rawText.match(/[^.!?]+[.!?]/g) || [];
+function splitSentencesWithMinLength(text, minLength = 4) {
+  let parts = text.match(/[^.!?]+[.!?]/g) || [];
   let sentences = [];
 
   for (let i = 0; i < parts.length; i++) {
     let current = parts[i].trim();
 
-    // If too short, merge with the next one
     if (current.length < minLength && i < parts.length - 1) {
       current += " " + parts[i + 1].trim();
-      i++; // skip next since we merged it
+      i++;
     }
 
     sentences.push(current);
@@ -1401,23 +1399,41 @@ function splitSentencesWithMinLength(rawText, minLength = 4) {
   return sentences;
 }
 
-
-
 function wrapSentences(parentP) {
+  let sentenceIndex = 0;
 
-// Example usage
-const rawText = parentP.innerHTML;
-const sentences = splitSentencesWithMinLength(rawText, 4);
+  function processNode(node) {
+    if (node.nodeType === Node.TEXT_NODE) {
+      const sentences = splitSentencesWithMinLength(node.textContent, 4);
 
+      const frag = document.createDocumentFragment();
+      sentences.forEach(s => {
+        const span = document.createElement("span");
+        span.className = "share";
+        span.dataset.sentenceIndex = sentenceIndex++;
+        span.style.cursor = "pointer";
+        span.innerHTML = s.trim() + " ";
+        frag.appendChild(span);
+      });
 
-  parentP.innerHTML = sentences
-    .map((s, i) => `<span class="share" data-sentence-index="${i}" style="cursor:pointer;">${s.trim()} </span>`)
-    .join("");
+      return frag;
+    } else if (node.nodeType === Node.ELEMENT_NODE) {
+      const clone = node.cloneNode(false);
+      node.childNodes.forEach(child => {
+        clone.appendChild(processNode(child));
+      });
+      return clone;
+    }
+    return node.cloneNode(true);
+  }
 
-  // Store sentences on the element for safe access
-  parentP._sentences = sentences;
+  const newContent = document.createDocumentFragment();
+  parentP.childNodes.forEach(node => {
+    newContent.appendChild(processNode(node));
+  });
 
-  return sentences;
+  parentP.innerHTML = "";
+  parentP.appendChild(newContent);
 }
 
 function removeAllActive() {

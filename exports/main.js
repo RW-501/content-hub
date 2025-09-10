@@ -1432,7 +1432,7 @@ console.log(sentenceElement, nextText);
 
         // Highlight clicked sentence
 //  parentP.querySelectorAll('.active').forEach(span => span.classList.add('active'));
-  nextText.classList.add('active');
+  sentenceElement.classList.add('active');
 
     // Build tooltip
     tooltip.innerHTML = `

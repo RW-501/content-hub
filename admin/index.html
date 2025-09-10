@@ -771,6 +771,36 @@ content = content.replace(
 
 // Create Page button
 document.getElementById("createBtn").addEventListener("click", async () => {
+
+
+      
+// Function to generate a random hex color
+function getRandomColor() {
+  const letters = "0123456789ABCDEF";
+  let color = "#";
+  for (let i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
+}
+
+// Your base style keys
+const baseStyle = {
+  hrColor: null,
+  headerBorder: null,
+};
+
+// ✅ Create just one random set
+const styles = (() => {
+  const randomColor = getRandomColor();
+  return Object.fromEntries(
+    Object.entries(baseStyle).map(([key]) => [key, randomColor])
+  );
+})();
+
+console.log("styles:", styles);
+
+
   // Gather input values
   const title = document.getElementById("title").value.trim();
   const description = document.getElementById("description").value.trim();

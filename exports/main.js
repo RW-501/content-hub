@@ -1418,7 +1418,7 @@ let sentences = parentP.innerText.match(/[^.!?]+[.!?]/g) || wrapSentences(parent
       : null;
 
         // Highlight clicked sentence
-  parentP.querySelectorAll('.active').forEach(span => span.classList.remove('active'));
+  parentP.querySelectorAll('.active').forEach(span => span.classList.add('active'));
   el.classList.add('active');
 
     // Build tooltip

@@ -1398,7 +1398,7 @@ function wrapSentences(parentP) {
 }
 
 function removeAllActive(parentP) {
-  parentP.querySelectorAll('span.share.active').forEach(span => {
+  parentP.querySelectorAll('span .share .active').forEach(span => {
     span.classList.remove('active');
   });
 }

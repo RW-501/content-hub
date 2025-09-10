@@ -1453,7 +1453,7 @@ function positionTooltip(el) {
 }
 
 // --------------------- Tooltip Display Logic ---------------------
-function showTooltip(p, index = 0) {
+function showShareTooltip(p, index = 0) {
   let currentIndex = index;
 
   function update() {
@@ -1496,5 +1496,5 @@ document.addEventListener("click", e => {
   if (!parentP._sentences) wrapSentences(parentP);
 
   const index = +shareEl.dataset.index;
-  showTooltip(parentP, index);
+  showShareTooltip(parentP, index);
 });

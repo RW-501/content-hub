@@ -1201,13 +1201,12 @@ function showTooltip(el, data) {
     </div>
   `;
 // Center the tooltip on the screen
-const tooltipWidth = tooltip.offsetWidth;
-const tooltipHeight = tooltip.offsetHeight;
-
-tooltip.style.position = "fixed"; // use fixed so it stays centered on scroll
-tooltip.style.top = `${(window.innerHeight - tooltipHeight) / 2}px`;
-tooltip.style.left = `${(window.innerWidth - tooltipWidth) / 2}px`;
+tooltip.style.position = "fixed";
+tooltip.style.top = "50%";
+tooltip.style.left = "50%";
+tooltip.style.transform = "translate(-50%, -50%)"; // centers perfectly
 tooltip.style.display = "block";
+
 
 
   // Bind after injection

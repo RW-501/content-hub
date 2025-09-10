@@ -1133,7 +1133,9 @@ ${scriptTag}
     background-color: ${articleData.styles.headerBorder || "#e6e6ea"};
     color: ${articleData.styles.headerText || "#222222"};
 }
-
+.breadcrumb-wrapper {
+    background-color:  ${articleData.styles.headerBorder+'5c' || "#19ba8a5c"};
+}
 #in-article-blocks h2 {
     border-left: 4px solid   ${articleData.styles.headerBorder || "#19ba8a"};
   border-right: 4px solid   ${articleData.styles.headerBorder || "#19ba8a"};
@@ -1155,6 +1157,12 @@ ${scriptTag}
     border-left: 4px solid  ${articleData.styles.headerBorder || "#19ba8a"};
     padding-left: .5rem;
 }
+
+#included-pages {
+display: = ${linkCount === 0 ? "none" : "block"};
+}
+
+
 
 main {
 /* 🔹 CTA Button */

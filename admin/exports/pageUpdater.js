@@ -261,6 +261,10 @@ if (match && text.includes(match[0])) {
     span.textContent = match[0];
     fragment.appendChild(span);
 
+    
+const formatted = formatCategory(category) || '';
+const categoryUrl = `https://contenthub.guru/category/?c=${encodeURIComponent(category)}`;
+
     // ✅ add to includedHTML
     includedHTML += `
       <div class="included-item">
@@ -269,7 +273,9 @@ if (match && text.includes(match[0])) {
         </a> → 
         <a href="${url || '#'}" target="_blank" title="${title || url || 'Link'}" aria-label="Link to ${title || url || 'Link'}">
           ${title || url || 'Link'}
-        </a> <span class="badge category-badge">${formatCategory(category) || ''}</span>
+        </a> <a href="${categoryUrl}" aria-label="View articles in ${formatted} category" title="View articles in ${formatted} category">
+    <span class="badge category-badge">${formatted}</span>
+  </a>
       </div>`;
 
       includedHTML2 = includedHTML;

@@ -1385,8 +1385,12 @@ function wrapSentences(parentP) {
     .map((s, i) => `<span class="share" data-sentence-index="${i}" style="cursor:pointer;">${s.trim()} </span>`)
     .join("");
 
+  // Store sentences on the element for safe access
+  parentP._sentences = sentences;
+
   return sentences;
 }
+
 
 function attachShareableText() {
   const tooltip = document.getElementById('link-tooltip');
@@ -1401,12 +1405,9 @@ function attachShareableText() {
       if (!parentP) return;
 
       // Ensure sentences are wrapped
-      let sentences;
-      if (!parentP.querySelector("[data-sentence-index]")) {
-        sentences = wrapSentences(parentP);
-      } else {
-        sentences = Array.from(parentP.querySelectorAll("[data-sentence-index]")).map(span => span.innerText.trim());
-      }
+// Use stored sentences if available
+let sentences = parentP._sentences || wrapSentences(parentP);
+
 
       let currentIndex = parseInt(el.dataset.sentenceIndex, 10);
       let text = sentences[currentIndex];

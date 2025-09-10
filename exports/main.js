@@ -1419,8 +1419,11 @@ document.querySelectorAll('.share').forEach(el => {
     el.classList.add('active');
 
     const parentP = el.closest('p');
-    if (!parentP) return;
+    if (!parentP){
 
+      console.log("Returned");
+      return;
+        }
 
 // Make sure sentences are wrapped
 let sentences = parentP._sentences || wrapSentences(parentP);

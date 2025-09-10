@@ -1328,9 +1328,9 @@ function createShareCard(text) {
         max-width:320px;">
         <img src="${dataUrl}" style="width:100%; border-radius:8px; margin-bottom:10px;" />
         <div class="share-buttons" style="display:flex; gap:8px;">
-          <button id="share-twitter">Twitter</button>
-          <button id="share-facebook">Facebook</button>
-          <button id="share-copy">Copy Link</button>
+          <button id="share-twitter"><i class="fab fa-twitter"></i></button>
+          <button id="share-facebook"><i class="fab fa-facebook"></i></button>
+          <button id="share-copy"><i class="fas fa-link"></i></button>
           <button id="close-share-container-btn">Close</button>
         </div>
       </div>

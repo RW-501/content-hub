@@ -17,8 +17,9 @@ header { animation-delay: 0.8s; }
 .header-bottom { animation-delay: 1s; }
 .share-section { animation-delay: 1.4s; }
 #mainImage { animation-delay: 1.6s; }
-#main-Content-Area { animation-delay: 1.8s; }
-footer { animation-delay: 2s; }
+#main-Content-Area { margin-bottom: 2.5rem; animation-delay: 1.8s; }
+#bottom-banner-container { animation-delay: 2s;  }
+footer { animation-delay: 2.5s; }
 
 @keyframes fadeSlideIn {
   from { opacity: 0; transform: translateY(-20px); }

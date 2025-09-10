@@ -1265,6 +1265,7 @@ function attachTooltips() {
   });
 }
 
+
 function hideTooltip() {
   tooltip.style.display = 'none';
   tooltip.style.pointerEvents = 'none'; // ✅ disable when hidden so it doesn’t block stuff
@@ -1278,7 +1279,11 @@ function goToLink(url) {
 
 attachTooltips();
 
-
+  // Hide tooltip when clicking outside
+  document.addEventListener('click', () => {
+     hideTooltip();
+  });
+  
 
 
 function createShareCard(text) {
@@ -1356,7 +1361,6 @@ document.addEventListener('click', () => {
   document.getElementById('share-container').style.display = 'none';
 });
 
-
 // Helper to wrap text nicely on canvas
 function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
   const words = text.split(' ');
@@ -1393,6 +1397,12 @@ function wrapSentences(parentP) {
   return sentences;
 }
 
+function removeAllActive(parentP) {
+  parentP.querySelectorAll('span.share.active').forEach(span => {
+    span.classList.remove('active');
+  });
+}
+
 
 function attachShareableText() {
   const tooltip = document.getElementById('link-tooltip');
@@ -1406,15 +1416,7 @@ document.querySelectorAll('.share').forEach(el => {
 
     const parentP = el.closest('p');
     if (!parentP) return;
-/*
-    // Split into sentences
-    const sentences = parentP.innerText.match(/[^.!?]+[.!?]/g) || [];
-    
-    let currentIndex = sentences.findIndex(s => s.trim() === text.trim());
-    let nextText = (currentIndex >= 0 && currentIndex < sentences.length - 1) 
-      ? sentences[currentIndex + 1].trim() 
-      : null;
-*/
+
 
 // Make sure sentences are wrapped
 let sentences = parentP._sentences || wrapSentences(parentP);
@@ -1433,7 +1435,6 @@ let nextText = (currentIndex >= 0 && currentIndex < sentences.length - 1)
   ? sentences[currentIndex + 1].trim() 
   : null;
 
-console.log(sentenceElement, nextText);
 sentenceElement.classList.add('active');
 
     // Build tooltip
@@ -1460,13 +1461,13 @@ sentenceElement.classList.add('active');
     document.getElementById('share-text-btn').onclick = () => {
       navigator.clipboard.writeText(text);
       showToast("info","Text copied! Share anywhere.");
-      el.classList.remove('active');
+removeAllActive(parentP);
     };
 
     // Image card share
     document.getElementById('share-card-btn').onclick = () => {
       createShareCard(text);
-      el.classList.remove('active');
+removeAllActive(parentP);
     };
 
     // Handle "More" button (if available)
@@ -1506,15 +1507,19 @@ sentenceElement.classList.add('active');
   // Cleanup on mouse leave / scroll
       //document.addEventListener('mouseleave', () => el.classList.remove('active'));
       document.addEventListener('scroll', () => el.classList.remove('active'));
+      removeAllActive(parentP);
     });
-  });
-
-
-
   // Hide tooltip when clicking outside
   document.addEventListener('click', () => {
     tooltip.style.display = 'none';
+    removeAllActive(parentP);
   });
+
+  });
+
+
+
+
     document.addEventListener('scroll', () => {
     tooltip.style.display = 'none';
   });

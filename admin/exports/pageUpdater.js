@@ -1544,13 +1544,13 @@ const GITHUB_TOKEN = part_1 + part_2 + part_3 + part_4;
     showToast("info", "Page Updated successfully!");
     console.log("Page updated successfully!");
 
-    cleanVars();
 
 // 200 seconds = 200 * 1000 milliseconds
 setTimeout(() => {
 if (location) {
   window.location.href = location;
 }
+    cleanVars();
 }, 2000);
     
   } catch (err) {

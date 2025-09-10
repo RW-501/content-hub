@@ -1620,7 +1620,7 @@ sentenceElement.classList.add('active');
     });
   // Hide tooltip when clicking outside
   document.addEventListener('click', () => {
-    tooltip.style.display = 'none';
+    //tooltip.style.display = 'none';
    // removeAllActive();
   });
 

@@ -1434,7 +1434,7 @@ hr {
 
 <section id="included-pages" >
   <h2 class="included">Pages Included:</h2>
-  <div id="included-container" class="included-grid">${includedHTML2}</div>
+  <div id="included-container" class="included-grid">${includedHTML}</div>
 </section>
 
 </main>

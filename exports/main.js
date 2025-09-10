@@ -1185,47 +1185,27 @@ const tooltip = document.getElementById('link-tooltip');
 
 
 function showTooltip(el, data) {
-const tooltip = document.getElementById("link-tooltip");
+  const tooltip = document.getElementById('link-tooltip');
 
-// keep a reference to the clicked element
-const triggerEl = el; 
+  tooltip.style.pointerEvents = 'auto'; // ✅ allow clicks again
 
-tooltip.style.pointerEvents = "auto";
-
-tooltip.innerHTML = `
-  <div class="tooltips" style="max-width:250px;">
-    <strong id="tooltip-title" style="cursor:pointer;">${data.title}</strong><br>
-    ${
-      data.image
-        ? `<img id="tooltip-img" src="${data.image}" style="max-width:100%;margin-top:5px;cursor:pointer;">`
-        : ""
-    }
-    <p style="margin:0;">${data.summary}</p>
-    <div class="tooltip-btns">
+  tooltip.innerHTML = `
+    <div class="tooltips" style="max-width:250px;">
+      <strong id="tooltip-title" style="cursor:pointer;">${data.title}</strong><br>
+      ${data.image ? `<img id="tooltip-img" src="${data.image}" style="max-width:100%;margin-top:5px;cursor:pointer;">` : ''}
+      <p style="margin:0;">${data.summary}</p>
+        <div class="tooltip-btns">
       <button id="tooltip-go" class="linked-btn" data-url="${data.url}">Go</button>
       <button id="tooltip-close" class="linked-btn-close">Close</button>
+      </div>
     </div>
-  </div>
-`;
+  `;
+  tooltip.style.display = 'block';
 
-tooltip.style.display = "block";
-
-// function to position tooltip
-const positionTooltip = () => {
-  if (!triggerEl) return;
-  const rect = triggerEl.getBoundingClientRect();
+  const rect = el.getBoundingClientRect();
   tooltip.style.top = `${window.scrollY + rect.bottom + 5}px`;
   tooltip.style.left = `${window.scrollX + rect.left}px`;
-};
 
-// if image exists, wait for it to load before positioning
-const img = tooltip.querySelector("#tooltip-img");
-if (img) {
-  img.onload = positionTooltip;
-  img.onerror = positionTooltip; // fallback if image fails
-} else {
-  positionTooltip(); // no image, position immediately
-}
 
 
   // Bind after injection
@@ -1397,7 +1377,6 @@ function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
   });
 }
 
-
 function wrapSentences(parentP) {
   const rawText = parentP.innerText;
   const sentences = rawText.match(/[^.!?]+[.!?]/g) || [];
@@ -1416,6 +1395,76 @@ function attachShareableText() {
 document.querySelectorAll('.share').forEach(el => {
   el.style.cursor = 'pointer';
 
+  el.addEventListener("click", (e) => {
+  e.stopPropagation();
+
+  const parentP = el.closest("p");
+  if (!parentP) return;
+
+  // Ensure sentences are wrapped
+  let sentences;
+  if (!parentP.querySelector("[data-sentence-index]")) {
+    sentences = wrapSentences(parentP);
+  } else {
+    sentences = Array.from(parentP.querySelectorAll("[data-sentence-index]"))
+                     .map(span => span.innerText.trim());
+  }
+
+  currentIndex = parseInt(el.dataset.sentenceIndex, 10);
+  let text = sentences[currentIndex];
+
+  el.classList.add("active");
+
+    // Build tooltip
+    tooltip.innerHTML = `
+      <div class="share-text-el">
+        <strong>Share this text:</strong>
+        <p id="share-text-p">
+          "${text}" 
+          ${nextText ? `<span id="add-more-btn">${nextText}</span>` : ""}
+        </p>
+        <div class="share-btns">
+          <button id="share-text-btn">Share as Text</button>
+          <button id="share-card-btn">Share as Image</button>
+        </div>
+      </div>
+    `;
+  // Add more button
+  const addMoreBtn = document.getElementById("add-more-btn");
+  if (addMoreBtn) {
+    addMoreBtn.onclick = () => {
+      if (currentIndex < sentences.length - 1) {
+        currentIndex++;
+        text += " " + sentences[currentIndex].trim();
+
+        // highlight the next sentence
+        const nextSentenceEl = parentP.querySelector(
+          `[data-sentence-index="${currentIndex}"]`
+        );
+        if (nextSentenceEl) nextSentenceEl.classList.add("active");
+
+        const nextText =
+          currentIndex < sentences.length - 1
+            ? sentences[currentIndex + 1].trim()
+            : null;
+
+        document.getElementById("share-text-p").innerHTML = `"${text}" ${
+          nextText ? `<span id="add-more-btn">${nextText}</span>` : ""
+        }`;
+
+        if (nextText) {
+          document.getElementById("add-more-btn").onclick = addMoreBtn.onclick;
+        }
+      }
+    };
+  }
+    // Cleanup on mouse leave / scroll
+      //document.addEventListener('mouseleave', () => el.classList.remove('active'));
+      document.addEventListener('scroll', () => el.classList.remove('active'));
+});
+
+
+/*
   el.addEventListener('click', (e) => {
     e.stopPropagation();
     let text = el.innerText; // current sentence
@@ -1464,105 +1513,44 @@ document.querySelectorAll('.share').forEach(el => {
       el.classList.remove('active');
     };
 
-    el.addEventListener("click", (e) => {
-  e.stopPropagation();
+    // Handle "More" button (if available)
+    const addMoreBtn = document.getElementById('add-more-btn');
+    if (addMoreBtn) {
+      addMoreBtn.onclick = (e) => {
+            e.stopPropagation();
+        if (currentIndex < sentences.length - 1) {
+          currentIndex++;
+          text += " " + sentences[currentIndex].trim();
 
-  const parentP = el.closest("p");
-  if (!parentP) return;
-
-  // Ensure sentences are wrapped
-  let sentences;
-  if (!parentP.querySelector("[data-sentence-index]")) {
-    sentences = wrapSentences(parentP);
-  } else {
-    sentences = Array.from(parentP.querySelectorAll("[data-sentence-index]"))
-                     .map(span => span.innerText.trim());
-  }
-
-  currentIndex = parseInt(el.dataset.sentenceIndex, 10);
-  let text = sentences[currentIndex];
-
-  el.classList.add("active");
-
-  // … your tooltip code …
-
-  // Add more button
-  const addMoreBtn = document.getElementById("add-more-btn");
-  if (addMoreBtn) {
-    addMoreBtn.onclick = () => {
-      if (currentIndex < sentences.length - 1) {
-        currentIndex++;
-        text += " " + sentences[currentIndex].trim();
-
-        // highlight the next sentence
-        const nextSentenceEl = parentP.querySelector(
-          `[data-sentence-index="${currentIndex}"]`
-        );
-        if (nextSentenceEl) nextSentenceEl.classList.add("active");
-
-        const nextText =
-          currentIndex < sentences.length - 1
-            ? sentences[currentIndex + 1].trim()
+          // Compute the following next sentence
+          nextText = (currentIndex < sentences.length - 1) 
+            ? sentences[currentIndex + 1].trim() 
             : null;
 
-        document.getElementById("share-text-p").innerHTML = `"${text}" ${
-          nextText ? `<span id="add-more-btn">${nextText}</span>` : ""
-        }`;
+          // Update tooltip
+          document.getElementById('share-text-p').innerHTML = `"${text}" ${
+            nextText ? `<span id="add-more-btn">${nextText}</span>` : ""
+          }`;
 
-        if (nextText) {
-          document.getElementById("add-more-btn").onclick = addMoreBtn.onclick;
+          // Re-bind button if more text remains
+          if (nextText) {
+            document.getElementById('add-more-btn').onclick = addMoreBtn.onclick;
+          }
+            
         }
-      }
-    };
-  }
-});
-/*
-
-    // Handle "More" button (if available)
-const addMoreBtn = document.getElementById('add-more-btn');
-if (addMoreBtn) {
-  addMoreBtn.onclick = (e) => {
-    e.stopPropagation();
-    if (currentIndex < sentences.length - 1) {
-      currentIndex++;
-      text += " " + sentences[currentIndex].trim();
-
-      // Highlight the next sentence in the article
-      const nextSentenceEl = document.querySelector(
-        `[data-sentence-index="${currentIndex}"]`
-      );
-      if (nextSentenceEl) {
-        nextSentenceEl.classList.add("active");
-      }
-
-      // Compute the following sentence (to preview in tooltip)
-      const nextText =
-        currentIndex < sentences.length - 1
-          ? sentences[currentIndex + 1].trim()
-          : null;
-
-      // Update tooltip
-      document.getElementById("share-text-p").innerHTML = `"${text}" ${
-        nextText ? `<span id="add-more-btn">${nextText}</span>` : ""
-      }`;
+          
+      };
       
+    }
 
-      // Re-bind button if more text remains
-      if (nextText) {
-        document.getElementById("add-more-btn").onclick = addMoreBtn.onclick;
-      }
-  }
-   
-    };
-
-  
-}
-*/
 
   // Cleanup on mouse leave / scroll
       //document.addEventListener('mouseleave', () => el.classList.remove('active'));
       document.addEventListener('scroll', () => el.classList.remove('active'));
     });
+    */
+
+
   });
 
 

@@ -1434,6 +1434,7 @@ let nextText = (currentIndex >= 0 && currentIndex < sentences.length - 1)
   : null;
 
 console.log(sentenceElement, nextText);
+sentenceElement.classList.add('active');
 
     // Build tooltip
     tooltip.innerHTML = `

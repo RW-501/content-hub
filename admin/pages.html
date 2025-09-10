@@ -902,17 +902,74 @@ function createStatusPopup() {
 
 function updatePopupProgress(current, total, updated, skipped, errors, elapsed) {
   const percent = ((current / total) * 100).toFixed(0);
-  const barLength = 20;
-  const filled = Math.round((current / total) * barLength);
-  const bar = "█".repeat(filled) + "-".repeat(barLength - filled);
 
-  document.getElementById("status-progress").textContent =
-    `Progress: [${bar}] ${percent}% (${current}/${total})`;
-  document.getElementById("status-timer").textContent =
-    `⏱ Elapsed: ${elapsed}s`;
+  // convert elapsed to minutes
+  const elapsedMin = (elapsed / 60).toFixed(1);
+
+  // estimate averages
+  const avgPerItem = elapsed / current;
+  const estTotal = avgPerItem * total;
+  const estRemaining = estTotal - elapsed;
+
+  const estTotalMin = (estTotal / 60).toFixed(1);
+  const estRemainingMin = (estRemaining / 60).toFixed(1);
+
+  // color logic for remaining time
+  let timeColor;
+  if (estRemaining <= 300) timeColor = "limegreen";   // < 5 min
+  else if (estRemaining <= 900) timeColor = "orange"; // 5–15 min
+  else timeColor = "red";                             // > 15 min
+
+  // color logic for progress bar
+  let barColor;
+  if (percent < 40) barColor = "red";
+  else if (percent < 80) barColor = "orange";
+  else barColor = "limegreen";
+
+  // add pulse animation at 100%
+  const pulseStyle = percent == 100 
+    ? "animation:pulse 1s infinite alternate;" 
+    : "";
+
+  document.getElementById("status-progress").innerHTML = `
+    <div style="width:100%; background:#333; height:10px; border-radius:4px; overflow:hidden;">
+      <div style="
+        width:${percent}%; 
+        height:100%; 
+        background:${barColor}; 
+        transition: width 0.5s ease;
+        ${pulseStyle}
+      "></div>
+    </div>
+    <div style="margin-top:4px;">
+      Progress: ${percent}% (${current}/${total})
+    </div>
+  `;
+
+  // inject color into "Left"
+  document.getElementById("status-timer").innerHTML =
+    `⏱ Elapsed: ${elapsedMin} min | ` +
+    `<span style="color:${timeColor}">⏳ Left: ${estRemainingMin} min</span> | ` +
+    `🕒 Total: ${estTotalMin} min`;
+
   document.getElementById("status-summary").textContent =
     `📊 Summary: ${updated} updated | ${skipped} skipped | ${errors} errors`;
+
+  // inject keyframes once (if not already there)
+  if (!document.getElementById("pulse-style")) {
+    const style = document.createElement("style");
+    style.id = "pulse-style";
+    style.textContent = `
+      @keyframes pulse {
+        from { filter: brightness(1); }
+        to { filter: brightness(1.6); }
+      }
+    `;
+    document.head.appendChild(style);
+  }
 }
+
+
 
 function logToPopup(message, color = "#ccc") {
   const logEl = document.getElementById("status-log");

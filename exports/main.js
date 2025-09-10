@@ -1381,7 +1381,7 @@ function attachShareableText() {
 
   document.querySelectorAll('.share').forEach(el => {
     el.style.cursor = 'pointer';
-    el.classList.add('highlight');
+   // el.classList.add('highlight');
 
     el.addEventListener('click', (e) => {
       e.stopPropagation();
@@ -1454,7 +1454,7 @@ function attachShareableText() {
       }
 
       // Cleanup on mouse leave / scroll
-      document.addEventListener('mouseleave', () => el.classList.remove('active'));
+      //document.addEventListener('mouseleave', () => el.classList.remove('active'));
       document.addEventListener('scroll', () => el.classList.remove('active'));
     });
   });

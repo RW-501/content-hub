@@ -1102,7 +1102,7 @@ ${scriptTag}
 }
 
 #included-pages {
-display: = ${linkCount === 0 ? "none" : "block"};
+display: ${linkCount === 0 ? "none" : "block"};
 }
 
 

@@ -134,19 +134,30 @@
     <div class="group">
 
 <div id="pageArea">   
-  <div class="row dashboard-tools">
-    <label for="searchInput">Search</label>
-    <input id="searchInput" placeholder="Search by title, domain, keyword..." />
-  </div>
+<div class="row dashboard-tools">
+  <label for="searchInput">Search</label>
+  <input id="searchInput" placeholder="Search by title, domain, keyword..." />
+</div>
 
-  <div class="row">
-    <label for="searchCategory">Category</label>
-    <select id="searchCategory">
-      <option value="">-- All Categories --</option>
-    </select>
-  </div>
+<div class="row">
+  <label for="searchCategory">Category</label>
+  <select id="searchCategory">
+    <option value="">-- All Categories --</option>
+    <option value="news">News</option>
+    <option value="sports">Sports</option>
+    <option value="tech">Tech</option>
+  </select>
+</div>
 
-  <button id="updateBTN">Update</button>
+<div class="row">
+  <label><input type="checkbox" id="filterLinks"> Has Links</label>
+  <label><input type="checkbox" id="filterAds"> Has Ads</label>
+  <label><input type="checkbox" id="filterImages"> Has Images</label>
+  <label><input type="checkbox" id="filterVideos"> Has Videos</label>
+</div>
+
+<button id="updateBTN">Update</button>
+<button id="logsBTN">Logs</button>
 
   <div id="dashboardContent"></div>
 </div>
@@ -500,6 +511,60 @@ async function loadDashboard(autoPing = false) {
   }
 }
 
+function filterPages(pages) {
+  const searchVal = document.getElementById("searchInput").value.toLowerCase();
+  const categoryVal = document.getElementById("searchCategory").value;
+
+  const filterLinks = document.getElementById("filterLinks").checked;
+  const filterAds = document.getElementById("filterAds").checked;
+  const filterImages = document.getElementById("filterImages").checked;
+  const filterVideos = document.getElementById("filterVideos").checked;
+
+  return pages.filter(p => {
+    // Search: check title, slug/url, keywords
+    const matchesSearch =
+      !searchVal ||
+      (p.title && p.title.toLowerCase().includes(searchVal)) ||
+      (p.slug && p.slug.toLowerCase().includes(searchVal)) ||
+      (p.keywords && p.keywords.join(" ").toLowerCase().includes(searchVal));
+
+    // Category filter
+    const matchesCategory = !categoryVal || p.category === categoryVal;
+
+    // Content count filters
+    const matchesLinks = !filterLinks || (p.links && p.links > 0);
+    const matchesAds = !filterAds || (p.ads && p.ads > 0);
+    const matchesImages = !filterImages || (p.images && p.images > 0);
+    const matchesVideos = !filterVideos || (p.videos && p.videos > 0);
+
+    return matchesSearch && matchesCategory &&
+           matchesLinks && matchesAds && matchesImages && matchesVideos;
+  });
+}
+
+function refreshDashboard() {
+  let filtered = filterPages(pageData);
+
+  // Apply sorting
+  const sorted = [...filtered].sort((a, b) => {
+    const valA = a[sortState.field] ?? '';
+    const valB = b[sortState.field] ?? '';
+    if (valA < valB) return sortState.asc ? -1 : 1;
+    if (valA > valB) return sortState.asc ? 1 : -1;
+    return 0;
+  });
+
+  renderDashboard(sorted);
+}
+
+// Attach events
+document.getElementById("searchInput").addEventListener("input", refreshDashboard);
+document.getElementById("searchCategory").addEventListener("change", refreshDashboard);
+document.getElementById("filterLinks").addEventListener("change", refreshDashboard);
+document.getElementById("filterAds").addEventListener("change", refreshDashboard);
+document.getElementById("filterImages").addEventListener("change", refreshDashboard);
+document.getElementById("filterVideos").addEventListener("change", refreshDashboard);
+
 // Separate function to render HTML table
 function renderDashboard(pages) {
   const dashboardContent = document.getElementById("dashboardContent");
@@ -554,7 +619,7 @@ function renderDashboard(pages) {
       <td><div id="status-${p.id}" class="status-offline">❌ Offline</div>
         <hr>
       <div id="version-${p.id}" class="version">version</div></td>
-      <td>${p.views || 0}</td>
+      <td><div class="sortable" data-field="views">${p.views || 0}</div></td>
       <td>
         <div class="action-buttons">
           <button class='updatePageBTN' onclick="updatePageBtn('${p.id}','${p.slug}', '${p.category}')">Update</button>
@@ -868,7 +933,7 @@ window.removePage = removePage;
 
 
 let stopUpdating = false;          // global flag
-let updateDelay = 50000;            // default delay in ms
+let updateDelay = 60000;            // default delay in ms
 
 function createStatusPopup() {
   let popup = document.getElementById("update-status-popup");
@@ -909,7 +974,7 @@ display: grid;
     justify-content: space-evenly;
 
         ">
-        <input id="update-speed" type="number" value="50000" style="width:60px; font-size:12px;">ms
+        <input id="update-speed" type="number" value="60000" style="width:60px; font-size:12px;">ms
         <button id="stop-popup-btn" style="
           background:#e74c3c; 
           color:#fff; 
@@ -942,7 +1007,12 @@ display: grid;
 
   // Attach close button event
   document.getElementById("close-popup-btn").addEventListener("click", () => {
-    popup.remove();
+    popup.style.display = 'none';
+  });
+
+    // Attach close button event
+  document.getElementById("logsBTN").addEventListener("click", () => {
+    popup.style.display = 'block';
   });
 
   // Attach stop button

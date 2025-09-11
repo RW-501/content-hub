@@ -148,6 +148,9 @@ let includedHTML2 = '';
  */
 async function linkifyKeywordsFromJSON(input, jsonUrl = 'https://contenthub.guru/internal-Links.json', maxLinks = null) {
   try {
+ includedHTML = '';
+ includedHTML2 = '';
+
     const res = await fetch(jsonUrl);
     if (!res.ok) throw new Error(`Failed to fetch ${jsonUrl}`);
     const keywordMap = await res.json();

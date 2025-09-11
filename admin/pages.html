@@ -143,13 +143,18 @@
   <label for="searchCategory">Category</label>
   <select id="searchCategory">
     <option value="">-- All Categories --</option>
-    <option value="news">News</option>
-    <option value="sports">Sports</option>
-    <option value="tech">Tech</option>
+    <option value="people">People</option>
+    <option value="general">General</option>
+    <option value="guides">Guides</option>
+    <option value="how_to">How Tos</option>
+    <option value="guides">Guides</option>
+  <option value="general">General</option>
+
   </select>
 </div>
 
 <div class="row">
+  <label><input type="checkbox" id="filterNoImages"> No Page Image</label>
   <label><input type="checkbox" id="filterLinks"> Has Links</label>
   <label><input type="checkbox" id="filterAds"> Has Ads</label>
   <label><input type="checkbox" id="filterImages"> Has Images</label>
@@ -158,6 +163,7 @@
 
 <button id="updateBTN">Update</button>
 <button id="logsBTN">Logs</button>
+<button id="pingBTN">Ping</button>
 
   <div id="dashboardContent"></div>
 </div>
@@ -510,7 +516,6 @@ async function loadDashboard(autoPing = false) {
     await updateAllPages(Object.values(pageCache));
   }
 }
-
 function filterPages(pages) {
   const searchVal = document.getElementById("searchInput").value.toLowerCase();
   const categoryVal = document.getElementById("searchCategory").value;
@@ -518,29 +523,40 @@ function filterPages(pages) {
   const filterLinks = document.getElementById("filterLinks").checked;
   const filterAds = document.getElementById("filterAds").checked;
   const filterImages = document.getElementById("filterImages").checked;
+  const filterNoImages = document.getElementById("filterNoImages").checked;
   const filterVideos = document.getElementById("filterVideos").checked;
 
   return pages.filter(p => {
-    // Search: check title, slug/url, keywords
+    // 🔎 Search: check title, slug/url, keywords
     const matchesSearch =
       !searchVal ||
       (p.title && p.title.toLowerCase().includes(searchVal)) ||
       (p.slug && p.slug.toLowerCase().includes(searchVal)) ||
-      (p.keywords && p.keywords.join(" ").toLowerCase().includes(searchVal));
+      (p.keywords && Array.isArray(p.keywords) && p.keywords.join(" ").toLowerCase().includes(searchVal));
 
-    // Category filter
+    // 📂 Category filter
     const matchesCategory = !categoryVal || p.category === categoryVal;
 
-    // Content count filters
-    const matchesLinks = !filterLinks || (p.links && p.links > 0);
-    const matchesAds = !filterAds || (p.ads && p.ads > 0);
-    const matchesImages = !filterImages || (p.images && p.images > 0);
-    const matchesVideos = !filterVideos || (p.videos && p.videos > 0);
+    // 📊 Content count filters
+    const matchesLinks   = !filterLinks   || (p.links   && p.links   > 0);
+    const matchesAds     = !filterAds     || (p.ads     && p.ads     > 0);
+    const matchesImages  = !filterImages  || (p.images  && p.images  > 0);
+    const matchesVideos  = !filterVideos  || (p.videos  && p.videos  > 0);
 
-    return matchesSearch && matchesCategory &&
-           matchesLinks && matchesAds && matchesImages && matchesVideos;
+    // 🖼️ No images filter (placeholder check or missing image)
+    const matchesNoImages = !filterNoImages || (!p.image || p.image === "https://contenthub.guru/images/placeholder.png");
+
+    // ✅ combine all
+    return matchesSearch &&
+           matchesCategory &&
+           matchesLinks &&
+           matchesAds &&
+           matchesImages &&
+           matchesVideos &&
+           matchesNoImages;
   });
 }
+
 
 function refreshDashboard() {
   let filtered = filterPages(pageData);
@@ -574,7 +590,7 @@ function renderDashboard(pages) {
         <th>Preview</th>
         <th class="sortable" data-field="title">Domain</th>
         <th class="sortable" data-field="category">Category</th>
-        <th>Status</th>
+        <th  class="sortable" data-field="status">Status</th>
         <th class="sortable" data-field="views">Views</th>
         <th>Actions</th>
       </tr>
@@ -663,6 +679,8 @@ function renderDashboard(pages) {
   html += "</tbody></table>";
   dashboardContent.innerHTML = html;
   console.log("✅ Dashboard rendered with rows:", pages.length);
+
+  
 }
 
 
@@ -726,6 +744,15 @@ window.shareOnFacebook = shareOnFacebook;
 
 
 
+async function pingPages(){
+
+  // Auto-ping logic
+  if (autoPing) {
+    console.log("🚀 Auto-pinging all pages...");
+    await updateAllPages(Object.values(pageCache));
+  }
+
+}
 
 
 
@@ -1206,6 +1233,7 @@ async function updateOutdatedPages() {
 
 // Attach function to the button
 document.getElementById("updateBTN").addEventListener("click", updateOutdatedPages);
+document.getElementById("pingBTN").addEventListener("click", pingPages);
 
 
 </script>

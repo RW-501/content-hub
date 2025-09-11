@@ -499,6 +499,7 @@ function addAds(html) {
 
 async function checkContent(html) {
   if (!html) return "";
+cleanVars();
 
   console.log("checkContent...");
 

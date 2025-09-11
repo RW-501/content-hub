@@ -1068,7 +1068,7 @@ ${scriptTag}
   color: ${articleData.styles.headerText || "#222222"};
   padding: 3rem 0;
   text-align: center;
-  border-bottom: 4px solid ${articleData.styles.headerBorder || "#e6e6ea"};
+  border-bottom: 4px solid ${articleData.styles.headerBorder || "#e6e6ea"} !important;
 }
 
 .header-bottom {
@@ -1076,11 +1076,11 @@ ${scriptTag}
     color: ${articleData.styles.headerText || "#222222"};
 }
 .breadcrumb-wrapper {
-    background-color:  ${articleData.styles.headerBorder+'5c' || "#19ba8a5c"};
+    background-color:  ${articleData.styles.headerBorder+'5c' || "#19ba8a5c"} !important;;
 }
 #in-article-blocks h2 {
-    border-left: 4px solid   ${articleData.styles.headerBorder || "#19ba8a"};
-  border-right: 4px solid   ${articleData.styles.headerBorder || "#19ba8a"};
+    border-left: 4px solid   ${articleData.styles.headerBorder || "#19ba8a"} !important;
+  border-right: 4px solid   ${articleData.styles.headerBorder || "#19ba8a"} !important;
       background: linear-gradient(270deg,  ${articleData.styles.headerBorder || "#19ba8a"}, transparent);
 }
 #toc {

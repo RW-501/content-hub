@@ -695,7 +695,7 @@ const styles = (() => {
   );
 })();
 
-console.log("styles:", styles);
+//console.log("styles:", styles);
 
 
     // 🔽 Get 4 lowest viewed pages (same category optional)
@@ -851,7 +851,7 @@ window.removePage = removePage;
 
 
 let stopUpdating = false;          // global flag
-let updateDelay = 8000;            // default delay in ms
+let updateDelay = 500000;            // default delay in ms
 
 function createStatusPopup() {
   let popup = document.getElementById("update-status-popup");
@@ -892,7 +892,7 @@ display: grid;
     justify-content: space-evenly;
 
         ">
-        <input id="update-speed" type="number" value="10000" style="width:60px; font-size:12px;">ms
+        <input id="update-speed" type="number" value="500000" style="width:60px; font-size:12px;">ms
         <button id="stop-popup-btn" style="
           background:#e74c3c; 
           color:#fff; 

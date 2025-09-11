@@ -360,27 +360,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-
+// Convert an image URL (or <img> element src) to a File
 async function imageToFile(imgElement, filename = "image.jpg") {
-  return new Promise((resolve, reject) => {
-    const canvas = document.createElement("canvas");
-    const ctx = canvas.getContext("2d");
-
-    canvas.width = imgElement.naturalWidth;
-    canvas.height = imgElement.naturalHeight;
-
-    ctx.drawImage(imgElement, 0, 0);
-
-    canvas.toBlob((blob) => {
-      if (blob) {
-        resolve(new File([blob], filename, { type: blob.type }));
-      } else {
-        reject(new Error("Failed to create blob from canvas"));
-      }
-    }, "image/jpeg", 0.95);
-  });
+  try {
+    // Fetch the image as a Blob
+    const response = await fetch(imgElement.src, { mode: "cors" });
+    if (!response.ok) throw new Error("Failed to fetch image");
+    const blob = await response.blob();
+    
+    // Convert the Blob to a File
+    return new File([blob], filename, { type: blob.type });
+  } catch (err) {
+    throw new Error("Failed to create file from image: " + err.message);
+  }
 }
 
+// Sharing logic
 if (navigator.share) {
   deviceShareButton.addEventListener("click", async () => {
     try {
@@ -396,11 +391,13 @@ if (navigator.share) {
       showToast("info", "Shared successfully!");
     } catch (error) {
       console.error("Error sharing:", error);
+      showToast("error", "Sharing failed. See console for details.");
     }
   });
 } else {
   deviceShareButton.style.display = "none";
 }
+
 
 
 document.getElementById("copyLinkButton").addEventListener("click", async () => {

@@ -45,20 +45,15 @@ function getOgLocale(lang) {
 
 
 export async function translateText(text, targetLang) {
-  const response = await fetch("https://libretranslate.com/translate", {
+  const response = await fetch("https://us-central1-contentmanagement-8af61.cloudfunctions.net/translateText", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      q: text,
-      source: "auto",     // detect source language automatically
-      target: targetLang,
-      format: "text"
-    })
+    body: JSON.stringify({ text, target: targetLang })
   });
-
   const result = await response.json();
   return result.translatedText;
 }
+
 
 
 // Remove page function

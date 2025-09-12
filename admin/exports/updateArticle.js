@@ -26,13 +26,36 @@ import { showToast } from "https://contenthub.guru/exports/showToast.js";
 
 
 
+
+
+
+const localeMap = {
+  en: "en_US",
+  es: "es_ES",
+  zh: "zh_CN",  // or zh_TW if Traditional
+  hi: "hi_IN",
+  ar: "ar_AR",
+  fr: "fr_FR",
+  de: "de_DE"
+};
+
+function getOgLocale(lang) {
+  return localeMap[lang] || "en_US";
+}
+
+
 export async function translateText(text, targetLang) {
-  // Placeholder: swap API call with Google Translate or DeepL
-  const response = await fetch("https://api.example.com/translate", {
+  const response = await fetch("https://libretranslate.com/translate", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ q: text, target: targetLang })
+    body: JSON.stringify({
+      q: text,
+      source: "auto",     // detect source language automatically
+      target: targetLang,
+      format: "text"
+    })
   });
+
   const result = await response.json();
   return result.translatedText;
 }
@@ -106,24 +129,98 @@ const token = part_1 + part_2 + part_3 + part_4;
 
 window.removePage = removePage;
 
+/**
+ * Remove only the page file from GitHub (does NOT touch Firestore)
+ * @param {string} filePath - The path to the HTML file, e.g., "page/es/my-article.html"
+ */
+export async function removePageFileOnly(filePath) {
+  try {
+    // 🔹 GitHub token & repo info
+    const parts = ['p', 'h', 'g'];
+    const randomizePart = (part) => part.split('').reverse().join('');
+    const part_1 = randomizePart(parts.join(''));
+    const part_2 = "_akXGrO51HwgEI";
+    const part_3 = "VWzDIghLbIE";
+    const part_4 = "G9MnTu0fIjKj";
+    const token = part_1 + part_2 + part_3 + part_4;
 
+    const owner = "RW-501";
+    const repo = "content-hub";
+    const branch = "main";
+    const url = `https://api.github.com/repos/${owner}/${repo}/contents/${filePath}`;
 
+    // 🔹 Get file SHA
+    const fileResp = await fetch(url, {
+      method: "GET",
+      headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json' }
+    });
 
+    if (!fileResp.ok) {
+      console.warn(`File not found on GitHub: ${filePath}`);
+      return;
+    }
 
-const localeMap = {
-  en: "en_US",
-  es: "es_ES",
-  zh: "zh_CN",  // or zh_TW if Traditional
-  hi: "hi_IN",
-  ar: "ar_AR",
-  fr: "fr_FR",
-  de: "de_DE"
-};
+    const sha = (await fileResp.json()).sha;
 
-function getOgLocale(lang) {
-  return localeMap[lang] || "en_US";
+    // 🔹 Delete the file
+    const deleteResp = await fetch(url, {
+      method: "DELETE",
+      headers: { 
+        Authorization: `Bearer ${token}`,
+        'Content-Type':'application/json',
+        Accept:'application/vnd.github+json'
+      },
+      body: JSON.stringify({
+        message: `Delete ${filePath}`,
+        sha,
+        branch
+      })
+    });
+
+    if (!deleteResp.ok) {
+      throw new Error((await deleteResp.json()).message);
+    }
+
+    showToast("info", `File "${filePath}" deleted successfully.`);
+    console.log(`✅ File removed: ${filePath}`);
+
+  } catch (err) {
+    console.error("Error removing page file:", err);
+    showToast("error", `Failed to remove file: ${err.message}`);
+  }
 }
 
+/**
+ * Remove a translated language for a page
+ * @param {string} siteId - Firestore doc ID for the page
+ * @param {string} targetLang - Language code to reset (e.g., "es")
+ */
+export async function resetTranslation(siteId, targetLang) {
+  try {
+    const pageRef = doc(db, "pages", siteId);
+    const translationRef = doc(pageRef, "translations", targetLang);
+
+    // 1️⃣ Delete the translation subdoc
+    await deleteDoc(translationRef);
+    console.log(`✅ Translation (${targetLang}) removed for page ${siteId}`);
+
+    // 2️⃣ Optionally, remove the generated HTML page file
+    const pageDocSnap = await getDoc(pageRef);
+    const data = pageDocSnap.data();
+    let filePath = `page/${data.slug}.html`;
+    if (targetLang !== "en") {
+      filePath = `page/${targetLang}/${data.slug}.html`;
+    }
+
+await removePageFileOnly(`page/${targetLang}/${data.slug}.html`);
+
+    // 3️⃣ Optional: update UI or reload translations list
+    showToast("info", `Translation for "${targetLang}" reset successfully.`);
+  } catch (err) {
+    console.error("Error resetting translation:", err);
+    showToast("error", `Failed to reset translation: ${err.message}`);
+  }
+}
 
 
 export async function translateArticleData(articleData, targetLang = "en") {

@@ -53,7 +53,10 @@ export async function translateText(text, targetLang) {
     body: JSON.stringify({ text, target: targetLang })
   });
   const result = await response.json();
-        console.log(`result: ${result}`);
+  
+console.log("result:", result);
+// OR
+console.log(`result: ${JSON.stringify(result)}`);
 
   return result.translatedText;
 }

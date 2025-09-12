@@ -2391,7 +2391,8 @@ sSnap.forEach((docSnap) => {
     category: d.category || "",
     description: d.description || "",
     slug: d.slug || "",
-    readTime: d.readTime || ''
+    readTime: d.readTime || '',
+    language: d.language || "en"
   });
 });
 
@@ -2404,6 +2405,7 @@ sSnap.forEach((docSnap) => {
     google_Verification: "ca-pub-2001518155292747",
     bing_Verification: "41794433A3D0795B3768E9AE59B10997",
     yandex_Verification: "26ca8e2174c73ca5",
+    language: "en",
     title: $("#title").value.trim(),
     slug: $("#slug").value.trim(),
     description: $("#description").value.trim(),

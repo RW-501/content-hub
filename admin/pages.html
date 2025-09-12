@@ -835,7 +835,8 @@ sSnap.forEach((docSnap) => {
     category: d.category || "",
     description: d.description || "",
     slug: d.slug || "",
-    readTime: d.readTime || ''
+    readTime: d.readTime || '',
+    language: d.language || "en"
   });
 });
 
@@ -862,6 +863,7 @@ const updateData = {
   adCount: adCount,
   imgCount: imgCount,
   videoCount: videoCount,
+  language: "en",
 };
 
 

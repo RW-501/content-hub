@@ -881,7 +881,7 @@ const Content = `
 <meta name="faq" content="${FAQ_Bool ? 'true' : 'false'}">
 <meta name="howTo" content="${HowTo_Bool ? 'true' : 'false'}">
 <meta name="category" content="${formatCategory(articleData.category)}">
-<meta name="lang" content="en">
+<meta name="lang" content="${articleData.language || "en"}">
 <meta name="adCount" content="${adCount}">
 <meta name="linkCount" content="${linkCount}">
 

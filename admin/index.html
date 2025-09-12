@@ -570,7 +570,8 @@ async function getFeaturedArticles() {
         category: d.category || "",
         description: d.description || "",
         slug: d.slug || "",
-        readTime: d.readTime || ""
+        readTime: d.readTime || "",
+        language: d.language || "en"
       });
             console.log("Catagory: ", d.category,"  Page : ",d.title);
 
@@ -865,7 +866,8 @@ sSnap.forEach((docSnap) => {
     title: d.title || "",
     category: d.category || "",
     description: d.description || "",
-    slug: d.slug || ""
+    readTime: d.readTime || '',
+    language: d.language || "en"
   });
 });
 
@@ -877,6 +879,8 @@ sSnap.forEach((docSnap) => {
     description,
     suggested,
     domain,
+    language: "en",
+    mediaArray: [],
     slug,
     image,
     schemaType,
@@ -1213,6 +1217,7 @@ async function updateStaticPageData() {
       return {
         id: doc.id,
         title: d.title || "Untitled Site",
+        language: d.language || "en",
         description: d.description || "",
         url: `https://contenthub.guru/page/${d.slug || "N/A"}`,
         domain: d.domain || "N/A",

@@ -43,6 +43,8 @@ function getOgLocale(lang) {
   return localeMap[lang] || "en_US";
 }
 
+
+
 const MAX_CHARS_PER_BATCH = 500; // safe limit for public LibreTranslate
 
 /**
@@ -82,7 +84,7 @@ function chunkText(text) {
 }
 
 /**
- * Translate text in batches
+ * Translate text in batches with fail-safe
  */
 export async function translateText(text, targetLang) {
   console.log(`targetLang: ${targetLang} - text length: ${text.length}`);
@@ -90,21 +92,36 @@ export async function translateText(text, targetLang) {
   const chunks = chunkText(text);
   const translatedChunks = [];
 
-  for (const chunk of chunks) {
-    const response = await fetch(
-      "https://us-central1-contentmanagement-8af61.cloudfunctions.net/translateText",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text: chunk, target: targetLang })
+  for (const [index, chunk] of chunks.entries()) {
+    try {
+const response = await fetch("http://localhost:5000/translate", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ q: chunk, source: "en", target: targetLang })
+});
+
+
+      const result = await response.json();
+      console.log(`Chunk ${index + 1} result:`, result);
+
+      // If API returns nothing or error, stop translation
+      if (!result || !result.translatedText) {
+        alert(
+          `⚠️ Translation failed on chunk ${index + 1}. Process stopped. ` +
+          `No text has been translated.`
+        );
+        return null; // stop process
       }
-    );
 
-    const result = await response.json();
-    console.log("Chunk result:", result);
-
-    // fallback if API fails
-    translatedChunks.push(result.translatedText || chunk);
+      translatedChunks.push(result.translatedText);
+    } catch (err) {
+      console.error(`Error translating chunk ${index + 1}:`, err);
+      alert(
+        `⚠️ Translation failed on chunk ${index + 1} due to an error. ` +
+        `Process stopped.`
+      );
+      return null; // stop process
+    }
   }
 
   // Join all translated chunks back together

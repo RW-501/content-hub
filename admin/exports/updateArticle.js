@@ -43,25 +43,74 @@ function getOgLocale(lang) {
   return localeMap[lang] || "en_US";
 }
 
+const MAX_CHARS_PER_BATCH = 500; // safe limit for public LibreTranslate
 
-export async function translateText(text, targetLang) {
-      console.log(`targetLang: ${targetLang} - text: ${text}`);
+/**
+ * Splits text into chunks of up to MAX_CHARS_PER_BATCH,
+ * trying to split at sentence or paragraph boundaries
+ */
+function chunkText(text) {
+  const chunks = [];
+  let current = "";
 
-  const response = await fetch("https://us-central1-contentmanagement-8af61.cloudfunctions.net/translateText", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ text, target: targetLang })
-  });
-  const result = await response.json();
-  
-console.log("result:", result);
-// OR
-console.log(`result: ${JSON.stringify(result)}`);
+  // Split by paragraphs first
+  const paragraphs = text.split(/\n+/);
+  for (let para of paragraphs) {
+    if ((current + para).length > MAX_CHARS_PER_BATCH) {
+      if (current) chunks.push(current.trim());
+      // further split paragraph by sentences if too long
+      const sentences = para.split(/([.!?]+)\s/);
+      let sentenceChunk = "";
+      for (let i = 0; i < sentences.length; i += 2) {
+        const sentence = (sentences[i] || "") + (sentences[i + 1] || "");
+        if ((sentenceChunk + sentence).length > MAX_CHARS_PER_BATCH) {
+          if (sentenceChunk) chunks.push(sentenceChunk.trim());
+          sentenceChunk = sentence;
+        } else {
+          sentenceChunk += sentence;
+        }
+      }
+      if (sentenceChunk) chunks.push(sentenceChunk.trim());
+      current = "";
+    } else {
+      current += para + "\n";
+    }
+  }
 
-  return result.translatedText;
+  if (current) chunks.push(current.trim());
+  return chunks;
 }
 
+/**
+ * Translate text in batches
+ */
+export async function translateText(text, targetLang) {
+  console.log(`targetLang: ${targetLang} - text length: ${text.length}`);
 
+  const chunks = chunkText(text);
+  const translatedChunks = [];
+
+  for (const chunk of chunks) {
+    const response = await fetch(
+      "https://us-central1-contentmanagement-8af61.cloudfunctions.net/translateText",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text: chunk, target: targetLang })
+      }
+    );
+
+    const result = await response.json();
+    console.log("Chunk result:", result);
+
+    // fallback if API fails
+    translatedChunks.push(result.translatedText || chunk);
+  }
+
+  // Join all translated chunks back together
+  const finalText = translatedChunks.join(" ");
+  return finalText;
+}
 
 // Remove page function
 export async function removePage(pageId, filePath) {

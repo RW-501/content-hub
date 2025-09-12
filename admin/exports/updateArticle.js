@@ -45,6 +45,8 @@ function getOgLocale(lang) {
 
 
 export async function translateText(text, targetLang) {
+      console.log(`targetLang: ${targetLang} - text: ${text}`);
+
   const response = await fetch("https://us-central1-contentmanagement-8af61.cloudfunctions.net/translateText", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -315,6 +317,8 @@ export async function handleTranslateAndUpdate(siteId, targetLang) {
 export async function translatePageLanguage(siteId, data, targetLang) {
   const pageRef = doc(db, "pages", siteId);
 
+        console.log(`siteId: ${siteId} - data: ${data} - targetLang: ${targetLang}`);
+
   // Path: pages/{siteId}/translations/{targetLang}
   const translationRef = doc(pageRef, "translations", targetLang);
 
@@ -323,7 +327,7 @@ export async function translatePageLanguage(siteId, data, targetLang) {
     data,
     targetLang
   );
-console.log(translatedData);
+console.log("T. Page: ",translatedData);
 
   // Store translation under subcollection
   await setDoc(translationRef, {

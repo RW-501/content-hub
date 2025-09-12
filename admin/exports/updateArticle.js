@@ -328,6 +328,7 @@ export async function translatePageLanguage(siteId, data, targetLang) {
     data,
     targetLang
   );
+console.log(translatedData);
 
   // Store translation under subcollection
   await setDoc(translationRef, {

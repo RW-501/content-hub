@@ -180,59 +180,77 @@
   function log(msg) { logEl.textContent += msg + "\n"; }
 
   /* ---------------- Fetch and Render Pages ---------------- */
-  async function loadPages() {
-    const q = query(collection(db, "pages"));
-    const snap = await getDocs(q);
-    pagesContainer.innerHTML = "";
+async function loadPages() {
+  const q = query(collection(db, "pages"));
+  const snap = await getDocs(q);
+  pagesContainer.innerHTML = "";
 
-    snap.forEach(docSnap => {
-      const data = docSnap.data();
-      const pageId = docSnap.id;
+  snap.forEach(docSnap => {
+    const data = docSnap.data();
+    const pageId = docSnap.id;
 
-      const div = document.createElement("div");
-      div.className = "page-card";
-      div.innerHTML = `<h3>${data.title}</h3><p>Slug: ${data.slug}</p>`;
+    const div = document.createElement("div");
+    div.className = "page-card";
 
-      targetLangs.forEach(lang => {
-        const translated = data.translatedLanguages?.[lang] === true;
-        const btn = document.createElement("button");
-        btn.className = "lang-btn " + (translated ? "translated" : "not-translated");
-        btn.textContent = lang.toUpperCase();
+    // Determine default URL (English or original)
+    const defaultUrl = `https://contenthub.guru/page/${data.slug}.html`;
 
-        btn.onclick = async () => {
-          log(`🔄 Translating ${data.slug} → ${lang.toUpperCase()}`);
-          await translatePageLanguage(pageId, data, lang);
+    // Create clickable title linking to default page
+    const titleLink = document.createElement("a");
+    titleLink.href = defaultUrl;
+    titleLink.textContent = data.title;
+    titleLink.target = "_blank"; // open in new tab
+    div.appendChild(titleLink);
+
+    // Show slug
+    const slugP = document.createElement("p");
+    slugP.textContent = `Slug: ${data.slug}`;
+    div.appendChild(slugP);
+
+    // Language buttons
+    targetLangs.forEach(lang => {
+      const translated = data.translatedLanguages?.[lang] === true;
+
+      const btn = document.createElement("button");
+      btn.className = "lang-btn " + (translated ? "translated" : "not-translated");
+      btn.textContent = lang.toUpperCase();
+
+      btn.onclick = async () => {
+        log(`🔄 Translating ${data.slug} → ${lang.toUpperCase()}`);
+        await translatePageLanguage(pageId, data, lang);
+        await loadPages();
+      };
+      div.appendChild(btn);
+
+      if (translated) {
+        // Link to translated page
+        const translatedLink = document.createElement("a");
+        translatedLink.href = `https://contenthub.guru/page/${lang}/${data.slug}.html`;
+        translatedLink.textContent = `Go to ${lang.toUpperCase()} version`;
+        translatedLink.target = "_blank";
+        translatedLink.style.display = "block";
+        translatedLink.style.marginTop = "4px";
+        div.appendChild(translatedLink);
+
+        // Optional: Reset translation
+        const resetBtn = document.createElement("button");
+        resetBtn.className = "reset-btn";
+        resetBtn.textContent = "Reset";
+
+        resetBtn.onclick = async () => {
+          const filePath = `page/${lang}/${data.slug}.html`;
+          log(`♻ Resetting ${filePath} (${lang})`);
+          await resetTranslation(pageId, lang);
+          await removePage(pageId, filePath);
           await loadPages();
         };
-        div.appendChild(btn);
-
-        if (translated) {
-          const resetBtn = document.createElement("button");
-          resetBtn.className = "reset-btn";
-          resetBtn.textContent = "Reset";
-
-          const language = articleData.language || '';
-
-
-let filePath = `page/${data.slug}.html`;
-if(language === 'en' || language == ''){
-filePath = `page/${data.slug}.html`;
-}else{
-filePath = `page/${data.language}/${data.slug}.html`;
-}
-          resetBtn.onclick = async () => {
-            log(`♻ Resetting ${filePath} (${lang})`);
-            await resetTranslation(pageId, lang);
-            await removePage(pageId, filePath);
-            await loadPages();
-          };
-          div.appendChild(resetBtn);
-        }
-      });
-
-      pagesContainer.appendChild(div);
+        div.appendChild(resetBtn);
+      }
     });
-  }
+
+    pagesContainer.appendChild(div);
+  });
+}
 
 
 

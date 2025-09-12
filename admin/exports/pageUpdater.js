@@ -871,7 +871,7 @@ if (Array.isArray(articleData.suggested)) {
   // Modern Layout HTML
 const Content = `
 <!DOCTYPE html>
-<html lang="en">
+<html lang="${articleData.language || "en"}">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -942,7 +942,12 @@ const Content = `
 <meta property="og:image:height" content="630">
 <meta property="og:url" content="https://contenthub.guru/page/${articleData.slug}">
 <meta property="og:site_name" content="ContentHub.guru">
-<meta property="og:locale" content="en_US">
+<meta property="og:locale" content="${articleData.og.locale  || "en_US"}">
+${articleData.og.localeAlternate
+  .map(loc => `<meta property="og:locale:alternate" content="${loc}">`)
+  .join("\n")}
+
+
 <meta property="article:published_time" content="${articleData.publishedAt || new Date().toISOString()}">
 <meta property="article:modified_time" content="${articleData.updatedAt || new Date().toISOString()}">
 <meta property="article:section" content="${formatCategory(articleData.category)}">
@@ -1200,7 +1205,7 @@ hr {
       </li>
     </ol>
 
-<p><strong>Read Time:</strong> <span id="readTime">${articleData.readTime || "5"} mins</span></p>
+<p><strong id="readTimeLabel">Read Time:</strong> <span id="readTime">${articleData.readTime || "5"} mins</span></p>
 
   <p>
     <a href="#commentForm" title="${articleData.title} Comments" id="navCommentBtn">Comments</a>
@@ -1347,7 +1352,7 @@ hr {
 <\/script>
 
   <div class="comments form">
-  <h2 class="changeable-text">Comments</h2>
+  <h2 id="comments-label">Comments</h2>
   <div id="commentForm">
     <div>
       <input type="text" id="commentName" placeholder="Your Name" required>
@@ -1379,12 +1384,12 @@ hr {
 </div>
 
 <section id="suggested-pages" >
-  <h2 class="suggested">Suggested for You</h2>
+  <h2  id="suggested-label"  class="suggested">Suggested for You</h2>
   <div id="suggested-container" class="suggested-grid">${suggestedHTML}</div>
 </section>
 
 <section id="included-pages" >
-  <h2 class="included">Pages Included:</h2>
+  <h2  id="included-label" class="included">Pages Included:</h2>
   <div id="included-container" class="included-grid">${includedHTML}</div>
 </section>
 
@@ -1396,6 +1401,7 @@ hr {
     Copyright © ${new Date().getFullYear()} | 
     <a href="https://contenthub.guru/" target="_blank" style="color:#4f46e5; text-decoration:none;">ContentHub.guru</a> <br>
     ${articleData.title || "Untitled Site"}
+    <a href="https://contenthub.guru/page/es/${articleData.slug}" target="_blank" ">${articleData.title || "Untitled Site"}</a> 
   </p>
 
   <!-- 🔹 Social Links -->
@@ -1484,9 +1490,18 @@ const part_4 = "G9MnTu0fIjKj";
 
 const GITHUB_TOKEN = part_1 + part_2 + part_3 + part_4;
 
+const language = articleData.language || '';
 
+
+let filePath = `page/${articleData.slug}.html`;
+if(language === 'en' || language == ''){
+filePath = `page/${articleData.slug}.html`;
+}else{
+filePath = `page/${articleData.language}/${articleData.slug}.html`;
+}
+ 
   // Upload to GitHub
-  const owner = "RW-501", repo = "content-hub", filePath = `page/${articleData.slug}.html`, branch = "main";
+  const owner = "RW-501", repo = "content-hub", branch = "main";
   const url = `https://api.github.com/repos/${owner}/${repo}/contents/${filePath}`;
   const encodedContent = btoa(unescape(encodeURIComponent(Content)));
 

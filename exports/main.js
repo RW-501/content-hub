@@ -201,6 +201,61 @@ loadScript('https://reelcareer.co/obituaries/setup/analytics.js', { defer: true,
 document.addEventListener('DOMContentLoaded', loadPageScripts);
 
 
+let localeData = {};
+async function loadLocale(lang) {
+  const res = await fetch(`https://contenthub.guru/exports/locales.json`);
+  const data = await res.json();
+  localeData = data[lang] || data['en']; // fallback to English
+}
+
+
+async function applyTranslations(lang) {
+  const locale = localeData;
+
+  const translations = {
+    "readTimeLabel": locale.readTimeLabel,
+    "navCommentBtn": locale.navCommentBtn,
+    "toc-heading": locale.tocHeading,
+    "toc-toggle": locale.tocHide,
+    "startBtn": locale.startBtn,
+    "pauseBtn": locale.pauseBtn,
+    "resumeBtn": locale.resumeBtn,
+    "stopBtn": locale.stopBtn,
+    "yesBtn": locale.yesBtn,
+    "noBtn": locale.noBtn,
+    "comments-label": locale.commentsLabel,
+    "commentName": locale.commentName,
+    "anonymousCheckbox": locale.anonymousCheckbox,
+    "privateCheckbox": locale.privateCheckbox,
+    "commentMessage": locale.commentMessage,
+    "comment-submit-btn": locale.commentSubmitBtn,
+    "suggested-label": locale.suggestedLabel,
+    "included-label": locale.includedLabel
+  };
+
+  for (const [id, text] of Object.entries(translations)) {
+    const el = document.getElementById(id);
+    if (!el) continue;
+
+    if (el.tagName === "INPUT" || el.tagName === "TEXTAREA") {
+      el.placeholder = text;
+    } else if (el.tagName === "BUTTON" || el.tagName === "A") {
+      el.textContent = text;
+    } else {
+      el.textContent = text;
+    }
+  }
+}
+
+
+  let meta = document.querySelector('meta[name="lang"]');
+
+  if (meta) {
+applyTranslations(meta);
+  }
+
+
+
 
 let readingTime = document.getElementById("readTime").textContent;
 
@@ -446,7 +501,7 @@ document.getElementById("yesBtn").onclick = async () => {
     helpful += 1; // increment local
     updateRatingDisplay(helpful, notHelpful);
 
-    document.getElementById("feedbackMsg").textContent = "Thanks for your feedback!";
+    document.getElementById("feedbackMsg").textContent = localeData.feedbackThanks;
   } catch (err) {
     console.error("Error updating helpful count:", err);
   }
@@ -460,7 +515,7 @@ document.getElementById("noBtn").onclick = async () => {
     notHelpful += 1; // increment local
     updateRatingDisplay(helpful, notHelpful);
 
-    document.getElementById("feedbackMsg").textContent = "Sorry to hear that. We’ll improve!";
+    document.getElementById("feedbackMsg").textContent = localeData.feedbackSorry;
   } catch (err) {
     console.error("Error updating notHelpful count:", err);
   }
@@ -524,10 +579,11 @@ submitBtn.addEventListener("click", async () => {
   const message = commentMessage.value.trim();
   const isPrivate = privateCheckbox.checked;
 
-  // 🔹 Validations
-  if (!message || message.length < 5) return alert("Comment must be at least 5 characters.");
-  if (!anonymousCheckbox.checked && (!name || name.length < 2)) return alert("Please enter a valid name.");
-  if (isPrivate && !auth.currentUser) return alert("Only logged-in users can make private comments.");
+  
+// Comment validation
+if (!message || message.length < 5) return alert(localeData.commentTooShort);
+if (!anonymousCheckbox.checked && (!name || name.length < 2)) return alert(localeData.commentInvalidName);
+if (isPrivate && !auth.currentUser) return alert(localeData.commentPrivateLogin);
 
   // 🔹 Simple blacklist
 const blacklist = [
@@ -564,7 +620,7 @@ const blacklist = [
   "scam"
 ];
   for (const word of blacklist) {
-    if (message.toLowerCase().includes(word)) return alert("Please avoid inappropriate language.");
+if (message.toLowerCase().includes(word)) return alert(localeData.commentInappropriate);
   }
 
   // 🔹 Sanitize

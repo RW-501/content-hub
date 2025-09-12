@@ -200,6 +200,7 @@ import { getFirestore, collection, getDoc, setDoc, doc, query, updateDoc, arrayU
 import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-storage.js";
 
 
+import { translateArticleData } from "https://contenthub.guru/admin/exports/updateArticle.js";
 import { updatePage } from "https://contenthub.guru/admin/exports/pageUpdater.js";
 import { showToast } from "https://contenthub.guru/exports/showToast.js";
 
@@ -851,6 +852,9 @@ const adCount = adCountEl ? parseInt(adCountEl.textContent.trim(), 10) || 0 : 0;
 const imgCount = imgCountEl ? parseInt(imgCountEl.textContent.trim(), 10) || 0 : 0;
 const videoCount = videoCountEl ? parseInt(videoCountEl.textContent.trim(), 10) || 0 : 0;
 
+
+const updateLanguage = document.getElementById(`updateLanguage`).value;
+
 const updateData = {
   suggested,
   publishedCount: increment(1),
@@ -863,7 +867,7 @@ const updateData = {
   adCount: adCount,
   imgCount: imgCount,
   videoCount: videoCount,
-  language: "en",
+  language: updateLanguage || "en",
 };
 
 
@@ -880,6 +884,8 @@ const updateData = {
 
     // ✅ Update UI row dynamically
       updatePage(articleData);
+
+     // translateArticleData(articleData, targetLang = "en") 
 
     showToast("success", "Page updated!", 2500);
 

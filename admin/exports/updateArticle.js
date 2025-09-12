@@ -317,6 +317,29 @@ export async function handleTranslateAndUpdate(siteId, targetLang) {
 }
 
 
+export async function translatePageLanguage(siteId, data, targetLang) {
+  const pageRef = doc(db, "pages", siteId);
+
+  // Path: pages/{siteId}/translations/{targetLang}
+  const translationRef = doc(pageRef, "translations", targetLang);
+
+  // Translate articleData (your existing logic)
+  const translatedData = await translateArticleData(
+    data,
+    targetLang
+  );
+
+  // Store translation under subcollection
+  await setDoc(translationRef, {
+    ...translatedData,
+    updatedAt: serverTimestamp(),
+    language: targetLang,
+  });
+
+  // Update UI with translated version
+  updatePage(translatedData);
+}
+
 
 
 export async function fetchPageWithLocale(siteId, userLocale = "en") {

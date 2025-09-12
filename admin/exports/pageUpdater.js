@@ -1401,7 +1401,19 @@ hr {
     Copyright © ${new Date().getFullYear()} | 
     <a href="https://contenthub.guru/" target="_blank" style="color:#4f46e5; text-decoration:none;">ContentHub.guru</a> <br>
     ${articleData.title || "Untitled Site"}
-    <a href="https://contenthub.guru/page/es/${articleData.slug}" target="_blank" ">${articleData.title || "Untitled Site"}</a> 
+  </p>
+ <p>
+    Available Languages: 
+    ${articleData.translations 
+      ? Object.entries(articleData.translations)
+          .map(([lang, translation]) => {
+            const slug = translation.slug || "";
+            return `<a href="https://contenthub.guru/page/${lang}/${slug}" target="_blank" style="color:#4f46e5; text-decoration:none; margin:0 5px;">
+                      ${lang.toUpperCase()}
+                    </a>`;
+          })
+          .join(" | ")
+      : "None"}
   </p>
 
   <!-- 🔹 Social Links -->

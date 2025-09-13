@@ -254,12 +254,16 @@ console.log("lang: ",lang," local: ",locale);
 }
 
 
-  let meta = document.querySelector('meta[name="lang"]');
+let meta = document.querySelector('meta[name="lang"]');
 
-  if (meta) {
-applyTranslations(meta);
-  }
+if (meta) {
+  let lang = meta.getAttribute("content");
+  console.log(lang); // e.g. "en_US"
+  applyTranslations(lang);
 
+} else {
+  console.log("Meta tag not found");
+}
 
 
 

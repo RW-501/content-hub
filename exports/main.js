@@ -215,8 +215,8 @@ async function loadLocale(lang) {
 
 
 async function applyTranslations(lang) {
-  const locale = loadLocale(lang);
-console.log("lang: ",lang," local: ",locale);
+  const locale = await loadLocale(lang); // ✅ await here
+  console.log("lang: ", lang, " local: ", locale);
 
   const translations = {
     "readTimeLabel": locale.readTimeLabel,
@@ -245,8 +245,6 @@ console.log("lang: ",lang," local: ",locale);
 
     if (el.tagName === "INPUT" || el.tagName === "TEXTAREA") {
       el.placeholder = text;
-    } else if (el.tagName === "BUTTON" || el.tagName === "A") {
-      el.textContent = text;
     } else {
       el.textContent = text;
     }
@@ -258,13 +256,11 @@ let meta = document.querySelector('meta[name="lang"]');
 
 if (meta) {
   let lang = meta.getAttribute("content");
-  console.log(lang); // e.g. "en_US"
-  applyTranslations(lang);
-
+  console.log("lang from meta:", lang);
+  applyTranslations(lang); // no need to await here unless you want blocking
 } else {
   console.log("Meta tag not found");
 }
-
 
 
 let readingTime = document.getElementById("readTime").textContent;

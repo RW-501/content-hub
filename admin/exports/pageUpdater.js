@@ -1268,10 +1268,10 @@ hr {
 <nav id="toc" aria-label="Table of Contents">
   <h3 id="toc-heading">
     Table of Contents
-    <button id="toc-toggle" aria-expanded="true" aria-controls="toc-list">
+  </h3>
+      <button id="toc-toggle" aria-expanded="true" aria-controls="toc-list">
       Hide
     </button>
-  </h3>
   <ul id="toc-list" role="list" aria-labelledby="toc-heading">
     <!-- JS injects TOC items -->
   </ul>

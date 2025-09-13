@@ -1419,7 +1419,7 @@ hr {
                     </a>`;
           })
           .join(" | ")
-      : "None"}
+      : "More Coming Soon."}
   </p>
 
   <!-- 🔹 Social Links -->

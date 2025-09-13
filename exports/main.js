@@ -205,6 +205,9 @@ let localeData = {};
 async function loadLocale(lang) {
   const res = await fetch(`https://contenthub.guru/exports/locales.json`);
   const data = await res.json();
+
+  console.log("data: ",data);
+
   localeData = data[lang] || data['en']; // fallback to English
 
   return localeData;

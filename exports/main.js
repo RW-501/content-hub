@@ -206,11 +206,13 @@ async function loadLocale(lang) {
   const res = await fetch(`https://contenthub.guru/exports/locales.json`);
   const data = await res.json();
   localeData = data[lang] || data['en']; // fallback to English
+
+  return localeData;
 }
 
 
 async function applyTranslations(lang) {
-  const locale = localeData;
+  const locale = loadLocale(lang);
 
   const translations = {
     "readTimeLabel": locale.readTimeLabel,

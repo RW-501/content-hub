@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>20 Years Later: Where Are the Survivors of Katrina Now? - contenthub.guru | 20-years-later-where-are-the-survivors-of-katrina-now</title>
 <meta name="description" content="Two decades after Hurricane Katrina, survivors are still navigating life’s challenges and rebuilding their communities. Discover where they are now and the stories of resilience that emerged from the storm.">
-<meta name="version" content="Version: V25091201">
+<meta name="version" content="Version: V25091318">
 <meta name="faq" content="true">
 <meta name="howTo" content="true">
 <meta name="category" content="News">
@@ -72,8 +72,12 @@
 <meta property="og:url" content="https://contenthub.guru/page/20-years-later-where-are-the-survivors-of-katrina-now">
 <meta property="og:site_name" content="ContentHub.guru">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2025-09-12T06:46:55.960Z">
-<meta property="article:modified_time" content="Timestamp(seconds=1757659615, nanoseconds=269000000)">
+
+
+
+
+<meta property="article:published_time" content="2025-09-13T23:15:05.978Z">
+<meta property="article:modified_time" content="Timestamp(seconds=1757805305, nanoseconds=555000000)">
 <meta property="article:section" content="News">
 <meta property="article:tag" content="Hurricane Katrina survivors, Katrina 20 years later, Hurricane Katrina aftermath, Katrina survivors now, New Orleans recovery, Hurricane Katrina anniversary">
 <meta property="og:readtime" content="7 Min">
@@ -95,8 +99,8 @@
   <meta name="twitter:creator" content="@Contenthub_Guru">
 
   <!-- Additional Article Schema/SEO Hints -->
-<meta property="article:published_time" content="2025-09-12T06:46:55.960Z">
-<meta property="article:modified_time" content="Timestamp(seconds=1757659615, nanoseconds=269000000)">
+<meta property="article:published_time" content="2025-09-13T23:15:05.978Z">
+<meta property="article:modified_time" content="Timestamp(seconds=1757805305, nanoseconds=555000000)">
 <meta property="article:section" content="News">
 <meta property="article:tag" content="Hurricane Katrina survivors, Katrina 20 years later, Hurricane Katrina aftermath, Katrina survivors now, New Orleans recovery, Hurricane Katrina anniversary">
 
@@ -135,8 +139,8 @@
       "url": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756419901736-photo-1662372597168-09d57440a9e5.jpg?alt=media&token=8edd8084-53ed-4585-9b49-86bc855d7d4f"
     }
   },
-  "datePublished":  "Timestamp(seconds=1757659615, nanoseconds=269000000)",
-  "dateModified": "Timestamp(seconds=1757659615, nanoseconds=269000000)",
+  "datePublished":  "Timestamp(seconds=1757805305, nanoseconds=555000000)",
+  "dateModified": "Timestamp(seconds=1757805305, nanoseconds=555000000)",
   "mainEntityOfPage": {
     "@type": "WebPage",
     "@id": "https://contenthub.guru/page/20-years-later-where-are-the-survivors-of-katrina-now"
@@ -159,7 +163,7 @@
   "aggregateRating": {
     "@type": "AggregateRating",
     "ratingValue": "4.5",
-    "ratingCount": "2198"
+    "ratingCount": "2960"
   }
 }
 </script>
@@ -194,39 +198,39 @@
 
 /* 🔹 Header */
 .site-header {
-  background: linear-gradient(180deg, #ffffff, #901667);
+  background: linear-gradient(180deg, #ffffff, #C7A0BB);
   color: #222222;
   padding: 3rem 0;
   text-align: center;
-  border-bottom: 4px solid #901667 !important;
+  border-bottom: 4px solid #C7A0BB !important;
 }
 
 .header-bottom {
-    background-color: #901667;
+    background-color: #C7A0BB;
     color: #222222;
 }
 .breadcrumb-wrapper {
-    background-color:  #9016675c !important;;
+    background-color:  #C7A0BB5c !important;;
 }
 #in-article-blocks h2 {
-    border-left: 4px solid   #901667 !important;
-  border-right: 4px solid   #901667 !important;
-      background: linear-gradient(270deg,  #901667, transparent);
+    border-left: 4px solid   #C7A0BB !important;
+  border-right: 4px solid   #C7A0BB !important;
+      background: linear-gradient(270deg,  #C7A0BB, transparent);
 }
 #toc {
-    border-top: 5px solid  #901667;
+    border-top: 5px solid  #C7A0BB;
 }
 
 .howto-title {
-    color:  #901667;
+    color:  #C7A0BB;
 }
 .comments.form h2 {
-    border-left: 4px solid  #901667;
+    border-left: 4px solid  #C7A0BB;
 }
 
 #included-pages h2,
 #suggested-pages h2 {
-    border-left: 4px solid  #901667;
+    border-left: 4px solid  #C7A0BB;
     padding-left: .5rem;
 }
 
@@ -275,7 +279,7 @@ button:hover {
 /* 🔹 Horizontal Rule */
 hr {
   border: none;
-  border-top: 1px solid #901667  !important;
+  border-top: 1px solid #C7A0BB  !important;
 }
 }
 
@@ -329,7 +333,7 @@ hr {
       </li>
     </ol>
 
-<p><strong>Read Time:</strong> <span id="readTime">5 mins</span></p>
+<p><strong id="readTimeLabel">Read Time:</strong> <span id="readTime">5 mins</span></p>
 
   <p>
     <a href="#commentForm" title="20 Years Later: Where Are the Survivors of Katrina Now? Comments" id="navCommentBtn">Comments</a>
@@ -386,12 +390,14 @@ hr {
 
 <!-- Table of Contents -->
 <nav id="toc" aria-label="Table of Contents">
-  <h3 id="toc-heading">
+<div  id="toc-heading">
+  <h3 id="toc-heading-label">
     Table of Contents
-    <button id="toc-toggle" aria-expanded="true" aria-controls="toc-list">
+  </h3>
+      <button id="toc-toggle" aria-expanded="true" aria-controls="toc-list">
       Hide
     </button>
-  </h3>
+    </div>
   <ul id="toc-list" role="list" aria-labelledby="toc-heading">
     <!-- JS injects TOC items -->
   </ul>
@@ -580,7 +586,7 @@ To reflect on resilience, ongoing recovery, and lessons learned for future disas
 </script>
 
   <div class="comments form">
-  <h2 class="changeable-text">Comments</h2>
+  <h2 id="comments-label">Comments</h2>
   <div id="commentForm">
     <div>
       <input type="text" id="commentName" placeholder="Your Name" required>
@@ -612,7 +618,7 @@ To reflect on resilience, ongoing recovery, and lessons learned for future disas
 </div>
 
 <section id="suggested-pages" >
-  <h2 class="suggested">Suggested for You</h2>
+  <h2  id="suggested-label"  class="suggested">Suggested for You</h2>
   <div id="suggested-container" class="suggested-grid">
       <div class="suggested-card">
         <img src="https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756419901736-photo-1662372597168-09d57440a9e5.jpg?alt=media&token=8edd8084-53ed-4585-9b49-86bc855d7d4f" alt="20 Years Later: Where Are the Survivors of Katrina Now?">
@@ -657,7 +663,7 @@ To reflect on resilience, ongoing recovery, and lessons learned for future disas
 </section>
 
 <section id="included-pages" >
-  <h2 class="included">Pages Included:</h2>
+  <h2  id="included-label" class="included">Pages Included:</h2>
   <div id="included-container" class="included-grid">
       <div class="included-item">
         <a href="#link-0" title="Jump to keyword in article" aria-label="Jump to keyword disaster preparedness">
@@ -679,6 +685,10 @@ To reflect on resilience, ongoing recovery, and lessons learned for future disas
     Copyright © 2025 | 
     <a href="https://contenthub.guru/" target="_blank" style="color:#4f46e5; text-decoration:none;">ContentHub.guru</a> <br>
     20 Years Later: Where Are the Survivors of Katrina Now?
+  </p>
+ <p>
+    Available Languages: 
+    More Coming Soon.
   </p>
 
   <!-- 🔹 Social Links -->
@@ -713,7 +723,7 @@ To reflect on resilience, ongoing recovery, and lessons learned for future disas
     </a>
   </p>
 
-  <p id="version">Version: V25091201</p>
+  <p id="version">Version: V25091318</p>
 
       <a href="https://contenthub.guru" title="Content Hub Home" style="text-decoration:none;">
         <img src= "https://contenthub.guru/images/logo.png" 

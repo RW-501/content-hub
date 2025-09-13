@@ -218,7 +218,7 @@ async function applyTranslations(lang) {
     "readTimeLabel": locale.readTimeLabel,
     "navCommentBtn": locale.navCommentBtn,
     "toc-heading": locale.tocHeading,
-    "toc-toggle": locale.tocHide,
+    "toc-toggle-label": locale.tocHide,
     "startBtn": locale.startBtn,
     "pauseBtn": locale.pauseBtn,
     "resumeBtn": locale.resumeBtn,

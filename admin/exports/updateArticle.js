@@ -94,7 +94,7 @@ export async function translateText(text, targetLang) {
 
   for (const [index, chunk] of chunks.entries()) {
     try {
-const response = await fetch("http://localhost:5000/translate", {
+const response = await fetch("https://libretranslate-o3ep.onrender.com", {
   method: "POST",
   headers: { "Content-Type": "application/json" },
   body: JSON.stringify({ q: chunk, source: "en", target: targetLang })

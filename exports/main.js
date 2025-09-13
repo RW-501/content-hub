@@ -364,6 +364,7 @@ const bulletStyles = {
 
 });
 
+document.addEventListener("DOMContentLoaded", () => {
 
 document.getElementById("toc-toggle").addEventListener("click", function () {
   const list = document.getElementById("toc-list");
@@ -378,7 +379,6 @@ document.getElementById("toc-toggle").addEventListener("click", function () {
 });
 
 
-document.addEventListener("DOMContentLoaded", () => {
   const main = document.querySelector("body");
   if (!main) return;
 

@@ -943,9 +943,13 @@ const Content = `
 <meta property="og:url" content="https://contenthub.guru/page/${articleData.slug}">
 <meta property="og:site_name" content="ContentHub.guru">
 <meta property="og:locale" content="${articleData.og.locale  || "en_US"}">
-${articleData.og.localeAlternate
-  .map(loc => `<meta property="og:locale:alternate" content="${loc}">`)
-  .join("\n")}
+${articleData.og.localeAlternate 
+  ? articleData.og.localeAlternate
+      .map(loc => `<meta property="og:locale:alternate" content="${loc}">`)
+      .join("\n") 
+  : ""
+}
+
 
 
 <meta property="article:published_time" content="${articleData.publishedAt || new Date().toISOString()}">

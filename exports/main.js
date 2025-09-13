@@ -213,6 +213,7 @@ async function loadLocale(lang) {
 
 async function applyTranslations(lang) {
   const locale = loadLocale(lang);
+console.log("lang: ",lang," local: ",locale);
 
   const translations = {
     "readTimeLabel": locale.readTimeLabel,

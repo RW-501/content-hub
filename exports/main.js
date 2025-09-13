@@ -206,7 +206,7 @@ async function loadLocale(lang) {
   const res = await fetch(`https://contenthub.guru/exports/locales.json`);
   const data = await res.json();
 
-  console.log("data: ",data);
+ // console.log("data: ",data);
 
   localeData = data[lang] || data['en']; // fallback to English
 
@@ -216,7 +216,7 @@ async function loadLocale(lang) {
 
 async function applyTranslations(lang) {
   const locale = await loadLocale(lang); // ✅ await here
-  console.log("lang: ", lang, " local: ", locale);
+ // console.log("lang: ", lang, " local: ", locale);
 
   const translations = {
     "readTimeLabel": locale.readTimeLabel,
@@ -256,7 +256,7 @@ let meta = document.querySelector('meta[name="lang"]');
 
 if (meta) {
   let lang = meta.getAttribute("content");
-  console.log("lang from meta:", lang);
+ // console.log("lang from meta:", lang);
   applyTranslations(lang); // no need to await here unless you want blocking
 } else {
   console.log("Meta tag not found");

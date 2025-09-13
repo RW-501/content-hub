@@ -217,8 +217,8 @@ async function applyTranslations(lang) {
   const translations = {
     "readTimeLabel": locale.readTimeLabel,
     "navCommentBtn": locale.navCommentBtn,
-    "toc-heading": locale.tocHeading,
-    "toc-toggle-label": locale.tocHide,
+    "toc-heading-label": locale.tocHeading,
+    "toc-toggle": locale.tocHide,
     "startBtn": locale.startBtn,
     "pauseBtn": locale.pauseBtn,
     "resumeBtn": locale.resumeBtn,

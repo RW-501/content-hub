@@ -269,17 +269,6 @@ readingTime = `Reading Time: ${minutes} min`;
 }
 
 
-document.getElementById("toc-toggle").addEventListener("click", function () {
-  const list = document.getElementById("toc-list");
-  const expanded = this.getAttribute("aria-expanded") === "true";
-
-  // Toggle visibility
-  list.hidden = expanded;
-  this.setAttribute("aria-expanded", String(!expanded));
-
-  // Update button text
-  this.textContent = expanded ? "Show" : "Hide";
-});
 
 const tocList = document.getElementById('toc-list');
 
@@ -375,6 +364,18 @@ const bulletStyles = {
 
 });
 
+
+document.getElementById("toc-toggle").addEventListener("click", function () {
+  const list = document.getElementById("toc-list");
+  const expanded = this.getAttribute("aria-expanded") === "true";
+
+  // Toggle visibility
+  list.hidden = expanded;
+  this.setAttribute("aria-expanded", String(!expanded));
+
+  // Update button text
+  this.textContent = expanded ? "Show" : "Hide";
+});
 
 
 document.addEventListener("DOMContentLoaded", () => {

@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Hero of Alexandria: The Ancient Genius Who Invented the Future - contenthub.guru | Hero-of-Alexandria</title>
 <meta name="description" content="Discover the incredible inventions of Hero of Alexandria, the ancient engineer and mathematician who created the world’s first steam engine, automatic doors, vending machines, and mechanical puppets—centuries ahead of his time.">
-<meta name="version" content="Version: V25091209">
+<meta name="version" content="Version: V25091401">
 <meta name="faq" content="true">
 <meta name="howTo" content="true">
 <meta name="category" content="Education">
@@ -72,8 +72,12 @@
 <meta property="og:url" content="https://contenthub.guru/page/Hero-of-Alexandria">
 <meta property="og:site_name" content="ContentHub.guru">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2025-09-12T14:12:39.568Z">
-<meta property="article:modified_time" content="Timestamp(seconds=1757686358, nanoseconds=639000000)">
+
+
+
+
+<meta property="article:published_time" content="2025-09-14T06:21:38.089Z">
+<meta property="article:modified_time" content="Timestamp(seconds=1757830897, nanoseconds=434000000)">
 <meta property="article:section" content="Education">
 <meta property="article:tag" content="Hero of Alexandria, ancient inventions, aeolipile, steam engine, automatic doors, vending machine history, mechanical puppets, Heron’s formula, ancient engineer, robotics history, automation pioneer, ancient technology, Alexandria genius, early engineering, historical inventors">
 <meta property="og:readtime" content="5 Min">
@@ -95,8 +99,8 @@
   <meta name="twitter:creator" content="@Contenthub_Guru">
 
   <!-- Additional Article Schema/SEO Hints -->
-<meta property="article:published_time" content="2025-09-12T14:12:39.568Z">
-<meta property="article:modified_time" content="Timestamp(seconds=1757686358, nanoseconds=639000000)">
+<meta property="article:published_time" content="2025-09-14T06:21:38.089Z">
+<meta property="article:modified_time" content="Timestamp(seconds=1757830897, nanoseconds=434000000)">
 <meta property="article:section" content="Education">
 <meta property="article:tag" content="Hero of Alexandria, ancient inventions, aeolipile, steam engine, automatic doors, vending machine history, mechanical puppets, Heron’s formula, ancient engineer, robotics history, automation pioneer, ancient technology, Alexandria genius, early engineering, historical inventors">
 
@@ -135,8 +139,8 @@
       "url": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1756409668549-download.jpg?alt=media&token=8d5279ca-79d5-4ffd-87cb-7fea4768d841"
     }
   },
-  "datePublished":  "Timestamp(seconds=1757686358, nanoseconds=639000000)",
-  "dateModified": "Timestamp(seconds=1757686358, nanoseconds=639000000)",
+  "datePublished":  "Timestamp(seconds=1757830897, nanoseconds=434000000)",
+  "dateModified": "Timestamp(seconds=1757830897, nanoseconds=434000000)",
   "mainEntityOfPage": {
     "@type": "WebPage",
     "@id": "https://contenthub.guru/page/Hero-of-Alexandria"
@@ -159,7 +163,7 @@
   "aggregateRating": {
     "@type": "AggregateRating",
     "ratingValue": "4.5",
-    "ratingCount": "2578"
+    "ratingCount": "3483"
   }
 }
 </script>
@@ -194,39 +198,39 @@
 
 /* 🔹 Header */
 .site-header {
-  background: linear-gradient(180deg, #ffffff, #46A92E);
+  background: linear-gradient(180deg, #ffffff, #FF92A9);
   color: #222222;
   padding: 3rem 0;
   text-align: center;
-  border-bottom: 4px solid #46A92E !important;
+  border-bottom: 4px solid #FF92A9 !important;
 }
 
 .header-bottom {
-    background-color: #46A92E;
+    background-color: #FF92A9;
     color: #222222;
 }
 .breadcrumb-wrapper {
-    background-color:  #46A92E5c !important;;
+    background-color:  #FF92A95c !important;;
 }
 #in-article-blocks h2 {
-    border-left: 4px solid   #46A92E !important;
-  border-right: 4px solid   #46A92E !important;
-      background: linear-gradient(270deg,  #46A92E, transparent);
+    border-left: 4px solid   #FF92A9 !important;
+  border-right: 4px solid   #FF92A9 !important;
+      background: linear-gradient(270deg,  #FF92A9, transparent);
 }
 #toc {
-    border-top: 5px solid  #46A92E;
+    border-top: 5px solid  #FF92A9;
 }
 
 .howto-title {
-    color:  #46A92E;
+    color:  #FF92A9;
 }
 .comments.form h2 {
-    border-left: 4px solid  #46A92E;
+    border-left: 4px solid  #FF92A9;
 }
 
 #included-pages h2,
 #suggested-pages h2 {
-    border-left: 4px solid  #46A92E;
+    border-left: 4px solid  #FF92A9;
     padding-left: .5rem;
 }
 
@@ -275,7 +279,7 @@ button:hover {
 /* 🔹 Horizontal Rule */
 hr {
   border: none;
-  border-top: 1px solid #46A92E  !important;
+  border-top: 1px solid #FF92A9  !important;
 }
 }
 
@@ -329,7 +333,7 @@ hr {
       </li>
     </ol>
 
-<p><strong>Read Time:</strong> <span id="readTime">4 mins</span></p>
+<p><strong id="readTimeLabel">Read Time:</strong> <span id="readTime">4 mins</span></p>
 
   <p>
     <a href="#commentForm" title="Hero of Alexandria: The Ancient Genius Who Invented the Future Comments" id="navCommentBtn">Comments</a>
@@ -386,12 +390,14 @@ hr {
 
 <!-- Table of Contents -->
 <nav id="toc" aria-label="Table of Contents">
-  <h3 id="toc-heading">
+<div  id="toc-heading">
+  <h3 id="toc-heading-label">
     Table of Contents
-    <button id="toc-toggle" aria-expanded="true" aria-controls="toc-list">
+  </h3>
+      <button id="toc-toggle" aria-expanded="true" aria-controls="toc-list">
       Hide
     </button>
-  </h3>
+    </div>
   <ul id="toc-list" role="list" aria-labelledby="toc-heading">
     <!-- JS injects TOC items -->
   </ul>
@@ -555,7 +561,7 @@ Directly, no—but his principles influence modern robotics, engines, and mechan
 </script>
 
   <div class="comments form">
-  <h2 class="changeable-text">Comments</h2>
+  <h2 id="comments-label">Comments</h2>
   <div id="commentForm">
     <div>
       <input type="text" id="commentName" placeholder="Your Name" required>
@@ -587,7 +593,7 @@ Directly, no—but his principles influence modern robotics, engines, and mechan
 </div>
 
 <section id="suggested-pages" >
-  <h2 class="suggested">Suggested for You</h2>
+  <h2  id="suggested-label"  class="suggested">Suggested for You</h2>
   <div id="suggested-container" class="suggested-grid">
       <div class="suggested-card">
         <img src="https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1757359789861-National%2BSeptember%2B11%2BMemorial_Slideshow_01%20(1)%20(1).webp?alt=media&token=e263928c-72b2-4de5-8273-84a3e32a81c0" alt="How the World Responded to 9/11: Global Shock, Solidarity, and a New Era of Security">
@@ -632,7 +638,7 @@ Directly, no—but his principles influence modern robotics, engines, and mechan
 </section>
 
 <section id="included-pages" >
-  <h2 class="included">Pages Included:</h2>
+  <h2  id="included-label" class="included">Pages Included:</h2>
   <div id="included-container" class="included-grid"></div>
 </section>
 
@@ -644,6 +650,10 @@ Directly, no—but his principles influence modern robotics, engines, and mechan
     Copyright © 2025 | 
     <a href="https://contenthub.guru/" target="_blank" style="color:#4f46e5; text-decoration:none;">ContentHub.guru</a> <br>
     Hero of Alexandria: The Ancient Genius Who Invented the Future
+  </p>
+ <p>
+    Available Languages: 
+    More Coming Soon.
   </p>
 
   <!-- 🔹 Social Links -->
@@ -678,7 +688,7 @@ Directly, no—but his principles influence modern robotics, engines, and mechan
     </a>
   </p>
 
-  <p id="version">Version: V25091209</p>
+  <p id="version">Version: V25091401</p>
 
       <a href="https://contenthub.guru" title="Content Hub Home" style="text-decoration:none;">
         <img src= "https://contenthub.guru/images/logo.png" 

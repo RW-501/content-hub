@@ -287,7 +287,7 @@ const categoryUrl = `https://contenthub.guru/category/?c=${encodeURIComponent(ca
     usedLinks.add(key);
     linkCount++;
 
-    logToPopup("Replaced: " + keyword + ": URL: " + url, "limegreen");
+    logToPopup("Replaced: " + keyword + ": URL: " + url, "palevioletred");
     console.log("Replaced: " + keyword + ": URL: " + url);
 
     text = text.slice(match.index + match[0].length);
@@ -533,7 +533,7 @@ if(adCount == 0){
 html = addAds(html);
 let { adCount, videoCount, imgCount } = checkCounts(html);
 
-    logToPopup("Added "+adCount+" ads", "limegreen");
+    logToPopup("Added "+adCount+" ads", "cornflowerblue");
     console.log("Added "+adCount+" ads");
 }
 

@@ -1183,7 +1183,9 @@ async function updatePageStatus(page) {
 
     // get latest version across all sites
     const latestVersion = getLatestVersion();
-    console.log("🔥 Latest version:", latestVersion);
+
+    logToPopup(`🔥 Pinged ${page.slug} updated V: ${version} `, "dodgerblue");
+  console.log(`%c🔥 Pinged ${page.slug} updated V: ${version} `, "color: dodgerblue; font-weight: bold;");
 
     // update UI
     renderPageStatus(page, latestVersion);

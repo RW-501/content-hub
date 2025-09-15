@@ -22,22 +22,6 @@ import { showToast } from "https://contenthub.guru/exports/showToast.js";
 import { db, auth, storage } from "https://contenthub.guru/admin/exports/firebaseConfig.js";
 
 
-
-let User;
-// 🔹 Watch Auth State (to show admin controls)
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    User = user;
-    console.log("user.uid: ",user.uid)
-    // Mark admins manually
-    if (user.uid === "5bShzf1KNZV1HmA9jlNc20eqvRm1") {
-      user.isAdmin = true;
-    }
-  }
-});
-
-
-
   // 🔹 Page data
   const pageData = {
     id: document.getElementById("pageID").innerText,
@@ -58,8 +42,18 @@ onAuthStateChanged(auth, (user) => {
     const pageID = document.getElementById("pageID")?.textContent || "unknown";
 
 
+let User;
+// 🔹 Watch Auth State (to show admin controls)
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    User = user;
+    console.log("user.uid: ",user.uid)
+    // Mark admins manually
+    if (user.uid === "5bShzf1KNZV1HmA9jlNc20eqvRm1") {
+      user.isAdmin = true;
+    }
 
-    const editPageLink = document.getElementById("editPageId");
+       const editPageLink = document.getElementById("editPageId");
 
 // Build the href depending on user.isAdmin
 const href = User?.isAdmin
@@ -72,6 +66,14 @@ editPageLink.href = href;
 }
 
 
+  }
+});
+
+
+
+
+
+ 
 
 
 const DEBUG = false;

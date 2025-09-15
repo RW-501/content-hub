@@ -23,10 +23,11 @@ import { db, auth, storage } from "https://contenthub.guru/admin/exports/firebas
 
 
 
-
+let User;
 // 🔹 Watch Auth State (to show admin controls)
 onAuthStateChanged(auth, (user) => {
   if (user) {
+    User = user;
     // Mark admins manually
     if (user.uid === "5bShzf1KNZV1HmA9jlNc20eqvRm1") {
       user.isAdmin = true;
@@ -58,7 +59,7 @@ onAuthStateChanged(auth, (user) => {
 
 
 // Build the href depending on user.isAdmin
-const href = user?.isAdmin
+const href = User?.isAdmin
   ? `https://contenthub.guru/admin/editor?id=${pageID}`
   : (pageURL);
 

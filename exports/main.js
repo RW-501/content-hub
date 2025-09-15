@@ -57,6 +57,23 @@ onAuthStateChanged(auth, (user) => {
 
 
 
+// Build the href depending on user.isAdmin
+const href = user?.isAdmin
+  ? `https://contenthub.guru/admin/editor?id=${pageID}`
+  : (pageURL);
+
+// Now build the link
+const link = `
+  <a id="editPageId" href="${href}" title="${pageTitle} Content">
+    ${pageTitle}
+  </a>
+`;
+
+// Insert into DOM (example)
+document.getElementById("editPageId").innerHTML = link;
+
+
+
 const DEBUG = false;
 
 let loadCount = 0;

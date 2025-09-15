@@ -1202,7 +1202,7 @@ hr {
         </a>
       </li>
       <li class="active" aria-current="page">
-        <a href="${articleData.canonicalUrl || window.location.href}" 
+        <a id='editPageId' href="https://contenthub.guru/page/${articleData.slug}" 
            title="${articleData.title} Content">
           ${articleData.title}
         </a>

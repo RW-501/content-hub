@@ -501,6 +501,7 @@ linksFromPage.forEach(link => {
 
       // Skip URLs that contain 'editor'
   if (cleanLink.includes('admin')) return;
+  if (cleanLink.includes('?')) return;
 
     addLinkToTable(cleanLink, url);
     highlightDuplicate(cleanLink);

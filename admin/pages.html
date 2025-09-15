@@ -1162,13 +1162,31 @@ function logToPopup(message, color = "#ccc") {
 
 let oldPage = '';
 
+
+  
+
 async function scrollAndClick(page) {
   page.btn.scrollIntoView({ behavior: "smooth", block: "center" });
   const row = page.btn.closest("tr");
   row?.classList.add("highlight-row");
 
-  pingSite(oldPage);
+  let p;
+  console.log("oldPage: ",oldPage);
+    const { online, version, faq, howTo, links, ads, images, videos } = await pingSite(oldPage);
+    versions[p.siteId] = version;
+    p.online = online;
+    p.version = version;
+    p.faq = faq;
+    p.howTo = howTo;
+    p.links = links ?? 0;
+p.ads = ads ?? 0;
+p.images = images ?? 0;
+p.videos = videos ?? 0;
+
   oldPage = page;
+  const latestVersion = getLatestVersion();
+  console.log("🔥 Latest version:", latestVersion);
+  renderPageStatus(oldPage, latestVersion);
   console.log("page: ",page);
 
   await new Promise(r => setTimeout(r, 600));

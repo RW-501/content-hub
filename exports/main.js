@@ -66,16 +66,9 @@ const href = User?.isAdmin
   ? `https://contenthub.guru/admin/editor?id=${pageID}`
   : (pageURL);
 
-// Now build the link
-const link = `
-  <a id="editPageId" href="${href}" title="${pageTitle} Content">
-    ${pageTitle}
-  </a>
-`;
-
 if(editPageLink){
 // Insert into DOM (example)
-editPageLink.innerHTML = link;
+editPageLink.href = href;
 }
 
 

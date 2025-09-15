@@ -1151,11 +1151,17 @@ function logToPopup(message, color = "#ccc") {
   logEl.prepend(line); // newest on top
 }
 
+let oldPage = '';
+
 async function scrollAndClick(page) {
   page.btn.scrollIntoView({ behavior: "smooth", block: "center" });
   const row = page.btn.closest("tr");
   row?.classList.add("highlight-row");
 
+  pingSite(oldPage);
+  oldPage = page;
+  console.log("page: ",page);
+  
   await new Promise(r => setTimeout(r, 600));
   page.btn.click();
   setTimeout(() => row?.classList.remove("highlight-row"), 1500);

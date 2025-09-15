@@ -1249,6 +1249,9 @@ async function updateOutdatedPages() {
   console.log(`%c⏰ Started at: ${new Date(startTime).toLocaleTimeString()}`, "color: gray;");
 
   for (let i = 0; i < outdatedPages.length; i++) {
+
+    if(stopUpdating) return;
+
     const page = outdatedPages[i];
     const progressText = `(${i + 1}/${outdatedPages.length})`;
     const pageStart = Date.now();

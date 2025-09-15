@@ -1162,6 +1162,35 @@ function logToPopup(message, color = "#ccc") {
 
 let oldPage = '';
 
+async function updatePageStatus(page) {
+  try {
+    console.log("page:", page);
+
+    const { online, version, faq, howTo, links, ads, images, videos } = await pingSite(page.slug);
+
+    // store version by siteId
+    versions[page.siteId] = version;
+
+    // update page object
+    page.online  = online;
+    page.version = version;
+    page.faq     = faq;
+    page.howTo   = howTo;
+    page.links   = links  ?? 0;
+    page.ads     = ads    ?? 0;
+    page.images  = images ?? 0;
+    page.videos  = videos ?? 0;
+
+    // get latest version across all sites
+    const latestVersion = getLatestVersion();
+    console.log("🔥 Latest version:", latestVersion);
+
+    // update UI
+    renderPageStatus(page, latestVersion);
+  } catch (err) {
+    console.error("❌ Failed to update page status for", page.slug, err);
+  }
+}
 
   
 
@@ -1170,24 +1199,10 @@ async function scrollAndClick(page) {
   const row = page.btn.closest("tr");
   row?.classList.add("highlight-row");
 
-  let p;
-  console.log("oldPage: ",oldPage);
-    const { online, version, faq, howTo, links, ads, images, videos } = await pingSite(oldPage);
-    versions[p.siteId] = version;
-    p.online = online;
-    p.version = version;
-    p.faq = faq;
-    p.howTo = howTo;
-    p.links = links ?? 0;
-p.ads = ads ?? 0;
-p.images = images ?? 0;
-p.videos = videos ?? 0;
-
-  oldPage = page;
-  const latestVersion = getLatestVersion();
-  console.log("🔥 Latest version:", latestVersion);
-  renderPageStatus(oldPage, latestVersion);
-  console.log("page: ",page);
+  if(oldPage){
+  await updatePageStatus(oldPage);
+  }
+oldPage = page;
 
   await new Promise(r => setTimeout(r, 600));
   page.btn.click();

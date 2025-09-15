@@ -310,15 +310,20 @@ const loadPagesFromDB = async () => {
     });
 
     // Add each page to the table
-    sitesData.forEach(site => {
-      const url = `https://contenthub.guru/page/${site.slug}`;
-      const lastmod = site.createdAt.toISOString().split('T')[0];
-      
-      addLinkToTable(url, url); // Add to table, source URL is same as page
-      const row = document.querySelector(`#linkTable tbody tr:last-child`);
-      row.querySelector('td:nth-child(4)').textContent = lastmod; // set lastmod
-      row.querySelector('input[type="checkbox"]').checked = true; // mark ready for sitemap
-    });
+sitesData.forEach(site => { 
+  const url = `https://contenthub.guru/page/${site.slug}`;
+
+  // Skip URLs that contain 'editor'
+  if (url.includes('editor')) return;
+
+  const lastmod = site.createdAt.toISOString().split('T')[0];
+  
+  addLinkToTable(url, url); // Add to table, source URL is same as page
+  const row = document.querySelector(`#linkTable tbody tr:last-child`);
+  row.querySelector('td:nth-child(4)').textContent = lastmod; // set lastmod
+  row.querySelector('input[type="checkbox"]').checked = true; // mark ready for sitemap
+});
+
 
   } catch (error) {
     console.error("Error loading pages from Firestore:", error);

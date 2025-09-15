@@ -259,6 +259,7 @@
       <button id="Translate">Translate</button>
       <button id="Linker">Linker</button>
 </div>
+      <button id="updatePages">Update Static Pages Data</button>
       <button id="updateFeaturedPages">Update Featured Pages</button>
 
 
@@ -537,7 +538,6 @@ window.location.href = "https://contenthub.guru/admin/linker.html";
 
 
 async function getFeaturedArticles() {
-    updateStaticPageData();
 
   const featured = [];
   const categories = new Set();
@@ -692,6 +692,10 @@ const categoryUrl = `https://contenthub.guru/category/?c=${encodeURIComponent(pa
   return HTML;
 }
 
+document.getElementById("updatePages").addEventListener("click", async () => {
+    updateStaticPageData();
+
+});
 
 
 document.getElementById("updateFeaturedPages").addEventListener("click", async () => {

@@ -1164,7 +1164,6 @@ let oldPage = '';
 
 async function updatePageStatus(page) {
   try {
-    console.log("page:", page);
 
     const { online, version, faq, howTo, links, ads, images, videos } = await pingSite(page.slug);
 
@@ -1186,6 +1185,8 @@ async function updatePageStatus(page) {
 
     logToPopup(`🔥 Pinged ${page.slug} updated V: ${version} `, "dodgerblue");
   console.log(`%c🔥 Pinged ${page.slug} updated V: ${version} `, "color: dodgerblue; font-weight: bold;");
+
+      console.log("page:", page);
 
     // update UI
     renderPageStatus(page, latestVersion);

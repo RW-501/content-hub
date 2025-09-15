@@ -562,17 +562,26 @@ function filterPages(pages) {
 function refreshDashboard() {
   let filtered = filterPages(pageData);
 
-  // Apply sorting
   const sorted = [...filtered].sort((a, b) => {
-    const valA = a[sortState.field] ?? '';
-    const valB = b[sortState.field] ?? '';
-    if (valA < valB) return sortState.asc ? -1 : 1;
-    if (valA > valB) return sortState.asc ? 1 : -1;
-    return 0;
+    // 1. publishedCount (descending)
+    const countA = a.publishedCount ?? 0;
+    const countB = b.publishedCount ?? 0;
+    if (countA !== countB) return countB - countA;
+
+    // 2. category (alphabetical)
+    const catA = a.category || "";
+    const catB = b.category || "";
+    if (catA !== catB) return catA.localeCompare(catB);
+
+    // 3. updatedAt (newest first, Firestore timestamp safe)
+    const updatedA = a.updatedAt?.toMillis?.() ?? 0;
+    const updatedB = b.updatedAt?.toMillis?.() ?? 0;
+    return updatedB - updatedA;
   });
 
   renderDashboard(sorted);
 }
+
 
 // Attach events
 document.getElementById("searchInput").addEventListener("input", refreshDashboard);
@@ -593,7 +602,7 @@ function renderDashboard(pages) {
         <th class="sortable" data-field="category">Category</th>
         <th  class="sortable" data-field="status">Status</th>
         <th class="sortable" data-field="views">Views</th>
-        <th>Actions</th>
+        <th  class="sortable" data-field="date">Actions</th>
       </tr>
     </thead>
     <tbody>`;
@@ -638,7 +647,7 @@ function renderDashboard(pages) {
       <div id="version-${p.id}" class="version">version</div></td>
       <td><div class="sortable" data-field="views">${p.views || 0}</div></td>
       <td>
-        <div class="action-buttons">
+        <div class="sortable" data-field="date" class="action-buttons">
           <button class='updatePageBTN' onclick="updatePageBtn('${p.id}','${p.slug}', '${p.category}')">Update</button>
           <button onclick="window.open('https://contenthub.guru/admin/editor?id=${p.id}', '_blank')">Edit</button>
           <button class="remove-btn" onclick="removePage('${p.id}','${p.slug}')">Remove</button>
@@ -1161,7 +1170,7 @@ async function scrollAndClick(page) {
   pingSite(oldPage);
   oldPage = page;
   console.log("page: ",page);
-  
+
   await new Promise(r => setTimeout(r, 600));
   page.btn.click();
   setTimeout(() => row?.classList.remove("highlight-row"), 1500);

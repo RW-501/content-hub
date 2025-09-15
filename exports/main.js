@@ -28,6 +28,7 @@ let User;
 onAuthStateChanged(auth, (user) => {
   if (user) {
     User = user;
+    console.log("user.uid: ",user.uid)
     // Mark admins manually
     if (user.uid === "5bShzf1KNZV1HmA9jlNc20eqvRm1") {
       user.isAdmin = true;

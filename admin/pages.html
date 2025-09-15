@@ -985,10 +985,12 @@ function createStatusPopup() {
   popup.style.fontFamily = "monospace";
   popup.style.fontSize = "13px";
   popup.style.padding = "10px";
-  popup.style.maxHeight = "300px";
+  popup.style.height = "300px";
+  popup.style.maxHeight = "100%";
   popup.style.overflowY = "auto";
   popup.style.boxShadow = "0 2px 8px rgba(0,0,0,0.5)";
   popup.style.borderBottom = "2px solid #444";
+  popup.style.resize = "vertical";
   popup.innerHTML = `
     <div style="
     display: block;

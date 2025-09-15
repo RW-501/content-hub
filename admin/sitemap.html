@@ -313,8 +313,6 @@ const loadPagesFromDB = async () => {
 sitesData.forEach(site => { 
   const url = `https://contenthub.guru/page/${site.slug}`;
 
-  // Skip URLs that contain 'editor'
-  if (url.includes('editor')) return;
 
   const lastmod = site.createdAt.toISOString().split('T')[0];
   
@@ -500,6 +498,10 @@ const crawlLinks = async (url) => {
 linksFromPage.forEach(link => {
   const cleanLink = link.split('#')[0]; // strip hash
   if (!links.has(cleanLink) && isValidLink(cleanLink)) {
+
+      // Skip URLs that contain 'editor'
+  if (cleanLink.includes('admin')) return;
+
     addLinkToTable(cleanLink, url);
     highlightDuplicate(cleanLink);
 

@@ -58,6 +58,8 @@ onAuthStateChanged(auth, (user) => {
 
 
 
+    const editPageLink = document.getElementById("editPageId");
+
 // Build the href depending on user.isAdmin
 const href = User?.isAdmin
   ? `https://contenthub.guru/admin/editor?id=${pageID}`
@@ -70,8 +72,11 @@ const link = `
   </a>
 `;
 
+if(editPageLink){
 // Insert into DOM (example)
-document.getElementById("editPageId").innerHTML = link;
+editPageLink.innerHTML = link;
+}
+
 
 
 

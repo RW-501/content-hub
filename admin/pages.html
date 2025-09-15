@@ -409,6 +409,8 @@ function renderPageStatus(p, latestVersion) {
   const adCountEl = document.getElementById(`adCount-${p.siteId}`);
   const imgCountEl = document.getElementById(`imgCount-${p.siteId}`);
   const videoCountEl = document.getElementById(`videoCount-${p.siteId}`);
+      
+  console.log("statusEl:  ", statusEl, "  page:", p);
 
 
   if (!statusEl) return;
@@ -1186,7 +1188,6 @@ async function updatePageStatus(page) {
     logToPopup(`🔥 Pinged ${page.slug} updated V: ${version} `, "dodgerblue");
   console.log(`%c🔥 Pinged ${page.slug} updated V: ${version} `, "color: dodgerblue; font-weight: bold;");
 
-      console.log("page:", page);
 
     // update UI
     renderPageStatus(page, latestVersion);

@@ -110,12 +110,14 @@ export async function translateText(text, targetLang) {
         console.error("Failed to parse JSON:", err);
         return null;
       });
+
       console.log(`Chunk ${index + 1} result:`, result);
 
       if (!result || !result.translatedText) {
         alert(`⚠️ Translation failed on chunk ${index + 1}.`);
         return null;
       }
+      console.log(result.translatedText); // "Hola mundo"
 
       translatedChunks.push(result.translatedText);
     } catch (err) {

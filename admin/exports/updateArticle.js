@@ -94,11 +94,12 @@ export async function translateText(text, targetLang) {
 
   for (const [index, chunk] of chunks.entries()) {
     try {
-const response = await fetch("https://translateapi-1-mx67.onrender.com", {
+const response = await fetch("https://translateapi-1-mx67.onrender.com/translate", {
   method: "POST",
   headers: { "Content-Type": "application/json" },
   body: JSON.stringify({ q: chunk, source: "en", target: targetLang })
 });
+
 
 
       const result = await response.json();

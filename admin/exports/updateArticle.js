@@ -98,14 +98,11 @@ const response = await fetch("https://translateapi-1-mx67.onrender.com/translate
   method: "POST",
   headers: { "Content-Type": "application/json" },
   body: JSON.stringify({ q: chunk, source: "en", target: targetLang })
-})
-.then(res => res.json())
-.then(console.log)
-.catch(console.error);
+});
 
+const result = await response.json(); // ✅ only once
+console.log(`Chunk ${index + 1} result:`, result);
 
-      const result = await response.json();
-      console.log(`Chunk ${index + 1} result:`, result);
 
       // If API returns nothing or error, stop translation
       if (!result || !result.translatedText) {

@@ -98,8 +98,10 @@ const response = await fetch("https://translateapi-1-mx67.onrender.com/translate
   method: "POST",
   headers: { "Content-Type": "application/json" },
   body: JSON.stringify({ q: chunk, source: "en", target: targetLang })
-});
-
+})
+.then(res => res.json())
+.then(console.log)
+.catch(console.error);
 
 
       const result = await response.json();

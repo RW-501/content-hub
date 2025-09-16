@@ -87,47 +87,47 @@ function chunkText(text) {
  * Translate text in batches with fail-safe
  */
 export async function translateText(text, targetLang) {
-  console.log(`targetLang: ${targetLang} - text length: ${text.length}`);
+  console.log(`Starting translation: targetLang=${targetLang}, text length=${text.length}`);
 
   const chunks = chunkText(text);
   const translatedChunks = [];
 
   for (const [index, chunk] of chunks.entries()) {
+    console.log(`Translating chunk ${index + 1}:`, chunk);
+
     try {
-const response = await fetch("https://translateapi-1-mx67.onrender.com/translate", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({ q: chunk, source: "en", target: targetLang })
-});
+      const response = await fetch("https://translateapi-1-mx67.onrender.com/translate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ q: chunk, source: "en", target: targetLang })
+      });
 
-const result = await response.json(); // ✅ only once
-console.log(`Chunk ${index + 1} result:`, result);
+      console.log(`Chunk ${index + 1} fetch completed:`, response);
+      console.log("Response headers:", [...response.headers.entries()]);
+      console.log("Response status:", response.status, response.statusText);
 
+      const result = await response.json().catch(err => {
+        console.error("Failed to parse JSON:", err);
+        return null;
+      });
+      console.log(`Chunk ${index + 1} result:`, result);
 
-      // If API returns nothing or error, stop translation
       if (!result || !result.translatedText) {
-        alert(
-          `⚠️ Translation failed on chunk ${index + 1}. Process stopped. ` +
-          `No text has been translated.`
-        );
-        return null; // stop process
+        alert(`⚠️ Translation failed on chunk ${index + 1}.`);
+        return null;
       }
 
       translatedChunks.push(result.translatedText);
     } catch (err) {
       console.error(`Error translating chunk ${index + 1}:`, err);
-      alert(
-        `⚠️ Translation failed on chunk ${index + 1} due to an error. ` +
-        `Process stopped.`
-      );
-      return null; // stop process
     }
   }
 
-  // Join all translated chunks back together
   const finalText = translatedChunks.join(" ");
+  console.log("Final translated text:", finalText);
   return finalText;
 }
+
 
 // Remove page function
 export async function removePage(pageId, filePath) {

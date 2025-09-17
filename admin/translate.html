@@ -221,7 +221,10 @@ async function loadPages() {
         log(`🔄 Translating ${data.slug} → ${lang.toUpperCase()}`);
               console.log(`pageId ${pageId} → ${lang.toUpperCase()} Slug:`, data.slug);
         await translatePageLanguage(pageId, data, lang);
-        await loadPages();
+              console.log(`????????????????????????`);
+
+
+       // await loadPages();
       };
       div.appendChild(btn);
 

@@ -315,11 +315,19 @@ export async function translateArticleData(articleData, targetLang = "en") {
     translatedData.pageName = await translateText(articleData.pageName, targetLang);
   }
     if (articleData.slug) {
-    translatedData.slug = "/" + targetLang + await translateText(articleData.slug, targetLang);
+    translatedData.slug = await translateText(articleData.slug, targetLang);
+  //  translatedData.slug = "/" + targetLang + await translateText(articleData.slug, targetLang);
   }
     if (articleData.category) {
     translatedData.category = await translateText(articleData.category, targetLang);
   }
+
+    // 🔹 Update the translations object for the targetLang
+  translatedData.translations[targetLang] = {
+    slug: await translateText(articleData.slug, targetLang), // or translated slug if you handle that separately
+    lang: targetLang,
+
+  };
 
   // 🔹 Keywords
   if (Array.isArray(articleData.keywords)) {

@@ -360,7 +360,7 @@ export async function translateArticleData(articleData, targetLang = "en") {
       translatedData.og.description = await translateText(articleData.og.description, targetLang);
     }
   }
-
+/*
  // --- Suggested Articles ---
   const suggested = [];
   let sq;
@@ -396,7 +396,7 @@ export async function translateArticleData(articleData, targetLang = "en") {
   }
 
   translatedData.suggested = suggested;
-
+*/
 
   // 🔹 Language marker
   translatedData.language = targetLang;

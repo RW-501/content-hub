@@ -361,6 +361,43 @@ export async function translateArticleData(articleData, targetLang = "en") {
     }
   }
 
+ // --- Suggested Articles ---
+  const suggested = [];
+  let sq;
+  if (articleData.category) {
+    sq = query(
+      collection(db, "pages"),
+      where("category", "==", articleData.category),
+      orderBy("views", "asc"),
+      limit(4)
+    );
+  } else {
+    sq = query(collection(db, "pages"), orderBy("views", "asc"), limit(4));
+  }
+
+  const sSnap = await getDocs(sq);
+  for (const docSnap of sSnap.docs) {
+    let baseData = docSnap.data();
+    
+    // Try to get translation in targetLang
+    let translatedSnap = await getDoc(doc(db, "pages", docSnap.id, targetLang));
+    let dataToUse = translatedSnap.exists() ? translatedSnap.data() : baseData;
+
+    suggested.push({
+      id: docSnap.id,
+      image: dataToUse.image || null,
+      title: dataToUse.title || "",
+      category: dataToUse.category || "",
+      description: dataToUse.description || "",
+      slug: dataToUse.slug || "",
+      readTime: dataToUse.readTime || "",
+      language: targetLang
+    });
+  }
+
+  translatedData.suggested = suggested;
+
+
   // 🔹 Language marker
   translatedData.language = targetLang;
 

@@ -438,6 +438,17 @@ export async function handleTranslateAndUpdate(siteId, targetLang) {
 }
 
 
+function slugify(text) {
+  return text
+    .toString()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "") // remove diacritics
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")     // non-alphanumeric → dash
+    .replace(/^-+|-+$/g, "");        // trim leading/trailing dash
+}
+
 export async function translatePageLanguage(siteId, data, targetLang) {
   const pageRef = doc(db, "pages", siteId);
 
@@ -451,6 +462,8 @@ export async function translatePageLanguage(siteId, data, targetLang) {
     data,
     targetLang
   );
+    translatedData.slug = slugify(translatedData.slug);
+
 console.log("T. Page: ",translatedData);
 
   // Store translation under subcollection

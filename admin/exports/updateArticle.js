@@ -427,32 +427,6 @@ function slugify(text) {
 }
 
 
-export async function handleTranslateAndUpdate(siteId, targetLang) {
-  const pageRef = doc(db, "pages", siteId);
-
-  // Path: pages/{siteId}/translations/{targetLang}
-  const translationRef = doc(pageRef, "translations", targetLang);
-
-  // Translate articleData
-  const translatedData = await translateArticleData(data, targetLang);
-  translatedData.slug = slugify(translatedData.slug);
-
-  // Store translation under subcollection
-  await setDoc(translationRef, {
-    ...translatedData,
-    updatedAt: serverTimestamp(),
-    language: targetLang,
-  });
-
-
-  // Mark as translated in parent doc
-  await updateDoc(doc(db, "pages", siteId), {
-    [`translatedLanguages.${targetLang}`]: true
-  });
-
-  // Update UI
-  updatePage(translatedData, '', targetLang);
-}
 
 
 export async function translatePageLanguage(siteId, data, targetLang) {

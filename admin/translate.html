@@ -354,6 +354,12 @@ setInterval(() => {
   }
 }, 30 * 60 * 1000);
 
+  const translateWithDelayBtn = document.getElementById('translateWithDelayBtn');
+
+        translateWithDelayBtn.addEventListener('click', () => {
+          safeTranslateWithDelay();
+        });
+        
 
 // Helper to format seconds into mm:ss
 function formatTime(seconds) {

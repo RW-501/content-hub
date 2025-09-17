@@ -89,12 +89,12 @@ function chunkText(text) {
 export async function translateText(text, targetLang) {
   console.log(`Starting translation: targetLang=${targetLang}, text length=${text.length}`);
 
- //const chunks = chunkText(text);
+  const chunks = chunkText(text);
   const translatedChunks = [];
 
-  const chunk = "Hello world";
+  for (const [index, chunkin] of chunks.entries()) {
+      const chunk = "Hello world";
 
-  for (const [index, chunk] of chunks.entries()) {
     console.log(`Translating chunk ${index + 1}:`, chunk);
 
     try {

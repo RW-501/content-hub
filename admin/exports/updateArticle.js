@@ -442,27 +442,27 @@ if (Array.isArray(articleData.blocks)) {
 
 
 
-function extractWaitTimeMs(message) {
-  // Example message:
-  // "MYMEMORY WARNING: YOU USED ALL AVAILABLE FREE TRANSLATIONS FOR TODAY. NEXT AVAILABLE IN 03 HOURS 06 MINUTES 47 SECONDS ..."
-  
-  const regex = /NEXT AVAILABLE IN (\d+)\s+HOURS\s+(\d+)\s+MINUTES\s+(\d+)\s+SECONDS/i;
-  const match = message.match(regex);
 
+
+function extractWaitTimeMs(message) {
+  // Allow multiple spaces and singular/plural
+  const regex = /NEXT AVAILABLE IN\s+(\d+)\s+HOUR[S]?\s+(\d+)\s+MINUTE[S]?\s+(\d+)\s+SECOND[S]?/i;
+  const match = message.match(regex);
   console.log("message:", message);
 
   if (!match) return null; // no time found
-
     console.log("match:", match);
 
   const hours = parseInt(match[1], 10);
   const minutes = parseInt(match[2], 10);
   const seconds = parseInt(match[3], 10);
 
-  const totalMs = ((hours * 60 * 60) + (minutes * 60) + seconds) * 1000;
-  return totalMs;
+  return ((hours * 3600) + (minutes * 60) + seconds) * 1000;
 }
 
+// Test
+const msg = "MYMEMORY WARNING: YOU USED ALL AVAILABLE FREE TRANSLATIONS FOR TODAY. NEXT AVAILABLE IN  01 HOURS 35 MINUTES 46 SECONDS VISIT HTTPS://MYMEMORY.TRANSLATED.NET/DOC/USAGELIMITS.PHP TO TRANSLATE MORE";
+console.log(extractWaitTimeMs(msg)); // 5746000 ms
 
 
 export async function translatePageLanguage(siteId, data, targetLang) {

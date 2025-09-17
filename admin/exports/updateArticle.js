@@ -311,6 +311,15 @@ export async function translateArticleData(articleData, targetLang = "en") {
   if (articleData.body) {
     translatedData.body = await translateText(articleData.body, targetLang);
   }
+    if (articleData.pageName) {
+    translatedData.pageName = await translateText(articleData.pageName, targetLang);
+  }
+    if (articleData.slug) {
+    translatedData.slug = await translateText(articleData.slug, targetLang);
+  }
+    if (articleData.category) {
+    translatedData.category = await translateText(articleData.category, targetLang);
+  }
 
   // 🔹 Keywords
   if (Array.isArray(articleData.keywords)) {
@@ -331,6 +340,9 @@ export async function translateArticleData(articleData, targetLang = "en") {
           newBlock.text = await translateText(newBlock.text, targetLang);
         }
         if (newBlock.type === "paragraph" && newBlock.text) {
+          newBlock.text = await translateText(newBlock.text, targetLang);
+        }        
+        if (newBlock.type === "html" && newBlock.text) {
           newBlock.text = await translateText(newBlock.text, targetLang);
         }
         return newBlock;

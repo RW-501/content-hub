@@ -171,9 +171,13 @@
 
   const targetLangs = ["es", "zh", "hi", "ar","fr", "de"];
   const pagesContainer = document.getElementById("pages");
-  const logEl = document.getElementById("log");
-  function log(msg) { logEl.textContent += msg + "\n"; }
 
+const logEl = document.getElementById("log");
+
+function log(msg) {
+  logEl.textContent += msg + "\n";
+  logEl.scrollTop = logEl.scrollHeight; // 🔥 always scroll to bottom
+}
 
   
   /* ---------------- Fetch and Render Pages ---------------- */
@@ -266,6 +270,11 @@ async function loadPages() {
     
 const statusDiv = document.getElementById('status');
 
+function status(msg) {
+  statusDiv.innerHTML += msg + "\n";
+  statusDiv.scrollTop = statusDiv.scrollHeight; // 🔥 always scroll to bottom
+}
+
 const JOB_KEY = "safeTranslateJob"; // localStorage key
 
 async function safeTranslateWithDelay() {
@@ -300,12 +309,13 @@ async function safeTranslateWithDelay() {
 
       try {
         const chunkStart = Date.now();
-        statusDiv.innerHTML = `
+        let msg = `
           <strong>Lang:</strong> ${targetLang.toUpperCase()} <br>
           <strong>Page:</strong> ${currentSlug} <br>
           <strong>Progress:</strong> ${jobState.doneCount}/${total} <br>
           <strong>Elapsed:</strong> ${formatTime((Date.now() - jobState.startTime) / 1000)}
         `;
+        status(msg);
 
 // ⏳ Show "working" countdown before translating
 for (let i = 60; i > 0; i--) {
@@ -342,7 +352,8 @@ log(`✅ translatePageLanguage returned in ${duration}s`);
 
           // Wait 60s pacing
           for (let i = 60; i > 0; i--) {
-            statusDiv.innerHTML += `<br>⏳ Waiting ${i}s before next page...`;
+            let msg = `<br>⏳ Waiting ${i}s before next page...`;
+            status(msg);
             await new Promise(res => setTimeout(res, 1000));
           }
         }
@@ -358,7 +369,9 @@ log(`✅ translatePageLanguage returned in ${duration}s`);
 
   // Cleanup after finishing all languages
   localStorage.removeItem(JOB_KEY);
-  statusDiv.innerHTML = `✅ All translations done!`;
+  let msg = `✅ All translations done!`;
+  status(msg);
+  
   await loadPages();
 }
 

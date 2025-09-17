@@ -307,6 +307,7 @@ await removePageFileOnly(`page/${targetLang}/${data.slug}.html`);
 
 export async function translateArticleData(articleData, targetLang = "en") {
   const translatedData = { ...articleData }; // clone first
+let Slug =  await translateText(slugify(translatedData.slug));
 
   // 🔹 Main text fields
   if (articleData.title) {
@@ -325,7 +326,7 @@ export async function translateArticleData(articleData, targetLang = "en") {
     translatedData.pageName = await translateText(articleData.pageName, targetLang);
   }
     if (articleData.slug) {
-    translatedData.slug = await translateText(slugify(translatedData.slug), targetLang);
+    translatedData.slug = Slug;
   //  translatedData.slug = "/" + targetLang + await translateText(articleData.slug, targetLang);
   }
     if (articleData.category) {
@@ -335,7 +336,7 @@ export async function translateArticleData(articleData, targetLang = "en") {
     // 🔹 Update the translations object for the targetLang
 translatedData.translations = translatedData.translations || {}; // ensure the object exists
 translatedData.translations[targetLang] = {
-  slug: await translateText(slugify(translatedData.slug), targetLang), // translated slug
+  slug: Slug, // translated slug
   lang: targetLang, // store language code
 };
 
@@ -346,7 +347,7 @@ translatedData.translations[targetLang] = {
       articleData.keywords.map(k => translateText(k, targetLang))
     );
   }
-
+/*
   // 🔹 Structured blocks (headings, paragraphs, etc.)
 if (Array.isArray(articleData.blocks)) {
   console.log("articleData.blocks:", articleData.blocks);
@@ -374,16 +375,16 @@ if (Array.isArray(articleData.blocks)) {
   );
 }
   console.log("articleData.blocks:", articleData.blocks);
-
+*/
 
   // 🔹 SEO Open Graph
   if (articleData.og) {
     translatedData.og = { ...articleData.og };
     if (articleData.og.title) {
-      translatedData.og.title = await translateText(articleData.og.title, targetLang);
+      translatedData.og.title = articleData.title;
     }
     if (articleData.og.description) {
-      translatedData.og.description = await translateText(articleData.og.description, targetLang);
+      translatedData.og.description = articleData.description;
     }
   }
 /*

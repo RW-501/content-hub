@@ -267,19 +267,7 @@ async function loadPages() {
 }
 
 
-
-    
-const statusDiv = document.getElementById('status');
-
-function status(msg) {
-  statusDiv.innerHTML += msg + "\n";
-  statusDiv.scrollTop = statusDiv.scrollHeight; // 🔥 always scroll to bottom
-}
-
-const JOB_KEY = "safeTranslateJob"; // localStorage key
-
-async function safeTranslateWithDelay() {
-const languages = ["es", "zh", "hi", "ar", "fr", "de"];
+const languagesSelect = ["es", "zh", "hi", "ar", "fr", "de"];
 
 // Define labels + desired order
 const langOptions = [
@@ -292,10 +280,12 @@ const langOptions = [
 ];
 
 const select = document.getElementById("select");
+const selectDiv = document.createElement("select");
+selectDiv.id = 'selectLang';
 
 langOptions.forEach(({ code, label }) => {
   // only include those that exist in your array
-  if (languages.includes(code)) {
+  if (languagesSelect.includes(code)) {
     const option = document.createElement("option");
     option.value = code;
     option.textContent = label;
@@ -303,7 +293,21 @@ langOptions.forEach(({ code, label }) => {
   }
 });
 
-document.body.appendChild(select);
+selectDiv.appendChild(select);
+    
+const statusDiv = document.getElementById('status');
+
+function status(msg) {
+  statusDiv.innerHTML += msg + "\n";
+  statusDiv.scrollTop = statusDiv.scrollHeight; // 🔥 always scroll to bottom
+}
+
+const JOB_KEY = "safeTranslateJob"; // localStorage key
+
+async function safeTranslateWithDelay() {
+
+const languages = document.getElementById('selectLang').value;
+
 
 const q = query(collection(db, "pages"));
   const snap = await getDocs(q);

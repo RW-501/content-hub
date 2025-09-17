@@ -349,7 +349,7 @@ translatedData.translations[targetLang] = {
 
   // 🔹 Structured blocks (headings, paragraphs, etc.)
 if (Array.isArray(articleData.blocks)) {
-  console.log("articleData.blocks:", articleData.blocks);
+  //console.log("articleData.blocks:", articleData.blocks);
 
   translatedData.blocks = await Promise.all(
     articleData.blocks.map(async (block) => {

@@ -230,16 +230,27 @@ async function loadPages() {
   buttonIndex[`${pageId}_${lang}`] = btn;
 
       // Translate on click
-      btn.onclick = async () => {
-        log(`🔄 Translating ${data.slug} → ${lang.toUpperCase()}`);
-        let waitMs = await translatePageLanguage(pageId, data, lang);
+btn.onclick = async () => {
+  if (translated) {
+    const confirmReset = confirm(
+      `⚠ ${data.slug} is already translated to ${lang.toUpperCase()}.\nDo you want to re-translate it?`
+    );
+    if (!confirmReset) {
+      log(`⏭ Skipped re-translation of ${data.slug} → ${lang.toUpperCase()}`);
+      return; // stop here if user cancels
+    }
+  }
 
-        if (waitMs && waitMs > 0) {
-          log(`⚠ Quota hit. Pausing for ${formatTime(waitMs / 1000)}...`);
-        } else {
-          log(`✅ Done translating ${data.slug} → ${lang.toUpperCase()}`);
-        }
-      };
+  log(`🔄 Translating ${data.slug} → ${lang.toUpperCase()}`);
+  let waitMs = await translatePageLanguage(pageId, data, lang);
+
+  if (waitMs && waitMs > 0) {
+    log(`⚠ Quota hit. Pausing for ${formatTime(waitMs / 1000)}...`);
+  } else {
+    log(`✅ Done translating ${data.slug} → ${lang.toUpperCase()}`);
+  }
+};
+
       div.appendChild(btn);
 
       // If already translated, check if live
@@ -271,11 +282,35 @@ async function loadPages() {
         resetBtn.textContent = "Reset";
 
         resetBtn.onclick = async () => {
-          const filePath = `page/${lang}/${data.slug}.html`;
-          log(`♻ Resetting ${filePath} (${lang})`);
-          await resetTranslation(pageId, lang);
-          await removePage(pageId, filePath);
-          await loadPages();
+  if (translated) {
+    const filePath = `page/${lang}/${data.slug}.html`;
+
+    const confirmReset = confirm(
+      `⚠ ${data.slug} is already translated to ${lang.toUpperCase()}.\n\n` +
+      `Do you want to RESET and re-translate?\n\nThis will delete:\n${filePath}`
+    );
+
+    if (!confirmReset) {
+      log(`⏭ Skipped reset for ${data.slug} (${lang.toUpperCase()})`);
+      return;
+    }
+
+    // If confirmed → reset first
+    log(`♻ Resetting ${filePath} (${lang})...`);
+    await resetTranslation(pageId, lang);
+    await removePage(pageId, filePath);
+    await loadPages();
+  }
+
+  // Normal translation
+  log(`🔄 Translating ${data.slug} → ${lang.toUpperCase()}`);
+  let waitMs = await translatePageLanguage(pageId, data, lang);
+
+  if (waitMs && waitMs > 0) {
+    log(`⚠ Quota hit. Pausing for ${formatTime(waitMs / 1000)}...`);
+  } else {
+    log(`✅ Done translating ${data.slug} → ${lang.toUpperCase()}`);
+  }
         };
         div.appendChild(resetBtn);
       }

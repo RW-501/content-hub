@@ -348,29 +348,32 @@ translatedData.translations[targetLang] = {
   }
 
   // 🔹 Structured blocks (headings, paragraphs, etc.)
-  if (Array.isArray(articleData.blocks)) {
+if (Array.isArray(articleData.blocks)) {
+  console.log("articleData.blocks:", articleData.blocks);
 
-    console.log("articleData.blocks:", articleData.blocks);
+  translatedData.blocks = await Promise.all(
+    articleData.blocks.map(async (block) => {
+      const newBlock = { ...block };
 
-    translatedData.blocks = await Promise.all(
-      articleData.blocks.map(async (block) => {
-        const newBlock = { ...block };
-        if (newBlock.type === "text" && newBlock.content) {
-          newBlock.content = await translateText(newBlock.content, targetLang);
-        }
-        if (newBlock.type === "heading" && newBlock.text) {
-          newBlock.text = await translateText(newBlock.text, targetLang);
-        }
-        if (newBlock.type === "paragraph" && newBlock.text) {
-          newBlock.text = await translateText(newBlock.text, targetLang);
-        }        
-        if (newBlock.type === "html" && newBlock.text) {
-          newBlock.text = await translateText(newBlock.text, targetLang);
-        }
-        return newBlock;
-      })
-    );
-  }
+      if (newBlock.type === "text" && newBlock.content) {
+        newBlock.content = await translateText(newBlock.content, targetLang);
+      }
+      if (newBlock.type === "heading" && newBlock.text) {
+        newBlock.text = await translateText(newBlock.text, targetLang);
+      }
+      if (newBlock.type === "paragraph" && newBlock.html) {
+        // Translate the HTML content directly
+        newBlock.html = await translateText(newBlock.html, targetLang);
+      }        
+      if (newBlock.type === "html" && newBlock.html) {
+        newBlock.html = await translateText(newBlock.html, targetLang);
+      }
+
+      return newBlock;
+    })
+  );
+}
+
 
   // 🔹 SEO Open Graph
   if (articleData.og) {

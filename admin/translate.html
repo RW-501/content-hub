@@ -279,9 +279,9 @@ const langOptions = [
   { code: "ar", label: "Arabic" }
 ];
 
-const select = document.getElementById("select");
-const selectDiv = document.createElement("select");
-selectDiv.id = 'selectLang';
+const selectDiv = document.getElementById("select");
+const select = document.createElement("select");
+select.id = 'selectLang';
 
 langOptions.forEach(({ code, label }) => {
   // only include those that exist in your array
@@ -296,7 +296,6 @@ langOptions.forEach(({ code, label }) => {
 selectDiv.appendChild(select);
     
 const statusDiv = document.getElementById('status');
-
 function status(msg) {
   statusDiv.innerHTML += msg + "\n";
   statusDiv.scrollTop = statusDiv.scrollHeight; // 🔥 always scroll to bottom

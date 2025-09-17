@@ -457,6 +457,9 @@ export async function translatePageLanguage(siteId, data, targetLang) {
 
   const translationRef = doc(db, "pages", siteId, "translations", targetLang);
 
+
+  console.log("translationRef ", translationRef);
+
   // Translate articleData
   const translatedData = await translateArticleData(data, targetLang);
   translatedData.slug = slugify(translatedData.slug);

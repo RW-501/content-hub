@@ -465,6 +465,9 @@ export async function translatePageLanguage(siteId, data, targetLang) {
   translatedData.slug = slugify(translatedData.slug);
 
   console.log("translatePageLanguage Page:", translatedData);
+             
+  
+  console.log(`????SET??????`);
 
   // Store translation under subcollection
   await setDoc(translationRef, {

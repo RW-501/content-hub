@@ -455,7 +455,6 @@ export async function handleTranslateAndUpdate(siteId, targetLang) {
 export async function translatePageLanguage(siteId, data, targetLang) {
   console.log(`siteId: ${siteId} - data:`, data, "- targetLang:", targetLang);
 
-  // Correct doc path: pages/{siteId}/translations/{targetLang}
   const translationRef = doc(db, "pages", siteId, "translations", targetLang);
 
   // Translate articleData
@@ -471,7 +470,12 @@ export async function translatePageLanguage(siteId, data, targetLang) {
     language: targetLang,
   });
 
-  // Update UI with translated version
+  // Mark as translated in parent doc
+  await updateDoc(doc(db, "pages", siteId), {
+    [`translatedLanguages.${targetLang}`]: true
+  });
+
+  // Update UI
   updatePage(translatedData, '', targetLang);
 }
 

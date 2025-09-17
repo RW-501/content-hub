@@ -216,9 +216,14 @@ async function loadPages() {
         log(`🔄 Translating ${data.slug} → ${lang.toUpperCase()}`);
               console.log(`pageId ${pageId} → ${lang.toUpperCase()} Slug:`, data.slug);
       let waitMs =  await translatePageLanguage(pageId, data, lang);
-              
-      
+                   
+      if (waitMs && waitMs > 0) {
+      log(`⚠ Quota hit. Pausing for ${formatTime(waitMs / 1000)}...`);
+                   }else{
       console.log(`Done ????????`);
+      log(`Done ????????`);
+
+                   }
 
 
        // await loadPages();

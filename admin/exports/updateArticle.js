@@ -95,7 +95,7 @@ export async function translateText(text, targetLang) {
   for (const [index, chunk] of chunks.entries()) {
     //  const chunk = "Hello world";
 
-    console.log(`Translating chunk ${index + 1}:`, chunk);
+  //  console.log(`Translating chunk ${index + 1}:`, chunk);
 
     try {
       const response = await fetch("https://translateapi-1-mx67.onrender.com/translate/", {
@@ -104,22 +104,22 @@ export async function translateText(text, targetLang) {
         body: JSON.stringify({ q: chunk, source: "en", target: targetLang })
       });
 
-      console.log(`Chunk ${index + 1} fetch completed:`, response);
-      console.log("Response headers:", [...response.headers.entries()]);
-      console.log("Response status:", response.status, response.statusText);
+   //   console.log(`Chunk ${index + 1} fetch completed:`, response);
+   //   console.log("Response headers:", [...response.headers.entries()]);
+   //   console.log("Response status:", response.status, response.statusText);
 
       const result = await response.json().catch(err => {
         console.error("Failed to parse JSON:", err);
         return null;
       });
 
-      console.log(`Chunk ${index + 1} result:`, result);
+    //  console.log(`Chunk ${index + 1} result:`, result);
 
       if (!result || !result.translatedText) {
         alert(`⚠️ Translation failed on chunk ${index + 1}.`);
         return null;
       }
-      console.log(result.translatedText); // "Hola mundo"
+   //   console.log(result.translatedText); // "Hola mundo"
 
       translatedChunks.push(result.translatedText);
     } catch (err) {

@@ -449,6 +449,8 @@ function extractWaitTimeMs(message) {
   const regex = /NEXT AVAILABLE IN (\d+)\s+HOURS\s+(\d+)\s+MINUTES\s+(\d+)\s+SECONDS/i;
   const match = message.match(regex);
 
+  console.log("message:", message);
+
   if (!match) return null; // no time found
 
   const hours = parseInt(match[1], 10);

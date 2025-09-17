@@ -226,7 +226,8 @@ async function loadPages() {
       if (translated) {
         // Link to translated page
         const translatedLink = document.createElement("a");
-        translatedLink.href = `https://contenthub.guru/page/${lang}/${data.slug}.html`;
+
+        translatedLink.href = `https://contenthub.guru/page/${lang}/${data.translations[lang].slug}.html`;
         translatedLink.textContent = `Go to ${lang.toUpperCase()} version`;
         translatedLink.target = "_blank";
         translatedLink.style.display = "block";

@@ -447,7 +447,8 @@ export async function translatePageLanguage(siteId, data, targetLang) {
 
   // Translate articleData
   const translatedData = await translateArticleData(data, targetLang);
-  translatedData.slug = slugify(translatedData.slug);
+  let slug = slugify(translatedData.slug);
+  translatedData.slug = slug;
 
   console.log("translatePageLanguage Page:", translatedData);
              
@@ -462,10 +463,12 @@ export async function translatePageLanguage(siteId, data, targetLang) {
   });
               console.log(`????UPDATE??????`);
 
-  // Mark as translated in parent doc
-  await updateDoc(doc(db, "pages", siteId), {
-    [`translatedLanguages.${targetLang}`]: true
-  });
+
+// Suppose siteId, targetLang, and slug are defined
+await updateDoc(doc(db, "pages", siteId), {
+  [`translatedLanguages.${targetLang}`]: true, // mark translated
+  [`translations.${targetLang}`]: { slug: slug } // store translated slug
+});
 
   // Update UI
   updatePage(translatedData, '', targetLang);

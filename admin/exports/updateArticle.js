@@ -45,7 +45,7 @@ function getOgLocale(lang) {
 
 
 
-const MAX_CHARS_PER_BATCH = 100; // safe limit for public LibreTranslate
+const MAX_CHARS_PER_BATCH = 50; // safe limit for public LibreTranslate
 
 /**
  * Splits text into chunks of up to MAX_CHARS_PER_BATCH,

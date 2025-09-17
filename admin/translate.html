@@ -307,7 +307,19 @@ async function safeTranslateWithDelay() {
           <strong>Elapsed:</strong> ${formatTime((Date.now() - jobState.startTime) / 1000)}
         `;
 
-        let waitMs = await translatePageLanguage(pageId, data, targetLang);
+// ⏳ Show "working" countdown before translating
+for (let i = 60; i > 0; i--) {
+  log(`🚀 Working ${i}s...`);
+  await new Promise(res => setTimeout(res, 1000));
+}
+
+// 🕒 Measure time spent on API call
+const callStart = Date.now();
+let waitMs = await translatePageLanguage(pageId, data, targetLang);
+const callEnd = Date.now();
+const duration = ((callEnd - callStart) / 1000).toFixed(1);
+
+log(`✅ translatePageLanguage returned in ${duration}s`);
 
         if (waitMs && waitMs > 0) {
           log(`⚠ Quota hit. Pausing for ${formatTime(waitMs / 1000)}...`);

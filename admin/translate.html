@@ -142,6 +142,7 @@
 
   <div class="container">
     <h3 style="margin:1.5rem 0 0.5rem 1.5rem;">Logs</h3>
+    <pre id="status"></pre>
     <pre id="log"></pre>
   </div>
 
@@ -264,7 +265,8 @@ async function loadPages() {
 
 /* ---------------- Safe Bulk Translate Button ---------------- */
 const safeBtn = document.getElementById("translateWithDelayBtn");
-safeBtn.id = "translateWithDelayBtn";
+const statusDiv = document.getElementById("status"); // your div to show progress
+
 safeBtn.textContent = "Translate with Delay (Safe Mode)";
 
 safeBtn.addEventListener("click", async () => {
@@ -274,31 +276,71 @@ safeBtn.addEventListener("click", async () => {
   const q = query(collection(db, "pages"));
   const snap = await getDocs(q);
 
-  let count = 0;
+  const total = snap.docs.length;
+  let doneCount = 0;
+  let prevSlug = "";
+
+  const startTime = Date.now();
+
   for (const docSnap of snap.docs) {
     const data = docSnap.data();
     const pageId = docSnap.id;
+    const currentSlug = data.slug;
 
     try {
-      log(`🔄 Translating: ${data.slug} (${pageId})`);
-      await handleTranslateAndUpdate(pageId, targetLang);
-      count++;
-      log(`✅ Done: ${data.slug} (${count}/${snap.docs.length})`);
+      const chunkStart = Date.now();
+      statusDiv.innerHTML = `
+        <strong>Translating:</strong> ${currentSlug} <br>
+        <strong>Previous:</strong> ${prevSlug || "N/A"} <br>
+        <strong>Progress:</strong> ${doneCount}/${total} (${((doneCount/total)*100).toFixed(1)}%) <br>
+        <strong>Elapsed:</strong> ${formatTime((Date.now() - startTime)/1000)} <br>
+        <strong>ETA:</strong> calculating... <br>
+        <strong>Speed:</strong> calculating...
+      `;
 
-      // Wait 60s before next update
+      await handleTranslateAndUpdate(pageId, targetLang);
+      doneCount++;
+
+      const chunkEnd = Date.now();
+      const lastDuration = (chunkEnd - chunkStart) / 1000; // in seconds
+      const elapsed = (chunkEnd - startTime) / 1000;
+      const speed = lastDuration.toFixed(1);
+      const eta = ((elapsed / doneCount) * (total - doneCount)).toFixed(1);
+
+      statusDiv.innerHTML = `
+        <strong>Translating:</strong> ${currentSlug} <br>
+<strong>Previous:</strong> ${prevSlug 
+  ? `<a href="https://contenthub.guru/page/${prevSlug}.html" target="_blank">${prevSlug}</a>` 
+  : "N/A"} <br>
+        <strong>Progress:</strong> ${doneCount}/${total} (${((doneCount/total)*100).toFixed(1)}%) <br>
+        <strong>Elapsed:</strong> ${formatTime(elapsed)} <br>
+        <strong>ETA:</strong> ${formatTime(eta)} <br>
+        <strong>Last page time:</strong> ${speed}s
+      `;
+
+      prevSlug = currentSlug;
+
+      // Wait 60s before next
       for (let i = 60; i > 0; i--) {
-        log(`⏳ Waiting ${i}s before next page...`);
+        statusDiv.innerHTML += `<br>⏳ Waiting ${i}s before next page...`;
         await new Promise(res => setTimeout(res, 1000));
       }
 
     } catch (err) {
-      log(`❌ Error on ${data.slug}: ${err.message}`);
+      log(`❌ Error on ${currentSlug}: ${err.message}`);
     }
   }
 
-  log(`🎉 Finished safe translation of ${count} pages into ${targetLang.toUpperCase()}`);
+  statusDiv.innerHTML = `🎉 Finished safe translation of ${doneCount}/${total} pages into ${targetLang.toUpperCase()}`;
   await loadPages();
 });
+
+// Helper to format seconds into mm:ss
+function formatTime(seconds) {
+  const mins = Math.floor(seconds / 60);
+  const secs = Math.floor(seconds % 60);
+  return `${mins}m ${secs}s`;
+}
 
 
   /* ---------------- Start ---------------- */

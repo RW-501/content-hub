@@ -373,6 +373,7 @@ if (Array.isArray(articleData.blocks)) {
     })
   );
 }
+  console.log("articleData.blocks:", articleData.blocks);
 
 
   // 🔹 SEO Open Graph

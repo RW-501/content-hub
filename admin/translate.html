@@ -223,7 +223,8 @@ async function loadPages() {
       };
       div.appendChild(btn);
 
-      if (translated) {
+
+      if (translated && data.translations?.[lang]?.slug) {
         // Link to translated page
         const translatedLink = document.createElement("a");
 

@@ -45,7 +45,7 @@ function getOgLocale(lang) {
 
 
 
-const MAX_CHARS_PER_BATCH = 50; // safe limit for public LibreTranslate
+const MAX_CHARS_PER_BATCH = 100; // safe limit for public LibreTranslate
 
 /**
  * Splits text into chunks of up to MAX_CHARS_PER_BATCH,
@@ -93,7 +93,7 @@ export async function translateText(text, targetLang) {
   const translatedChunks = [];
 
   for (const [index, chunk] of chunks.entries()) {
-      const chunk = "Hello world";
+    //  const chunk = "Hello world";
 
     console.log(`Translating chunk ${index + 1}:`, chunk);
 

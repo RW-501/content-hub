@@ -461,7 +461,7 @@ export async function translatePageLanguage(siteId, data, targetLang) {
   const translatedData = await translateArticleData(data, targetLang);
   translatedData.slug = slugify(translatedData.slug);
 
-  console.log("Translated Page:", translatedData);
+  console.log("translatePageLanguage Page:", translatedData);
 
   // Store translation under subcollection
   await setDoc(translationRef, {
@@ -469,6 +469,7 @@ export async function translatePageLanguage(siteId, data, targetLang) {
     updatedAt: serverTimestamp(),
     language: targetLang,
   });
+              console.log(`????UPDATE??????`);
 
   // Mark as translated in parent doc
   await updateDoc(doc(db, "pages", siteId), {

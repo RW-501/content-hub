@@ -175,7 +175,7 @@
   const db = getFirestore(app);
   const auth = getAuth(app);
 
-  const targetLangs = ["es", "zh", "hi", "ar", "fr", "de"];
+  const targetLangs = ["es", "zh", "hi", "ar","fr", "de"];
   const pagesContainer = document.getElementById("pages");
   const logEl = document.getElementById("log");
   function log(msg) { logEl.textContent += msg + "\n"; }
@@ -270,13 +270,19 @@ const statusDiv = document.getElementById("status"); // your div to show progres
 safeBtn.textContent = "Translate with Delay (Safe Mode)";
 
 safeBtn.addEventListener("click", async () => {
-  const targetLang = document.getElementById("updateLanguage").value;
-  log(`🚀 Starting SAFE bulk translation for ${targetLang.toUpperCase()}... (1 min delay each)`);
+
+    // List of languages you want to process
+const languages = ["es", "zh", "hi", "ar"," fr", "de"];
 
   const q = query(collection(db, "pages"));
   const snap = await getDocs(q);
 
   const total = snap.docs.length;
+
+  
+  for (const targetLang of languages) {
+    log(`🚀 Starting SAFE bulk translation for ${targetLang.toUpperCase()}...`);
+
   let doneCount = 0;
   let prevSlug = "";
 
@@ -311,7 +317,7 @@ if (data.translatedLanguages?.[targetLang]) {
       const lastDuration = (chunkEnd - chunkStart) / 1000; // in seconds
       const elapsed = (chunkEnd - startTime) / 1000;
       const speed = lastDuration.toFixed(1);
-      const eta = ((elapsed / doneCount) * (total - doneCount)).toFixed(1);
+      const eta = ((elapsed / doneCount) * (total - doneCount));
 
       statusDiv.innerHTML = `
         <strong>Translating:</strong> ${currentSlug} <br>
@@ -338,6 +344,10 @@ if (data.translatedLanguages?.[targetLang]) {
   }
 
   statusDiv.innerHTML = `🎉 Finished safe translation of ${doneCount}/${total} pages into ${targetLang.toUpperCase()}`;
+  
+    log(`🎉 Finished ${targetLang.toUpperCase()} translation: ${doneCount}/${total}`);
+  }
+  
   await loadPages();
 });
 

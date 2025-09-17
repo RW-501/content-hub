@@ -453,6 +453,8 @@ function extractWaitTimeMs(message) {
 
   if (!match) return null; // no time found
 
+    console.log("match:", match);
+
   const hours = parseInt(match[1], 10);
   const minutes = parseInt(match[2], 10);
   const seconds = parseInt(match[3], 10);

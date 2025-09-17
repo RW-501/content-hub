@@ -1408,19 +1408,36 @@ hr {
     <a href="https://contenthub.guru/" target="_blank" style="color:#4f46e5; text-decoration:none;">ContentHub.guru</a> <br>
     ${articleData.title || "Untitled Site"}
   </p>
- <p>
-    Available Languages: 
-    ${articleData.translations 
-      ? Object.entries(articleData.translations)
-          .map(([lang, translation]) => {
-            const slug = translation.slug || "";
-            return `<a href="https://contenthub.guru/page/${lang}/${slug}" target="_blank" style="color:#4f46e5; text-decoration:none; margin:0 5px;">
-                      ${lang.toUpperCase()}
-                    </a>`;
-          })
-          .join(" | ")
-      : "More Coming Soon."}
-  </p>
+
+<p aria-label="Available Languages for this article">
+  <span id="av_lang_tabel">Available Languages:</span>
+  ${articleData.translations
+    ? Object.entries(articleData.translations)
+        .map(([lang, translation]) => {
+          const slug = translation.slug || "";
+          const flags = {
+            en: "🇺🇸",
+            es: "🇪🇸",
+            zh: "🇨🇳",
+            hi: "🇮🇳",
+            ar: "🇸🇦",
+            fr: "🇫🇷",
+            de: "🇩🇪"
+          };
+          return `<a href="https://contenthub.guru/page/${lang}/${slug}" 
+                     target="_blank" 
+                     class="lang-flag"
+                     style="margin:0 5px; text-decoration:none;"
+                     title="Read this article in ${lang.toUpperCase()}">
+                     ${flags[lang] || "🌐"}
+                     <span class="sr-only">${lang.toUpperCase()}</span>
+                  </a>`;
+        })
+        .join(" | ")
+    : `<span>More Coming Soon.</span>`}
+</p>
+
+
 
   <!-- 🔹 Social Links -->
   <div style="margin:15px 0; display:flex; justify-content:center; gap:20px; font-size:22px;">

@@ -271,12 +271,12 @@ const languagesSelect = ["es", "zh", "hi", "ar", "fr", "de"];
 
 // Define labels + desired order
 const langOptions = [
-  { code: "fr", label: "French" },
-  { code: "de", label: "German" },
-  { code: "es", label: "Spanish" },
-  { code: "zh", label: "Chinese" },
-  { code: "hi", label: "Hindi" },
-  { code: "ar", label: "Arabic" }
+  { code: ["fr", "zh", "hi", "ar", "es", "de"], label: "French" },
+  { code: ["de", "zh", "hi", "ar", "fr", "es"], label: "German" },
+  { code: ["es", "zh", "hi", "ar", "fr", "de"], label: "Spanish" },
+  { code: ["zh", "es", "hi", "ar", "fr", "de"], label: "Chinese" },
+  { code: ["hi", "zh", "es", "ar", "fr", "de"], label: "Hindi" },
+  { code: ["ar", "zh", "hi", "es", "fr", "de"], label: "Arabic" }
 ];
 
 const selectDiv = document.getElementById("select");

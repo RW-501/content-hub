@@ -135,6 +135,7 @@
   <button id="translateWithDelayBtn">Translate & Update All Pages</button>
 
   <div class="container">
+    <div id="select"></div>
     <h3 style="margin:1.5rem 0 0.5rem 1.5rem;">Logs</h3>
     <pre id="status"></pre>
     <pre id="log"></pre>
@@ -278,8 +279,33 @@ function status(msg) {
 const JOB_KEY = "safeTranslateJob"; // localStorage key
 
 async function safeTranslateWithDelay() {
-  const languages = ["es", "zh", "hi", "ar", "fr", "de"];
-  const q = query(collection(db, "pages"));
+const languages = ["es", "zh", "hi", "ar", "fr", "de"];
+
+// Define labels + desired order
+const langOptions = [
+  { code: "fr", label: "French" },
+  { code: "de", label: "German" },
+  { code: "es", label: "Spanish" },
+  { code: "zh", label: "Chinese" },
+  { code: "hi", label: "Hindi" },
+  { code: "ar", label: "Arabic" }
+];
+
+const select = document.getElementById("select");
+
+langOptions.forEach(({ code, label }) => {
+  // only include those that exist in your array
+  if (languages.includes(code)) {
+    const option = document.createElement("option");
+    option.value = code;
+    option.textContent = label;
+    select.appendChild(option);
+  }
+});
+
+document.body.appendChild(select);
+
+const q = query(collection(db, "pages"));
   const snap = await getDocs(q);
   const pages = snap.docs.map(doc => ({ id: doc.id, data: doc.data() }));
   const total = pages.length;
@@ -371,7 +397,7 @@ log(`✅ translatePageLanguage returned in ${duration}s`);
   localStorage.removeItem(JOB_KEY);
   let msg = `✅ All translations done!`;
   status(msg);
-  
+
   await loadPages();
 }
 

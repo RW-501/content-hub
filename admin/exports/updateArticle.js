@@ -414,6 +414,19 @@ export async function translateArticleData(articleData, targetLang = "en") {
 }
 
 
+
+function slugify(text) {
+  return text
+    .toString()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "") // remove diacritics
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")     // non-alphanumeric → dash
+    .replace(/^-+|-+$/g, "");        // trim leading/trailing dash
+}
+
+
 export async function handleTranslateAndUpdate(siteId, targetLang) {
   const pageRef = doc(db, "pages", siteId);
 
@@ -425,6 +438,7 @@ export async function handleTranslateAndUpdate(siteId, targetLang) {
     (await getDoc(pageRef)).data(),
     targetLang
   );
+  translatedData.slug = slugify(translatedData.slug);
 
   // Store translation under subcollection
   await setDoc(translationRef, {
@@ -438,33 +452,17 @@ export async function handleTranslateAndUpdate(siteId, targetLang) {
 }
 
 
-function slugify(text) {
-  return text
-    .toString()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "") // remove diacritics
-    .toLowerCase()
-    .trim()
-    .replace(/[^a-z0-9]+/g, "-")     // non-alphanumeric → dash
-    .replace(/^-+|-+$/g, "");        // trim leading/trailing dash
-}
-
 export async function translatePageLanguage(siteId, data, targetLang) {
-  const pageRef = doc(db, "pages", siteId);
+  console.log(`siteId: ${siteId} - data:`, data, "- targetLang:", targetLang);
 
-        console.log(`siteId: ${siteId} - data: ${data} - targetLang: ${targetLang}`);
+  // Correct doc path: pages/{siteId}/translations/{targetLang}
+  const translationRef = doc(db, "pages", siteId, "translations", targetLang);
 
-  // Path: pages/{siteId}/translations/{targetLang}
-  const translationRef = doc(pageRef, "translations", targetLang);
+  // Translate articleData
+  const translatedData = await translateArticleData(data, targetLang);
+  translatedData.slug = slugify(translatedData.slug);
 
-  // Translate articleData (your existing logic)
-  const translatedData = await translateArticleData(
-    data,
-    targetLang
-  );
-    translatedData.slug = slugify(translatedData.slug);
-
-console.log("T. Page: ",translatedData);
+  console.log("Translated Page:", translatedData);
 
   // Store translation under subcollection
   await setDoc(translationRef, {
@@ -474,8 +472,9 @@ console.log("T. Page: ",translatedData);
   });
 
   // Update UI with translated version
-  updatePage(translatedData,'' ,targetLang );
+  updatePage(translatedData, '', targetLang);
 }
+
 
 
 

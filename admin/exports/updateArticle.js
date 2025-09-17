@@ -442,6 +442,22 @@ if (Array.isArray(articleData.blocks)) {
 
 
 
+function extractWaitTimeMs(message) {
+  // Example message:
+  // "MYMEMORY WARNING: YOU USED ALL AVAILABLE FREE TRANSLATIONS FOR TODAY. NEXT AVAILABLE IN 03 HOURS 06 MINUTES 47 SECONDS ..."
+  
+  const regex = /NEXT AVAILABLE IN (\d+)\s+HOURS\s+(\d+)\s+MINUTES\s+(\d+)\s+SECONDS/i;
+  const match = message.match(regex);
+
+  if (!match) return null; // no time found
+
+  const hours = parseInt(match[1], 10);
+  const minutes = parseInt(match[2], 10);
+  const seconds = parseInt(match[3], 10);
+
+  const totalMs = ((hours * 60 * 60) + (minutes * 60) + seconds) * 1000;
+  return totalMs;
+}
 
 
 
@@ -454,15 +470,20 @@ export async function translatePageLanguage(siteId, data, targetLang) {
   const translatedData = await translateArticleData(data, targetLang);
 
   // Check for MyMemory quota warning or invalid translation
-  const isQuotaExceeded = Object.values(translatedData).some(value => 
-    typeof value === "string" && value.includes("MYMEMORY WARNING")
-  );
 
-  if (isQuotaExceeded) {
-    console.warn(`⚠ Translation skipped for ${siteId} (${targetLang}) due to quota limit.`);
-   alert(`⚠ Translation skipped for ${siteId} (${targetLang}) due to quota limit.`);
-    return; // stop here, do not save to Firestore
-  }
+const isQuotaExceeded = Object.values(translatedData).some(value => 
+  typeof value === "string" && value.includes("MYMEMORY WARNING")
+);
+
+if (isQuotaExceeded) {
+  const msg = Object.values(translatedData).find(v => typeof v === "string" && v.includes("MYMEMORY WARNING"));
+  const waitMs = extractWaitTimeMs(msg);
+
+  console.warn(`⚠ Translation skipped for ${siteId} (${targetLang}). Wait ${waitMs} ms before retrying.`);
+  
+  return waitMs; // don’t save to Firestore
+}
+
 
   // Generate slug
   let slug = slugify(translatedData.slug);

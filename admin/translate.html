@@ -215,8 +215,10 @@ async function loadPages() {
       btn.onclick = async () => {
         log(`🔄 Translating ${data.slug} → ${lang.toUpperCase()}`);
               console.log(`pageId ${pageId} → ${lang.toUpperCase()} Slug:`, data.slug);
-        await translatePageLanguage(pageId, data, lang);
-              console.log(`Done ????????`);
+      let waitMs =  await translatePageLanguage(pageId, data, lang);
+              
+      
+      console.log(`Done ????????`);
 
 
        // await loadPages();
@@ -258,94 +260,100 @@ async function loadPages() {
 
 
   
+const JOB_KEY = "safeTranslateJob"; // localStorage key
 
-/* ---------------- Safe Bulk Translate Button ---------------- */
-const safeBtn = document.getElementById("translateWithDelayBtn");
-const statusDiv = document.getElementById("status"); // your div to show progress
-
-safeBtn.textContent = "Translate with Delay (Safe Mode)";
-
-safeBtn.addEventListener("click", async () => {
-
-    // List of languages you want to process
-const languages = ["es", "zh", "hi", "ar"," fr", "de"];
-
+async function safeTranslateWithDelay() {
+  const languages = ["es", "zh", "hi", "ar", "fr", "de"];
   const q = query(collection(db, "pages"));
   const snap = await getDocs(q);
+  const pages = snap.docs.map(doc => ({ id: doc.id, data: doc.data() }));
+  const total = pages.length;
 
-  const total = snap.docs.length;
+  // Try to resume progress
+  let jobState = JSON.parse(localStorage.getItem(JOB_KEY)) || {
+    langIndex: 0,
+    pageIndex: 0,
+    doneCount: 0,
+    startTime: Date.now(),
+  };
 
-  
-  for (const targetLang of languages) {
+  for (let li = jobState.langIndex; li < languages.length; li++) {
+    const targetLang = languages[li];
     log(`🚀 Starting SAFE bulk translation for ${targetLang.toUpperCase()}...`);
+    let prevSlug = "";
 
-  let doneCount = 0;
-  let prevSlug = "";
+    for (let pi = jobState.pageIndex; pi < pages.length; pi++) {
+      const { id: pageId, data } = pages[pi];
+      const currentSlug = data.slug;
 
-  const startTime = Date.now();
-
-  for (const docSnap of snap.docs) {
-    const data = docSnap.data();
-    const pageId = docSnap.id;
-    const currentSlug = data.slug;
-
-
-if (data.translatedLanguages?.[targetLang]) {
-  log(`⚡ Skipping ${data.slug}, already translated to ${targetLang.toUpperCase()}`);
-  continue;
-}
-
-    try {
-      const chunkStart = Date.now();
-      statusDiv.innerHTML = `
-        <strong>Translating:</strong> ${currentSlug} <br>
-        <strong>Previous:</strong> ${prevSlug || "N/A"} <br>
-        <strong>Progress:</strong> ${doneCount}/${total} (${((doneCount/total)*100).toFixed(1)}%) <br>
-        <strong>Elapsed:</strong> ${formatTime((Date.now() - startTime)/1000)} <br>
-        <strong>ETA:</strong> calculating... <br>
-        <strong>Speed:</strong> calculating...
-      `;
-
-      await translatePageLanguage(pageId, data, targetLang);
-      doneCount++;
-
-      const chunkEnd = Date.now();
-      const lastDuration = (chunkEnd - chunkStart) / 1000; // in seconds
-      const elapsed = (chunkEnd - startTime) / 1000;
-      const speed = lastDuration.toFixed(1);
-      const eta = ((elapsed / doneCount) * (total - doneCount));
-
-      statusDiv.innerHTML = `
-        <strong>Translating:</strong> ${currentSlug} <br>
-<strong>Previous:</strong> ${prevSlug 
-  ? `<a href="https://contenthub.guru/page/${prevSlug}.html" target="_blank">${prevSlug}</a>` 
-  : "N/A"} <br>
-        <strong>Progress:</strong> ${doneCount}/${total} (${((doneCount/total)*100).toFixed(1)}%) <br>
-        <strong>Elapsed:</strong> ${formatTime(elapsed)} <br>
-        <strong>ETA:</strong> ${formatTime(eta)} <br>
-        <strong>Last page time:</strong> ${speed}s
-      `;
-
-      prevSlug = currentSlug;
-
-      // Wait 60s before next
-      for (let i = 60; i > 0; i--) {
-        statusDiv.innerHTML += `<br>⏳ Waiting ${i}s before next page...`;
-        await new Promise(res => setTimeout(res, 1000));
+      if (data.translatedLanguages?.[targetLang]) {
+        log(`⚡ Skipping ${currentSlug}, already translated to ${targetLang.toUpperCase()}`);
+        jobState.pageIndex = pi + 1; // advance index
+        continue;
       }
 
-    } catch (err) {
-      log(`❌ Error on ${currentSlug}: ${err.message}`);
+      try {
+        const chunkStart = Date.now();
+        statusDiv.innerHTML = `
+          <strong>Lang:</strong> ${targetLang.toUpperCase()} <br>
+          <strong>Page:</strong> ${currentSlug} <br>
+          <strong>Progress:</strong> ${jobState.doneCount}/${total} <br>
+          <strong>Elapsed:</strong> ${formatTime((Date.now() - jobState.startTime) / 1000)}
+        `;
+
+        let waitMs = await translatePageLanguage(pageId, data, targetLang);
+
+        if (waitMs && waitMs > 0) {
+          log(`⚠ Quota hit. Pausing for ${formatTime(waitMs / 1000)}...`);
+          statusDiv.innerHTML += `<br>⚠ Quota hit. Waiting ${formatTime(waitMs / 1000)}...`;
+
+          // Save state before waiting
+          localStorage.setItem(JOB_KEY, JSON.stringify({ 
+            ...jobState, langIndex: li, pageIndex: pi 
+          }));
+
+          await new Promise(res => setTimeout(res, waitMs));
+        } else {
+          jobState.doneCount++;
+          prevSlug = currentSlug;
+
+          // Save progress
+          jobState.langIndex = li;
+          jobState.pageIndex = pi + 1;
+          localStorage.setItem(JOB_KEY, JSON.stringify(jobState));
+
+          // Wait 60s pacing
+          for (let i = 60; i > 0; i--) {
+            statusDiv.innerHTML += `<br>⏳ Waiting ${i}s before next page...`;
+            await new Promise(res => setTimeout(res, 1000));
+          }
+        }
+      } catch (err) {
+        log(`❌ Error on ${currentSlug}: ${err.message}`);
+      }
     }
+
+    log(`🎉 Finished ${targetLang.toUpperCase()} translation`);
+    jobState.pageIndex = 0; // reset for next language
+    localStorage.setItem(JOB_KEY, JSON.stringify(jobState));
   }
 
-  statusDiv.innerHTML = `🎉 Finished safe translation of ${doneCount}/${total} pages into ${targetLang.toUpperCase()}`;
-  
-    log(`🎉 Finished ${targetLang.toUpperCase()} translation: ${doneCount}/${total}`);
-  }
-  
+  // Cleanup after finishing all languages
+  localStorage.removeItem(JOB_KEY);
+  statusDiv.innerHTML = `✅ All translations done!`;
   await loadPages();
-});
+}
+
+/* Heartbeat every 30 mins */
+setInterval(() => {
+  const jobState = JSON.parse(localStorage.getItem(JOB_KEY));
+  if (jobState) {
+    console.log("💓 Heartbeat: still working...", jobState);
+    jobState.lastHeartbeat = Date.now();
+    localStorage.setItem(JOB_KEY, JSON.stringify(jobState));
+  }
+}, 30 * 60 * 1000);
+
 
 // Helper to format seconds into mm:ss
 function formatTime(seconds) {

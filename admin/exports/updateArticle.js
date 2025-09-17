@@ -444,24 +444,28 @@ if (Array.isArray(articleData.blocks)) {
 
 
 
-
 export async function translatePageLanguage(siteId, data, targetLang) {
   console.log(`siteId: ${siteId} - data:`, data, "- targetLang:", targetLang);
 
   const translationRef = doc(db, "pages", siteId, "translations", targetLang);
 
-
-  ///console.log("translationRef ", translationRef);
-
   // Translate articleData
   const translatedData = await translateArticleData(data, targetLang);
+
+  // Check for MyMemory quota warning or invalid translation
+  const isQuotaExceeded = Object.values(translatedData).some(value => 
+    typeof value === "string" && value.includes("MYMEMORY WARNING")
+  );
+
+  if (isQuotaExceeded) {
+    console.warn(`⚠ Translation skipped for ${siteId} (${targetLang}) due to quota limit.`);
+   alert(`⚠ Translation skipped for ${siteId} (${targetLang}) due to quota limit.`);
+    return; // stop here, do not save to Firestore
+  }
+
+  // Generate slug
   let slug = slugify(translatedData.slug);
   translatedData.slug = slug;
-
-  //console.log("translatePageLanguage Page:", translatedData);
-             
-  
- // console.log(`????SET??????`);
 
   // Store translation under subcollection
   await setDoc(translationRef, {
@@ -469,19 +473,16 @@ export async function translatePageLanguage(siteId, data, targetLang) {
     updatedAt: serverTimestamp(),
     language: targetLang,
   });
-           //   console.log(`????UPDATE??????`);
 
-
-// Suppose siteId, targetLang, and slug are defined
-await updateDoc(doc(db, "pages", siteId), {
-  [`translatedLanguages.${targetLang}`]: true, // mark translated
-  [`translations.${targetLang}`]: { slug: slug } // store translated slug
-});
+  // Update parent doc with translatedLanguages and slug
+  await updateDoc(doc(db, "pages", siteId), {
+    [`translatedLanguages.${targetLang}`]: true, // mark translated
+    [`translations.${targetLang}`]: { slug: slug } // store translated slug
+  });
 
   // Update UI
   updatePage(translatedData, '', targetLang);
 }
-
 
 
 

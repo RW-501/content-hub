@@ -1064,6 +1064,7 @@ ${articleData.og.localeAlternate
 
 
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"><\/script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flag-icons/css/flag-icons.min.css">
 
 ${scriptTag}
 
@@ -1415,29 +1416,33 @@ hr {
     ? Object.entries(articleData.translations)
         .map(([lang, translation]) => {
           const slug = translation.slug || "";
-          const flags = {
-            en: "🇺🇸",
-            es: "🇪🇸",
-            zh: "🇨🇳",
-            hi: "🇮🇳",
-            ar: "🇸🇦",
-            fr: "🇫🇷",
-            de: "🇩🇪"
+          
+          // Map language codes to Flag Icons CSS codes
+          const flagIcons = {
+            en: "us",
+            es: "es",
+            zh: "cn",
+            hi: "in",
+            ar: "sa",
+            fr: "fr",
+            de: "de"
           };
-        
-          const flag = flags[lang] || "🏳️"; // fallback flag
-          return `<a href="https://contenthub.guru/page/${lang}/${slug}" 
-                     target="_blank" 
-                     class="lang-flag"
-                     style="margin:0 5px; text-decoration:none;"
-                     title="Read this article in ${lang.toUpperCase()}">
-                     <i class="lang-flag">${flag}</i> ${lang.toUpperCase()}
-                     <span class="sr-only">${lang.toUpperCase()}</span>
-                  </a>`;
+          const flagCode = flagIcons[lang] || "un"; // 'un' = UN flag as fallback
+
+          return `
+            <a href="https://contenthub.guru/page/${lang}/${slug}" 
+               target="_blank" 
+               class="lang-flag" 
+               style="margin:0 5px; text-decoration:none;" 
+               title="Read this article in ${lang.toUpperCase()}" 
+               aria-label="Read this article in ${lang.toUpperCase()}">
+               <i class="fi fi-${flagCode}"></i> ${lang.toUpperCase()}
+            </a>`;
         })
         .join(" | ")
     : `<span>More Coming Soon.</span>`}
 </p>
+
 
 
 

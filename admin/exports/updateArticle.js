@@ -93,7 +93,7 @@ export async function translateText(text, targetLang) {
   const translatedChunks = [];
 
   for (const [index, chunk] of chunks.entries()) {
-     // const chunk = "Hello world";
+      const chunk = "Hello world";
 
     console.log(`Translating chunk ${index + 1}:`, chunk);
 

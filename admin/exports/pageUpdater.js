@@ -1429,7 +1429,7 @@ hr {
                      class="lang-flag"
                      style="margin:0 5px; text-decoration:none;"
                      title="Read this article in ${lang.toUpperCase()}">
-                     ${flags[lang] || "🌐"}
+                     <i class="lang-flag">${flag}</i> ${lang.toUpperCase()}
                      <span class="sr-only">${lang.toUpperCase()}</span>
                   </a>`;
         })

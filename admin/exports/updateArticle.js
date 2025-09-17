@@ -447,8 +447,14 @@ export async function handleTranslateAndUpdate(siteId, targetLang) {
     language: targetLang,
   });
 
-  // Update UI with translated version
-  updatePage(translatedData);
+
+  // Mark as translated in parent doc
+  await updateDoc(doc(db, "pages", siteId), {
+    [`translatedLanguages.${targetLang}`]: true
+  });
+
+  // Update UI
+  updatePage(translatedData, '', targetLang);
 }
 
 

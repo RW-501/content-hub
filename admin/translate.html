@@ -287,6 +287,12 @@ safeBtn.addEventListener("click", async () => {
     const pageId = docSnap.id;
     const currentSlug = data.slug;
 
+    
+if (data.translatedLanguages?.[targetLang]) {
+  log(`⚡ Skipping ${data.slug}, already translated to ${targetLang.toUpperCase()}`);
+  continue;
+}
+
     try {
       const chunkStart = Date.now();
       statusDiv.innerHTML = `

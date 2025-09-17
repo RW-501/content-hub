@@ -97,7 +97,7 @@ function chunkText(text) {
  * Translate text in batches with fail-safe
  */
 export async function translateText(text, targetLang) {
-  console.log(`Starting translation: targetLang=${targetLang}, text length=${text.length}`);
+  //console.log(`Starting translation: targetLang=${targetLang}, text length=${text.length}`);
 
   const chunks = chunkText(text);
   const translatedChunks = [];
@@ -138,7 +138,7 @@ export async function translateText(text, targetLang) {
   }
 
   const finalText = translatedChunks.join(" ");
-  console.log("Final translated text:", finalText);
+ // console.log("Final translated text:", finalText);
   return finalText;
 }
 
@@ -349,6 +349,9 @@ translatedData.translations[targetLang] = {
 
   // 🔹 Structured blocks (headings, paragraphs, etc.)
   if (Array.isArray(articleData.blocks)) {
+
+    console.log("articleData.blocks:", articleData.blocks);
+
     translatedData.blocks = await Promise.all(
       articleData.blocks.map(async (block) => {
         const newBlock = { ...block };

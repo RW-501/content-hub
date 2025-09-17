@@ -1424,6 +1424,8 @@ hr {
             fr: "🇫🇷",
             de: "🇩🇪"
           };
+        
+          const flag = flags[lang] || "🏳️"; // fallback flag
           return `<a href="https://contenthub.guru/page/${lang}/${slug}" 
                      target="_blank" 
                      class="lang-flag"

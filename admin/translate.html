@@ -116,6 +116,14 @@
     transition: all 0.2s ease;
     text-align: center;
   }
+
+  .lang-btn.live {
+  background-color: #16a34a; /* green */
+  color: white;
+  border: none;
+}
+
+
 </style>
 </head>
 <body>
@@ -180,7 +188,9 @@ function log(msg) {
   logEl.scrollTop = logEl.scrollHeight; // 🔥 always scroll to bottom
 }
 
-  
+  // global lookup map
+const buttonIndex = {}; // { [pageId_lang]: HTMLElement }
+
   /* ---------------- Fetch and Render Pages ---------------- */
 async function loadPages() {
   const q = query(collection(db, "pages"));
@@ -194,59 +204,69 @@ async function loadPages() {
     const div = document.createElement("div");
     div.className = "page-card";
 
-    // Determine default URL (English or original)
+    // Default URL (English or original)
     const defaultUrl = `https://contenthub.guru/page/${data.slug}.html`;
 
-    // Create clickable title linking to default page
+    // Title link
     const titleLink = document.createElement("a");
     titleLink.href = defaultUrl;
     titleLink.textContent = data.title;
-    titleLink.target = "_blank"; // open in new tab
+    titleLink.target = "_blank";
     div.appendChild(titleLink);
 
-    // Show slug
+    // Slug info
     const slugP = document.createElement("p");
     slugP.textContent = `Slug: ${data.slug}`;
     div.appendChild(slugP);
 
     // Language buttons
-    targetLangs.forEach(lang => {
+    targetLangs.forEach(async lang => {
       const translated = data.translatedLanguages?.[lang] === true;
 
       const btn = document.createElement("button");
       btn.className = "lang-btn " + (translated ? "translated" : "not-translated");
       btn.textContent = lang.toUpperCase();
 
+ // Save button reference for later lookup
+  buttonIndex[`${pageId}_${lang}`] = btn;
+
+      // Translate on click
       btn.onclick = async () => {
         log(`🔄 Translating ${data.slug} → ${lang.toUpperCase()}`);
-              console.log(`pageId ${pageId} → ${lang.toUpperCase()} Slug:`, data.slug);
-      let waitMs =  await translatePageLanguage(pageId, data, lang);
-                   
-      if (waitMs && waitMs > 0) {
-      log(`⚠ Quota hit. Pausing for ${formatTime(waitMs / 1000)}...`);
-                   }else{
-      console.log(`Done ????????`);
-      log(`Done ????????`);
-                   }
+        let waitMs = await translatePageLanguage(pageId, data, lang);
 
-
-       // await loadPages();
+        if (waitMs && waitMs > 0) {
+          log(`⚠ Quota hit. Pausing for ${formatTime(waitMs / 1000)}...`);
+        } else {
+          log(`✅ Done translating ${data.slug} → ${lang.toUpperCase()}`);
+        }
       };
       div.appendChild(btn);
 
-
+      // If already translated, check if live
       if (translated && data.translations?.[lang]?.slug) {
+        const translatedUrl = `https://contenthub.guru/page/${lang}/${data.translations[lang].slug}.html`;
+
+        // 🔎 Check if page is live
+        try {
+          const res = await fetch(translatedUrl, { method: "HEAD" });
+          if (res.ok) {
+            btn.classList.add("live"); // ✅ add live class
+          }
+        } catch (err) {
+          console.warn(`⚠ Could not reach ${translatedUrl}`, err);
+        }
+
         // Link to translated page
         const translatedLink = document.createElement("a");
-
-        translatedLink.href = `https://contenthub.guru/page/${lang}/${data.translations[lang].slug}.html`;
+        translatedLink.href = translatedUrl;
         translatedLink.textContent = `Go to ${lang.toUpperCase()} version`;
         translatedLink.target = "_blank";
         translatedLink.style.display = "block";
         translatedLink.style.marginTop = "4px";
         div.appendChild(translatedLink);
 
-        // Optional: Reset translation
+        // Reset button
         const resetBtn = document.createElement("button");
         resetBtn.className = "reset-btn";
         resetBtn.textContent = "Reset";
@@ -265,6 +285,7 @@ async function loadPages() {
     pagesContainer.appendChild(div);
   });
 }
+
 
 
 const languagesSelect = ["es", "zh", "hi", "ar", "fr", "de"];
@@ -304,6 +325,8 @@ function status(msg) {
 const JOB_KEY = "safeTranslateJob"; // localStorage key
 
 async function safeTranslateWithDelay() {
+
+
 
 const languages = document.getElementById('selectLang').value;
 
@@ -371,6 +394,26 @@ log(`✅ translatePageLanguage returned in ${duration}s`);
 
           await new Promise(res => setTimeout(res, waitMs));
         } else {
+
+// After verifying translation + fetch
+const btnKey = `${pageId}_${targetLang}`;
+const btn = buttonIndex[btnKey];
+if (btn) {
+  const translatedUrl = `https://contenthub.guru/page/${targetLang}/${data.translations[targetLang].slug}.html`;
+  try {
+    const res = await fetch(translatedUrl, { method: "HEAD" });
+    if (res.ok) {
+      btn.classList.add("live"); // add green/live indicator
+      log(`🌍 Page is LIVE: ${translatedUrl}`);
+    } else {
+      log(`⚠ Page not live yet: ${translatedUrl}`);
+    }
+  } catch (err) {
+    log(`❌ Error pinging ${translatedUrl}: ${err.message}`);
+  }
+}
+
+       
           jobState.doneCount++;
           prevSlug = currentSlug;
 

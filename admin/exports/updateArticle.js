@@ -315,7 +315,7 @@ export async function translateArticleData(articleData, targetLang = "en") {
     translatedData.pageName = await translateText(articleData.pageName, targetLang);
   }
     if (articleData.slug) {
-    translatedData.slug = await translateText(articleData.slug, targetLang);
+    translatedData.slug = "/" + targetLang + await translateText(articleData.slug, targetLang);
   }
     if (articleData.category) {
     translatedData.category = await translateText(articleData.category, targetLang);
@@ -424,7 +424,7 @@ console.log("T. Page: ",translatedData);
   });
 
   // Update UI with translated version
-  updatePage(translatedData);
+  updatePage(translatedData,'' ,targetLang );
 }
 
 

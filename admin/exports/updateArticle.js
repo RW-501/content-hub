@@ -323,11 +323,12 @@ export async function translateArticleData(articleData, targetLang = "en") {
   }
 
     // 🔹 Update the translations object for the targetLang
-  translatedData.translations[targetLang] = {
-    slug: await translateText(articleData.slug, targetLang), // or translated slug if you handle that separately
-    lang: targetLang,
+translatedData.translations = translatedData.translations || {}; // ensure the object exists
+translatedData.translations[targetLang] = {
+  slug: await translateText(articleData.slug, targetLang), // translated slug
+  lang: targetLang, // store language code
+};
 
-  };
 
   // 🔹 Keywords
   if (Array.isArray(articleData.keywords)) {

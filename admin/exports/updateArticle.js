@@ -433,11 +433,8 @@ export async function handleTranslateAndUpdate(siteId, targetLang) {
   // Path: pages/{siteId}/translations/{targetLang}
   const translationRef = doc(pageRef, "translations", targetLang);
 
-  // Translate articleData (your existing logic)
-  const translatedData = await translateArticleData(
-    (await getDoc(pageRef)).data(),
-    targetLang
-  );
+  // Translate articleData
+  const translatedData = await translateArticleData(data, targetLang);
   translatedData.slug = slugify(translatedData.slug);
 
   // Store translation under subcollection

@@ -179,27 +179,59 @@
   const logEl = document.getElementById("log");
   function log(msg) { logEl.textContent += msg + "\n"; }
 
-  /* ---------------- Fetch and Render Pages ---------------- */
+/* ---------------- Translate Page ---------------- */
+async function translatePageLanguage(pageId, data, targetLang) {
+  // Translate the article
+  const translatedData = await translateArticleData(data, targetLang);
+
+  // Slugify for safe URLs
+  function slugify(text) {
+    return text
+      .toString()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "");
+  }
+
+  translatedData.slug = slugify(translatedData.slug || data.slug);
+
+  // Store translation in subcollection: pages/{pageId}/{lang}/content
+  const docRef = doc(db, "pages", pageId, targetLang, "content");
+  await setDoc(docRef, translatedData);
+
+  // Mark this language as translated in the parent doc
+  const parentRef = doc(db, "pages", pageId);
+  await updateDoc(parentRef, {
+    [`translatedLanguages.${targetLang}`]: true
+  });
+
+  log(`✅ Translated ${data.slug} → ${targetLang}`);
+}
+
+/* ---------------- Fetch and Render Pages ---------------- */
 async function loadPages() {
   const q = query(collection(db, "pages"));
   const snap = await getDocs(q);
   pagesContainer.innerHTML = "";
 
-  snap.forEach(docSnap => {
+  for (const docSnap of snap.docs) {
     const data = docSnap.data();
     const pageId = docSnap.id;
 
     const div = document.createElement("div");
     div.className = "page-card";
 
-    // Determine default URL (English or original)
+    // Default URL (English / base)
     const defaultUrl = `https://contenthub.guru/page/${data.slug}.html`;
 
-    // Create clickable title linking to default page
+    // Clickable title
     const titleLink = document.createElement("a");
     titleLink.href = defaultUrl;
     titleLink.textContent = data.title;
-    titleLink.target = "_blank"; // open in new tab
+    titleLink.target = "_blank";
     div.appendChild(titleLink);
 
     // Show slug
@@ -208,7 +240,7 @@ async function loadPages() {
     div.appendChild(slugP);
 
     // Language buttons
-    targetLangs.forEach(lang => {
+    for (const lang of targetLangs) {
       const translated = data.translatedLanguages?.[lang] === true;
 
       const btn = document.createElement("button");
@@ -217,43 +249,50 @@ async function loadPages() {
 
       btn.onclick = async () => {
         log(`🔄 Translating ${data.slug} → ${lang.toUpperCase()}`);
-              console.log(`pageId ${pageId} → ${lang.toUpperCase()} Slug:`, data.slug);
         await translatePageLanguage(pageId, data, lang);
         await loadPages();
       };
       div.appendChild(btn);
 
       if (translated) {
-        // Link to translated page
+        // Fetch translated slug from subcollection
+        const translatedDocRef = doc(db, "pages", pageId, lang, "content");
+        const translatedDocSnap = await getDoc(translatedDocRef);
+        const translatedData = translatedDocSnap.exists() ? translatedDocSnap.data() : data;
+
         const translatedLink = document.createElement("a");
-        translatedLink.href = `https://contenthub.guru/page/${lang}/${data.slug}.html`;
+        translatedLink.href = `https://contenthub.guru/page/${lang}/${translatedData.slug}.html`;
         translatedLink.textContent = `Go to ${lang.toUpperCase()} version`;
         translatedLink.target = "_blank";
         translatedLink.style.display = "block";
         translatedLink.style.marginTop = "4px";
         div.appendChild(translatedLink);
 
-        // Optional: Reset translation
+        // Reset button
         const resetBtn = document.createElement("button");
         resetBtn.className = "reset-btn";
         resetBtn.textContent = "Reset";
 
         resetBtn.onclick = async () => {
-          const filePath = `page/${lang}/${data.slug}.html`;
-          log(`♻ Resetting ${filePath} (${lang})`);
-          await resetTranslation(pageId, lang);
-          await removePage(pageId, filePath);
+          const translatedDocRef = doc(db, "pages", pageId, lang, "content");
+          await deleteDoc(translatedDocRef);
+
+          // Remove language marker in parent doc
+          const parentRef = doc(db, "pages", pageId);
+          await updateDoc(parentRef, {
+            [`translatedLanguages.${lang}`]: false
+          });
+
+          log(`♻ Reset translation ${data.slug} → ${lang}`);
           await loadPages();
         };
         div.appendChild(resetBtn);
       }
-    });
+    }
 
     pagesContainer.appendChild(div);
-  });
+  }
 }
-
-
 
   
 

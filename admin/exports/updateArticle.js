@@ -43,6 +43,16 @@ function getOgLocale(lang) {
   return localeMap[lang] || "en_US";
 }
 
+function slugify(text) {
+  return text
+    .toString()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "") // remove diacritics
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")     // non-alphanumeric → dash
+    .replace(/^-+|-+$/g, "");        // trim leading/trailing dash
+}
 
 
 const MAX_CHARS_PER_BATCH = 100; // safe limit for public LibreTranslate
@@ -315,7 +325,7 @@ export async function translateArticleData(articleData, targetLang = "en") {
     translatedData.pageName = await translateText(articleData.pageName, targetLang);
   }
     if (articleData.slug) {
-    translatedData.slug = await translateText(articleData.slug, targetLang);
+    translatedData.slug = await translateText(slugify(translatedData.slug), targetLang);
   //  translatedData.slug = "/" + targetLang + await translateText(articleData.slug, targetLang);
   }
     if (articleData.category) {
@@ -325,7 +335,7 @@ export async function translateArticleData(articleData, targetLang = "en") {
     // 🔹 Update the translations object for the targetLang
 translatedData.translations = translatedData.translations || {}; // ensure the object exists
 translatedData.translations[targetLang] = {
-  slug: await translateText(articleData.slug, targetLang), // translated slug
+  slug: await translateText(slugify(translatedData.slug), targetLang), // translated slug
   lang: targetLang, // store language code
 };
 
@@ -424,16 +434,6 @@ translatedData.translations[targetLang] = {
 
 
 
-function slugify(text) {
-  return text
-    .toString()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "") // remove diacritics
-    .toLowerCase()
-    .trim()
-    .replace(/[^a-z0-9]+/g, "-")     // non-alphanumeric → dash
-    .replace(/^-+|-+$/g, "");        // trim leading/trailing dash
-}
 
 
 
@@ -444,17 +444,17 @@ export async function translatePageLanguage(siteId, data, targetLang) {
   const translationRef = doc(db, "pages", siteId, "translations", targetLang);
 
 
-  console.log("translationRef ", translationRef);
+  ///console.log("translationRef ", translationRef);
 
   // Translate articleData
   const translatedData = await translateArticleData(data, targetLang);
   let slug = slugify(translatedData.slug);
   translatedData.slug = slug;
 
-  console.log("translatePageLanguage Page:", translatedData);
+  //console.log("translatePageLanguage Page:", translatedData);
              
   
-  console.log(`????SET??????`);
+ // console.log(`????SET??????`);
 
   // Store translation under subcollection
   await setDoc(translationRef, {
@@ -462,7 +462,7 @@ export async function translatePageLanguage(siteId, data, targetLang) {
     updatedAt: serverTimestamp(),
     language: targetLang,
   });
-              console.log(`????UPDATE??????`);
+           //   console.log(`????UPDATE??????`);
 
 
 // Suppose siteId, targetLang, and slug are defined

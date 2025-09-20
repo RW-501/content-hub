@@ -114,9 +114,9 @@ export async function translateText(text, targetLang) {
         body: JSON.stringify({ q: chunk, source: "en", target: targetLang })
       });
 
-   //   console.log(`Chunk ${index + 1} fetch completed:`, response);
-   //   console.log("Response headers:", [...response.headers.entries()]);
-   //   console.log("Response status:", response.status, response.statusText);
+      console.log(`Chunk ${index + 1} fetch completed:`, response);
+      console.log("Response headers:", [...response.headers.entries()]);
+      console.log("Response status:", response.status, response.statusText);
 
       const result = await response.json().catch(err => {
         console.error("Failed to parse JSON:", err);
@@ -126,7 +126,7 @@ export async function translateText(text, targetLang) {
     //  console.log(`Chunk ${index + 1} result:`, result);
 
       if (!result || !result.translatedText) {
-        alert(`⚠️ Translation failed on chunk ${index + 1}.`);
+         console.error(`⚠️ Translation failed on chunk ${index + 1}.`);
         return null;
       }
    //   console.log(result.translatedText); // "Hola mundo"

@@ -97,7 +97,7 @@ function chunkText(text) {
  * Translate text in batches with fail-safe
  */
 export async function translateText(text, targetLang) {
-  //console.log(`Starting translation: targetLang=${targetLang}, text length=${text.length}`);
+console.log(`Starting translation: targetLang=${targetLang}, text length=${text.length}`);
 
   const chunks = chunkText(text);
   const translatedChunks = [];
@@ -108,7 +108,7 @@ export async function translateText(text, targetLang) {
       
       //  const chunk = "Hello world";
 
-  //  console.log(`Translating chunk ${index + 1}:`, chunk);
+    console.log(`Translating chunk ${index + 1}:`, chunk);
 
     try {
       const response = await fetch("https://translateapi-1-mx67.onrender.com/translate/", {
@@ -157,7 +157,7 @@ export async function translateText(text, targetLang) {
       return null;
     }
   }
-  
+
   const finalText = translatedChunks.join(" ");
  // console.log("Final translated text:", finalText);
   return finalText;

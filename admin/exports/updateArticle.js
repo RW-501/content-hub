@@ -105,15 +105,17 @@ console.log(`Starting translation: targetLang=${targetLang}, text length=${text.
   const translatedChunks = [];
 
   for (const [index, chunk] of chunks.entries()) {
+
 let retries = 5; // up to 40 seconds
 let delay = 5000; // 3 seconds
+
     while (retries > 0) {
       
 
     console.log(`Translating chunk ${index + 1}:`, chunk);
 
     try {
-      const response = await fetch("https://translateapi-1-mx67.onrender.com/translate/", {
+      const response = await fetch("https://translateapi-1-mx67.onrender.com/translate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ q: chunk, source: "en", target: targetLang })

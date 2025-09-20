@@ -96,7 +96,7 @@ function chunkText(text) {
 /**
  * Translate text in batches with fail-safe
  */
-export async function translateText(text, targetLang) {
+export async function translateText(texts, targetLang) {
         const text = "Hello world";
 
 console.log(`Starting translation: targetLang=${targetLang}, text length=${text.length}`);

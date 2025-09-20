@@ -124,7 +124,7 @@ let delay = 5000; // 3 seconds
 
 
 
-      console.log(`Chunk ${index + 1} fetch completed:`, response);
+      console.log(`Chunk ${index + 1} fetch response:`, response);
       console.log("Response headers:", [...response.headers.entries()]);
       console.log("Response status:", response.status, response.statusText);
 

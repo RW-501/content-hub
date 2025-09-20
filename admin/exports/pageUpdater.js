@@ -435,6 +435,11 @@ function cleanHTML(inputHTML) {
         }
       }
 
+      if (node.tagName.toLowerCase() === 'svg') {
+        node.remove();
+        return;
+}
+
       // Recurse through child nodes
       node.childNodes.forEach(walk);
     }

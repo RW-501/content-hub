@@ -311,6 +311,11 @@ export async function translateArticleData(articleData, targetLang = "en") {
   const translatedData = { ...articleData }; // clone first
 let Slug =  await translateText(slugify(translatedData.slug));
 
+      if (!Slug) {
+        alert(`⚠️ Translation failed STOP.`);
+        return null;
+      }
+
   // 🔹 Main text fields
   if (articleData.title) {
     translatedData.title = await translateText(articleData.title, targetLang);

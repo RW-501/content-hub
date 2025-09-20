@@ -103,7 +103,10 @@ export async function translateText(text, targetLang) {
   const translatedChunks = [];
 
   for (const [index, chunk] of chunks.entries()) {
-    //  const chunk = "Hello world";
+    let retries = 5;
+    while (retries > 0) {
+      
+      //  const chunk = "Hello world";
 
   //  console.log(`Translating chunk ${index + 1}:`, chunk);
 
@@ -113,6 +116,15 @@ export async function translateText(text, targetLang) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ q: chunk, source: "en", target: targetLang })
       });
+
+        if (response.status === 202) {
+          // Model is being downloaded, wait and retry
+          console.log(`Chunk ${index + 1}: Model downloading, retrying...`);
+          await new Promise(r => setTimeout(r, 2000));
+          retries--;
+          continue;
+        }
+
 
       console.log(`Chunk ${index + 1} fetch completed:`, response);
       console.log("Response headers:", [...response.headers.entries()]);
@@ -131,14 +143,21 @@ export async function translateText(text, targetLang) {
       }
    //   console.log(result.translatedText); // "Hola mundo"
 
-      translatedChunks.push(result.translatedText);
-    } catch (err) {
+    translatedChunks.push(result.translatedText);
+        break; // success, exit retry loop
+      } catch (err) {
       console.error(`Error translating chunk ${index + 1}:`, err);
     alert(`⚠️STOP `);
 
     }
   }
 
+      if (retries === 0) {
+      console.error(`Chunk ${index + 1} failed after retries.`);
+      return null;
+    }
+  }
+  
   const finalText = translatedChunks.join(" ");
  // console.log("Final translated text:", finalText);
   return finalText;

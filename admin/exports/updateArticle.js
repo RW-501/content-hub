@@ -134,6 +134,8 @@ export async function translateText(text, targetLang) {
       translatedChunks.push(result.translatedText);
     } catch (err) {
       console.error(`Error translating chunk ${index + 1}:`, err);
+    alert(`⚠️STOP `);
+
     }
   }
 

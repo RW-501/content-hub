@@ -103,7 +103,8 @@ console.log(`Starting translation: targetLang=${targetLang}, text length=${text.
   const translatedChunks = [];
 
   for (const [index, chunk] of chunks.entries()) {
-    let retries = 5;
+let retries = 20; // up to 40 seconds
+let delay = 3000; // 3 seconds
     while (retries > 0) {
       
       //  const chunk = "Hello world";
@@ -117,13 +118,12 @@ console.log(`Starting translation: targetLang=${targetLang}, text length=${text.
         body: JSON.stringify({ q: chunk, source: "en", target: targetLang })
       });
 
-        if (response.status === 202) {
-          // Model is being downloaded, wait and retry
-          console.log(`Chunk ${index + 1}: Model downloading, retrying...`);
-          await new Promise(r => setTimeout(r, 2000));
-          retries--;
-          continue;
-        }
+    if (response.status === 202) {
+        console.log(`Model downloading, waiting ${delay/1000}s...`);
+        await new Promise(r => setTimeout(r, delay));
+        retries--;
+        continue;
+    }
 
 
       console.log(`Chunk ${index + 1} fetch completed:`, response);
@@ -328,7 +328,7 @@ await removePageFileOnly(`page/${targetLang}/${data.slug}.html`);
 
 export async function translateArticleData(articleData, targetLang = "en") {
   const translatedData = { ...articleData }; // clone first
-let Slug =  await translateText(slugify(translatedData.slug));
+let Slug =  await translateText(slugify(translatedData.slug), targetLang);
 
       if (!Slug) {
         alert(`⚠️ Translation failed STOP.`);

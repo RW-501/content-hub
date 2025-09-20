@@ -97,6 +97,8 @@ function chunkText(text) {
  * Translate text in batches with fail-safe
  */
 export async function translateText(text, targetLang) {
+        const text = "Hello world";
+
 console.log(`Starting translation: targetLang=${targetLang}, text length=${text.length}`);
 
   const chunks = chunkText(text);
@@ -107,7 +109,6 @@ let retries = 5; // up to 40 seconds
 let delay = 5000; // 3 seconds
     while (retries > 0) {
       
-      const chunk = "Hello world";
 
     console.log(`Translating chunk ${index + 1}:`, chunk);
 

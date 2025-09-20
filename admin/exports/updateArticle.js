@@ -103,11 +103,11 @@ console.log(`Starting translation: targetLang=${targetLang}, text length=${text.
   const translatedChunks = [];
 
   for (const [index, chunk] of chunks.entries()) {
-let retries = 20; // up to 40 seconds
-let delay = 3000; // 3 seconds
+let retries = 5; // up to 40 seconds
+let delay = 5000; // 3 seconds
     while (retries > 0) {
       
-      //  const chunk = "Hello world";
+      const chunk = "Hello world";
 
     console.log(`Translating chunk ${index + 1}:`, chunk);
 
@@ -118,17 +118,19 @@ let delay = 3000; // 3 seconds
         body: JSON.stringify({ q: chunk, source: "en", target: targetLang })
       });
 
+
+
+
+      console.log(`Chunk ${index + 1} fetch completed:`, response);
+      console.log("Response headers:", [...response.headers.entries()]);
+      console.log("Response status:", response.status, response.statusText);
+
     if (response.status === 202) {
         console.log(`Model downloading, waiting ${delay/1000}s...`);
         await new Promise(r => setTimeout(r, delay));
         retries--;
         continue;
     }
-
-
-      console.log(`Chunk ${index + 1} fetch completed:`, response);
-      console.log("Response headers:", [...response.headers.entries()]);
-      console.log("Response status:", response.status, response.statusText);
 
       const result = await response.json().catch(err => {
         console.error("Failed to parse JSON:", err);

@@ -387,6 +387,31 @@ const bulletStyles = {
 
 });
 
+function fixHeadingHierarchy() {
+  const container = document.getElementById("main-content");
+  if (!container) return;
+
+  const headings = container.querySelectorAll('h1, h2, h3, h4, h5, h6');
+  let lastLevel = 0;
+
+  headings.forEach(h => {
+    const level = parseInt(h.tagName[1]);
+    if (level <= lastLevel) {
+      // Increment heading level to maintain hierarchy
+      const newLevel = Math.min(lastLevel + 1, 6);
+      const newHeading = document.createElement(`h${newLevel}`);
+      newHeading.innerHTML = h.innerHTML;
+      // Copy all attributes
+      Array.from(h.attributes).forEach(attr => newHeading.setAttribute(attr.name, attr.value));
+      h.replaceWith(newHeading);
+      lastLevel = newLevel;
+    } else {
+      lastLevel = level;
+    }
+  });
+}
+
+
 function removeCompassIcons() {
   const container = document.getElementById("main-content");
   if (!container) return;
@@ -458,7 +483,7 @@ function pageLoaded(){
 
 
   removeCompassIcons();
-
+fixHeadingHierarchy();
 }
 
   // Optional: listen on the document as a fallback

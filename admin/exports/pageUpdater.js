@@ -23,7 +23,8 @@ function cleanVars() {
     "adCount",
     "videoCount",
     "imgCount",
-    "currentURL"
+    "currentURL",
+    "CompareTable_Bool"
   ];
 
   globalsToReset.forEach(name => {
@@ -40,6 +41,7 @@ function cleanVars() {
           break;
         case "FAQ_Bool":
         case "HowTo_Bool":
+        case "CompareTable_Bool":
           window[name] = false;
           break;
         case "includedHTML":
@@ -341,6 +343,7 @@ linkifyKeywordsFromJSON(articleHTML, 'internal-Links.json');   // unlimited
             
 let HowTo_Bool = false;
 let FAQ_Bool = false;
+let CompareTable_Bool = false;
 
 function generateHowToSchema(html) {
 //  console.log("html, ", html);
@@ -411,7 +414,6 @@ function generateHowToSchema(html) {
 
 
 
-
 function cleanHTML(inputHTML) {
   if (!inputHTML) return "";
 
@@ -421,8 +423,10 @@ function cleanHTML(inputHTML) {
 
   function walk(node) {
     if (node.nodeType === Node.ELEMENT_NODE) {
+      const tag = node.tagName.toLowerCase();
+
       // Convert ALL H1 to H2
-      if (node.tagName.toLowerCase() === 'h1') {
+      if (tag === 'h1') {
         const h2 = document.createElement('h2');
         h2.innerHTML = node.innerHTML;
         node.replaceWith(h2);
@@ -430,9 +434,25 @@ function cleanHTML(inputHTML) {
       }
 
       // Remove SVGs completely
-      if (node.tagName.toLowerCase() === 'svg') {
+      if (tag === 'svg') {
         node.remove();
         return;
+      }
+
+      // Flag tables
+      if (tag === 'table') {
+        CompareTable_Bool = true;
+      }
+
+      // Remove <a> tags that are not contenthub.guru
+      if (tag === 'a') {
+        const href = node.getAttribute('href') || "";
+        if (!href.includes("contenthub.guru")) {
+          // Replace the <a> with its text content
+          const textNode = document.createTextNode(node.textContent);
+          node.replaceWith(textNode);
+          return;
+        }
       }
 
       // Recurse through child nodes
@@ -525,10 +545,7 @@ cleanVars();
 let { adCount, videoCount, imgCount } = checkCounts(html);
 console.log("Ads:", adCount);       // 2
 
-/*
-console.log("Videos:", videoCount); // 1
-console.log("Images:", imgCount);   // 2
-*/
+
 if(adCount == 0){
 
 html = addAds(html);
@@ -607,7 +624,6 @@ function renderHowTo(html) {
   `);
 }
 
-
 function renderFAQs(html) {
   if (!html) return html;
 
@@ -617,7 +633,11 @@ function renderFAQs(html) {
 
   html = html.replace(faqRegex, (match, q, a) => {
     hasFAQ = true;
-    return `<details class="faq-item"><summary>${q}</summary><div class="faq-answer">${a}</div></details>`;
+
+    // Remove all tags except <script>
+    const answer = a.replace(/<(?!\/?script\b)[^>]+>/gi, "").trim();
+
+    return `<details class="faq-item"><summary>${q}</summary><div class="faq-answer">${answer}</div></details>`;
   });
 
   FAQ_Bool = hasFAQ;
@@ -891,6 +911,15 @@ if (Array.isArray(articleData.suggested)) {
   });
 }
 
+// Ensure ISO 8601 format before inserting into meta/JSON-LD
+const publishedISO = articleData.publishedAt instanceof Date
+  ? articleData.publishedAt.toISOString()
+  : new Date(articleData.publishedAt?.seconds * 1000 || Date.now()).toISOString();
+
+const modifiedISO = articleData.updatedAt instanceof Date
+  ? articleData.updatedAt.toISOString()
+  : new Date(articleData.updatedAt?.seconds * 1000 || Date.now()).toISOString();
+
 
 
 
@@ -906,11 +935,13 @@ const Content = `
 <meta name="version" content="${version}">
 <meta name="faq" content="${FAQ_Bool ? 'true' : 'false'}">
 <meta name="howTo" content="${HowTo_Bool ? 'true' : 'false'}">
+<meta name="compareTable" content="${CompareTable_Bool ? 'true' : 'false'}">
+
 <meta name="category" content="${formatCategory(articleData.category)}">
 <meta name="lang" content="${articleData.language || "en"}">
+
 <meta name="adCount" content="${adCount}">
 <meta name="linkCount" content="${linkCount}">
-
 <meta name="imageCount" content="${imgCount}">
 <meta name="videoCount" content="${videoCount}">
 <meta name="pageType" content="Article">
@@ -937,7 +968,6 @@ const Content = `
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
 <meta name="revisit-after" content="1 days">
 <meta name="rating" content="general">
-<meta name="theme-color" content="#1a1a1a">
 <meta name="author" content="ContentHub.guru">
 <meta name="readtime" content="PT${readTime}M"> <!-- ISO 8601 duration for structured data -->
 <meta name="docsearch:read_time" content="${readTime} min"> <!-- optional for advanced SEO tools -->
@@ -977,10 +1007,6 @@ ${articleData.og.localeAlternate
 }
 
 
-
-<meta property="article:published_time" content="${articleData.publishedAt || new Date().toISOString()}">
-<meta property="article:modified_time" content="${articleData.updatedAt || new Date().toISOString()}">
-<meta property="article:section" content="${formatCategory(articleData.category)}">
 <meta property="article:tag" content="${articleData.keywords?.join(', ') || ''}">
 <meta property="og:readtime" content="${readTime} Min">
 <meta property="article:author" content="https://contenthub.guru">
@@ -1001,8 +1027,8 @@ ${articleData.og.localeAlternate
   <meta name="twitter:creator" content="@Contenthub_Guru">
 
   <!-- Additional Article Schema/SEO Hints -->
-<meta property="article:published_time" content="${new Date().toISOString()}">
-<meta property="article:modified_time" content="${articleData.updatedAt || new Date().toISOString()}">
+<meta property="article:published_time" content="${publishedISO}">
+<meta property="article:modified_time" content="${modifiedISO}">
 <meta property="article:section" content="${formatCategory(articleData.category)}">
 <meta property="article:tag" content="${articleData.keywords?.join(', ') || ''}">
 
@@ -1041,8 +1067,8 @@ ${articleData.og.localeAlternate
       "url": "${articleData.image}"
     }
   },
-  "datePublished":  "${articleData.updatedAt}",
-  "dateModified": "${articleData.updatedAt}",
+  "datePublished":  "${publishedISO}",
+  "dateModified": "${modifiedISO}",
   "mainEntityOfPage": {
     "@type": "WebPage",
     "@id": "https://contenthub.guru/page/${articleData.slug}"
@@ -1088,9 +1114,11 @@ ${articleData.og.localeAlternate
   gtag('config', '${articleData.gTag}');
 <\/script>
 
-
-<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"><\/script>
+<!-- CSS: flag icons -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flag-icons/css/flag-icons.min.css">
+
+<!-- JS: confetti, deferred -->
+<script defer src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
 ${scriptTag}
 
@@ -1162,6 +1190,7 @@ main {
   background-color: ${articleData.styles.ctaHover || "#3730a3"};
   transform: translateY(-1px);
 }
+
 
  button {
   background-color: ${articleData.styles.btnBg || "#22c55e"};
@@ -1253,26 +1282,27 @@ hr {
 <!-- Share Section -->
 <div class="share-section">
   <div class="share-buttons">
-    <a class="facebook" href="https://www.facebook.com/sharer/sharer.php?u=${pageURL}" target="_blank" title="Share on Facebook">
-      <i class="fab fa-facebook"></i>
+    <a class="facebook" href="https://www.facebook.com/sharer/sharer.php?u=${pageURL}" target="_blank" aria-label="Share on Facebook">
+      <i class="fab fa-facebook" aria-hidden="true"></i>
     </a>
-    <a class="twitter" href="https://twitter.com/intent/tweet?text=${encodedPageTitle}&url=${pageURL}" target="_blank" title="Share on Twitter">
-      <i class="fab fa-twitter"></i>
+    <a class="twitter" href="https://twitter.com/intent/tweet?text=${encodedPageTitle}&url=${pageURL}" target="_blank" aria-label="Share on Twitter">
+      <i class="fab fa-twitter" aria-hidden="true"></i>
     </a>
-    <a class="linkedin" href="https://www.linkedin.com/shareArticle?mini=true&url=${pageURL}" target="_blank" title="Share on LinkedIn">
-      <i class="fab fa-linkedin"></i>
+    <a class="linkedin" href="https://www.linkedin.com/shareArticle?mini=true&url=${pageURL}" target="_blank" aria-label="Share on LinkedIn">
+      <i class="fab fa-linkedin" aria-hidden="true"></i>
     </a>
-    <a class="whatsapp" href="https://wa.me/?text=${encodedPageTitle}%20${pageURL}" target="_blank" title="Share on WhatsApp">
-      <i class="fab fa-whatsapp"></i>
+    <a class="whatsapp" href="https://wa.me/?text=${encodedPageTitle}%20${pageURL}" target="_blank" aria-label="Share on WhatsApp">
+      <i class="fab fa-whatsapp" aria-hidden="true"></i>
     </a>
-    <button id="deviceShareButton" class="device-share" title="Share using your device">
-      <i class="fas fa-share-alt"></i> 
+    <button id="deviceShareButton" class="device-share" aria-label="Share using your device">
+      <i class="fas fa-share-alt" aria-hidden="true"></i>
     </button>
-    <button id="copyLinkButton" class="copy-link" title="Copy Link">
-      <i class="fas fa-link"></i>
+    <button id="copyLinkButton" class="copy-link" aria-label="Copy Link">
+      <i class="fas fa-link" aria-hidden="true"></i>
     </button>
   </div>
 </div>
+
 
 
     <!-- Hero / Featured image -->

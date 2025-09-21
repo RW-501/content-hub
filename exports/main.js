@@ -393,9 +393,9 @@ const bulletStyles = {
 
 
  function fixHeadingHierarchy() {
-  const container = document.getElementById("main-content");
+  const container = document.getElementById("in-article-blocks");
   if (!container) {
-    debugLog("fixHeadingHierarchy: #main-content not found");
+    debugLog("fixHeadingHierarchy: #in-article-blocks not found");
     return;
   }
 

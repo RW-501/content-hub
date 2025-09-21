@@ -397,7 +397,17 @@ function removeCompassIcons() {
 
 
 
+  document.getElementById("toc-toggle").addEventListener("click", function () {
+  const list = document.getElementById("toc-list");
+  const expanded = this.getAttribute("aria-expanded") === "true";
 
+  // Toggle visibility
+  list.hidden = expanded;
+  this.setAttribute("aria-expanded", String(!expanded));
+
+  // Update button text
+  this.textContent = expanded ? "Show" : "Hide";
+});
 
 
 function pageLoaded(){
@@ -427,17 +437,7 @@ function pageLoaded(){
   });
 
   
-  document.getElementById("toc-toggle").addEventListener("click", function () {
-  const list = document.getElementById("toc-list");
-  const expanded = this.getAttribute("aria-expanded") === "true";
 
-  // Toggle visibility
-  list.hidden = expanded;
-  this.setAttribute("aria-expanded", String(!expanded));
-
-  // Update button text
-  this.textContent = expanded ? "Show" : "Hide";
-});
 
   document.querySelectorAll(".faq-item summary").forEach(summary => {
     summary.addEventListener("click", function() {

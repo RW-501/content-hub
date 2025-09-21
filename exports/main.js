@@ -464,6 +464,10 @@ function pageLoaded(){
   
 const toggleBtn = document.getElementById("toc-toggle");
   const list = document.getElementById("toc-list");
+
+  console.log(`list: ${list}`);
+  console.log(`toggleBtn: ${toggleBtn}`);
+
   if (!toggleBtn || !list) return;
 
   toggleBtn.addEventListener("click", function () {

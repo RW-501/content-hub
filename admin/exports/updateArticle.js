@@ -116,9 +116,11 @@ export async function translateText(text, targetLang) {
   const chunks = chunkText(text);
   const translatedChunks = [];
 
-  for (const [index, chunk] of chunks.entries()) {
-    console.log(`\nTranslating chunk ${index + 1}/${chunks.length}`);
-    console.log(`Chunk text:`, chunk);
+for (const [index, chunk] of chunks.entries()) {
+  const chunkStart = new Date(); // <-- add this
+  console.log(`\nTranslating chunk ${index + 1}/${chunks.length}`);
+  console.log(`Chunk start time: ${chunkStart.toISOString()}`);
+  console.log(`Chunk text:`, chunk);
 
     try {
       const response = await fetch("https://translateapi-1-mx67.onrender.com/translate", {
@@ -148,7 +150,6 @@ export async function translateText(text, targetLang) {
         return null;
       }
 
-      console.log(`Chunk ${index + 1} translated text:`, result.translatedText);
       translatedChunks.push(result.translatedText);
 
             const chunkEnd = new Date();

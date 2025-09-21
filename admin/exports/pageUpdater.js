@@ -419,26 +419,21 @@ function cleanHTML(inputHTML) {
   const container = document.createElement('div');
   container.innerHTML = inputHTML;
 
-  let firstH1Found = false;
-
   function walk(node) {
     if (node.nodeType === Node.ELEMENT_NODE) {
-      // Convert H1 to H2 if not the first
-      if (node.tagName === 'H1' || node.tagName === 'h1') {
-        if (!firstH1Found) {
-          firstH1Found = true; // keep the first H1
-        } else {
-          const h2 = document.createElement('h2');
-          h2.innerHTML = node.innerHTML;
-          node.replaceWith(h2);
-          node = h2; // continue walking the new node
-        }
+      // Convert ALL H1 to H2
+      if (node.tagName.toLowerCase() === 'h1') {
+        const h2 = document.createElement('h2');
+        h2.innerHTML = node.innerHTML;
+        node.replaceWith(h2);
+        node = h2; // continue walking the new node
       }
 
+      // Remove SVGs completely
       if (node.tagName.toLowerCase() === 'svg') {
         node.remove();
         return;
-}
+      }
 
       // Recurse through child nodes
       node.childNodes.forEach(walk);
@@ -449,6 +444,7 @@ function cleanHTML(inputHTML) {
 
   return container.innerHTML;
 }
+
 
 let adCount = 0, videoCount = 0, imgCount = 0;
 

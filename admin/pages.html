@@ -596,15 +596,21 @@ document.getElementById("filterVideos").addEventListener("change", refreshDashbo
 // Separate function to render HTML table
 function renderDashboard(pages) {
   const dashboardContent = document.getElementById("dashboardContent");
-  let html = `<table>
+
+  let html = `
+    <div class="dashboard-header">
+      <button id="totalLinksBtn">Get Total Links</button>
+      <span id="totalLinksDisplay">Total Links: 0</span>
+    </div>
+    <table>
     <thead>
       <tr>
         <th>Preview</th>
         <th class="sortable" data-field="title">Domain</th>
         <th class="sortable" data-field="category">Category</th>
-        <th  class="sortable" data-field="status">Status</th>
+        <th class="sortable" data-field="status">Status</th>
         <th class="sortable" data-field="views">Views</th>
-        <th  class="sortable" data-field="date">Actions</th>
+        <th class="sortable" data-field="date">Actions</th>
       </tr>
     </thead>
     <tbody>`;
@@ -612,6 +618,7 @@ function renderDashboard(pages) {
   for (const p of pages) {
     const pageUrl = `https://contenthub.guru/page/${p.slug}`;
     const shareText = encodeURIComponent(`Check out this page: ${p.title || ''}`);
+
     html += `<tr>
       <td><a href="${pageUrl}" target="_blank">
         <img class='siteImage' src="${p.image || 'https://contenthub.guru/images/placeholder.png'}" 
@@ -623,30 +630,30 @@ function renderDashboard(pages) {
         <div id="faq-${p.id}" class="faq_status">FAQ</div>
         <div id="howTo-${p.id}" class="howTo_status">howTo</div>
 
-
-<!-- Live status counters -->
-<div class="content-counts" aria-label="Content counts on this page">
-  <div class="count-item">
-    <span class="count-label">Links:</span>
-    <span id="linkCount-${p.id}" class="count-value">${p.linkCount || 0}</span>
-  </div>
-  <div class="count-item">
-    <span class="count-label">Ads:</span>
-    <span id="adCount-${p.id}" class="count-value">${p.adCount || 0}</span>
-  </div>
-  <div class="count-item">
-    <span class="count-label">Images:</span>
-    <span id="imgCount-${p.id}" class="count-value">${p.imgCount || 0}</span>
-  </div>
-  <div class="count-item">
-    <span class="count-label">Videos:</span>
-    <span id="videoCount-${p.id}" class="count-value">${p.videoCount || 0}</span>
-  </div>
-</div>
+        <!-- Live status counters -->
+        <div class="content-counts" aria-label="Content counts on this page">
+          <div class="count-item">
+            <span class="count-label">Links:</span>
+            <span id="linkCount-${p.id}" class="count-value">${p.linkCount || 0}</span>
+          </div>
+          <div class="count-item">
+            <span class="count-label">Ads:</span>
+            <span id="adCount-${p.id}" class="count-value">${p.adCount || 0}</span>
+          </div>
+          <div class="count-item">
+            <span class="count-label">Images:</span>
+            <span id="imgCount-${p.id}" class="count-value">${p.imgCount || 0}</span>
+          </div>
+          <div class="count-item">
+            <span class="count-label">Videos:</span>
+            <span id="videoCount-${p.id}" class="count-value">${p.videoCount || 0}</span>
+          </div>
+        </div>
       </td>
       <td><div id="status-${p.id}" class="status-offline">❌ Offline</div>
         <hr>
-      <div id="version-${p.id}" class="version">version</div></td>
+        <div id="version-${p.id}" class="version">version</div>
+      </td>
       <td><div class="sortable" data-field="views">${p.views || 0}</div></td>
       <td>
         <div class="sortable" data-field="date" class="action-buttons">
@@ -654,46 +661,29 @@ function renderDashboard(pages) {
           <button onclick="window.open('https://contenthub.guru/admin/editor?id=${p.id}', '_blank')">Edit</button>
           <button class="remove-btn" onclick="removePage('${p.id}','${p.slug}')">Remove</button>
         </div>
-   <div class="share-buttons" role="group" aria-label="Share this page">
-  <button 
-    onclick="shareOnTwitter('${pageUrl}', '${shareText}')" 
-    aria-label="Share on Twitter" 
-    data-platform="twitter">
-    🐦
-  </button>
-
-  <button 
-    onclick="shareOnLinkedIn('${pageUrl}', '${shareText}')" 
-    aria-label="Share on LinkedIn" 
-    data-platform="linkedin">
-    💼
-  </button>
-
-  <button 
-    onclick="shareOnFacebook('${pageUrl}')" 
-    aria-label="Share on Facebook" 
-    data-platform="facebook">
-    📘
-  </button>
-
-  <button 
-    onclick="shareOnAll('${pageUrl}', '${shareText}')" 
-    aria-label="Share on multiple platforms" 
-    data-platform="all">
-    🌍
-  </button>
-</div>
-
+        <div class="share-buttons" role="group" aria-label="Share this page">
+          <button onclick="shareOnTwitter('${pageUrl}', '${shareText}')" aria-label="Share on Twitter" data-platform="twitter">🐦</button>
+          <button onclick="shareOnLinkedIn('${pageUrl}', '${shareText}')" aria-label="Share on LinkedIn" data-platform="linkedin">💼</button>
+          <button onclick="shareOnFacebook('${pageUrl}')" aria-label="Share on Facebook" data-platform="facebook">📘</button>
+          <button onclick="shareOnAll('${pageUrl}', '${shareText}')" aria-label="Share on multiple platforms" data-platform="all">🌍</button>
+        </div>
       </td>
     </tr>`;
   }
 
   html += "</tbody></table>";
   dashboardContent.innerHTML = html;
+
   console.log("✅ Dashboard rendered with rows:", pages.length);
 
-  
+  // Attach total link counter
+  const totalBtn = document.getElementById("totalLinksBtn");
+  totalBtn.addEventListener("click", () => {
+    const totalLinks = pages.reduce((sum, p) => sum + (p.linkCount || 0), 0);
+    document.getElementById("totalLinksDisplay").textContent = `Total Links: ${totalLinks}`;
+  });
 }
+
 
 
 function shareOnAll(url, text) {

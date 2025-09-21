@@ -1319,7 +1319,7 @@
       "keyword research tools",
       "SEO tips for bloggers",
       "blog SEO strategy",
-      "contenthub guru SEO"
+      "SEO"
     ],
     "category": "writing_blogging",
     "description": "Discover the best SEO tools for bloggers on a budget. From free keyword research platforms to affordable analytics, this guide from contenthub.guru shows you how to grow your blog without draining your savings.",
@@ -2264,7 +2264,8 @@
       "cluster content examples",
       "content marketing SEO",
       "SEO beginner guide",
-      "topic cluster tutorial"
+      "topic cluster tutorial",
+      "SEO"
     ],
     "category": "advanced_strategy",
     "description": "Learn how to structure your website content with topic clusters to dominate SEO, improve internal linking, and satisfy both Google and your audience. This step-by-step guide from ContentHub.Guru shows you exactly how to plan, create, and interlink content for maximum impact.",
@@ -2537,7 +2538,7 @@
       "content SEO best practices",
       "search engine myths",
       "bad SEO advice",
-      "ContentHub Guru SEO tips"
+      "SEO"
     ],
     "category": "seo_organic",
     "description": "Think keyword stuffing boosts rankings? Or that SEO is all about backlinks? Wrong. Discover the most dangerous SEO myths that could be hurting your content—and learn what really works in 2025.",
@@ -2557,7 +2558,7 @@
       "SEO for beginners",
       "Ahrefs vs SEMrush",
       "Google Search Console",
-      "contenthub.guru SEO"
+      "SEO"
     ],
     "category": "seo_organic",
     "description": "Discover the best free and paid SEO tools in 2025 with ContentHub.guru. From keyword research to site audits, this guide reviews top tools like SEMrush, Ahrefs, Google Search Console, and more—so you can outsmart competitors and win search traffic.",
@@ -2593,9 +2594,9 @@
       "beginner SEO guide",
       "how to optimize website for SEO",
       "on-page SEO best practices",
-      "contenthub.guru SEO tips",
       "SEO for beginners",
-      "technical SEO vs on-page SEO"
+      "technical SEO vs on-page SEO",
+      "SEO"
     ],
     "category": "seo_organic",
     "description": "Discover ContentHub.guru’s ultimate On-Page SEO Checklist. Learn how to optimize titles, meta descriptions, headers, images, links, and more to rank higher on Google—without boring tech talk.",
@@ -4811,7 +4812,8 @@
       "passport delays",
       "expedited passport",
       "international travel documents",
-      "passport photo tips"
+      "passport photo tips",
+      "passport"
     ],
     "category": "travel",
     "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1757907989809-istockphoto-486884556-612x612.jpg?alt=media&token=40d437b6-2300-4d5a-9b85-6c3b4666605f",
@@ -4828,7 +4830,8 @@
       "travel tips",
       "airport security",
       "frequent flyer hacks",
-      "Global Entry interview"
+      "Global Entry interview",
+      "Global Entry"
     ],
     "category": "travel",
     "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1757907776644-images%20(30).jpg?alt=media&token=659f670f-5ac8-44f8-9a7b-915882c2ace9",
@@ -4914,7 +4917,10 @@
       "public transport travel",
       "tourism tips",
       "urban exploration",
-      "sightseeing bus"
+      "sightseeing bus",
+      "Hop-On, Hop-Off Bus",
+      "hop-off bus",
+      "Hop On hop off bus"
     ],
     "category": "travel",
     "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1757906897961-pexels-shambadatta-32951977.jpg?alt=media&token=588b7357-42bf-4bdc-8b32-7c59ffbf6d94",
@@ -4930,7 +4936,8 @@
       "Fire Stick abroad",
       "streaming while traveling",
       "Fire Stick setup guide",
-      "traveling with Fire Stick"
+      "traveling with Fire Stick",
+      "Fire Stick"
     ],
     "category": "travel",
     "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1757906730492-Amazon-Fire-TV-Stick-with-TV-in-background.jpg?alt=media&token=67e4d855-71d8-4bb2-b16e-d40b4e4a1491",
@@ -4982,7 +4989,10 @@
       "solo adventures",
       "travel safety",
       "cultural experiences",
-      "wanderlust"
+      "wanderlust",
+      "solo travel",
+      "Solo Traveler",
+      "Solo"
     ],
     "category": "travel",
     "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1757906215866-pexels-bruno-braghini-3095724-4935595.jpg?alt=media&token=7386a72f-c26f-4e3b-a5c2-9e48520b05ca",
@@ -5017,7 +5027,9 @@
       "CPAP airline rules",
       "Bi-PAP travel hacks",
       "sleep apnea gadgets",
-      "CPAP travel bag"
+      "CPAP travel bag",
+      "CPAP",
+      "Bi-PAP"
     ],
     "category": "travel",
     "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1757905981562-istockphoto-1351786573-612x612.jpg?alt=media&token=e23b8e06-a70f-4fbb-a60f-41d49b831ff8",
@@ -5050,7 +5062,8 @@
       "protein powder travel",
       "supplement packing guide",
       "fitness travel tips",
-      "health travel hacks"
+      "health travel hacks",
+      "supplement"
     ],
     "category": "travel",
     "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1757905612533-istockphoto-1379313788-612x612.jpg?alt=media&token=95b988cb-365f-437d-bb46-e8bb4357322b",
@@ -5080,7 +5093,8 @@
       "professional travel cameras",
       "travel content creation",
       "best cameras for vlogging",
-      "travel photography gear"
+      "travel photography gear",
+      "cameras"
     ],
     "category": "travel",
     "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1757904592665-best-travel-cameras-20230901-medium.jpg?alt=media&token=d9525379-b2a7-4f82-b8dc-a7ac820ab489",
@@ -5285,7 +5299,8 @@
       "travel influencer advice",
       "travel content strategy",
       "beginner travel creators",
-      "budget travel tips"
+      "budget travel tips",
+      "New Travel"
     ],
     "category": "travel",
     "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1757899902423-pexels-freestockpro-1008155.jpg?alt=media&token=6c2a2eb9-2282-437f-aba1-6eb2d9c26b35",
@@ -5415,7 +5430,8 @@
       "Southeast Asia backpacking",
       "cheap travel destinations Asia",
       "travel tips Asia 2025",
-      "affordable Asia travel"
+      "affordable Asia travel",
+      "Asia"
     ],
     "category": "travel",
     "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1757897978680-pexels-anciaes-33899285.jpg?alt=media&token=0d323e9c-6c8b-4311-b62b-290047583341",
@@ -5435,7 +5451,8 @@
       "Victoria Falls travel",
       "Serengeti National Park",
       "Pyramids of Giza",
-      "African culture travel"
+      "African culture travel",
+      "Africa"
     ],
     "category": "travel",
     "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1757896832562-pexels-marri-shyam-366418-33866837.jpg?alt=media&token=6f6b0e19-9dc8-46ca-b459-f2d75dbfff14",
@@ -5450,7 +5467,8 @@
       "budget travel South America",
       "backpacking South America",
       "South America destinations",
-      "affordable travel South America"
+      "affordable travel South America",
+      "South America"
     ],
     "category": "travel",
     "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1757896639713-Brazil-Rio-de-Janeiro.jpg?alt=media&token=de0904a4-b093-4124-9241-53f04350561c",
@@ -5467,7 +5485,9 @@
       "Sydney",
       "Melbourne",
       "Australian culture",
-      "travel hacks"
+      "travel hacks",
+      "Australian",
+      "Australia"
     ],
     "category": "travel",
     "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1757896493242-pexels-catarina-sousa-9147-68704.jpg?alt=media&token=756efe81-7406-4f44-ad37-9f7fe7fccc8c",
@@ -5482,7 +5502,8 @@
       "budget travel to Antarctica",
       "Antarctica cruise",
       "Antarctica travel tips",
-      "how to visit Antarctica"
+      "how to visit Antarctica",
+      "Antarctica"
     ],
     "category": "travel",
     "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1757896303392-pexels-lara-jameson-8828641.jpg?alt=media&token=44293916-715e-47d0-93e7-5640a05d17cd",
@@ -5499,7 +5520,10 @@
       "Mexico travel guide",
       "budget travel North America",
       "North America destinations",
-      "cultural travel North America"
+      "cultural travel North America",
+      "North America",
+      "united states",
+      "USA"
     ],
     "category": "travel",
     "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1757896001399-pexels-pixabay-290386.jpg?alt=media&token=4793a51d-ce2a-4285-8bb9-02291be30c40",
@@ -5532,7 +5556,8 @@
       "budget travel",
       "cultural travel",
       "travel hacks",
-      "smart packing"
+      "smart packing",
+      "Traveling Checklist"
     ],
     "category": "travel",
     "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1757895049436-pexels-timur-weber-9186183.jpg?alt=media&token=b9c13e88-b68d-474e-8114-2af3ff1bb95e",
@@ -5546,7 +5571,8 @@
       "travel in America",
       "overseas travel",
       "budget travel tips",
-      "cultural experiences"
+      "cultural experiences",
+      "Overseas"
     ],
     "category": "travel",
     "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1757894886099-pexels-element5-1051075.jpg?alt=media&token=a3444ef9-8962-43f6-b3a7-5f50fa9874a6",
@@ -6558,7 +6584,8 @@
       "NYC tips",
       "NYC neighborhoods",
       "NYC food",
-      "NYC travel guide"
+      "NYC travel guide",
+      "NYC"
     ],
     "category": "places",
     "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1758406080637-view-on-manhattan-at-night-new-york-city_header-141511.jpeg?alt=media&token=45560df4-ee4f-4140-b28f-559026f2bb86",
@@ -6574,7 +6601,8 @@
       "hidden gems LA",
       "LA tips",
       "things to do in LA",
-      "Los Angeles history"
+      "Los Angeles history",
+      "LA"
     ],
     "category": "places",
     "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1758405989441-living-in-los-angeles.jpg.webp?alt=media&token=866d7b5d-3751-4b5a-98ea-a544fb825891",
@@ -6588,7 +6616,8 @@
       "Chicago culture",
       "Windy City guide",
       "Chicago food",
-      "Chicago hidden gems"
+      "Chicago hidden gems",
+      "Chicago"
     ],
     "category": "places",
     "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1758405889345-general-contact-1800x900.jpg?alt=media&token=9a5a7f63-a279-4871-a3f5-728d53a889d1",
@@ -6604,7 +6633,9 @@
       "Dallas history",
       "Dallas food",
       "Dallas tourism",
-      "Dallas travel guide"
+      "Dallas travel guide",
+      "Dallas",
+      "DFW"
     ],
     "category": "general",
     "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1758405773532-d9ac6aeb-b924-4b15-b57b-a5a8eef63c83.webp?alt=media&token=4ca1f6d6-5253-43a4-96eb-dcf13f6f658e",
@@ -6619,7 +6650,9 @@
       "Fort Worth culture",
       "Texas hidden gems",
       "Fort Worth food",
-      "Fort Worth attractions"
+      "Fort Worth attractions",
+      "Fort Worth",
+      "DFW"
     ],
     "category": "places",
     "image": "https://contenthub.guru/images/placeholder.png",
@@ -6635,7 +6668,8 @@
       "Austin tech hub",
       "things to do in Austin",
       "Austin food",
-      "Austin lifestyle"
+      "Austin lifestyle",
+      "Austin"
     ],
     "category": "places",
     "image": "https://firebasestorage.googleapis.com/v0/b/contentmanagement-8af61.firebasestorage.app/o/page-images%2F1758405575849-images%20(41).jpg?alt=media&token=5e7c9fec-0648-463c-937a-0b6e3067a3f4",

@@ -159,7 +159,7 @@
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
-  import { getFirestore, getDocs, query, collection } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+  import { getFirestore, getDocs, query, collection, doc, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
   import { getAuth } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
 
   import { translatePageLanguage, resetTranslation, removePage } from "https://contenthub.guru/admin/exports/updateArticle.js";
@@ -511,6 +511,40 @@ function formatTime(seconds) {
 
   /* ---------------- Start ---------------- */
   loadPages();
+
+
+async function renameTranslationDocs() {
+  const parentCollection = collection(db, "artipagescles"); // <-- top-level collection
+  const parentSnapshots = await getDocs(parentCollection);
+
+  for (const parentDoc of parentSnapshots.docs) {
+    console.log(`Checking article: ${parentDoc.id}`);
+
+    // point to the "translations" subcollection
+    const translationsCol = collection(db, "pages", parentDoc.id, "translations");
+    const translationsSnap = await getDocs(translationsCol);
+
+    for (const subDoc of translationsSnap.docs) {
+      if (subDoc.id === "f") {
+        const data = subDoc.data();
+
+        // create new doc with "fr"
+        const newDocRef = doc(db, "articpagesles", parentDoc.id, "translations", "fr");
+        await setDoc(newDocRef, data);
+
+        // delete old doc
+        await deleteDoc(subDoc.ref);
+
+        console.log(`Renamed doc from f ➝ fr in ${parentDoc.id}/translations`);
+      }
+    }
+  }
+
+  console.log("All done ✅");
+}
+
+renameTranslationDocs().catch(console.error);
+
 </script>
 </body>
 </html>

@@ -676,14 +676,41 @@ function renderDashboard(pages) {
 
   console.log("✅ Dashboard rendered with rows:", pages.length);
 
-  // Attach total link counter
-  const totalBtn = document.getElementById("totalLinksBtn");
-  totalBtn.addEventListener("click", () => {
-    const totalLinks = pages.reduce((sum, p) => sum + (p.linkCount || 0), 0);
-    document.getElementById("totalLinksDisplay").textContent = `Total Links: ${totalLinks}`;
-  });
-}
+  // --- Total Link Counter with memory ---
+  let lastTotal = null;
 
+  function checkTotalLinks() {
+    const totalLinks = pages.reduce((sum, p) => sum + (p.linkCount || 0), 0);
+    const display = document.getElementById("totalLinksDisplay");
+
+    if (lastTotal === null) {
+      // First time load
+      display.textContent = `Total Links: ${totalLinks}`;
+      display.style.borderColor = "#ccc"; // neutral
+    } else {
+      const diff = totalLinks - lastTotal;
+      let diffText = "";
+      if (diff > 0) {
+        diffText = ` (+${diff})`;
+        display.style.borderColor = "green";
+      } else if (diff < 0) {
+        diffText = ` (${diff})`;
+        display.style.borderColor = "red";
+      } else {
+        display.style.borderColor = "#ccc";
+      }
+      display.textContent = `Total Links: ${totalLinks}${diffText}`;
+    }
+
+    lastTotal = totalLinks; // save for next check
+  }
+
+  // Attach button event
+  document.getElementById("totalLinksBtn").addEventListener("click", checkTotalLinks);
+
+  // Auto-check on load
+  checkTotalLinks();
+}
 
 
 function shareOnAll(url, text) {

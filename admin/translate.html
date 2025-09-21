@@ -525,11 +525,11 @@ async function renameTranslationDocs() {
     const translationsSnap = await getDocs(translationsCol);
 
     for (const subDoc of translationsSnap.docs) {
-      if (subDoc.id === "f") {
+      if (subDoc.id === "z") {
         const data = subDoc.data();
 
         // create new doc with "fr"
-        const newDocRef = doc(db, "pages", parentDoc.id, "translations", "fr");
+        const newDocRef = doc(db, "pages", parentDoc.id, "translations", "zh");
         await setDoc(newDocRef, data);
 
         // delete old doc

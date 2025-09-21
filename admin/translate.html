@@ -514,7 +514,7 @@ function formatTime(seconds) {
 
 
 async function renameTranslationDocs() {
-  const parentCollection = collection(db, "artipagescles"); // <-- top-level collection
+  const parentCollection = collection(db, "pages"); // <-- top-level collection
   const parentSnapshots = await getDocs(parentCollection);
 
   for (const parentDoc of parentSnapshots.docs) {

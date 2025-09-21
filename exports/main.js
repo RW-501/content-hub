@@ -408,7 +408,7 @@ const bulletStyles = {
 
   headings.forEach(h => {
     const level = parseInt(h.tagName[1]);
-    debugLog("Heading found:", h.tagName, h.textContent, "current lastLevel:", lastLevel);
+ //   debugLog("Heading found:", h.tagName, h.textContent, "current lastLevel:", lastLevel);
 
     if (level <= lastLevel) {
       // Increment heading level to maintain hierarchy
@@ -419,7 +419,7 @@ const bulletStyles = {
       Array.from(h.attributes).forEach(attr => newHeading.setAttribute(attr.name, attr.value));
       h.replaceWith(newHeading);
 
-      debugLog(`Heading level changed: ${h.tagName} → h${newLevel}`, newHeading.textContent);
+   //   debugLog(`Heading level changed: ${h.tagName} → h${newLevel}`, newHeading.textContent);
 
       lastLevel = newLevel;
     } else {
@@ -427,7 +427,7 @@ const bulletStyles = {
     }
   });
 
-  debugLog("fixHeadingHierarchy: finished processing headings");
+ // debugLog("fixHeadingHierarchy: finished processing headings");
 }
 
 function removeCompassIcons() {
@@ -442,7 +442,7 @@ function removeCompassIcons() {
 
   container.innerHTML = originalHTML.replace(/🧭/g, "");
 
-  debugLog(`removeCompassIcons: removed ${compassCount} compass icons`);
+ // debugLog(`removeCompassIcons: removed ${compassCount} compass icons`);
 }
 
 

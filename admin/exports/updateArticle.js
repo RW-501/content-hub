@@ -105,6 +105,9 @@ function chunkText(text) {
 
 
 export async function translateText(text, targetLang) {
+    const startTime = new Date();
+  console.log(`Translation started at: ${startTime.toISOString()}`);
+
   console.log(`Starting translation`);
   console.log(`Target language: ${targetLang}`);
   console.log(`Original text length: ${text.length}`);
@@ -148,6 +151,11 @@ export async function translateText(text, targetLang) {
       console.log(`Chunk ${index + 1} translated text:`, result.translatedText);
       translatedChunks.push(result.translatedText);
 
+            const chunkEnd = new Date();
+      console.log(`Chunk ${index + 1} translated text:`, result.translatedText);
+      console.log(`Chunk end time: ${chunkEnd.toISOString()}`);
+      console.log(`Chunk duration: ${(chunkEnd - chunkStart) / 1000}s`);
+
     } catch (err) {
       console.error(`Error translating chunk ${index + 1}:`, err);
       return null;
@@ -155,7 +163,10 @@ export async function translateText(text, targetLang) {
   }
 
   const finalText = translatedChunks.join(" ");
+  const stopTime = new Date();
   console.log(`\nAll chunks translated successfully`);
+  console.log(`Translation stopped at: ${stopTime.toISOString()}`);
+  console.log(`Total translation duration: ${(stopTime - startTime) / 1000}s`);
   console.log(`Final translated text:`, finalText);
   console.log(`Final text length: ${finalText.length}`);
 

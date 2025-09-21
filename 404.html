@@ -163,7 +163,7 @@ async function loadSites(){
         <p>Pages: ${d.pageCount || 0} | Published: ${d.publishedCount || 0}</p>
         <div>${(d.tags || []).map(tag=>`<span class="tag">${tag}</span>`).join('')}</div>
       `;
-      card.addEventListener("click",()=>{ window.location.href=`/site/${d.slug}`; });
+      card.addEventListener("click",()=>{ window.location.href=`/page/${d.slug}`; });
       sitesList.appendChild(card);
     });
   } catch(err){

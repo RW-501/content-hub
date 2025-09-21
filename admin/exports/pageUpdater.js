@@ -661,9 +661,34 @@ function generateFAQSchema(html) {
 // Step 3: Linkify mentions of ContentHub
 function linkifyContentHub(html) {
   if (!html) return "";
-  
+
   const regex = /\bcontent\s*hub(?:\.guru)?\b/gi;
-  return html.replace(regex, match => `<a href="https://contenthub.guru" target="_blank" title="Content Hub" rel="noopener noreferrer">${match}</a>`);
+  const container = document.createElement("div");
+  container.innerHTML = html;
+
+  function walk(node) {
+    if (node.nodeType === Node.TEXT_NODE) {
+      // Only replace in text nodes not inside headers
+      const parentTag = node.parentElement?.tagName.toLowerCase();
+      if (parentTag && /^h[1-6]$/.test(parentTag)) {
+        return; // skip headers
+      }
+
+      if (regex.test(node.textContent)) {
+        const span = document.createElement("span");
+        span.innerHTML = node.textContent.replace(regex, match =>
+          `<a href="https://contenthub.guru" target="_blank" title="Content Hub" rel="noopener noreferrer">${match}</a>`
+        );
+        node.replaceWith(...span.childNodes);
+      }
+    } else if (node.nodeType === Node.ELEMENT_NODE) {
+      node.childNodes.forEach(walk);
+    }
+  }
+
+  walk(container);
+
+  return container.innerHTML;
 }
 
 

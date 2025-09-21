@@ -321,10 +321,9 @@ btn.onclick = async () => {
 }
 
 
-
 const languagesSelect = ["es", "zh", "hi", "ar", "fr", "de"];
 
-// Define labels + desired order
+// Define labels + desired order (make sure these are real arrays!)
 const langOptions = [
   { code: ["fr", "zh", "hi", "ar", "es", "de"], label: "French" },
   { code: ["de", "zh", "hi", "ar", "fr", "es"], label: "German" },
@@ -339,7 +338,9 @@ const select = document.createElement("select");
 select.id = 'selectLang';
 
 langOptions.forEach(({ code, label }) => {
-  const mainCode = code[0]; // first element is the "real" language code
+  // Ensure code is an array
+  const mainCode = Array.isArray(code) ? code[0] : code;
+  
   if (languagesSelect.includes(mainCode)) {
     const option = document.createElement("option");
     option.value = mainCode;
@@ -349,6 +350,7 @@ langOptions.forEach(({ code, label }) => {
 });
 
 selectDiv.appendChild(select);
+
 
     
 const statusDiv = document.getElementById('status');

@@ -339,16 +339,17 @@ const select = document.createElement("select");
 select.id = 'selectLang';
 
 langOptions.forEach(({ code, label }) => {
-  // only include those that exist in your array
-  if (languagesSelect.includes(code)) {
+  const mainCode = code[0]; // first element is the "real" language code
+  if (languagesSelect.includes(mainCode)) {
     const option = document.createElement("option");
-    option.value = code;
+    option.value = mainCode;
     option.textContent = label;
     select.appendChild(option);
   }
 });
 
 selectDiv.appendChild(select);
+
     
 const statusDiv = document.getElementById('status');
 function status(msg) {

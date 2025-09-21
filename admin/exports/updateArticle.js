@@ -96,7 +96,86 @@ function chunkText(text) {
 /**
  * Translate text in batches with fail-safe
  */
-export async function translateText(texts, targetLang) {
+
+
+
+
+
+
+
+
+export async function translateText(text, targetLang) {
+  console.log(`Starting translation`);
+  console.log(`Target language: ${targetLang}`);
+  console.log(`Original text length: ${text.length}`);
+  console.log(`Original text:`, text);
+
+  const chunks = chunkText(text);
+  const translatedChunks = [];
+
+  for (const [index, chunk] of chunks.entries()) {
+    console.log(`\nTranslating chunk ${index + 1}/${chunks.length}`);
+    console.log(`Chunk text:`, chunk);
+
+    try {
+      const response = await fetch("https://translateapi-1-mx67.onrender.com/translate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ q: chunk, source: "en", target: targetLang })
+      });
+
+      console.log(`Chunk ${index + 1} fetch response:`, response);
+      console.log(`Response status: ${response.status} ${response.statusText}`);
+      console.log(`Response headers:`, [...response.headers.entries()]);
+
+      if (!response.ok) {
+        console.error(`Error translating chunk ${index + 1}: ${response.status} ${response.statusText}`);
+        return null;
+      }
+
+      const result = await response.json().catch(err => {
+        console.error(`Failed to parse JSON for chunk ${index + 1}:`, err);
+        return null;
+      });
+
+      console.log(`Chunk ${index + 1} JSON result:`, result);
+
+      if (!result || !result.translatedText) {
+        console.error(`Translation failed for chunk ${index + 1}`);
+        return null;
+      }
+
+      console.log(`Chunk ${index + 1} translated text:`, result.translatedText);
+      translatedChunks.push(result.translatedText);
+
+    } catch (err) {
+      console.error(`Error translating chunk ${index + 1}:`, err);
+      return null;
+    }
+  }
+
+  const finalText = translatedChunks.join(" ");
+  console.log(`\nAll chunks translated successfully`);
+  console.log(`Final translated text:`, finalText);
+  console.log(`Final text length: ${finalText.length}`);
+
+  return finalText;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+export async function translateText2(texts, targetLang) {
         const text = "Hello world";
 
 console.log(`Starting translation: targetLang=${targetLang}, text length=${text.length}`);

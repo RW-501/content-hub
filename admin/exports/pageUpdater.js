@@ -578,7 +578,6 @@ let { adCount, videoCount, imgCount } = checkCounts(html);
 
   return html;
 }
-
 function renderHowTo(html) {
   if (!html) return html;
 
@@ -596,21 +595,31 @@ function renderHowTo(html) {
   const stepHeadingRegex = /<h3[^>]*>(.*?)<\/h3>\s*<p[^>]*>([\s\S]*?)<\/p>/gi;
   let stepMatch;
   while ((stepMatch = stepHeadingRegex.exec(sectionContent)) !== null) {
-    steps.push(`<div class="howto-step"><strong>${stepMatch[1]}</strong><p>${stepMatch[2]}</p></div>`);
+    const stepTitle = stepMatch[1].trim();
+    const stepDesc = stepMatch[2].trim();
+    steps.push(`<div class="howto-step"><strong>${stepTitle}</strong><p>${stepDesc}</p></div>`);
   }
 
   // 2. Capture ordered or unordered list steps <ol>/<ul>
   const listRegex = /<(ol|ul)[^>]*>([\s\S]*?)<\/\1>/gi;
   let listMatch;
   while ((listMatch = listRegex.exec(sectionContent)) !== null) {
-    const items = [];
     const liRegex = /<li[^>]*>([\s\S]*?)<\/li>/gi;
     let liMatch;
     while ((liMatch = liRegex.exec(listMatch[2])) !== null) {
-      const liContent = liMatch[1].replace(/<[^>]+>/g, "").trim(); // remove inner tags
-      if (liContent.length > 0) items.push(`<div class="howto-step"><p>${liContent}</p></div>`);
+      const liContent = liMatch[1].replace(/<[^>]+>/g, "").trim();
+      if (liContent.length) {
+        steps.push(`<div class="howto-step"><p>${liContent}</p></div>`);
+      }
     }
-    if (items.length) steps.push(items.join(""));
+  }
+
+  // 3. Detect plain text steps starting with "Step X:"
+  const plainStepRegex = /Step\s*\d+:\s*(.*?)(?=(Step\s*\d+:|$))/gi;
+  let plainStepMatch;
+  while ((plainStepMatch = plainStepRegex.exec(sectionContent)) !== null) {
+    const stepText = plainStepMatch[1].trim();
+    if (stepText.length) steps.push(`<div class="howto-step"><p>${stepText}</p></div>`);
   }
 
   // Replace the original How-To block with structured HTML

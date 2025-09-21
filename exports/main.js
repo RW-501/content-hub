@@ -458,7 +458,6 @@ const toggleBtn = document.getElementById("toc-toggle");
   console.log(`list: ${list}`);
   console.log(`toggleBtn: ${toggleBtn}`);
 
-  if (!toggleBtn || !list) return;
 
   toggleBtn.addEventListener("click", function () {
     const expanded = this.getAttribute("aria-expanded") === "true";

@@ -148,15 +148,34 @@ let includedHTML2 = '';
  * @param {string} jsonUrl - Path to internal links JSON
  * @param {number|null} maxLinks - (optional) Maximum number of links allowed per page. Null = unlimited
  */
+
+async function fetchWithRetry(url, retries = 3, delay = 1000) {
+  for (let i = 0; i < retries; i++) {
+    try {
+      const res = await fetch(url);
+      if (res.ok) return res.json();
+      throw new Error(`HTTP ${res.status}`);
+    } catch (err) {
+      console.warn(`Fetch attempt ${i + 1} failed:`, err.message);
+      if (i < retries - 1) {
+        await new Promise(r => setTimeout(r, delay));
+      }
+    }
+  }
+  throw new Error(`Failed to fetch ${url} after ${retries} retries`);
+}
+
 async function linkifyKeywordsFromJSON(input, jsonUrl = 'https://contenthub.guru/internal-Links.json', maxLinks = null) {
   try {
  includedHTML = '';
  includedHTML2 = '';
 
-    const res = await fetch(jsonUrl);
-    if (!res.ok) throw new Error(`Failed to fetch ${jsonUrl}`);
-    const keywordMap = await res.json();
-
+    // 🔒 Double-check fetch with retries
+    const keywordMap = await fetchWithRetry(jsonUrl, 3, 1500);
+    if (!keywordMap || typeof keywordMap !== 'object') {
+      console.warn("Keyword map missing or invalid, skipping linkify.");
+      return typeof input === 'string' ? input : input.innerHTML;
+    }
     const entries = [];
     for (const [url, data] of Object.entries(keywordMap)) {
       if (url === currentURL) {

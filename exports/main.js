@@ -520,7 +520,7 @@ function pageLoaded() {
 
   debugLog("Removing compass icons and fixing heading hierarchy");
   //removeCompassIcons();
-  // fixHeadingHierarchy();
+   fixHeadingHierarchy();
 }
 
 document.addEventListener("DOMContentLoaded", () => {

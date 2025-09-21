@@ -472,7 +472,9 @@ const toggleBtn = document.getElementById("toc-toggle");
 
   toggleBtn.addEventListener("click", function () {
     const expanded = this.getAttribute("aria-expanded") === "true";
-
+  console.log(`list: ${list}`);
+  console.log(`toggleBtn: ${toggleBtn}`);
+  
     // Toggle visibility
     list.hidden = expanded;
     this.setAttribute("aria-expanded", String(!expanded));

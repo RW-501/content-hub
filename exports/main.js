@@ -507,10 +507,9 @@ fixHeadingHierarchy();
 
 
 
-window.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
 pageLoaded();
 });
-
 
 
 

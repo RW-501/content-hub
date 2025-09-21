@@ -8,8 +8,12 @@ document.addEventListener("DOMContentLoaded", () => {
     console.log('Loading...');
   });
   
+const DEBUG = true; // Toggle debug logging
 
 
+function debugLog(...args) {
+  if (DEBUG) console.log(...args);
+}
 
 import { doc, getDoc, setDoc, updateDoc, increment, collection, 
     addDoc, serverTimestamp, query, orderBy, onSnapshot, deleteDoc, arrayUnion  } 
@@ -75,8 +79,6 @@ editPageLink.href = href;
 
  
 
-
-const DEBUG = false;
 
 let loadCount = 0;
 let totalFileSize = 0; // To accumulate the file size of scripts
@@ -387,15 +389,27 @@ const bulletStyles = {
 
 });
 
-function fixHeadingHierarchy() {
+
+
+
+ function fixHeadingHierarchy() {
   const container = document.getElementById("main-content");
-  if (!container) return;
+  if (!container) {
+    debugLog("fixHeadingHierarchy: #main-content not found");
+    return;
+  }
+
+  debugLog("fixHeadingHierarchy: found container", container);
 
   const headings = container.querySelectorAll('h1, h2, h3, h4, h5, h6');
+  debugLog(`fixHeadingHierarchy: found ${headings.length} headings`);
+
   let lastLevel = 0;
 
   headings.forEach(h => {
     const level = parseInt(h.tagName[1]);
+    debugLog("Heading found:", h.tagName, h.textContent, "current lastLevel:", lastLevel);
+
     if (level <= lastLevel) {
       // Increment heading level to maintain hierarchy
       const newLevel = Math.min(lastLevel + 1, 6);
@@ -404,41 +418,52 @@ function fixHeadingHierarchy() {
       // Copy all attributes
       Array.from(h.attributes).forEach(attr => newHeading.setAttribute(attr.name, attr.value));
       h.replaceWith(newHeading);
+
+      debugLog(`Heading level changed: ${h.tagName} → h${newLevel}`, newHeading.textContent);
+
       lastLevel = newLevel;
     } else {
       lastLevel = level;
     }
   });
-}
 
+  debugLog("fixHeadingHierarchy: finished processing headings");
+}
 
 function removeCompassIcons() {
   const container = document.getElementById("main-content");
-  if (!container) return;
+  if (!container) {
+    debugLog("removeCompassIcons: #main-content not found");
+    return;
+  }
 
-  // Replace all 🧭 characters inside the div
-  container.innerHTML = container.innerHTML.replace(/🧭/g, "");
+  const originalHTML = container.innerHTML;
+  const compassCount = (originalHTML.match(/🧭/g) || []).length;
+
+  container.innerHTML = originalHTML.replace(/🧭/g, "");
+
+  debugLog(`removeCompassIcons: removed ${compassCount} compass icons`);
 }
 
 
 
- 
-
-
-function pageLoaded(){
-
+function pageLoaded() {
   const main = document.querySelector("body");
   if (!main) return;
+
+  debugLog("Main <body> found:", main);
 
   // Make main focusable
   main.setAttribute("tabindex", "0");
 
   // Optionally auto-focus so keydown works immediately
   main.focus();
+  debugLog("Main focused");
 
   // Right-click inside <main> allowed
   main.addEventListener("contextmenu", (event) => {
     event.stopPropagation(); // stop global blockers
+    debugLog("Context menu inside main allowed");
   });
 
   // Detect Ctrl+A inside <main>
@@ -447,28 +472,34 @@ function pageLoaded(){
       event.preventDefault(); // stop select all
       const selection = window.getSelection();
       if (selection) selection.removeAllRanges();
-      console.log("Select All blocked → Selection cleared");
+      debugLog("Select All blocked → Selection cleared");
     }
   });
 
-  
+  const toggleBtn = document.getElementById("toc-toggle");
+  const list = document.getElementById("toc-list");
 
-  
+  if (toggleBtn && list) {
+    toggleBtn.addEventListener("click", function () {
+      const expanded = toggleBtn.getAttribute("aria-expanded") === "true";
 
-  document.getElementById("toc-toggle").addEventListener("click", function () {
-    const expanded = document.getElementById("toc-toggle").getAttribute("aria-expanded") === "true";
-    const list = document.getElementById("toc-list");
+      debugLog("TOC toggle clicked");
+      debugLog("Current expanded state:", expanded);
+      debugLog("TOC list element:", list);
 
-    console.log(`list: ${list}`);
-  console.log(`toggleBtn: ${toggleBtn}`);
+      // Toggle visibility
+      list.hidden = expanded;
+      toggleBtn.setAttribute("aria-expanded", String(!expanded));
 
-    // Toggle visibility
-    list.hidden = expanded;
-    thidocument.getElementById("toc-toggle").setAttribute("aria-expanded", String(!expanded));
+      // Update button text
+      toggleBtn.textContent = expanded ? "Show" : "Hide";
 
-    // Update button text
-    document.getElementById("toc-toggle").textContent = expanded ? "Show" : "Hide";
-  });
+      debugLog("TOC new expanded state:", !expanded);
+      debugLog("TOC button text updated:", toggleBtn.textContent);
+    });
+  } else {
+    debugLog("TOC toggle button or list not found");
+  }
 
   document.querySelectorAll(".faq-item summary").forEach(summary => {
     summary.addEventListener("click", function() {
@@ -478,19 +509,25 @@ function pageLoaded(){
       details.classList.toggle("open");
 
       if (details.classList.contains("open")) {
-        // Expand
         answer.style.maxHeight = answer.scrollHeight + "px";
+        debugLog("FAQ expanded:", details);
       } else {
-        // Collapse
         answer.style.maxHeight = "0";
+        debugLog("FAQ collapsed:", details);
       }
     });
   });
 
-
+  debugLog("Removing compass icons and fixing heading hierarchy");
   removeCompassIcons();
-fixHeadingHierarchy();
+  fixHeadingHierarchy();
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+  debugLog("DOM fully loaded");
+  pageLoaded();
+});
+
 
   // Optional: listen on the document as a fallback
   document.addEventListener("keydown", (event) => {
@@ -507,9 +544,6 @@ fixHeadingHierarchy();
 
 
 
-document.addEventListener("DOMContentLoaded", async () => {
-pageLoaded();
-});
 
 
 

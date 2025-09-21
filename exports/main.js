@@ -397,10 +397,10 @@ function removeCompassIcons() {
 
 
 
-  removeCompassIcons();
 
 
 
+function pageLoaded(){
 
   const main = document.querySelector("body");
   if (!main) return;
@@ -425,6 +425,9 @@ function removeCompassIcons() {
       console.log("Select All blocked → Selection cleared");
     }
   });
+  removeCompassIcons();
+
+}
 
   // Optional: listen on the document as a fallback
   document.addEventListener("keydown", (event) => {
@@ -471,6 +474,9 @@ function removeCompassIcons() {
 
 
 
+window.addEventListener("DOMContentLoaded", () => {
+pageLoaded();
+});
 
 
 

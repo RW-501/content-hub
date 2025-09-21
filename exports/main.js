@@ -422,17 +422,7 @@ function removeCompassIcons() {
 
 
 
-  document.getElementById("toc-toggle").addEventListener("click", function () {
-  const list = document.getElementById("toc-list");
-  const expanded = this.getAttribute("aria-expanded") === "true";
-
-  // Toggle visibility
-  list.hidden = expanded;
-  this.setAttribute("aria-expanded", String(!expanded));
-
-  // Update button text
-  this.textContent = expanded ? "Show" : "Hide";
-});
+ 
 
 
 function pageLoaded(){
@@ -474,7 +464,7 @@ const toggleBtn = document.getElementById("toc-toggle");
     const expanded = this.getAttribute("aria-expanded") === "true";
   console.log(`list: ${list}`);
   console.log(`toggleBtn: ${toggleBtn}`);
-  
+
     // Toggle visibility
     list.hidden = expanded;
     this.setAttribute("aria-expanded", String(!expanded));
@@ -1393,10 +1383,12 @@ function attachTooltips() {
   let tooltipTimeout;
   let isHoveringTooltip = false;
 
-   
+
+
   document.querySelectorAll('.linked').forEach(span => {
     span.addEventListener('click', (e) => {
           span.style.cursor = 'pointer';
+  console.log(`tools up?`);
 
             e.stopPropagation();
 

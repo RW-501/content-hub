@@ -425,24 +425,8 @@ function pageLoaded(){
       console.log("Select All blocked → Selection cleared");
     }
   });
-  removeCompassIcons();
 
-}
-
-  // Optional: listen on the document as a fallback
-  document.addEventListener("keydown", (event) => {
-    if (document.activeElement === main &&
-        event.ctrlKey && event.key.toLowerCase() === "a") {
-      event.preventDefault();
-      const selection = window.getSelection();
-      if (selection) selection.removeAllRanges();
-      console.log("Select All blocked → Selection cleared");
-    }
-  });
-
-
-
-
+  
   document.getElementById("toc-toggle").addEventListener("click", function () {
   const list = document.getElementById("toc-list");
   const expanded = this.getAttribute("aria-expanded") === "true";
@@ -471,6 +455,24 @@ function pageLoaded(){
       }
     });
   });
+
+
+  removeCompassIcons();
+
+}
+
+  // Optional: listen on the document as a fallback
+  document.addEventListener("keydown", (event) => {
+    if (document.activeElement === main &&
+        event.ctrlKey && event.key.toLowerCase() === "a") {
+      event.preventDefault();
+      const selection = window.getSelection();
+      if (selection) selection.removeAllRanges();
+      console.log("Select All blocked → Selection cleared");
+    }
+  });
+
+
 
 
 

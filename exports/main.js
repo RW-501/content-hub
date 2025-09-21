@@ -387,19 +387,19 @@ const bulletStyles = {
 
 });
 
-document.addEventListener("DOMContentLoaded", () => {
+function removeCompassIcons() {
+  const container = document.getElementById("main-content");
+  if (!container) return;
 
-document.getElementById("toc-toggle").addEventListener("click", function () {
-  const list = document.getElementById("toc-list");
-  const expanded = this.getAttribute("aria-expanded") === "true";
+  // Replace all 🧭 characters inside the div
+  container.innerHTML = container.innerHTML.replace(/🧭/g, "");
+}
 
-  // Toggle visibility
-  list.hidden = expanded;
-  this.setAttribute("aria-expanded", String(!expanded));
 
-  // Update button text
-  this.textContent = expanded ? "Show" : "Hide";
-});
+
+  removeCompassIcons();
+
+
 
 
   const main = document.querySelector("body");
@@ -436,7 +436,42 @@ document.getElementById("toc-toggle").addEventListener("click", function () {
       console.log("Select All blocked → Selection cleared");
     }
   });
+
+
+
+
+  document.getElementById("toc-toggle").addEventListener("click", function () {
+  const list = document.getElementById("toc-list");
+  const expanded = this.getAttribute("aria-expanded") === "true";
+
+  // Toggle visibility
+  list.hidden = expanded;
+  this.setAttribute("aria-expanded", String(!expanded));
+
+  // Update button text
+  this.textContent = expanded ? "Show" : "Hide";
 });
+
+  document.querySelectorAll(".faq-item summary").forEach(summary => {
+    summary.addEventListener("click", function() {
+      const details = this.parentElement;
+      const answer = this.nextElementSibling;
+
+      details.classList.toggle("open");
+
+      if (details.classList.contains("open")) {
+        // Expand
+        answer.style.maxHeight = answer.scrollHeight + "px";
+      } else {
+        // Collapse
+        answer.style.maxHeight = "0";
+      }
+    });
+  });
+
+
+
+
 
 
 
@@ -738,26 +773,6 @@ onSnapshot(q, (snapshot) => {
 
 
   
-document.addEventListener("DOMContentLoaded", () => {
-  document.querySelectorAll(".faq-item summary").forEach(summary => {
-    summary.addEventListener("click", function() {
-      const details = this.parentElement;
-      const answer = this.nextElementSibling;
-
-      details.classList.toggle("open");
-
-      if (details.classList.contains("open")) {
-        // Expand
-        answer.style.maxHeight = answer.scrollHeight + "px";
-      } else {
-        // Collapse
-        answer.style.maxHeight = "0";
-      }
-    });
-  });
-});
-
-
 
 
 
@@ -1583,3 +1598,5 @@ document.addEventListener("click", e => {
   const index = +shareEl.dataset.index;
   showShareTooltip(parentP, index);
 });
+
+

@@ -109,10 +109,11 @@ export async function translateText(text, targetLang) {
   console.log(`Translation started at: ${startTime.toISOString()}`);
 
   console.log(`Starting translation`);
+  /*
   console.log(`Target language: ${targetLang}`);
   console.log(`Original text length: ${text.length}`);
   console.log(`Original text:`, text);
-
+*/
   const chunks = chunkText(text);
   const translatedChunks = [];
 
@@ -128,11 +129,11 @@ for (const [index, chunk] of chunks.entries()) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ q: chunk, source: "en", target: targetLang })
       });
-
+/*
       console.log(`Chunk ${index + 1} fetch response:`, response);
       console.log(`Response status: ${response.status} ${response.statusText}`);
       console.log(`Response headers:`, [...response.headers.entries()]);
-
+*/
       if (!response.ok) {
         console.error(`Error translating chunk ${index + 1}: ${response.status} ${response.statusText}`);
         return null;
@@ -143,7 +144,7 @@ for (const [index, chunk] of chunks.entries()) {
         return null;
       });
 
-      console.log(`Chunk ${index + 1} JSON result:`, result);
+   //   console.log(`Chunk ${index + 1} JSON result:`, result);
 
       if (!result || !result.translatedText) {
         console.error(`Translation failed for chunk ${index + 1}`);
@@ -153,7 +154,8 @@ for (const [index, chunk] of chunks.entries()) {
       translatedChunks.push(result.translatedText);
 
             const chunkEnd = new Date();
-      console.log(`Chunk ${index + 1} translated text:`, result.translatedText);
+            
+      //console.log(`Chunk ${index + 1} translated text:`, result.translatedText);
       console.log(`Chunk end time: ${chunkEnd.toISOString()}`);
       console.log(`Chunk duration: ${(chunkEnd - chunkStart) / 1000}s`);
 
@@ -166,9 +168,11 @@ for (const [index, chunk] of chunks.entries()) {
   const finalText = translatedChunks.join(" ");
   const stopTime = new Date();
   console.log(`\nAll chunks translated successfully`);
+  /*
   console.log(`Translation stopped at: ${stopTime.toISOString()}`);
   console.log(`Total translation duration: ${(stopTime - startTime) / 1000}s`);
   console.log(`Final translated text:`, finalText);
+  */
   console.log(`Final text length: ${finalText.length}`);
 
   return finalText;

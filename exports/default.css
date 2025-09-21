@@ -1096,3 +1096,49 @@ color: slategrey;
 .category-badge {
   background-color: #007bff; /* change per category if desired */
 }
+
+
+/* Scope to only tables inside .content-paragraph */
+.content-paragraph table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1.5rem 0;
+  font-size: 0.95rem;
+  border: 1px solid #ddd;
+  background: #fff;
+}
+
+/* Table header styling */
+.content-paragraph table thead {
+  background: #f5f5f5;
+}
+
+.content-paragraph table th {
+  padding: 10px 12px;
+  text-align: left;
+  font-weight: 600;
+  border-bottom: 2px solid #ccc;
+}
+
+/* Table rows & cells */
+.content-paragraph table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid #e0e0e0;
+  vertical-align: top;
+}
+
+/* Zebra striping */
+.content-paragraph table tr:nth-child(even) {
+  background: #fafafa;
+}
+
+/* Hover effect */
+.content-paragraph table tr:hover {
+  background: #f0f8ff;
+  transition: background 0.2s ease-in-out;
+}
+
+/* Responsive handling - scroll if overflow */
+.content-paragraph ._tableWrapper_1rjym_13 {
+  overflow-x: auto;
+}

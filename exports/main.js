@@ -452,24 +452,22 @@ function pageLoaded(){
   });
 
   
-const toggleBtn = document.getElementById("toc-toggle");
-  const list = document.getElementById("toc-list");
 
-  console.log(`list: ${list}`);
-  console.log(`toggleBtn: ${toggleBtn}`);
+  
 
+  document.getElementById("toc-toggle").addEventListener("click", function () {
+    const expanded = document.getElementById("toc-toggle").getAttribute("aria-expanded") === "true";
+    const list = document.getElementById("toc-list");
 
-  toggleBtn.addEventListener("click", function () {
-    const expanded = this.getAttribute("aria-expanded") === "true";
-  console.log(`list: ${list}`);
+    console.log(`list: ${list}`);
   console.log(`toggleBtn: ${toggleBtn}`);
 
     // Toggle visibility
     list.hidden = expanded;
-    this.setAttribute("aria-expanded", String(!expanded));
+    thidocument.getElementById("toc-toggle").setAttribute("aria-expanded", String(!expanded));
 
     // Update button text
-    this.textContent = expanded ? "Show" : "Hide";
+    document.getElementById("toc-toggle").textContent = expanded ? "Show" : "Hide";
   });
 
   document.querySelectorAll(".faq-item summary").forEach(summary => {

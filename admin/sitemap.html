@@ -991,7 +991,7 @@ rows.forEach(row => {
   const data = parseRow(row);
   if (data && data.ready) {
     // Format lastmod as YYYY-MM-DD for Google
-    const lastMod = new Date(data.date).toISOString().split("T")[0];
+   // const lastMod = new Date(data.date).toISOString().split("T")[0];
 
     const altTags = data.alternates
       .map(alt => `<xhtml:link rel="alternate" hreflang="${escapeXML(alt.lang)}" href="${escapeXML(alt.url)}"/>`)
@@ -1000,7 +1000,7 @@ rows.forEach(row => {
     sitemapUrls.push(
 `  <url>
     <loc>${escapeXML(data.url)}</loc>
-    <lastmod>${lastMod}</lastmod>
+    <lastmod>${data.date}</lastmod>
     <changefreq>${escapeXML(data.schedule)}</changefreq>
     <priority>${parseFloat(data.priority).toFixed(1)}</priority>
     ${altTags}

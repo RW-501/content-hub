@@ -622,7 +622,7 @@ function addLinkToTable(displayUrl, sourceUrl, alternates = []) {
 
     document.getElementById('linkCount').textContent = totalLinks;
 
-  checkReachability(url, row, sourceUrl);
+  checkReachability(displayUrl, row, sourceUrl);
 }
 
 const checkReachability = async (url, row, sourceUrl) => {

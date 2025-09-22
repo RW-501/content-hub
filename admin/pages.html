@@ -534,6 +534,7 @@ if (!pageData.length) {
 // Cache pages
 pageCache = {};
 pageData.forEach(p => (pageCache[p.id] = p));
+    console.log("pageData:", pageData);
 
 renderDashboard(pageData);
 

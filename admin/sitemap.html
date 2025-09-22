@@ -285,43 +285,65 @@ async function showAdminPanel(user) {
 }
 
 
+//const targetLangs = ["es", "zh", "hi", "ar", "fr", "de"];
 
+const targetLangs = ["es", "fr", "de"];
+        let totalLinks = 0;
 
-// Fetch pages from Firestore and populate table
 const loadPagesFromDB = async () => {
   try {
     const q = query(collection(db, "pages"), orderBy("createdAt", "desc"));
     const snap = await getDocs(q);
 
+    const tbody = document.getElementById("linkTable").querySelector("tbody");
+
     if (snap.empty) {
-      document.getElementById('linkTable').querySelector('tbody').innerHTML =
+      tbody.innerHTML =
         "<tr><td colspan='6' class='text-center'>No pages found in the database.</td></tr>";
       return;
     }
 
+    // Prepare all site data
     const sitesData = snap.docs.map(doc => {
       const d = doc.data();
+      totalLinks++;
       return {
         id: doc.id,
         title: d.name || d.title || "Untitled Site",
         slug: d.slug || "N/A",
-        createdAt: d.createdAt?.toDate() || new Date()
+        createdAt: d.createdAt?.toDate() || new Date(),
+        translations: d.translations || {}
       };
     });
 
-    // Add each page to the table
-sitesData.forEach(site => { 
-  const url = `https://contenthub.guru/page/${site.slug}`;
+    // Add each page (with alternates) to the table
+    sitesData.forEach(site => {
+      const baseUrl = `https://contenthub.guru/page/${site.slug}.html`;
+      const lastmod = site.createdAt.toISOString().split("T")[0];
 
+      // Build alternates
+      const alternates = [{ lang: "en", url: baseUrl }];
+      targetLangs.forEach(lang => {
+        if (site.translations?.[lang]?.slug) {
+          totalLinks++;
+          alternates.push({
+            lang,
+            url: `https://contenthub.guru/page/${lang}/${site.translations[lang].slug}.html`
+          });
+        }
+      });
 
-  const lastmod = site.createdAt.toISOString().split('T')[0];
-  
-  addLinkToTable(url, url); // Add to table, source URL is same as page
-  const row = document.querySelector(`#linkTable tbody tr:last-child`);
-  row.querySelector('td:nth-child(4)').textContent = lastmod; // set lastmod
-  row.querySelector('input[type="checkbox"]').checked = true; // mark ready for sitemap
-});
+      // Add one row only, attach alternates to dataset
+      addLinkToTable(baseUrl, baseUrl, alternates);
 
+      // Update last added row
+      const row = document.querySelector("#linkTable tbody tr:last-child");
+      row.querySelector("td:nth-child(4)").textContent = lastmod;
+      row.querySelector('input[type="checkbox"]').checked = true;
+
+      // Store alternates in dataset for later use
+      row.dataset.alternates = JSON.stringify(alternates);
+    });
 
   } catch (error) {
     console.error("Error loading pages from Firestore:", error);
@@ -330,6 +352,7 @@ sitesData.forEach(site => {
 };
 
 window.loadPagesFromDB = loadPagesFromDB;
+
 
   window.onscroll = function () {
     const btn = document.getElementById("scrollUpBtn");
@@ -385,7 +408,6 @@ document.getElementById('selectAllCheckbox').addEventListener('change', function
         let links = new Set();
         let errors = [];
         let crawling = false;
-        let totalLinks = 0;
         const subdomainsExcluded = new Set();
 const excludeSubdomainsDiv = document.getElementById('excludeSubdomainsDiv');
    
@@ -513,7 +535,6 @@ linksFromPage.forEach(link => {
 
 
     // Update progress
-    totalLinks++;
     updateProgress(crawledPages.size, totalLinks, progressBar);
 
     if (pendingUrls.length > 0) {
@@ -575,34 +596,34 @@ const updateProgress = (processedLinks, totalLinks, progressBar) => {
 
 
 // Function to add link to table with dynamic priority and scheduling
-function addLinkToTable(url, sourceUrl) {
-  const tableBody = document.querySelector('#linkTable tbody');
-  const row = document.createElement('tr');
-  const priority = calculatePriority(url);
+function addLinkToTable(displayUrl, sourceUrl, alternates = []) {
+  const tbody = document.querySelector("#linkTable tbody");
+  const tr = document.createElement("tr");
 
-  row.innerHTML = `
-    <td>${url}</td>
-    <td><input type="number" value="${priority}" class="priority" step="0.1" min="0.0" max="1.0"></td>
+  tr.innerHTML = `
+    <td>${displayUrl}</td>
+    <td><input type="text" value="0.5" /></td>
     <td>
       <select>
-        <option value="hourly">Hourly</option>
-        <option value="daily">Daily</option>
-        <option value="weekly">Weekly</option>
-        <option value="monthly">Monthly</option>
+        <option value="weekly" selected>weekly</option>
+        <option value="daily">daily</option>
+        <option value="monthly">monthly</option>
       </select>
     </td>
-    <td>${new Date().toISOString().split('T')[0]}</td>
-    <td><span class="status">Pending</span></td>
-    <td><input type="checkbox"></td>
+    <td></td>
+    <td><span class="status">OK</span></td>
+    <td><input type="checkbox" checked /></td>
   `;
 
-  tableBody.appendChild(row);
+  // 👇 store alternates (hreflang) in dataset
+  tr.dataset.alternates = JSON.stringify(alternates);
 
-  document.getElementById('linkCount').textContent = totalLinks;
+  tbody.appendChild(tr);
+
+    document.getElementById('linkCount').textContent = totalLinks;
 
   checkReachability(url, row, sourceUrl);
 }
-
 
 const checkReachability = async (url, row, sourceUrl) => {
   try {
@@ -828,8 +849,14 @@ document.addEventListener('DOMContentLoaded', () => {
 // Utility: Extract row data into a JS object
 function parseRow(row) {
   const columns = row.querySelectorAll("td");
-
   if (columns.length < 6) return null;
+
+  let alternates = [];
+  try {
+    alternates = JSON.parse(row.dataset.alternates || "[]");
+  } catch (e) {
+    alternates = [];
+  }
 
   return {
     url: columns[0].textContent.trim(),
@@ -838,8 +865,10 @@ function parseRow(row) {
     date: columns[3].textContent.trim(),
     status: columns[4].querySelector(".status")?.textContent.trim() || "",
     ready: columns[5].querySelector("input[type='checkbox']")?.checked || false,
+    alternates
   };
 }
+
 
 // Select All toggle
 document.getElementById("selectAllCheckbox").addEventListener("change", (e) => {
@@ -923,43 +952,46 @@ document.getElementById("saveSiteMap").addEventListener("click", async () => { /
 
 
 // Generate Sitemap XML
-document.getElementById("downloadBtn").addEventListener("click", async () => { // async added here
+document.getElementById("downloadBtn").addEventListener("click", () => {
   const rows = document.querySelectorAll("#linkTable tbody tr");
   const sitemapUrls = [];
 
   rows.forEach(row => {
     const data = parseRow(row);
     if (data && data.ready) {
+      const altTags = data.alternates
+        .map(
+          alt => `<xhtml:link rel="alternate" hreflang="${alt.lang}" href="${alt.url}" />`
+        )
+        .join("\n    ");
+
       sitemapUrls.push(`
   <url>
     <loc>${data.url}</loc>
     <lastmod>${data.date}</lastmod>
     <changefreq>${data.schedule}</changefreq>
     <priority>${data.priority}</priority>
+    ${altTags}
   </url>`);
     }
   });
 
-  // Metadata (safe XML comment)
   const now = new Date().toISOString();
   const metaComment = `<!-- 
   Generated: ${now}
   Link Count: ${sitemapUrls.length}
 -->`;
 
-   sitemapContent = `${metaComment}
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  const sitemapContent = `${metaComment}
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
 ${sitemapUrls.join("\n")}
 </urlset>`;
 
- 
-  // Output sitemap content to textarea
   const output = document.getElementById("sitemapOutput");
   if (output) {
     output.value = sitemapContent;
     downloaded = true;
-  } else {
-    console.error("sitemapOutput textarea not found!");
   }
 });
 

@@ -308,12 +308,12 @@ async function loadPages() {
   
       let updated =  await ensureTranslationConsistency(pageId, lang, data.translations[lang].slug, btn);
             
-      if (!updated) {
-              status(`No Update to DB`);
-              return;
-            }else{
+      if (!updated) {        
         status(`Updated DB`);
+            }else{     
+        status(`No Update to DB`);
             }
+            
         const translatedUrl = `https://contenthub.guru/page/${lang}/${data.translations[lang].slug}.html`;
 
         const translatedLink = document.createElement("a");

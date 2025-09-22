@@ -956,33 +956,39 @@ document.getElementById("downloadBtn").addEventListener("click", () => {
   const rows = document.querySelectorAll("#linkTable tbody tr");
   const sitemapUrls = [];
 
+  // Helper to escape XML special characters
+  const escapeXML = (str) => {
+    return String(str)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&apos;");
+  };
+
   rows.forEach(row => {
     const data = parseRow(row);
     if (data && data.ready) {
       const altTags = data.alternates
-        .map(
-          alt => `<xhtml:link rel="alternate" hreflang="${alt.lang}" href="${alt.url}" />`
-        )
+        .map(alt => `<xhtml:link rel="alternate" hreflang="${escapeXML(alt.lang)}" href="${escapeXML(alt.url)}"/>`)
         .join("\n    ");
 
       sitemapUrls.push(`
   <url>
-    <loc>${data.url}</loc>
-    <lastmod>${data.date}</lastmod>
-    <changefreq>${data.schedule}</changefreq>
-    <priority>${data.priority}</priority>
+    <loc>${escapeXML(data.url)}</loc>
+    <lastmod>${escapeXML(data.date)}</lastmod>
+    <changefreq>${escapeXML(data.schedule)}</changefreq>
+    <priority>${escapeXML(data.priority)}</priority>
     ${altTags}
   </url>`);
     }
   });
 
   const now = new Date().toISOString();
-  const metaComment = `<!-- 
-  Generated: ${now}
-  Link Count: ${sitemapUrls.length}
--->`;
 
-  const sitemapContent = `${metaComment}
+  // XML declaration must come first
+  const sitemapContent = `<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated: ${now}, Link Count: ${sitemapUrls.length} -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
 ${sitemapUrls.join("\n")}
@@ -994,6 +1000,7 @@ ${sitemapUrls.join("\n")}
     downloaded = true;
   }
 });
+
 
 
 

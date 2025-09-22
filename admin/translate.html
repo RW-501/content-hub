@@ -489,6 +489,15 @@ async function autoClickNotTranslated() {
           translatedLink.style.display = "block";
           translatedLink.style.marginTop = "4px";
           card.appendChild(translatedLink);
+        }else{
+
+        const translatedLink = document.createElement("a");
+        translatedLink.href = translatedUrl;
+        translatedLink.textContent = `Go to ${lang.toUpperCase()} version`;
+        translatedLink.target = "_blank";
+        translatedLink.style.display = "block";
+        translatedLink.style.marginTop = "4px";
+        div.appendChild(translatedLink);
         }
       } else {
         log(`⚠ Still not live after retries: ${translatedUrl}`);

@@ -548,7 +548,7 @@ pageData.forEach(page => {
   Object.entries(page.translations || {}).forEach(([lang, t]) => {
     allPages.push({
       id: `${page.id}_${lang}`, // unique row id
-      slug: t.slug,
+      slug: `${lang}/${t.slug}`,
       lang,
       title: `${page.title} (${lang})`,
       parentId: page.id,

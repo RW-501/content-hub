@@ -413,6 +413,7 @@ async function fetchAllPages(pages) {
       if(pages.lang != 'en'){
         pages.slug =  `${pages.lang}/${pages.slug}`;
       }
+
   for (const p of pages) {
     const { online, version, faq, howTo, links, ads, images, videos } = await pingSite(p.slug);
     versions[p.siteId] = version;

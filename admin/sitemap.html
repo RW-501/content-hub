@@ -976,6 +976,16 @@ document.getElementById("saveSiteMap").addEventListener("click", async () => { /
 
   });
 
+  // Format lastmod as YYYY-MM-DD for Google
+    const formatDateForSitemap = (date) => {
+  if (!date) return new Date().toISOString().split("T")[0]; // fallback = today
+  const d = new Date(date);
+  if (isNaN(d.getTime())) {
+    return new Date().toISOString().split("T")[0]; // invalid -> fallback
+  }
+  return d.toISOString().split("T")[0]; // YYYY-MM-DD
+};
+
 
 // Generate Sitemap XML
 document.getElementById("downloadBtn").addEventListener("click", () => {
@@ -997,8 +1007,7 @@ const escapeXML = (str) => {
 rows.forEach(row => {
   const data = parseRow(row);
   if (data && data.ready) {
-    // Format lastmod as YYYY-MM-DD for Google
-   // const lastMod = new Date(data.date).toISOString().split("T")[0];
+  
 
     const altTags = data.alternates
       .map(alt => `<xhtml:link rel="alternate" hreflang="${escapeXML(alt.lang)}" href="${escapeXML(alt.url)}"/>`)
@@ -1007,7 +1016,7 @@ rows.forEach(row => {
     sitemapUrls.push(
 `  <url>
     <loc>${escapeXML(data.url)}</loc>
-    <lastmod>${data.date}</lastmod>
+<lastmod>${escapeXML(formatDateForSitemap(data.date))}</lastmod>
     <changefreq>${escapeXML(data.schedule)}</changefreq>
     <priority>${parseFloat(data.priority).toFixed(1)}</priority>
     ${altTags}

@@ -224,13 +224,13 @@ async function ensureTranslationConsistency(pageId, lang, slug, btn) {
   } catch (err) {
     log(`⚠ ${lang.toUpperCase()} page missing. Cleaning DB...`);
 
-    /*
+    
     // 🧹 Clean up Firestore state
     await updateDoc(doc(db, "pages", pageId), {
       [`translatedLanguages.${lang}`]: deleteField(),
       [`translations.${lang}`]: deleteField()
     });
-*/
+
     btn.classList.remove("translated", "live");
     btn.classList.add("not-translated");
 

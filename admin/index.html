@@ -1208,7 +1208,7 @@ if (slugInput.value) {
 
 
 
-
+const targetLangs = ["es", "zh", "hi", "ar", "fr", "de"];
 async function updateStaticPageData() {
   try {
     // Fetch pages from Firestore
@@ -1217,17 +1217,30 @@ async function updateStaticPageData() {
 
     const sitePages = snap.docs.map(doc => {
       const d = doc.data();
+
+      let baseUrl = `https://contenthub.guru/page/${d.slug || "N/A"}.html`;
+           
+      const translations = [{ lang: "en", url: baseUrl }];
+      targetLangs.forEach(lang => {
+        if (d.translations?.[lang]?.slug) {
+          translations.push({
+            lang,
+            url: `https://contenthub.guru/page/${lang}/${d.translations[lang].slug}.html`
+          });
+        }
+      });
+
       return {
         id: doc.id,
+        translations,
         title: d.title || "Untitled Site",
         language: d.language || "en",
         description: d.description || "",
-        url: `https://contenthub.guru/page/${d.slug || "N/A"}`,
+        url: baseUrl,
         domain: d.domain || "N/A",
         slug: d.slug || "N/A",
         category: d.category || "N/A",
-        keywords: d.keywords || "N/A",
-        tags: d.tags || "N/A",
+        keywords: d.keywords || [],
         pageCount: d.pageCount || 0,
         publishedCount: d.publishedCount || 0,
         views: d.views || 0,

@@ -1258,10 +1258,10 @@ async function updateStaticPageData() {
     console.log(sitePagesJson);
 
     const now = new Date().toISOString();
-    const metaComment = `<!-- 
-  Generated: ${now}
-  Page Count: ${sitePages.length}
--->`;
+    const metaComment = `
+ // Generated: ${now}
+//  Page Count: ${sitePages.length}
+`;
 
     const fileContent = `${metaComment}\n\n${sitePagesJson}`;
 

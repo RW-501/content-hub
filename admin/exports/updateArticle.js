@@ -99,7 +99,17 @@ function chunkText(text) {
 
 
 
+const logEl = document.getElementById("log");
 
+function writeLog(el, msg) {
+  if (!el) return;
+  el.textContent += msg + "\n";
+  el.scrollTop = el.scrollHeight;
+}
+
+function log(msg) {
+  writeLog(logEl, msg);
+}
 
 
 
@@ -107,6 +117,7 @@ function chunkText(text) {
 export async function translateText(text, targetLang) {
     const startTime = new Date();
   console.log(`Translation started at: ${startTime.toISOString()}`);
+  log(`Translation started at: ${startTime.toISOString()}`);
 
   console.log(`Starting translation`);
   /*
@@ -173,6 +184,8 @@ for (const [index, chunk] of chunks.entries()) {
   console.log(`Total translation duration: ${(stopTime - startTime) / 1000}s`);
   console.log(`Final translated text:`, finalText);
   */
+   log(`Translation stopped at: ${stopTime.toISOString()}`);
+
   console.log(`Final text length: ${finalText.length}`);
 
   return finalText;

@@ -288,7 +288,7 @@ pages.forEach(page => {
     pagesByLang[t.lang].push({
       ...page,
       title: t.title || page.title,
-      url: t.url,
+      url:  `${t.lang}/${t.slug}`,
       lang: t.lang
     });
   });

@@ -48,7 +48,6 @@
   loadAdminHeader('admin-header');
 </script>
 
-<main>
   <div id="auth-section">
     <h3>Login</h3>
     <button id="googleLogin">Login with Google</button>
@@ -403,6 +402,19 @@ document.getElementById('selectAllCheckbox').addEventListener('change', function
   checkboxes.forEach(cb => cb.checked = this.checked);
 });
 
+document.getElementById('selectReachableBtn').addEventListener('click', () => {
+  const rows = document.querySelectorAll('#linkTable tbody tr');
+  rows.forEach(row => {
+    const status = row.querySelector('.status').textContent.trim();
+    const checkbox = row.querySelector('input[type="checkbox"]');
+    if (status === 'Reachable') {
+      checkbox.checked = true;
+    } else {
+      checkbox.checked = false;
+    }
+  });
+});
+
 
         const baseDomain = 'https://contenthub.guru';
         let links = new Set();
@@ -701,14 +713,20 @@ window.sortTable = sortTable;
         
 
         // Function to highlight duplicate links
-        const highlightDuplicate = (url) => {
-          const rows = document.querySelectorAll('#linkTable tbody tr');
-          rows.forEach(row => {
-            if (row.firstChild.textContent === url) {
-              row.style.backgroundColor = '#ffcccc';
-            }
-          });
-        };
+const highlightDuplicate = (url) => {
+  const rows = document.querySelectorAll('#linkTable tbody tr');
+  let firstFound = false;
+  rows.forEach(row => {
+    if (row.firstChild.textContent === url) {
+      if (!firstFound) {
+        firstFound = true; // skip first
+      } else {
+        row.style.backgroundColor = '#ffcccc';
+      }
+    }
+  });
+};
+
         
  
         
@@ -744,6 +762,8 @@ const handleError = (error, url) => {
           filterLinks();
         });
         
+                      const uniqueLinks = new Set();
+
         // Function to filter and display links based on selected filters
         const filterLinks = () => {
           const tableRows = document.querySelectorAll('#linkTable tbody tr');
@@ -755,7 +775,6 @@ const handleError = (error, url) => {
         
             // Filter by unique links
             if (filterUnique.checked) {
-              const uniqueLinks = new Set();
               if (uniqueLinks.has(url)) {
                 showRow = false;
               } else {
@@ -955,6 +974,7 @@ document.getElementById("saveSiteMap").addEventListener("click", async () => { /
 document.getElementById("downloadBtn").addEventListener("click", () => {
   const rows = document.querySelectorAll("#linkTable tbody tr");
   const sitemapUrls = [];
+  let downloaded = false;
 
   // Helper to escape XML special characters
   const escapeXML = (str) => {
@@ -973,14 +993,15 @@ document.getElementById("downloadBtn").addEventListener("click", () => {
         .map(alt => `<xhtml:link rel="alternate" hreflang="${escapeXML(alt.lang)}" href="${escapeXML(alt.url)}"/>`)
         .join("\n    ");
 
-      sitemapUrls.push(`
-  <url>
+      sitemapUrls.push(
+`  <url>
     <loc>${escapeXML(data.url)}</loc>
     <lastmod>${escapeXML(data.date)}</lastmod>
     <changefreq>${escapeXML(data.schedule)}</changefreq>
     <priority>${escapeXML(data.priority)}</priority>
     ${altTags}
-  </url>`);
+  </url>`
+      );
     }
   });
 
@@ -1000,6 +1021,7 @@ ${sitemapUrls.join("\n")}
     downloaded = true;
   }
 });
+
 
 
 

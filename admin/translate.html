@@ -296,6 +296,11 @@ async function loadPages() {
 
           if (waitMs && waitMs > 0) {
             status(`⚠ Quota hit. Pausing for ${formatTime(waitMs / 1000)}...`);
+                
+        state.waitEnd = Date.now() + waitMs;
+        state.waitForIndex = state.index; // mark which index this wait corresponds to
+        localStorage.setItem(AUTO_JOB_KEY, JSON.stringify(state));
+  
           } else {
             status(`✅ Done translating ${data.slug} → ${lang.toUpperCase()}`);
           }

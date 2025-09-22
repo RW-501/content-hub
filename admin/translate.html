@@ -316,7 +316,7 @@ async function loadPages() {
       div.appendChild(btn);
 
       // If already translated, try to add link + live indicator
-      if (translated && data.translations?.[lang]?.slug) {
+      if (!waitBool && translated && data.translations?.[lang]?.slug) {
   
       let updated =  await ensureTranslationConsistency(pageId, lang, data.translations[lang].slug, btn);
             
@@ -453,7 +453,7 @@ async function autoClickNotTranslated() {
 
     try {
       // If we don't already have a waitEnd for this index, set it now
-      if (!waitBool || !state.waitEnd || state.waitForIndex !== state.index) {
+      if (!waitBool && !state.waitEnd || state.waitForIndex !== state.index) {
         // start a fresh 60s wait
         const waitMs = 60 * 1000;
         state.waitEnd = Date.now() + waitMs;

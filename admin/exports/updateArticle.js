@@ -465,7 +465,7 @@ let Slug =  await translateText(slugify(translatedData.slug), targetLang);
     translatedData.pageName = await translateText(articleData.pageName, targetLang);
   }
     if (articleData.slug) {
-    translatedData.slug = Slug;
+translatedData.slug = Slug ? Slug : translatedData.slug;
   //  translatedData.slug = "/" + targetLang + await translateText(articleData.slug, targetLang);
   }
     if (articleData.category) {
@@ -475,7 +475,7 @@ let Slug =  await translateText(slugify(translatedData.slug), targetLang);
     // 🔹 Update the translations object for the targetLang
 translatedData.translations = translatedData.translations || {}; // ensure the object exists
 translatedData.translations[targetLang] = {
-  slug: Slug, // translated slug
+  slug: Slug ? Slug : translatedData.slug, // translated slug
   lang: targetLang, // store language code
 };
 

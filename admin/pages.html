@@ -681,7 +681,7 @@ function renderDashboard(pages) {
       <td><div class="sortable" data-field="views">${p.views || 0}</div></td>
       <td>
         <div class="sortable" data-field="date" class="action-buttons">
-          <button class='updatePageBTN' onclick="updatePageBtn('${p.id}','${p.slug}', '${p.category}')">Update</button>
+          <button class='updatePageBTN' onclick="updatePageBtn('${p.id}','${p.slug}', '${p.category}', '${p.language}')">Update</button>
           <button onclick="window.open('https://contenthub.guru/admin/editor?id=${p.id}', '_blank')">Edit</button>
           <button class="remove-btn" onclick="removePage('${p.id}','${p.slug}')">Remove</button>
         </div>
@@ -812,10 +812,11 @@ async function pingPages(){
 
 
 
-async function updatePageBtn(siteId, slug, category) {
+async function updatePageBtn(siteId, slug, category, language) {
   try {
 
-    
+    console.log("language:", language);
+
 // Function to generate a random hex color
 function getRandomColor() {
   const letters = "0123456789ABCDEF";

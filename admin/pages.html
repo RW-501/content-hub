@@ -354,7 +354,7 @@ function formatVersion(n) {
 async function pingSite(domain) {
   if (!domain) return { online: false, version: null, faq: null, howTo: null, links: 0, ads: 0, images: 0, videos: 0 };
 
- //   console.log("/domain:", domain);
+   console.log("/domain:", domain);
 
   const url = domain.startsWith("http") ? domain : `https://contenthub.guru/page/${domain}`;
   if (checkedDomains.hasOwnProperty(url)) return checkedDomains[url];
@@ -584,7 +584,7 @@ pageData.forEach(page => {
 pageCache = {};
 allPages.forEach(p => (pageCache[p.id] = p));
 
-console.log("allPages:", allPages);
+//console.log("allPages:", allPages);
 
 // Render
 renderDashboard(allPages);
@@ -724,7 +724,7 @@ function renderDashboard(pages) {
     if (p.lang && p.lang !== 'en') {
       p.slug = `${p.lang}/${p.slug}`;
     }
-    
+
     const pageUrl = `https://contenthub.guru/page/${p.slug}`;
     const shareText = encodeURIComponent(`Check out this page: ${p.title || ''}`);
 

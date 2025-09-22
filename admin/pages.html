@@ -1292,6 +1292,10 @@ let oldPage = '';
 async function updatePageStatus(page) {
   try {
 
+        if (page.lang && page.lang !== 'en') {
+      page.slug = `${page.lang}/${page.slug}`;
+    }
+
     const { online, version, faq, howTo, links, ads, images, videos } = await pingSite(page.slug);
 
     // store version by siteId

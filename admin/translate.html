@@ -177,33 +177,48 @@
   const db = getFirestore(app);
   const auth = getAuth(app);
 
-  const targetLangs = ["es", "zh", "hi", "ar","fr", "de"];
-  const pagesContainer = document.getElementById("pages");
 
+
+
+
+
+/* ---------------- Config ---------------- */
+const targetLangs = ["es", "zh", "hi", "ar", "fr", "de"];
+const pagesContainer = document.getElementById("pages");
+
+// Unified log/status output
 const logEl = document.getElementById("log");
+const statusDiv = document.getElementById("status");
 
-function log(msg) {
-  logEl.textContent += msg + "\n";
-  logEl.scrollTop = logEl.scrollHeight; // 🔥 always scroll to bottom
+function writeLog(el, msg) {
+  if (!el) return;
+  el.textContent += msg + "\n";
+  el.scrollTop = el.scrollHeight;
 }
 
-  // global lookup map
+function log(msg) {
+  writeLog(logEl, msg);
+  writeLog(statusDiv, msg);
+}
+
+// Global lookup map (keeps references if needed)
 const buttonIndex = {}; // { [pageId_lang]: HTMLElement }
 
-  /* ---------------- Fetch and Render Pages ---------------- */
+/* ---------------- Firestore -> Render ---------------- */
 async function loadPages() {
   const q = query(collection(db, "pages"));
   const snap = await getDocs(q);
   pagesContainer.innerHTML = "";
 
-  snap.forEach(docSnap => {
+  // Use for...of so we can await inside the loop
+  for (const docSnap of snap.docs) {
     const data = docSnap.data();
     const pageId = docSnap.id;
 
     const div = document.createElement("div");
     div.className = "page-card";
 
-    // Default URL (English or original)
+    // Default URL (English)
     const defaultUrl = `https://contenthub.guru/page/${data.slug}.html`;
 
     // Title link
@@ -213,61 +228,63 @@ async function loadPages() {
     titleLink.target = "_blank";
     div.appendChild(titleLink);
 
-    // Slug info
+    // Slug
     const slugP = document.createElement("p");
     slugP.textContent = `Slug: ${data.slug}`;
     div.appendChild(slugP);
 
     // Language buttons
-    targetLangs.forEach(async lang => {
+    for (const lang of targetLangs) {
       const translated = data.translatedLanguages?.[lang] === true;
 
       const btn = document.createElement("button");
       btn.className = "lang-btn " + (translated ? "translated" : "not-translated");
       btn.textContent = lang.toUpperCase();
 
- // Save button reference for later lookup
-  buttonIndex[`${pageId}_${lang}`] = btn;
+      // Save reference
+      buttonIndex[`${pageId}_${lang}`] = btn;
 
-      // Translate on click
-btn.onclick = async () => {
-  if (translated) {
-    const confirmReset = confirm(
-      `⚠ ${data.slug} is already translated to ${lang.toUpperCase()}.\nDo you want to re-translate it?`
-    );
-    if (!confirmReset) {
-      log(`⏭ Skipped re-translation of ${data.slug} → ${lang.toUpperCase()}`);
-      return; // stop here if user cancels
-    }
-  }
+      // Click handler for manual action
+      btn.onclick = async () => {
+        try {
+          if (translated) {
+            const confirmReset = confirm(
+              `⚠ ${data.slug} is already translated to ${lang.toUpperCase()}.\nDo you want to re-translate it?`
+            );
+            if (!confirmReset) {
+              log(`⏭ Skipped re-translation of ${data.slug} → ${lang.toUpperCase()}`);
+              return;
+            }
+          }
 
-  log(`🔄 Translating ${data.slug} → ${lang.toUpperCase()}`);
-  let waitMs = await translatePageLanguage(pageId, data, lang);
+          log(`🔄 Translating ${data.slug} → ${lang.toUpperCase()}`);
+          const waitMs = await translatePageLanguage(pageId, data, lang);
 
-  if (waitMs && waitMs > 0) {
-    log(`⚠ Quota hit. Pausing for ${formatTime(waitMs / 1000)}...`);
-  } else {
-    log(`✅ Done translating ${data.slug} → ${lang.toUpperCase()}`);
-  }
-};
+          if (waitMs && waitMs > 0) {
+            log(`⚠ Quota hit. Pausing for ${formatTime(waitMs / 1000)}...`);
+          } else {
+            log(`✅ Done translating ${data.slug} → ${lang.toUpperCase()}`);
+          }
+        } catch (err) {
+          log(`❌ Manual translation error: ${err.message}`);
+        }
+      };
 
       div.appendChild(btn);
 
-      // If already translated, check if live
+      // If already translated, try to add link + live indicator
       if (translated && data.translations?.[lang]?.slug) {
         const translatedUrl = `https://contenthub.guru/page/${lang}/${data.translations[lang].slug}.html`;
 
-        // 🔎 Check if page is live
         try {
           const res = await fetch(translatedUrl, { method: "HEAD" });
           if (res.ok) {
-            btn.classList.add("live"); // ✅ add live class
+            btn.classList.add("live");
           }
         } catch (err) {
           console.warn(`⚠ Could not reach ${translatedUrl}`, err);
         }
 
-        // Link to translated page
         const translatedLink = document.createElement("a");
         translatedLink.href = translatedUrl;
         translatedLink.textContent = `Go to ${lang.toUpperCase()} version`;
@@ -282,43 +299,211 @@ btn.onclick = async () => {
         resetBtn.textContent = "Reset";
 
         resetBtn.onclick = async () => {
-  if (translated) {
-    const filePath = `page/${lang}/${data.slug}.html`;
+          try {
+            const filePath = `page/${lang}/${data.slug}.html`;
 
-    const confirmReset = confirm(
-      `⚠ ${data.slug} is already translated to ${lang.toUpperCase()}.\n\n` +
-      `Do you want to RESET and re-translate?\n\nThis will delete:\n${filePath}`
-    );
+            const confirmReset = confirm(
+              `⚠ ${data.slug} is already translated to ${lang.toUpperCase()}.\n\n` +
+              `Do you want to RESET and re-translate?\n\nThis will delete:\n${filePath}`
+            );
 
-    if (!confirmReset) {
-      log(`⏭ Skipped reset for ${data.slug} (${lang.toUpperCase()})`);
-      return;
-    }
+            if (!confirmReset) {
+              log(`⏭ Skipped reset for ${data.slug} (${lang.toUpperCase()})`);
+              return;
+            }
 
-    // If confirmed → reset first
-    log(`♻ Resetting ${filePath} (${lang})...`);
-    await resetTranslation(pageId, lang);
-    await removePage(pageId, filePath);
-    await loadPages();
-  }
-
-  // Normal translation
-  log(`🔄 Translating ${data.slug} → ${lang.toUpperCase()}`);
-  let waitMs = await translatePageLanguage(pageId, data, lang);
-
-  if (waitMs && waitMs > 0) {
-    log(`⚠ Quota hit. Pausing for ${formatTime(waitMs / 1000)}...`);
-  } else {
-    log(`✅ Done translating ${data.slug} → ${lang.toUpperCase()}`);
-  }
+            log(`♻ Resetting ${filePath} (${lang})...`);
+            await resetTranslation(pageId, lang);
+            await removePage(pageId, filePath);
+            await loadPages();
+          } catch (err) {
+            log(`❌ Reset error: ${err.message}`);
+          }
         };
         div.appendChild(resetBtn);
       }
-    });
+    }
 
     pagesContainer.appendChild(div);
+  }
+}
+
+/* ---------------- Auto Translate Job (with resume) ---------------- */
+const AUTO_JOB_KEY = "autoTranslateJob";
+
+function sleep(ms) {
+  return new Promise(r => setTimeout(r, ms));
+}
+
+/**
+ * HEAD-check a URL with retries (delay in ms).
+ * returns true if any attempt succeeds.
+ */
+async function checkPageLive(url, retries = 2, delay = 30000) {
+  for (let attempt = 1; attempt <= retries + 1; attempt++) {
+    try {
+      const res = await fetch(url, { method: "HEAD" });
+      if (res.ok) return true;
+    } catch (err) {
+      log(`❌ Error checking page: ${err.message}`);
+    }
+
+    if (attempt <= retries) {
+      log(`🔁 Retry ${attempt}/${retries} in ${delay / 1000}s...`);
+      await sleep(delay);
+    }
+  }
+  return false;
+}
+
+/**
+ * Auto-run that clicks each .lang-btn.not-translated in order.
+ * It persists state to localStorage and resumes countdown if you reload.
+ *
+ * State shape saved to localStorage:
+ * { index: number, waitEnd: msTimestamp | null }
+ */
+async function autoClickNotTranslated() {
+  // always re-query buttons so DOM updates are respected
+  const buttons = Array.from(document.querySelectorAll(".lang-btn.not-translated"));
+
+  if (buttons.length === 0) {
+    log("🎉 No untranslated buttons found. Job done!");
+    localStorage.removeItem(AUTO_JOB_KEY);
+    return;
+  }
+
+  // Load or create job state
+  let state = JSON.parse(localStorage.getItem(AUTO_JOB_KEY)) || { index: 0, waitEnd: null };
+
+  if (state.index >= buttons.length) {
+    log("✅ All buttons processed.");
+    localStorage.removeItem(AUTO_JOB_KEY);
+    return;
+  }
+
+  // main loop - do not use recursion to avoid stack growth
+  while (state.index < buttons.length) {
+    // Re-query the button in case DOM shifted; fallback to previous index if missing
+    const btn = buttons[state.index] || document.querySelectorAll(".lang-btn.not-translated")[state.index];
+
+    if (!btn) {
+      log(`⚠ Button at index ${state.index} disappeared; skipping.`);
+      state.index++;
+      state.waitEnd = null;
+      localStorage.setItem(AUTO_JOB_KEY, JSON.stringify(state));
+      continue;
+    }
+
+    const card = btn.closest(".page-card");
+    const slugText = card?.querySelector("p")?.textContent || "Slug: unknown";
+    const slug = slugText.replace("Slug: ", "").trim();
+    const lang = btn.textContent.toLowerCase();
+    const translatedUrl = `https://contenthub.guru/page/${lang}/${slug}.html`;
+
+    try {
+      // If we don't already have a waitEnd for this index, set it now
+      if (!state.waitEnd || state.waitForIndex !== state.index) {
+        // start a fresh 60s wait
+        const waitMs = 60 * 1000;
+        state.waitEnd = Date.now() + waitMs;
+        state.waitForIndex = state.index; // mark which index this wait corresponds to
+        localStorage.setItem(AUTO_JOB_KEY, JSON.stringify(state));
+        log(`👉 Clicking [${btn.textContent}] for ${slug}... (index ${state.index})`);
+        btn.click();
+      } else {
+        // resuming existing wait
+        log(`🔁 Resuming waiting for index ${state.index} (${slug})`);
+      }
+
+      // Wait loop - resume from remaining time instead of restarting
+      while (true) {
+        const now = Date.now();
+        const remaining = Math.max(0, Math.ceil((state.waitEnd - now) / 1000)); // in seconds
+
+        if (remaining <= 0) break;
+
+        // Reduced spam: log every 10s and every second for last 5s
+        if (remaining % 10 === 0 || remaining <= 5) {
+          log(`⏳ Waiting ${remaining}s before checking live page...`);
+        }
+
+        // Sleep 1s (or until waitEnd)
+        await sleep(1000);
+
+        // If user reloads, state is persisted, so loop will continue where it left off
+      }
+
+      // Wait finished (or already passed). Clear waitEnd before performing ping
+      state.waitEnd = null;
+      state.waitForIndex = null;
+      localStorage.setItem(AUTO_JOB_KEY, JSON.stringify(state));
+
+      // Ping with retries
+      const isLive = await checkPageLive(translatedUrl, 2, 30000); // 2 retries, 30s apart
+
+      if (isLive) {
+        log(`🌍 Live check passed: ${translatedUrl}`);
+        btn.classList.remove("not-translated");
+        btn.classList.add("translated", "live");
+
+        // Add link if missing
+        if (!card.querySelector(`a[href="${translatedUrl}"]`)) {
+          const translatedLink = document.createElement("a");
+          translatedLink.href = translatedUrl;
+          translatedLink.textContent = `Go to ${lang.toUpperCase()} version`;
+          translatedLink.target = "_blank";
+          translatedLink.style.display = "block";
+          translatedLink.style.marginTop = "4px";
+          card.appendChild(translatedLink);
+        }
+      } else {
+        log(`⚠ Still not live after retries: ${translatedUrl}`);
+      }
+    } catch (err) {
+      log(`❌ Error processing index ${state.index}: ${err.message}`);
+      // don't get stuck — mark as attempted and continue
+    }
+
+    // advance to next and persist
+    state.index++;
+    state.waitEnd = null;
+    state.waitForIndex = null;
+    localStorage.setItem(AUTO_JOB_KEY, JSON.stringify(state));
+  }
+
+  // finished
+  log("✅ Finished all not-translated buttons.");
+  localStorage.removeItem(AUTO_JOB_KEY);
+}
+
+/* ---------------- Start Button ---------------- */
+// attach once (ensure element exists)
+const startBtn = document.getElementById("translateWithDelayBtn");
+if (startBtn) {
+  startBtn.addEventListener("click", () => {
+    // Prevent double-start in same session
+    const currentJob = JSON.parse(localStorage.getItem(AUTO_JOB_KEY));
+    if (currentJob && currentJob.index < document.querySelectorAll(".lang-btn.not-translated").length) {
+      log("⚠ Auto job already present in localStorage — resuming it instead of starting a new one.");
+      autoClickNotTranslated();
+    } else {
+      autoClickNotTranslated();
+    }
   });
 }
+
+/* ---------------- Helpers ---------------- */
+function formatTime(seconds) {
+  const mins = Math.floor(seconds / 60);
+  const secs = Math.floor(seconds % 60);
+  return `${mins}m ${secs}s`;
+}
+
+/* ---------------- Initial load ---------------- */
+loadPages();
+
+
 
 
 const languagesSelect = ["es", "zh", "hi", "ar", "fr", "de"];
@@ -350,167 +535,6 @@ langOptions.forEach(({ code, label }) => {
 });
 
 selectDiv.appendChild(select);
-
-
-    
-const statusDiv = document.getElementById('status');
-function status(msg) {
-  statusDiv.innerHTML += msg + "\n";
-  statusDiv.scrollTop = statusDiv.scrollHeight; // 🔥 always scroll to bottom
-}
-
-const JOB_KEY = "safeTranslateJob"; // localStorage key
-
-async function safeTranslateWithDelay() {
-
-
-
-const languages = document.getElementById('selectLang').value;
-
-
-const q = query(collection(db, "pages"));
-  const snap = await getDocs(q);
-  const pages = snap.docs.map(doc => ({ id: doc.id, data: doc.data() }));
-  const total = pages.length;
-
-  // Try to resume progress
-  let jobState = JSON.parse(localStorage.getItem(JOB_KEY)) || {
-    langIndex: 0,
-    pageIndex: 0,
-    doneCount: 0,
-    startTime: Date.now(),
-  };
-
-  for (let li = jobState.langIndex; li < languages.length; li++) {
-    const targetLang = languages[li];
-    log(`🚀 Starting SAFE bulk translation for ${targetLang.toUpperCase()}...`);
-    let prevSlug = "";
-
-    for (let pi = jobState.pageIndex; pi < pages.length; pi++) {
-      const { id: pageId, data } = pages[pi];
-      const currentSlug = data.slug;
-
-      if (data.translatedLanguages?.[targetLang]) {
-        log(`⚡ Skipping ${currentSlug}, already translated to ${targetLang.toUpperCase()}`);
-        jobState.pageIndex = pi + 1; // advance index
-        continue;
-      }
-
-      try {
-        const chunkStart = Date.now();
-        let msg = `
-          <strong>Lang:</strong> ${targetLang.toUpperCase()} <br>
-          <strong>Page:</strong> ${currentSlug} <br>
-          <strong>Progress:</strong> ${jobState.doneCount}/${total} <br>
-          <strong>Elapsed:</strong> ${formatTime((Date.now() - jobState.startTime) / 1000)}
-        `;
-        status(msg);
-
-// ⏳ Show "working" countdown before translating
-for (let i = 60; i > 0; i--) {
-  log(`🚀 Working ${i}s...`);
-  await new Promise(res => setTimeout(res, 1000));
-}
-
-// 🕒 Measure time spent on API call
-const callStart = Date.now();
-let waitMs = await translatePageLanguage(pageId, data, targetLang);
-const callEnd = Date.now();
-const duration = ((callEnd - callStart) / 1000).toFixed(1);
-
-log(`✅ translatePageLanguage returned in ${duration}s`);
-
-        if (waitMs && waitMs > 0) {
-          log(`⚠ Quota hit. Pausing for ${formatTime(waitMs / 1000)}...`);
-          statusDiv.innerHTML += `<br>⚠ Quota hit. Waiting ${formatTime(waitMs / 1000)}...`;
-
-          // Save state before waiting
-          localStorage.setItem(JOB_KEY, JSON.stringify({ 
-            ...jobState, langIndex: li, pageIndex: pi 
-          }));
-
-          await new Promise(res => setTimeout(res, waitMs));
-        } else {
-
-// After verifying translation + fetch
-const btnKey = `${pageId}_${targetLang}`;
-const btn = buttonIndex[btnKey];
-if (btn) {
-  const translatedUrl = `https://contenthub.guru/page/${targetLang}/${data.translations[targetLang].slug}.html`;
-  try {
-    const res = await fetch(translatedUrl, { method: "HEAD" });
-    if (res.ok) {
-      btn.classList.add("live"); // add green/live indicator
-      log(`🌍 Page is LIVE: ${translatedUrl}`);
-    } else {
-      log(`⚠ Page not live yet: ${translatedUrl}`);
-    }
-  } catch (err) {
-    log(`❌ Error pinging ${translatedUrl}: ${err.message}`);
-  }
-}
-
-       
-          jobState.doneCount++;
-          prevSlug = currentSlug;
-
-          // Save progress
-          jobState.langIndex = li;
-          jobState.pageIndex = pi + 1;
-          localStorage.setItem(JOB_KEY, JSON.stringify(jobState));
-
-          // Wait 60s pacing
-          for (let i = 60; i > 0; i--) {
-            let msg = `<br>⏳ Waiting ${i}s before next page...`;
-            status(msg);
-            await new Promise(res => setTimeout(res, 1000));
-          }
-        }
-      } catch (err) {
-        log(`❌ Error on ${currentSlug}: ${err.message}`);
-      }
-    }
-
-    log(`🎉 Finished ${targetLang.toUpperCase()} translation`);
-    jobState.pageIndex = 0; // reset for next language
-    localStorage.setItem(JOB_KEY, JSON.stringify(jobState));
-  }
-
-  // Cleanup after finishing all languages
-  localStorage.removeItem(JOB_KEY);
-  let msg = `✅ All translations done!`;
-  status(msg);
-
-  await loadPages();
-}
-
-/* Heartbeat every 30 mins */
-setInterval(() => {
-  const jobState = JSON.parse(localStorage.getItem(JOB_KEY));
-  if (jobState) {
-    console.log("💓 Heartbeat: still working...", jobState);
-    jobState.lastHeartbeat = Date.now();
-    localStorage.setItem(JOB_KEY, JSON.stringify(jobState));
-  }
-}, 30 * 60 * 1000);
-
-  const translateWithDelayBtn = document.getElementById('translateWithDelayBtn');
-
-        translateWithDelayBtn.addEventListener('click', () => {
-          safeTranslateWithDelay();
-        });
-        
-
-// Helper to format seconds into mm:ss
-function formatTime(seconds) {
-  const mins = Math.floor(seconds / 60);
-  const secs = Math.floor(seconds % 60);
-  return `${mins}m ${secs}s`;
-}
-
-
-  /* ---------------- Start ---------------- */
-  loadPages();
 
 
 async function renameTranslationDocs() {

@@ -271,22 +271,29 @@ filteredSites = sitesData.filter(s =>
 
     try {
       const response = await fetch("https://contenthub.guru/sitePages.json");
-      const data = await response.json();
+const data = await response.json();
 
-      // Group pages by language
-      const pagesByLang = {};
-      data.forEach(page => {
-        // parent language
-        const lang = page.language || 'en';
-        if(!pagesByLang[lang]) pagesByLang[lang] = [];
-        pagesByLang[lang].push({...page, url: page.url, lang});
+// Ensure it's an array
+const pages = Array.isArray(data) ? data : Object.values(data);
 
-        // translations
-        (page.translations||[]).forEach(t=>{
-          if(!pagesByLang[t.lang]) pagesByLang[t.lang]=[];
-          pagesByLang[t.lang].push({...page, title: t.title, url: t.url, lang: t.lang});
-        });
-      });
+pages.forEach(page => {
+  // parent language
+  const lang = page.language || 'en';
+  if (!pagesByLang[lang]) pagesByLang[lang] = [];
+  pagesByLang[lang].push({ ...page, url: page.url, lang });
+
+  // translations
+  (page.translations || []).forEach(t => {
+    if (!pagesByLang[t.lang]) pagesByLang[t.lang] = [];
+    pagesByLang[t.lang].push({
+      ...page,
+      title: t.title || page.title,
+      url: t.url,
+      lang: t.lang
+    });
+  });
+});
+
 
       sitesData = shuffleArray(pagesByLang[currentLang] || []);
       renderSites();

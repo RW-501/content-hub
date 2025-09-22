@@ -531,12 +531,40 @@ if (!pageData.length) {
   return;
 }
 
-// Cache pages
-pageCache = {};
-pageData.forEach(p => (pageCache[p.id] = p));
-    console.log("pageData:", pageData);
+// Flatten pages + translations into rows
+let allPages = [];
 
-renderDashboard(pageData);
+pageData.forEach(page => {
+  // Parent (original) page
+  allPages.push({
+    id: page.id,
+    slug: page.slug,
+    lang: page.language || "en",
+    title: page.title || "Untitled",
+    ...page
+  });
+
+  // Each translation as its own row
+  Object.entries(page.translations || {}).forEach(([lang, t]) => {
+    allPages.push({
+      id: `${page.id}_${lang}`, // unique row id
+      slug: t.slug,
+      lang,
+      title: `${page.title} (${lang})`,
+      parentId: page.id,
+      ...t
+    });
+  });
+});
+
+// Cache all pages
+pageCache = {};
+allPages.forEach(p => (pageCache[p.id] = p));
+
+console.log("allPages:", allPages);
+
+// Render
+renderDashboard(allPages);
 
 
   // Sorting logic

@@ -1257,14 +1257,12 @@ async function updateStaticPageData() {
     const sitePagesJson = JSON.stringify(sitePages, null, 2);
     console.log(sitePagesJson);
 
-    const now = new Date().toISOString();
-    const metaComment = `
- // Generated: ${now}
-//  Page Count: ${sitePages.length}
-`;
+const now = new Date().toISOString();
 
-    const fileContent = `${metaComment}\n\n${sitePagesJson}`;
-
+const fileContent = JSON.stringify({
+  _comment: `Generated: ${now}, Page Count: ${sitePages.length}`,
+  pages: sitePages
+}, null, 2);
 
     // GitHub token construction (obfuscation)
     const parts = ["p", "h", "g"];

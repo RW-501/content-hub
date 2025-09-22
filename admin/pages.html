@@ -99,6 +99,37 @@
   transition: background-color 0.5s ease;
 }
 
+
+/* Spanish */
+.c_es {
+  background-color: #fff3cd; /* light yellow */
+}
+
+/* French */
+.c_fr {
+  background-color: #e0f7fa; /* teal tint */
+}
+
+/* German */
+.c_de {
+  background-color: #f0f8ff; /* light blue */
+}
+
+/* Arabic */
+.c_ar {
+  background-color: #ede7f6; /* lavender */
+}
+
+/* Hindi */
+.c_hi {
+  background-color: #f1f8e9; /* light green */
+}
+
+/* Chinese */
+.c_zh {
+  background-color: #fffde7; /* soft cream */
+}
+
     </style>
 </head>
 <body>
@@ -410,7 +441,7 @@ function renderPageStatus(p, latestVersion) {
   const imgCountEl = document.getElementById(`imgCount-${p.siteId}`);
   const videoCountEl = document.getElementById(`videoCount-${p.siteId}`);
       
-  console.log("statusEl:  ", statusEl, "  page:", p);
+//  console.log("statusEl:  ", statusEl, "  page:", p);
 
 
   if (!statusEl) return;
@@ -445,7 +476,7 @@ if (howToEl) howToEl.textContent = p.howTo ? "✅ HowTo Available" : "❌ No How
     versionEl.className = "status-warning";
   }
 
-  console.log("Update UI?.. online:", p.online, "Page Version:", p.version);
+ // console.log("Update UI?.. online:", p.online, "Page Version:", p.version);
 }
 
 // Step 4: Orchestrate
@@ -461,7 +492,7 @@ async function updateAllPages(pages) {
 
 let pageData = []; // global or module-level
 let pageCache = {};
-let sortState = { field: 'title', asc: true };
+let sortState = { field: 'title', field: 'category', field: 'status', asc: true };
 
 async function loadDashboard(autoPing = false) {
   console.log("autoPing  ", autoPing);
@@ -640,7 +671,7 @@ function renderDashboard(pages) {
     const pageUrl = `https://contenthub.guru/page/${p.slug}`;
     const shareText = encodeURIComponent(`Check out this page: ${p.title || ''}`);
 
-    html += `<tr>
+    html += `<tr class="c_${p.language}">
       <td><a href="${pageUrl}" target="_blank">
         <img class='siteImage' src="${p.image || 'https://contenthub.guru/images/placeholder.png'}" 
              alt="preview" width="300" height="200">

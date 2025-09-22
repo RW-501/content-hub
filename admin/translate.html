@@ -305,18 +305,14 @@ async function loadPages() {
 
       // If already translated, try to add link + live indicator
       if (translated && data.translations?.[lang]?.slug) {
+  
+      let updated =  await ensureTranslationConsistency(pageId, lang, data.translations[lang].slug, btn);
+            
+      if (!updated) {
+              status(`No Update`);
+              return;
+            }
         const translatedUrl = `https://contenthub.guru/page/${lang}/${data.translations[lang].slug}.html`;
-
-        try {
-          const res = await fetch(translatedUrl, { method: "HEAD" });
-          if (res.ok) {
-            btn.classList.add("live");
-          }else{
-            await ensureTranslationConsistency(pageId, lang, data.translations[lang].slug, btn);
-          }
-        } catch (err) {
-          console.warn(`⚠ Could not reach ${translatedUrl}`, err);
-        }
 
         const translatedLink = document.createElement("a");
         translatedLink.href = translatedUrl;

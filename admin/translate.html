@@ -198,6 +198,9 @@ function writeLog(el, msg) {
 
 function log(msg) {
   writeLog(logEl, msg);
+}
+
+function status(msg) {
   writeLog(statusDiv, msg);
 }
 
@@ -252,21 +255,21 @@ async function loadPages() {
               `⚠ ${data.slug} is already translated to ${lang.toUpperCase()}.\nDo you want to re-translate it?`
             );
             if (!confirmReset) {
-              log(`⏭ Skipped re-translation of ${data.slug} → ${lang.toUpperCase()}`);
+              status(`⏭ Skipped re-translation of ${data.slug} → ${lang.toUpperCase()}`);
               return;
             }
           }
 
-          log(`🔄 Translating ${data.slug} → ${lang.toUpperCase()}`);
+          status(`🔄 Translating ${data.slug} → ${lang.toUpperCase()}`);
           const waitMs = await translatePageLanguage(pageId, data, lang);
 
           if (waitMs && waitMs > 0) {
-            log(`⚠ Quota hit. Pausing for ${formatTime(waitMs / 1000)}...`);
+            status(`⚠ Quota hit. Pausing for ${formatTime(waitMs / 1000)}...`);
           } else {
-            log(`✅ Done translating ${data.slug} → ${lang.toUpperCase()}`);
+            status(`✅ Done translating ${data.slug} → ${lang.toUpperCase()}`);
           }
         } catch (err) {
-          log(`❌ Manual translation error: ${err.message}`);
+          status(`❌ Manual translation error: ${err.message}`);
         }
       };
 
@@ -378,6 +381,7 @@ async function autoClickNotTranslated() {
 
   if (state.index >= buttons.length) {
     log("✅ All buttons processed.");
+    status("✅ All buttons processed.");
     localStorage.removeItem(AUTO_JOB_KEY);
     return;
   }
@@ -473,7 +477,7 @@ async function autoClickNotTranslated() {
   }
 
   // finished
-  log("✅ Finished all not-translated buttons.");
+  status("✅ Finished all not-translated buttons.");
   localStorage.removeItem(AUTO_JOB_KEY);
 }
 
@@ -485,7 +489,7 @@ if (startBtn) {
     // Prevent double-start in same session
     const currentJob = JSON.parse(localStorage.getItem(AUTO_JOB_KEY));
     if (currentJob && currentJob.index < document.querySelectorAll(".lang-btn.not-translated").length) {
-      log("⚠ Auto job already present in localStorage — resuming it instead of starting a new one.");
+      status("⚠ Auto job already present in localStorage — resuming it instead of starting a new one.");
       autoClickNotTranslated();
     } else {
       autoClickNotTranslated();

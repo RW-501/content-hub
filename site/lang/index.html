@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>ContentHub.guru - Pages by Language</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="List of pages by language on ContentHub.guru">
+  <link rel="stylesheet" href="https://contenthub.guru/site/css/style.css">
+<link rel="canonical" href="https://contenthub.guru/site/lang">
+
+<!-- Favicons -->
+<link rel="apple-touch-icon" sizes="180x180" href="https://contenthub.guru/images/favicons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://contenthub.guru/images/favicons/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="https://contenthub.guru/images/favicons/favicon-16x16.png">
+<link rel="manifest" href="https://contenthub.guru/images/favicons/site.webmanifest">
+
+<!-- 🔹 Social Profiles for OG -->
+<meta property="og:see_also" content="https://x.com/Contenthub_Guru">
+<meta property="og:see_also" content="https://www.linkedin.com/showcase/content-hub-guru">
+<meta property="og:see_also" content="https://www.reddit.com/r/ContentHubGuru/">
+<!-- (Future) <meta property="og:see_also" content="https://facebook.com/..."> -->
+<!-- (Future) <meta property="og:see_also" content="https://youtube.com/..."> -->
+
+  <!-- Breadcrumb Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://contenthub.guru"},
+      {"@type": "ListItem", "position": 2, "name": "Categories", "item": "https://contenthub.guru/category/"},
+      {"@type": "ListItem", "position": 3, "name": "About", "item": "https://contenthub.guru/site/about"},
+      {"@type": "ListItem", "position": 4, "name": "Contact Us", "item": "https://contenthub.guru/site/contact-us"}
+    ]
+  }
+  </script>
+
+  <!-- FAQ Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is ContentHub.guru?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "ContentHub.guru is a hub for creators, marketers, and businesses to access expert guides, tutorials, and actionable insights on content creation, SEO, and online growth."
+        }
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin:0; padding:0; background:#f4f6f8; color:#333; }
+    a { text-decoration:none; color:inherit; }
+    header { background:linear-gradient(90deg,#4a90e2,#357ABD); color:white; padding:1rem 2rem; display:flex; justify-content:space-between; align-items:center; box-shadow:0 4px 10px rgba(0,0,0,0.12);}
+    header h1 { margin:0; font-size:2rem; }
+    .sites-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:1.8rem; margin:2rem auto; max-width:1200px; padding:0 1rem; }
+    .site-card { box-shadow: 0 8px 20px rgba(0,0,0,0.06); transition:0.4s; cursor:pointer; background:#fff; border-radius:12px; overflow:hidden; }
+    .site-card:hover { transform:translateY(-8px) scale(1.02); box-shadow:0 15px 30px rgba(0,0,0,0.12); }
+    .site-card img { width:100%; height:160px; object-fit:cover; }
+    .site-card h3 { margin:0.5rem 0 0; color:#357ABD; font-size:1.1rem; }
+    .site-card p { margin:0.2rem 0 0; font-size:0.9rem; color:#555; }
+    .category-badge { background:#007bff; color:#fff; padding:2px 6px; border-radius:4px; font-size:0.8rem; display:inline-block; margin-bottom:0.5rem; }
+    .toolbar { display:flex; justify-content:center; flex-wrap:wrap; gap:1rem; margin:1rem 0; }
+    .toolbar input, .toolbar select { padding:0.5rem 1rem; border-radius:6px; border:1px solid #ccc; font-size:0.95rem; }
+    .pagination { display:flex; justify-content:center; margin:2rem 0; gap:0.5rem; flex-wrap:wrap; }
+    .page-btn { cursor:pointer; padding:0.4rem 0.8rem; border-radius:5px; background:#357ABD; color:white; transition:0.3s; }
+    .page-btn.active { background:#4a90e2; font-weight:600; }
+    .page-btn:hover:not(.active) { background:#4a90e2; }
+    .loading { text-align:center; padding:2rem; font-size:1.2rem; color:#888; }
+  </style>
+</head>
+<body>
+<header>
+  <h1>ContentHub.guru</h1>
+  <div>
+    <button class="login-btn">Login</button>
+    <button class="admin-btn">Admin</button>
+  </div>
+</header>
+
+<div id="main-header"></div>
+<script type="module">
+  import {  } from 'https://contenthub.guru/site/js/header.js';
+</script>
+
+<main>
+  <h2 id="pageTitle">Pages</h2>
+  <div class="toolbar">
+    <input type="text" id="searchInput" placeholder="Search pages...">
+    <select id="sortSelect">
+      <option value="createdDesc">Newest</option>
+      <option value="createdAsc">Oldest</option>
+      <option value="publishedDesc">Most Published</option>
+      <option value="viewsDesc">Most Viewed</option>
+    </select>
+  </div>
+  <div id="sitesList" class="sites-grid"></div>
+  <div class="pagination" id="paginationDiv"></div>
+</main>
+
+
+
+<footer id="main-footer">
+  <nav aria-label="Footer Navigation" style="
+        display:flex;
+        flex-wrap:wrap;
+        justify-content:center;
+        gap:10px;
+        font-size:14px;
+      ">
+    <ul style="list-style:none; display:flex; flex-wrap:wrap; gap:10px; padding:0; margin:0;">
+      <li><a href="https://contenthub.guru" title="Content Hub Home" style="color:#f3f4f6; text-decoration:none;">Home</a></li>
+      <li>|</li>
+      <li><a href="https://contenthub.guru/admin" id="mainAdminBtn" title="Dashboard Login" style="color:#f3f4f6; text-decoration:none;">Dashboard</a></li>
+      <li>|</li>
+      <li><a href="https://contenthub.guru/site/about" title="About Content Hub" style="color:#f3f4f6; text-decoration:none;">About</a></li>
+      <li>|</li>
+      <li><a href="https://contenthub.guru/category" title="Browse Categories" style="color:#f3f4f6; text-decoration:none;">Categories</a></li>
+      <li>|</li>
+      <li><a href="https://contenthub.guru/site/feedback" title="Submit Feedback" style="color:#f3f4f6; text-decoration:none;">Feedback</a></li>
+      <li>|</li>
+      <li><a href="https://contenthub.guru/site/faqs" title="Frequently Asked Questions" style="color:#f3f4f6; text-decoration:none;">FAQs</a></li>
+      <li>|</li>
+      <li><a href="https://contenthub.guru/site/support" title="Support Center" style="color:#f3f4f6; text-decoration:none;">Support</a></li>
+      <li>|</li>
+      <li><a href="https://contenthub.guru/site/contact-us" title="Contact Content Hub" style="color:#f3f4f6; text-decoration:none;">Contact Us</a></li>
+      <li>|</li>
+      <li><a href="https://contenthub.guru/site/privacy-policy" title="Privacy Policy" style="color:#f3f4f6; text-decoration:none;">Privacy Policy</a></li>
+    </ul>
+  </nav>
+</footer>
+
+<!-- JSON-LD Structured Data for Footer Navigation -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SiteNavigationElement",
+  "name": [
+    "Home",
+    "Dashboard",
+    "About",
+    "Categories",
+    "Languages",
+    "Feedback",
+    "FAQs",
+    "Support",
+    "Contact Us",
+    "Privacy Policy"
+  ],
+  "url": [
+    "https://contenthub.guru",
+    "https://contenthub.guru/admin",
+    "https://contenthub.guru/site/about",
+    "https://contenthub.guru/category",
+    "https://contenthub.guru/site/lang",
+    "https://contenthub.guru/site/feedback",
+    "https://contenthub.guru/site/faqs",
+    "https://contenthub.guru/site/support",
+    "https://contenthub.guru/site/contact-us",
+    "https://contenthub.guru/site/privacy-policy"
+  ]
+}
+</script>
+
+<script type="module">
+  import { loadFooter } from 'https://contenthub.guru/site/js/footer.js';
+  loadFooter(); // injects footer into #main-footer
+</script>
+
+<script type="module">
+  let sitesData = [], filteredSites = [];
+  let currentPage = 1, pageSize = 12;
+  const searchInput = document.getElementById("searchInput");
+  const sortSelect = document.getElementById("sortSelect");
+  const sitesList = document.getElementById("sitesList");
+  const paginationDiv = document.getElementById("paginationDiv");
+
+  function formatCategory(category) {
+    if (!category) return "";
+    return category.replace(/[_-]+/g," ").trim().replace(/\b\w/g, c=>c.toUpperCase());
+  }
+
+  function renderSites() {
+    const query = searchInput.value.toLowerCase();
+    filteredSites = sitesData.filter(s =>
+      s.title.toLowerCase().includes(query) ||
+      s.slug.toLowerCase().includes(query) ||
+      (s.tags||[]).some(t=>t.toLowerCase().includes(query))
+    );
+
+    const totalPages = Math.ceil(filteredSites.length / pageSize);
+    if(currentPage>totalPages) currentPage=1;
+
+    const start = (currentPage-1)*pageSize;
+    const pageSites = filteredSites.slice(start, start+pageSize);
+
+    sitesList.innerHTML = '';
+    if(!pageSites.length) { sitesList.innerHTML="<p class='loading'>No pages found.</p>"; return; }
+
+    pageSites.forEach(data=>{
+      const card = document.createElement("article");
+      card.className = "site-card";
+      card.innerHTML = `
+        <img src="${data.image || 'https://contenthub.guru/images/placeholder.png'}" alt="preview">
+        <div style="padding:0.8rem;">
+          <span class="category-badge">${formatCategory(data.category)}</span>
+          <h3>${data.title}</h3>
+          <p>Published: ${data.publishedCount || 0}</p>
+        </div>
+      `;
+      card.addEventListener("click", ()=>window.location.href = data.url);
+      sitesList.appendChild(card);
+    });
+
+    renderPagination(totalPages);
+  }
+
+  function renderPagination(totalPages) {
+    paginationDiv.innerHTML='';
+    for(let i=1;i<=totalPages;i++){
+      const btn=document.createElement("span");
+      btn.className="page-btn"+(i===currentPage?' active':'');
+      btn.textContent=i;
+      btn.addEventListener("click",()=>{ currentPage=i; renderSites(); });
+      paginationDiv.appendChild(btn);
+    }
+  }
+
+  function shuffleArray(arr) {
+    for(let i=arr.length-1;i>0;i--){
+      const j = Math.floor(Math.random()*(i+1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+
+  async function loadSites() {
+    sitesList.innerHTML='<div class="loading">Loading pages...</div>';
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const currentLang = urlParams.get('lang') || 'en';
+    document.getElementById("pageTitle").textContent = `Pages (${currentLang.toUpperCase()})`;
+
+    try {
+      const response = await fetch("https://contenthub.guru/sitePages.json");
+      const data = await response.json();
+
+      // Group pages by language
+      const pagesByLang = {};
+      data.forEach(page => {
+        // parent language
+        const lang = page.language || 'en';
+        if(!pagesByLang[lang]) pagesByLang[lang] = [];
+        pagesByLang[lang].push({...page, url: page.url, lang});
+
+        // translations
+        (page.translations||[]).forEach(t=>{
+          if(!pagesByLang[t.lang]) pagesByLang[t.lang]=[];
+          pagesByLang[t.lang].push({...page, url: t.url, lang: t.lang});
+        });
+      });
+
+      sitesData = shuffleArray(pagesByLang[currentLang] || []);
+      renderSites();
+
+    } catch(err) {
+      sitesList.innerHTML=`<p class="loading">Error loading pages: ${err.message}</p>`;
+      console.error(err);
+    }
+  }
+
+  searchInput.addEventListener('input', ()=>{ currentPage=1; renderSites(); });
+  sortSelect.addEventListener('change', ()=>{ currentPage=1; renderSites(); });
+
+  loadSites();
+</script>
+
+</body>
+</html>

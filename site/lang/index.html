@@ -205,7 +205,7 @@ langSelect.addEventListener('change', () => {
   }
 
   function renderSites() {
-    
+
 const query = searchInput.value.toLowerCase();
 
 filteredSites = sitesData.filter(s =>
@@ -284,7 +284,7 @@ filteredSites = sitesData.filter(s =>
         // translations
         (page.translations||[]).forEach(t=>{
           if(!pagesByLang[t.lang]) pagesByLang[t.lang]=[];
-          pagesByLang[t.lang].push({...page, url: t.url, lang: t.lang});
+          pagesByLang[t.lang].push({...page, title: t.title, url: t.url, lang: t.lang});
         });
       });
 

@@ -977,43 +977,46 @@ document.getElementById("downloadBtn").addEventListener("click", () => {
    downloaded = false;
 
   // Helper to escape XML special characters
-  const escapeXML = (str) => {
-    return String(str)
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&apos;");
-  };
+const escapeXML = (str) => {
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&apos;");
+};
 
-  rows.forEach(row => {
-    const data = parseRow(row);
-    if (data && data.ready) {
-      const altTags = data.alternates
-        .map(alt => `<xhtml:link rel="alternate" hreflang="${escapeXML(alt.lang)}" href="${escapeXML(alt.url)}"/>`)
-        .join("\n    ");
 
-      sitemapUrls.push(
+rows.forEach(row => {
+  const data = parseRow(row);
+  if (data && data.ready) {
+    // Format lastmod as YYYY-MM-DD for Google
+    const lastMod = new Date(data.date).toISOString().split("T")[0];
+
+    const altTags = data.alternates
+      .map(alt => `<xhtml:link rel="alternate" hreflang="${escapeXML(alt.lang)}" href="${escapeXML(alt.url)}"/>`)
+      .join("\n    ");
+
+    sitemapUrls.push(
 `  <url>
     <loc>${escapeXML(data.url)}</loc>
-    <lastmod>${escapeXML(data.date)}</lastmod>
+    <lastmod>${lastMod}</lastmod>
     <changefreq>${escapeXML(data.schedule)}</changefreq>
-    <priority>${escapeXML(data.priority)}</priority>
+    <priority>${parseFloat(data.priority).toFixed(1)}</priority>
     ${altTags}
   </url>`
-      );
-    }
-  });
+    );
+  }
+});
 
-  const now = new Date().toISOString();
-
-  // XML declaration must come first
-   sitemapContent = `<?xml version="1.0" encoding="UTF-8"?>
+const now = new Date().toISOString();
+ sitemapContent = `<?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated: ${now}, Link Count: ${sitemapUrls.length} -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
 ${sitemapUrls.join("\n")}
 </urlset>`;
+
 
   const output = document.getElementById("sitemapOutput");
   if (output) {

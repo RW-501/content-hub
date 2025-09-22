@@ -586,10 +586,6 @@ function extractWaitTimeMs(message) {
   return ((hours * 3600) + (minutes * 60) + seconds) * 1000;
 }
 
-// Test
-const msg = "MYMEMORY WARNING: YOU USED ALL AVAILABLE FREE TRANSLATIONS FOR TODAY. NEXT AVAILABLE IN  01 HOURS 35 MINUTES 46 SECONDS VISIT HTTPS://MYMEMORY.TRANSLATED.NET/DOC/USAGELIMITS.PHP TO TRANSLATE MORE";
-console.log(extractWaitTimeMs(msg)); // 5746000 ms
-
 
 export async function translatePageLanguage(siteId, data, targetLang) {
   console.log(`siteId: ${siteId} - data:`, data, "- targetLang:", targetLang);

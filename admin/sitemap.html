@@ -955,9 +955,6 @@ document.getElementById("saveSiteMap").addEventListener("click", async () => { /
     if (!resp.ok) {
       const errorData = await resp.json();
       throw new Error(errorData.message || "Unknown GitHub API error");
-    }else{
-          showToast("success", "Page Updated successfully!");
-
     }
 
     showToast("success", "Page Updated successfully!");

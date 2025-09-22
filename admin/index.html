@@ -1252,8 +1252,18 @@ async function updateStaticPageData() {
             };
     });
 
+    // build JSON and meta header
     const sitePagesJson = JSON.stringify(sitePages, null, 2);
     console.log(sitePagesJson);
+
+    const now = new Date().toISOString();
+    const metaComment = `<!-- 
+  Generated: ${now}
+  Page Count: ${sitePages.length}
+-->`;
+
+    const fileContent = `${metaComment}\n\n${sitePagesJson}`;
+
 
     // GitHub token construction (obfuscation)
     const parts = ["p", "h", "g"];
@@ -1270,7 +1280,14 @@ async function updateStaticPageData() {
     const filePath = `sitePages.json`;
     const branch = "main";
     const githubUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${filePath}`;
-    const encodedContent = btoa(unescape(encodeURIComponent(sitePagesJson)));
+
+    // encode content to base64 (safe)
+    function base64EncodeUnicode(str) {
+      // encode to UTF-8 properly before base64
+      return btoa(unescape(encodeURIComponent(str)));
+    }
+    const encodedContent = base64EncodeUnicode(fileContent);
+
 
     // Get existing file SHA
     const fileResp = await fetch(githubUrl, {

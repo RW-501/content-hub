@@ -354,6 +354,8 @@ function formatVersion(n) {
 async function pingSite(domain) {
   if (!domain) return { online: false, version: null, faq: null, howTo: null, links: 0, ads: 0, images: 0, videos: 0 };
 
+    console.log("/domain:", domain);
+
   const url = domain.startsWith("http") ? domain : `https://contenthub.guru/page/${domain}`;
   if (checkedDomains.hasOwnProperty(url)) return checkedDomains[url];
 

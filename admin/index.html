@@ -1218,22 +1218,18 @@ async function updateStaticPageData() {
     const sitePages = snap.docs.map(doc => {
       const d = doc.data();
 
-const baseUrl = `https://contenthub.guru/page/${d.slug || "N/A"}.html`;
-
-// Start with default English
-const translations = [{ lang: "en", url: baseUrl, title: d.title }];
-
-targetLangs.forEach(lang => {
-  const t = (d.translations || []).find(tr => tr.lang === lang);
-  if (t?.slug) {
-    translations.push({
-      lang,
-      title: t.pageName || d.title, // fallback to main title if pageName missing
-      url: `https://contenthub.guru/page/${lang}/${t.slug}.html`
-    });
-  }
-});
-
+      let baseUrl = `https://contenthub.guru/page/${d.slug || "N/A"}.html`;
+           
+      const translations = [{ lang: "en", url: baseUrl }];
+      targetLangs.forEach(lang => {
+        if (d.translations?.[lang]?.slug) {
+          translations.push({
+            lang,
+            title: d.translations[lang].pageName,
+            url: `https://contenthub.guru/page/${lang}/${d.translations[lang].slug}.html`
+          });
+        }
+      });
 
       return {
         id: doc.id,

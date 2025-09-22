@@ -239,6 +239,8 @@ async function ensureTranslationConsistency(pageId, lang, slug, btn) {
 }
 
 let  waitBool = true;
+let MS = 0;
+
 
 /* ---------------- Firestore -> Render ---------------- */
 async function loadPages() {
@@ -297,6 +299,7 @@ async function loadPages() {
           const waitMs = await translatePageLanguage(pageId, data, lang);
 
           if (waitMs && waitMs > 0) {
+            MS = waitMs;
                       waitBool = true;
             status(`⚠ Quota hit. Pausing for ${formatTime(waitMs / 1000)}...`);
  
@@ -305,6 +308,7 @@ async function loadPages() {
         localStorage.setItem(AUTO_JOB_KEY, JSON.stringify(state));
   
           } else {
+            MS = 0;
                       waitBool = false;
             status(`✅ Done translating ${data.slug} → ${lang.toUpperCase()}`);
           }
@@ -381,7 +385,11 @@ async function loadPages() {
 const AUTO_JOB_KEY = "autoTranslateJob";
 
 function sleep(ms) {
-  return new Promise(r => setTimeout(r, ms));
+  let waitMs = ms;
+  if(waitBool){
+    waitMs = MS;
+  }
+  return new Promise(r => setTimeout(r, waitMs));
 }
 
 /**

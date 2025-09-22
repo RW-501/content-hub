@@ -176,6 +176,9 @@
 </script>
 
 <script type="module">
+
+    let pagesByLang = {};  // <--- declare it globally so loadSites can use it
+
   let sitesData = [], filteredSites = [];
   let currentPage = 1, pageSize = 12;
   const searchInput = document.getElementById("searchInput");

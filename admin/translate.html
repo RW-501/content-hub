@@ -238,6 +238,8 @@ async function ensureTranslationConsistency(pageId, lang, slug, btn) {
   }
 }
 
+let  waitBool = true;
+
 /* ---------------- Firestore -> Render ---------------- */
 async function loadPages() {
   const q = query(collection(db, "pages"));
@@ -295,13 +297,16 @@ async function loadPages() {
           const waitMs = await translatePageLanguage(pageId, data, lang);
 
           if (waitMs && waitMs > 0) {
+                      waitBool = true;
             status(`⚠ Quota hit. Pausing for ${formatTime(waitMs / 1000)}...`);
-                
+                   await waitForQuota(waitMs);
+ 
         state.waitEnd = Date.now() + waitMs;
         state.waitForIndex = state.index; // mark which index this wait corresponds to
         localStorage.setItem(AUTO_JOB_KEY, JSON.stringify(state));
   
           } else {
+                      waitBool = false;
             status(`✅ Done translating ${data.slug} → ${lang.toUpperCase()}`);
           }
         } catch (err) {
@@ -321,6 +326,12 @@ async function loadPages() {
             }else{     
         //status(`No Update to DB`);
             }
+
+  if (updated) {
+    // Stop retrying this button — it's invalid now
+    btn.classList.remove("translated", "live");
+    btn.classList.add("not-translated");
+  }
 
         const translatedUrl = `https://contenthub.guru/page/${lang}/${data.translations[lang].slug}.html`;
 
@@ -443,7 +454,7 @@ async function autoClickNotTranslated() {
 
     try {
       // If we don't already have a waitEnd for this index, set it now
-      if (!state.waitEnd || state.waitForIndex !== state.index) {
+      if (!waitBool || !state.waitEnd || state.waitForIndex !== state.index) {
         // start a fresh 60s wait
         const waitMs = 60 * 1000;
         state.waitEnd = Date.now() + waitMs;
@@ -478,6 +489,7 @@ async function autoClickNotTranslated() {
       state.waitEnd = null;
       state.waitForIndex = null;
       localStorage.setItem(AUTO_JOB_KEY, JSON.stringify(state));
+
 
       // Ping with retries
       const isLive = await checkPageLive(translatedUrl, 2, 30000); // 2 retries, 30s apart

@@ -1225,7 +1225,7 @@ async function updateStaticPageData() {
         if (d.translations?.[lang]?.slug) {
           translations.push({
             lang,
-            title: `${d.translations[lang].title}`,
+            title: `${d.translations[lang].pageName}`,
             url: `https://contenthub.guru/page/${lang}/${d.translations[lang].slug}.html`
           });
         }

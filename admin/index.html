@@ -1216,6 +1216,8 @@ async function updateStaticPageData() {
     const snap = await getDocs(q);
 
     const sitePages = snap.docs.map(doc => {
+      const d = doc.data();
+
 const baseUrl = `https://contenthub.guru/page/${d.slug || "N/A"}.html`;
 
 // Start with default English

@@ -159,7 +159,7 @@
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
-  import { getFirestore, updateDoc, getDocs, query, collection, doc, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+  import { getFirestore, updateDoc, deleteField,  getDocs, query, collection, doc, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
   import { getAuth } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
 
   import { translatePageLanguage, resetTranslation, removePage } from "https://contenthub.guru/admin/exports/updateArticle.js";
@@ -313,7 +313,7 @@ async function loadPages() {
             }else{     
         status(`No Update to DB`);
             }
-            
+
         const translatedUrl = `https://contenthub.guru/page/${lang}/${data.translations[lang].slug}.html`;
 
         const translatedLink = document.createElement("a");

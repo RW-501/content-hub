@@ -207,6 +207,34 @@ function status(msg) {
 // Global lookup map (keeps references if needed)
 const buttonIndex = {}; // { [pageId_lang]: HTMLElement }
 
+
+async function ensureTranslationConsistency(pageId, lang, slug, btn) {
+  const translatedUrl = `https://contenthub.guru/page/${lang}/${slug}.html`;
+
+  try {
+    const res = await fetch(translatedUrl, { method: "HEAD" });
+    if (res.ok) {
+      btn.classList.add("live");
+      return true;
+    } else {
+      throw new Error(`Not found: ${res.status}`);
+    }
+  } catch (err) {
+    log(`⚠ ${lang.toUpperCase()} page missing. Cleaning DB...`);
+
+    // 🧹 Clean up Firestore state
+    await updateDoc(doc(db, "pages", pageId), {
+      [`translatedLanguages.${lang}`]: deleteField(),
+      [`translations.${lang}`]: deleteField()
+    });
+
+    btn.classList.remove("translated", "live");
+    btn.classList.add("not-translated");
+
+    return false;
+  }
+}
+
 /* ---------------- Firestore -> Render ---------------- */
 async function loadPages() {
   const q = query(collection(db, "pages"));
@@ -283,6 +311,8 @@ async function loadPages() {
           const res = await fetch(translatedUrl, { method: "HEAD" });
           if (res.ok) {
             btn.classList.add("live");
+          }else{
+            await ensureTranslationConsistency(pageId, lang, data.translations[lang].slug, btn);
           }
         } catch (err) {
           console.warn(`⚠ Could not reach ${translatedUrl}`, err);

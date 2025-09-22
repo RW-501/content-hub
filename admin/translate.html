@@ -319,23 +319,7 @@ async function loadPages() {
 
       div.appendChild(btn);
 
-      // If already translated, try to add link + live indicator
-      if (!waitBool && translated && data.translations?.[lang]?.slug) {
-  
-      let updated =  await ensureTranslationConsistency(pageId, lang, data.translations[lang].slug, btn);
-            
-      if (!updated) {        
-        status(`Updated DB`);
-            }else{     
-        //status(`No Update to DB`);
-            }
-
-  if (updated) {
-    // Stop retrying this button — it's invalid now
-    btn.classList.remove("translated", "live");
-    btn.classList.add("not-translated");
-  }
-
+  if (translated && data.translations?.[lang]?.slug) {
         const translatedUrl = `https://contenthub.guru/page/${lang}/${data.translations[lang].slug}.html`;
 
         const translatedLink = document.createElement("a");
@@ -350,6 +334,21 @@ async function loadPages() {
         const resetBtn = document.createElement("button");
         resetBtn.className = "reset-btn";
         resetBtn.textContent = "Reset";
+
+  }
+      // If already translated, try to add link + live indicator
+      if (!waitBool) {
+  
+      let updated =  await ensureTranslationConsistency(pageId, lang, data.translations[lang].slug, btn);
+
+  if (updated) {
+    // Stop retrying this button — it's invalid now
+    btn.classList.remove("translated", "live");
+    btn.classList.add("not-translated");
+  }else{
+    status(`Updated DB`);
+  }
+
 
         resetBtn.onclick = async () => {
           try {

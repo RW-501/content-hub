@@ -471,20 +471,41 @@ async function loadDashboard(autoPing = false) {
   if (!dashboardContent) return;
 
   // Fetch all pages from Firestore
-  const pagesCol = collection(db, "pages");
-  const pagesSnap = await getDocs(pagesCol);
-  pageData = pagesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+const pagesCol = collection(db, "pages");
+const pagesSnap = await getDocs(pagesCol);
 
-  if (!pageData.length) {
-    dashboardContent.innerHTML = "<p>No pages yet.</p>";
-    return;
-  }
+pageData = await Promise.all(
+  pagesSnap.docs.map(async (docSnap) => {
+    const data = docSnap.data();
 
-  // Cache pages
-  pageCache = {};
-  pageData.forEach(p => pageCache[p.id] = p);
+    // Get translations subcollection
+    const translationsCol = collection(db, "pages", docSnap.id, "translations");
+    const translationsSnap = await getDocs(translationsCol);
 
-  renderDashboard(pageData);
+    const translations = {};
+    translationsSnap.forEach(t => {
+      translations[t.id] = t.data(); // t.id = "es", "fr", etc.
+    });
+
+    return {
+      id: docSnap.id,
+      ...data,
+      translations
+    };
+  })
+);
+
+if (!pageData.length) {
+  dashboardContent.innerHTML = "<p>No pages yet.</p>";
+  return;
+}
+
+// Cache pages
+pageCache = {};
+pageData.forEach(p => (pageCache[p.id] = p));
+
+renderDashboard(pageData);
+
 
   // Sorting logic
   document.querySelectorAll(".sortable").forEach(th => {
@@ -912,7 +933,9 @@ const updateData = {
     // ✅ Update UI row dynamically
       updatePage(articleData);
 
-     // translateArticleData(articleData, targetLang = "en") 
+    // updatePage(articleData, '', targetLang);
+
+
 
     showToast("success", "Page updated!", 2500);
 

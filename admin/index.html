@@ -1223,6 +1223,12 @@ async function updateStaticPageData() {
       const translations = [{ lang: "en", url: baseUrl }];
       targetLangs.forEach(lang => {
         if (d.translations?.[lang]?.slug) {
+
+                console.log("d.translations:", d.translations);
+                console.log("d.translations pageName :", d.translations[lang].pageName);
+                console.log("d.translations title:", d.translations[lang].title);
+                console.log("d.translations:", d.translations[lang]);
+
           translations.push({
             lang,
             title: d.translations[lang].pageName,

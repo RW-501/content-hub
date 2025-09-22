@@ -373,7 +373,7 @@ function sleep(ms) {
  * HEAD-check a URL with retries (delay in ms).
  * returns true if any attempt succeeds.
  */
-async function checkPageLive(url, retries = 2, delay = 30000) {
+async function checkPageLive(url, retries = 4, delay = 10000) {
   for (let attempt = 1; attempt <= retries + 1; attempt++) {
     try {
       const res = await fetch(url, { method: "HEAD" });

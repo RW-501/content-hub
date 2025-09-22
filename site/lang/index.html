@@ -205,12 +205,16 @@ langSelect.addEventListener('change', () => {
   }
 
   function renderSites() {
-    const query = searchInput.value.toLowerCase();
-    filteredSites = sitesData.filter(s =>
-      s.title.toLowerCase().includes(query) ||
-      s.slug.toLowerCase().includes(query) ||
-      (s.tags||[]).some(t=>t.toLowerCase().includes(query))
-    );
+    
+const query = searchInput.value.toLowerCase();
+
+filteredSites = sitesData.filter(s =>
+  s.title.toLowerCase().includes(query) ||
+  s.slug.toLowerCase().includes(query) ||
+  (s.translations || []).some(t => t.lang.toLowerCase() === currentLang.toLowerCase()) ||
+  (s.tags || []).some(t => t.toLowerCase().includes(query))
+);
+
 
     const totalPages = Math.ceil(filteredSites.length / pageSize);
     if(currentPage>totalPages) currentPage=1;

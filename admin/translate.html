@@ -299,7 +299,6 @@ async function loadPages() {
           if (waitMs && waitMs > 0) {
                       waitBool = true;
             status(`⚠ Quota hit. Pausing for ${formatTime(waitMs / 1000)}...`);
-                   await waitForQuota(waitMs);
  
         state.waitEnd = Date.now() + waitMs;
         state.waitForIndex = state.index; // mark which index this wait corresponds to

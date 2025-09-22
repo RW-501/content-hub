@@ -1,7 +1,23 @@
 import { showToast } from "https://contenthub.guru/exports/showToast.js";
 
+
+
+const logE2 = document.getElementById("log");
+
+function writeLog(el, msg) {
+  if (!el) return;
+  el.textContent += msg + "\n";
+  el.scrollTop = el.scrollHeight;
+}
+
+function log(msg) {
+  writeLog(logE2, msg);
+}
+
+
 function logToPopup(message, color = "#ccc") {
   try {
+    log(message);
     const logEl = document.getElementById("status-log");
     if (!logEl) return; // stop if log element doesn't exist
     const line = document.createElement("div");

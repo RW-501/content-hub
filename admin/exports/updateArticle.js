@@ -638,7 +638,7 @@ if (isQuotaExceeded) {
   // Update parent doc with translatedLanguages and slug
   await updateDoc(doc(db, "pages", siteId), {
     [`translatedLanguages.${targetLang}`]: true, // mark translated
-    [`translations.${targetLang}`]: { slug: slug } // store translated slug
+    [`translations.${targetLang}`]: { slug: slug , title: translatedData.title, pageName: translatedData.pageName } // store translated slug
   });
 
   // Update UI

@@ -906,8 +906,10 @@ document.getElementById("saveSiteMap").addEventListener("click", async () => { /
     showToast("info", "Download Sitemap First");
     return;
   }
-
-
+  const output = document.getElementById("sitemapOutput");
+  if (output) {
+  sitemapContent = output.value;
+  }
      // encode content to base64 (safe)
     function base64EncodeUnicode(str) {
       // encode to UTF-8 properly before base64

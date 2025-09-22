@@ -974,7 +974,7 @@ document.getElementById("saveSiteMap").addEventListener("click", async () => { /
 document.getElementById("downloadBtn").addEventListener("click", () => {
   const rows = document.querySelectorAll("#linkTable tbody tr");
   const sitemapUrls = [];
-  let downloaded = false;
+   downloaded = false;
 
   // Helper to escape XML special characters
   const escapeXML = (str) => {
@@ -1008,7 +1008,7 @@ document.getElementById("downloadBtn").addEventListener("click", () => {
   const now = new Date().toISOString();
 
   // XML declaration must come first
-  const sitemapContent = `<?xml version="1.0" encoding="UTF-8"?>
+   sitemapContent = `<?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated: ${now}, Link Count: ${sitemapUrls.length} -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xhtml="http://www.w3.org/1999/xhtml">

@@ -207,17 +207,21 @@ langSelect.addEventListener('change', () => {
     return category.replace(/[_-]+/g," ").trim().replace(/\b\w/g, c=>c.toUpperCase());
   }
 
-  function renderSites() {
+function renderSites() {
+  console.log("renderSites called");
+  console.log("sitesData:", sitesData);
+  console.log("currentPage:", currentPage);
 
-const query = searchInput.value.toLowerCase();
+  const query = (searchInput?.value || "").toLowerCase();
+  console.log("query:", query);
 
-filteredSites = sitesData.filter(s =>
-  (s.title || '').toLowerCase().includes(query) ||
-  (s.slug || '').toLowerCase().includes(query) ||
-  (s.tags || []).some(t => (t || '').toLowerCase().includes(query))
-);
+  filteredSites = sitesData.filter(s =>
+    (s.title || '').toLowerCase().includes(query) ||
+    (s.slug || '').toLowerCase().includes(query) ||
+    (s.tags || []).some(t => (t || '').toLowerCase().includes(query))
+  );
 
-
+  console.log("filteredSites:", filteredSites);
 
     const totalPages = Math.ceil(filteredSites.length / pageSize);
     if(currentPage>totalPages) currentPage=1;

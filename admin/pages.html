@@ -412,17 +412,12 @@ async function fetchAllPages(pages) {
   for (const p of pages) {
 
       console.log("++++ /p.slug:", p.slug);
-
+/*
     // adjust slug for non-English
     if (p.lang && p.lang !== 'en') {
       p.slug = `${p.lang}/${p.slug}`;
     }
-
-    // build full URL if not already there
-    if (!p.url) {
-      p.url = `https://contenthub.guru/page/${p.slug}.html`;
-    }
-  console.log("/p.slug:", p.slug);
+*/
 
     // enrich page data with site info
     const { online, version, faq, howTo, links, ads, images, videos } = await pingSite(p.slug);
@@ -567,8 +562,11 @@ pageData.forEach(page => {
     slug: page.slug,
     lang: page.language || "en",
     title: page.title || "Untitled",
+    url: `https://contenthub.guru/page/${p.slug}.html`,
+
     ...page
   });
+
 
   // Each translation as its own row
   Object.entries(page.translations || {}).forEach(([lang, t]) => {
@@ -578,6 +576,8 @@ pageData.forEach(page => {
       lang,
       title: `${page.title} (${lang})`,
       parentId: page.id,
+      url: `https://contenthub.guru/page/${lang}/${t.slug}.html`,
+
       ...t
     });
   });

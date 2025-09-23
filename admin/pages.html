@@ -728,7 +728,7 @@ function renderDashboard(pages) {
     const pageUrl = `https://contenthub.guru/page/${p.slug}`;
     const shareText = encodeURIComponent(`Check out this page: ${p.title || ''}`);
 
-    html += `<tr class="c_${p.language}">${p}
+    html += `<tr class="c_${p.language}">
       <td><a href="${pageUrl}" target="_blank">
         <img class='siteImage' src="${p.image || 'https://contenthub.guru/images/placeholder.png'}" 
              alt="preview" width="300" height="200">

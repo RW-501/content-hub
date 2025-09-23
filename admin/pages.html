@@ -577,6 +577,7 @@ pageData.forEach(page => {
       title: `${page.title} (${lang})`,
       parentId: page.id,
       url: `https://contenthub.guru/page/${lang}/${t.slug}.html`,
+      siteId: `${page.id}_${lang}`, 
 
       ...t
     });

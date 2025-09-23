@@ -458,9 +458,9 @@ function renderPageStatus(p, latestVersion) {
     console.log("p.siteId:  ", p.siteId, "  page.lang:", p.lang);
 
     if (p.lang && p.lang !== 'en') {
-      p.slug = `${p.lang}/${p.slug}`;
-      p.url = `https://contenthub.guru/page/${p.lang}/${p.slug}.html`;
-      p.siteId = `${p.id}_${p.lang}`;
+      p.slug = `${p.lang}/${p.pageName}`;
+      p.url = `https://contenthub.guru/page/${p.lang}.html`;
+      p.siteId = `${p.id}`;
       console.log("Set");
     }
     console.log("p.siteId:  ", p.siteId, "  page:", p);
@@ -523,8 +523,8 @@ async function updateAllPages(pages) {
     
         if (p.lang && p.lang !== 'en') {
       p.slug = `${p.lang}/${p.slug}`;
-      p.url = `https://contenthub.guru/page/${p.lang}/${p.slug}.html`;
-      p.siteId = `${p.id}_${p.lang}`;
+      p.url = `https://contenthub.guru/page/${p.slug}.html`;
+      p.siteId = `${p.id}`;
     }
 
     renderPageStatus(p, latestVersion);
@@ -1325,8 +1325,8 @@ async function updatePageStatus(page) {
 
         if (page.lang && page.lang !== 'en') {
       page.slug = `${page.lang}/${page.slug}`;
-      page.url = `https://contenthub.guru/page/${lang}/${t.slug}.html`;
-      page.siteId = `${page.id}_${lang}`;
+      page.url = `https://contenthub.guru/page/${t.slug}.html`;
+      page.siteId = `${page.id}`;
 
     }
 

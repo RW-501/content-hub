@@ -214,7 +214,6 @@ const query = searchInput.value.toLowerCase();
 filteredSites = sitesData.filter(s =>
   (s.title || '').toLowerCase().includes(query) ||
   (s.slug || '').toLowerCase().includes(query) ||
-  (s.translations || []).some(t => (t.lang || '').toLowerCase() === currentLang.toLowerCase()) ||
   (s.tags || []).some(t => (t || '').toLowerCase().includes(query))
 );
 
@@ -299,7 +298,7 @@ pages.forEach(page => {
 });
 
 
-      sitesData = shuffleArray(pagesByLang[currentLang] || []);
+sitesData = shuffleArray(pagesByLang[currentLang] || []);
       renderSites();
 
     } catch(err) {

@@ -453,6 +453,9 @@ function getLatestVersion() {
 
 // Step 3: Update DOM for each page against the global latest
 function renderPageStatus(p, latestVersion) {
+
+
+  
   const statusEl  = document.getElementById(`status-${p.siteId}`);
   const versionEl = document.getElementById(`version-${p.siteId}`);
   const faqEl = document.getElementById(`faq-${p.siteId}`);
@@ -509,6 +512,13 @@ async function updateAllPages(pages) {
   console.log("🔥 Final latest version:", latestVersion);
 
   for (const p of pages) {
+    
+        if (p.lang && p.lang !== 'en') {
+      p.slug = `${p.lang}/${p.slug}`;
+      p.url = `https://contenthub.guru/page/${p.lang}/${p.slug}.html`;
+      p.siteId = `${p.id}_${p.lang}`;
+    }
+
     renderPageStatus(p, latestVersion);
   }
 }
@@ -1307,6 +1317,9 @@ async function updatePageStatus(page) {
 
         if (page.lang && page.lang !== 'en') {
       page.slug = `${page.lang}/${page.slug}`;
+      page.url = `https://contenthub.guru/page/${lang}/${t.slug}.html`;
+      page.siteId = `${page.id}_${lang}`;
+
     }
 
     const { online, version, faq, howTo, links, ads, images, videos } = await pingSite(page.slug);

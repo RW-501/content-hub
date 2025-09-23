@@ -297,7 +297,7 @@ async function loadSites() {
         pagesByLang[t.lang].push({
           ...page,
           title: t.title || page.title,
-          url: `${t.lang}/${page.slug}`,
+          url: `https://contenthub.guru/page/${t.lang}/${page.slug}`,
           lang: t.lang
         });
       });

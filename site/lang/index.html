@@ -269,7 +269,7 @@ function renderSites() {
     return arr;
   }
 
- async function loadSites() {
+async function loadSites() {
   console.log("loadSites called");
 
   const urlParams = new URLSearchParams(window.location.search);
@@ -283,7 +283,8 @@ function renderSites() {
     const data = await response.json();
     console.log("Raw data:", data);
 
-    const pages = Array.isArray(data) ? data : Object.values(data);
+    // ✅ Grab only the pages array
+    const pages = data.pages || [];
     console.log("Normalized pages:", pages);
 
     pages.forEach(page => {
@@ -296,7 +297,7 @@ function renderSites() {
         pagesByLang[t.lang].push({
           ...page,
           title: t.title || page.title,
-          url:  `${t.lang}/${t.slug}`,
+          url: `${t.lang}/${t.slug}`,
           lang: t.lang
         });
       });
@@ -307,14 +308,13 @@ function renderSites() {
     sitesData = shuffleArray(pagesByLang[currentLang] || []);
     console.log("sitesData (shuffled):", sitesData);
 
+    renderSites();
 
-      renderSites();
-
-    } catch(err) {
-      sitesList.innerHTML=`<p class="loading">Error loading pages: ${err.message}</p>`;
-      console.error(err);
-    }
+  } catch (err) {
+    sitesList.innerHTML = `<p class="loading">Error loading pages: ${err.message}</p>`;
+    console.error(err);
   }
+}
 
   searchInput.addEventListener('input', ()=>{ currentPage=1; renderSites(); });
   sortSelect.addEventListener('change', ()=>{ currentPage=1; renderSites(); });

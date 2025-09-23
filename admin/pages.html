@@ -411,13 +411,13 @@ async function fetchAllPages(pages) {
 
   for (const p of pages) {
 
- //     console.log("++++ /p.slug:", p.slug);
-/*
+      console.log("++++ /p.slug:", p.slug);
+
     // adjust slug for non-English
     if (p.lang && p.lang !== 'en') {
       p.slug = `${p.lang}/${p.slug}`;
     }
-*/
+
 
     // enrich page data with site info
     const { online, version, faq, howTo, links, ads, images, videos } = await pingSite(p.slug);

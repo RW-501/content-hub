@@ -351,12 +351,12 @@ function formatVersion(n) {
 }
 
 /* ---- network ---- */
-async function pingSite(domain) {
-  if (!domain) return { online: false, version: null, faq: null, howTo: null, links: 0, ads: 0, images: 0, videos: 0 };
+async function pingSite(slug) {
+  if (!slug) return { online: false, version: null, faq: null, howTo: null, links: 0, ads: 0, images: 0, videos: 0 };
 
-   console.log("/domain:", domain);
+   console.log("/slug:", slug);
 
-  const url = domain.startsWith("http") ? domain : `https://contenthub.guru/page/${domain}`;
+  const url = slug.startsWith("http") ? slug : `https://contenthub.guru/page/${slug}`;
   if (checkedDomains.hasOwnProperty(url)) return checkedDomains[url];
 
   try {

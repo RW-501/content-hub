@@ -437,7 +437,7 @@ async function fetchAllPages(pages) {
         if (t.slug) {
           const tSlug = lang !== "en" ? `${lang}/${t.slug}` : t.slug;
           t.url = `https://contenthub.guru/page/${tSlug}.html`;
-          t.siteId = `${page.id}_${lang}`;
+          t.siteId = `${p.siteId}_${lang}`;
         }
       }
     }

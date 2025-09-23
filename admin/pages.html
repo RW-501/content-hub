@@ -454,12 +454,17 @@ function getLatestVersion() {
 // Step 3: Update DOM for each page against the global latest
 function renderPageStatus(p, latestVersion) {
 
-        if (p.lang && p.lang !== 'en') {
+
+    console.log("p.siteId:  ", p.siteId, "  page.lang:", p.lang);
+
+    if (p.lang && p.lang !== 'en') {
       p.slug = `${p.lang}/${p.slug}`;
       p.url = `https://contenthub.guru/page/${p.lang}/${p.slug}.html`;
       p.siteId = `${p.id}_${p.lang}`;
+      console.log("Set");
     }
-  
+    console.log("p.siteId:  ", p.siteId, "  page:", p);
+
   const statusEl  = document.getElementById(`status-${p.siteId}`);
   const versionEl = document.getElementById(`version-${p.siteId}`);
   const faqEl = document.getElementById(`faq-${p.siteId}`);
@@ -493,7 +498,6 @@ if (howToEl) howToEl.textContent = p.howTo ? "✅ HowTo Available" : "❌ No How
     statusEl.className = "status-online";
   }
   
-  console.log("p.siteId:  ", p.siteId, "  page:", p);
 
   if (!p.version) {
     versionEl.textContent = "⚠️ No version tag";

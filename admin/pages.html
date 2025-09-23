@@ -411,7 +411,7 @@ async function fetchAllPages(pages) {
 
   for (const p of pages) {
 
-      console.log("++++ /p.slug:", p.slug);
+   //   console.log("++++ /p.slug:", p.slug);
 /*
     // adjust slug for non-English
     if (p.lang && p.lang !== 'en') {
@@ -454,7 +454,11 @@ function getLatestVersion() {
 // Step 3: Update DOM for each page against the global latest
 function renderPageStatus(p, latestVersion) {
 
-
+        if (p.lang && p.lang !== 'en') {
+      p.slug = `${p.lang}/${p.slug}`;
+      p.url = `https://contenthub.guru/page/${p.lang}/${p.slug}.html`;
+      p.siteId = `${p.id}_${p.lang}`;
+    }
   
   const statusEl  = document.getElementById(`status-${p.siteId}`);
   const versionEl = document.getElementById(`version-${p.siteId}`);

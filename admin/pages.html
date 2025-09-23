@@ -407,11 +407,11 @@ async function pingSite(slug) {
 
 // Step 1: Ping all pages first
 async function fetchAllPages(pages) {
-  console.log("// Fetch pages:", pages);
+ // console.log("// Fetch pages:", pages);
 
   for (const p of pages) {
 
-      console.log("++++ /p.slug:", p.slug);
+ //     console.log("++++ /p.slug:", p.slug);
 /*
     // adjust slug for non-English
     if (p.lang && p.lang !== 'en') {
@@ -462,7 +462,6 @@ function renderPageStatus(p, latestVersion) {
   const imgCountEl = document.getElementById(`imgCount-${p.siteId}`);
   const videoCountEl = document.getElementById(`videoCount-${p.siteId}`);
       
-//  console.log("statusEl:  ", statusEl, "  page:", p);
 
 
   if (!statusEl) return;
@@ -485,6 +484,8 @@ if (howToEl) howToEl.textContent = p.howTo ? "✅ HowTo Available" : "❌ No How
     statusEl.textContent = "✅ Online";
     statusEl.className = "status-online";
   }
+  
+  console.log("p.siteId:  ", p.siteId, "  page:", p);
 
   if (!p.version) {
     versionEl.textContent = "⚠️ No version tag";

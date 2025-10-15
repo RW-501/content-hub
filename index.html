@@ -2470,11 +2470,10 @@ function shuffleArray(array) {
 }
 
 // Load sites from sitePages.json instead of Firebase
-async function loadSites(){
+async function loadSites() {
   sitesList.innerHTML = '<div class="loading">Loading sites...</div>';
 
   try {
-    // 🔥 Replace with your actual hosted JSON URL
     const response = await fetch("https://contenthub.guru/sitePages.json");
 
     if (!response.ok) {
@@ -2483,26 +2482,28 @@ async function loadSites(){
 
     const data = await response.json();
 
-    if (!data || data.length === 0) {
+    const pages = Array.isArray(data) ? data : data.pages || [];
+
+    if (pages.length === 0) {
       sitesList.innerHTML = "<p class='loading'>No websites yet. Create one after login.</p>";
       return;
     }
 
     // Shuffle data for variety
-    sitesData = shuffleArray(data);
+    sitesData = shuffleArray(pages);
 
-    console.log("https://contenthub.guru/page/",data.slug);
+    console.log("✅ Loaded pages count:", sitesData.length);
 
     // Render filters + sites
     renderTagFilters();
     renderSites();
-    console.log("loaded Json");
-
+    console.log("✅ Sites rendered successfully");
   } catch (err) {
     sitesList.innerHTML = `<p class="loading">Error loading sites: ${err.message}</p>`;
-    console.error("Error loading sites:", err);
+    console.error("❌ Error loading sites:", err);
   }
 }
+
 
 loadSites();
 searchInput.addEventListener('input',()=>{ currentPage=1; renderSites(); });
